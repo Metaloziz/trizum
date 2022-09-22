@@ -6,14 +6,14 @@ import {
   RequestLogin,
   RequestRegister,
   RequestSMS,
+  RequestSwitchUser,
+  ResponseAvatar,
+  ResponseEditSelf,
   ResponseLogin,
   ResponseMe,
   ResponseSMS,
-  ResponseAvatar,
-  ResponseEditSelf,
-  RequestSwitchUser,
 } from 'app/types/AuthTypes';
-import { ResponseLoadMeBaseT } from 'app/types/ResponseLoadMeBaseT';
+import { LoginPasswordFormType } from 'pages/login/loginWithPassword/LoginWithPassword';
 
 const authService = {
   authenticate: async (data: any) => {
@@ -21,7 +21,7 @@ const authService = {
     return res.data;
   },
 
-  login: async (data: RequestLogin) => {
+  loginWithSMS: async (data: RequestLogin) => {
     const res: AxiosResponse<ResponseLogin> = await instance.post(Paths.Login, data, {
       // withCredentials: true,
     });
@@ -56,6 +56,11 @@ const authService = {
   },
   switchUser: async (params: RequestSwitchUser) => {
     const { data }: ResponseLogin = await instance.post(Paths.SwitchUser, params);
+    return data;
+  },
+
+  loginWithPassword: async (loginData: LoginPasswordFormType) => {
+    const { data } = await instance.post(Paths.Login, loginData);
     return data;
   },
 };

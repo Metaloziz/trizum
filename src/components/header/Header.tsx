@@ -1,4 +1,4 @@
-import { useState, FC, useEffect, useRef } from 'react';
+import { FC, useState } from 'react';
 
 import classNames from 'classnames';
 
@@ -9,12 +9,16 @@ import BurgerButton from 'components/burger/Burger';
 import DropDownMenu from 'components/drop-down-menu/DropDownMenu';
 import Logo from 'components/logo/Logo';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
+import { whoCanUseIt } from 'utils/whoCanUseIt';
+import { Roles } from 'app/stores/appStore';
 
 type Props = { className: string };
 
 const Header: FC<Props> = ({ className }) => {
   const [isOpen] = useState(false);
   const [open, setOpen] = useState<boolean>(false);
+
+  const isAuthorized = !whoCanUseIt([Roles.Unauthorized]);
 
   const handleClick = () => {
     if (window.innerWidth <= 1280) {
@@ -42,7 +46,7 @@ const Header: FC<Props> = ({ className }) => {
         </ClickAwayListener>
         <Logo />
       </div>
-      <Account />
+      {isAuthorized && <Account />}
     </header>
   );
 };

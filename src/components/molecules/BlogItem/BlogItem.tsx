@@ -13,6 +13,7 @@ import Button from 'components/button/Button';
 import { Button as DeleteButton } from '@mui/material';
 import Image from 'components/image/Image';
 import { SecondaryRoutes } from 'app/enums/SecondaryRoutes';
+import { whoCanUseIt } from 'utils/whoCanUseIt';
 
 interface Props {
   id: string;
@@ -57,7 +58,7 @@ const BlogItem: FC<Props> = observer(({ title, imgSrc = '', description, id, tes
           {role !== Roles.Student && testId && <Button onClick={onTestClick}>Пройти тест</Button>}
         </div>
         <div className={styles.delete}>
-          {role === Roles.Admin && (
+          {whoCanUseIt([Roles.Admin, Roles.Methodist]) && (
             <DeleteButton onClick={deleteArticleHandle} variant="outlined" color="error">
               Удалить статью
             </DeleteButton>
