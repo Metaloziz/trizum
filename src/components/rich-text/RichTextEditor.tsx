@@ -1,41 +1,23 @@
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { BaseSelection, createEditor, Descendant, Transforms } from 'slate';
-import { Editable, Slate, useSlate, withReact } from 'slate-react';
+import { createEditor, Descendant } from 'slate';
+import { Editable, Slate, withReact } from 'slate-react';
 
 import { RichTextGallery } from './RichTextGallery';
-import { MarkButton, BlockButton } from './RichTextComponents';
+import { BlockButton, MarkButton } from './RichTextComponents';
 import { Elem, Leaf } from './RichTextElements';
 import {
   CustomElement,
-  CustomElementAlignment,
-  CustomElementFormat,
   CustomText,
-  CustomTextMark,
-  BlockButtonProp,
   Hotkeys,
   KeysOfHotkeys,
-  MarkButtonProp,
   RichTextEditorProps,
-  RichEditorCallback,
 } from './RichTextTypes';
-import { toggleBlock, toggleMark, isMarkActive, isBlockActive } from './RichTextHelpers';
+import { toggleMark } from './RichTextHelpers';
 import Paper from '@mui/material/Paper';
 import Divider from '@mui/material/Divider';
-import ToggleButton from '@mui/material/ToggleButton';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
-import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-import CollectionsIcon from '@mui/icons-material/Collections';
-import ImageList from '@mui/material/ImageList';
-import DoneIcon from '@mui/icons-material/Done';
-import ImageListItem from '@mui/material/ImageListItem';
 import { observer } from 'mobx-react-lite';
 import slateStore from '../../app/stores/slateStore';
-import _ from 'lodash';
-import { galleryService } from '../../app/services/galleryService';
 import imagesStore from '../../app/stores/imagesStore';
 
 const HOTKEYS: Hotkeys = {
@@ -52,7 +34,19 @@ const RichTextEditor = observer((editorProps: RichTextEditorProps): JSX.Element 
   const [cont, setCont] = useState<Descendant[]>([
     {
       type: 'paragraph',
-      children: [{ text: 'A line of text in a paragraph.' }],
+      children: [
+        {
+          text: '',
+        },
+      ],
+    },
+    {
+      type: 'paragraph',
+      children: [
+        {
+          text: 'Учитывая ключевые сценарии поведения, современная методология разработки в значительной степени обусловливает важность анализа существующих паттернов поведения.',
+        },
+      ],
     },
   ]);
   useEffect(() => {
@@ -122,6 +116,7 @@ const RichTextEditor = observer((editorProps: RichTextEditorProps): JSX.Element 
           />
         </Paper>
         <Editable
+          style={{ height: '300px' }}
           renderElement={renderElement}
           renderLeaf={renderLeaf}
           onKeyDown={event => {

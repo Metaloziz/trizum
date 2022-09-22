@@ -11,6 +11,8 @@ import { canSwitchToT } from 'app/types/UserTypes';
 import { execute } from 'utils/execute';
 import { AvatarT } from 'app/types/AvatarT';
 import { FranchiseT } from 'app/types/FranchiseTypes';
+import { LoginPasswordFormType } from 'pages/login/loginWithPassword/LoginWithPassword';
+import tokenService from 'app/services/tokenService';
 
 export enum Roles {
   /* Ученик */
@@ -115,9 +117,17 @@ class AppStore {
     makeAutoObservable(this);
   }
 
-  login = async (data: RequestLogin) => {
+  loginWithSMS = async (data: RequestLogin) => {
     await execute(async () => {
-      await authService.login(data);
+      await authService.loginWithSMS(data);
+    });
+  };
+
+  loginWithPassword = async (data: LoginPasswordFormType) => {
+    await execute(async () => {
+      const res = await authService.loginWithPassword(data);
+      await tokenService.setUser(res.data.token);
+      await this.loadme();
     });
   };
 

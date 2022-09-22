@@ -4,7 +4,7 @@ import styles from './AddNewsPage.module.scss';
 import Button from 'components/button/Button';
 import RichTextEditor from 'components/rich-text/RichTextEditor';
 import { CustomMultiSelect, StyledOption } from 'components/multiSelect/CustomMultiSelect';
-import { convertEnumOptions } from 'utils/convertEnumOptions';
+import { convertEnumOptions, EMPTY_ROLE_VALUE } from 'utils/convertEnumOptions';
 import { RoleNames } from 'app/enums/RoleNames';
 import { TextField } from '@mui/material';
 import testsStore from 'app/stores/testsStore';
@@ -31,14 +31,24 @@ type ArticleFormT = {
 };
 
 const AddNewsPage = observer(() => {
+  const { content } = slateStore;
   const { tests, setTests, setSearchParams } = testsStore;
   const { postArticle, isSuccessPost, article, setDefaultIsSuccessPost } = articlesStore;
-  const { content } = slateStore;
 
-  const [roles, setRoles] = useState<any>(['']);
+  const [roles, setRoles] = useState<any>([EMPTY_ROLE_VALUE]);
 
   const rolesOptions = convertEnumOptions(RoleNames);
   const testOptions = convertTestOptions(tests);
+
+  const removeDefaultRole = (newRoles: any[]) => {
+    const EmptyRoleIndex = newRoles.indexOf(EMPTY_ROLE_VALUE);
+
+    if (EmptyRoleIndex >= 0 && newRoles.length > 1) {
+      newRoles.splice(EmptyRoleIndex, 1);
+    }
+
+    setRoles(newRoles);
+  };
 
   useEffect(() => {
     setSearchParams({ per_page: 1000 });
@@ -135,7 +145,7 @@ const AddNewsPage = observer(() => {
             <div className={styles.selectBlock}>
               <p>Доступно ролям:</p>
 
-              <CustomMultiSelect value={roles} onChange={e => setRoles(e)}>
+              <CustomMultiSelect value={roles} onChange={e => removeDefaultRole(e)}>
                 {rolesOptions.map(({ value, label }) => (
                   <StyledOption key={value} value={value}>
                     {label}

@@ -6,15 +6,15 @@ import { useNavigate } from 'react-router-dom';
 import styles from './BlogPage.module.scss';
 
 import { AppRoutes } from 'app/enums/AppRoutes';
-import appStore, { Roles } from 'app/stores/appStore';
+import { Roles } from 'app/stores/appStore';
 import articlesStore from 'app/stores/articlesStore';
 import Button from 'components/button/Button';
 import { SecondaryRoutes } from 'app/enums/SecondaryRoutes';
 import Pagination from '@mui/material/Pagination';
 import { ArticlePreview } from 'components/blog-page/ArticlePreview/ArticlePreview';
+import { whoCanUseIt } from 'utils/whoCanUseIt';
 
 const BlogPage: FunctionComponent = observer(() => {
-  const { role } = appStore;
   const { articles, getArticles, page, perPage, total, setSearchArticlesParams } = articlesStore;
 
   const [currentPage, setCurrentPage] = useState(page + 1);
@@ -39,23 +39,17 @@ const BlogPage: FunctionComponent = observer(() => {
     navigate(`${AppRoutes.Testing}/${SecondaryRoutes.AddTest}`);
   };
 
-  const isAdmin = () => {
-    switch (role) {
-      case Roles.Admin:
-      case Roles.Methodist:
-        return true;
-      default:
-        return false;
-    }
-  };
-
   return (
     <div className={styles.container}>
-      {isAdmin() && (
-        <>
-          <Button onClick={onClickAddPost}>Добавить статью</Button>
-          <Button onClick={onClickAddTest}>Добавить тест</Button>
-        </>
+      {whoCanUseIt([Roles.Admin, Roles.Methodist]) && (
+        <div className={styles.buttons}>
+          <Button onClick={onClickAddPost} variant="addUser" size="small">
+            Добавить статью
+          </Button>
+          <Button onClick={onClickAddTest} variant="addUser" size="small">
+            Добавить тест
+          </Button>
+        </div>
       )}
       <ArticlePreview articles={articles} />
       <div className={styles.pagination}>

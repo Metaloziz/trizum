@@ -19,7 +19,7 @@ import { GameWrapper } from 'pages/game/Game';
 import Home from 'pages/home/Home';
 import Homework from 'pages/homework/Homework';
 import HomeworkAddEdit from 'pages/homework/HomeworkAddEdit/HomeworkAddEdit';
-import Login from 'pages/login/Login';
+import LoginWithSMS from 'pages/login/LoginWithSMS/LoginWithSMS';
 import Olympiad from 'pages/olympiads/Olympiad/Olympiad';
 import Olympiads from 'pages/olympiads/Olympiads';
 import Pay from 'pages/pay/Pay';
@@ -62,7 +62,7 @@ const App = observer(() => (
           {/* <Route path={AppRoutes.Games} element={<Game />} /> */}
           <Route path={AppRoutes.Homework} element={<Homework />} />
           <Route path={`${AppRoutes.Homework}${AppRoutes.Add}`} element={<HomeworkAddEdit />} />
-          <Route path={AppRoutes.Signin} element={<Login />} />
+          <Route path={AppRoutes.Signin} element={<LoginWithSMS />} />
 
           <Route path={AppRoutes.Olympiads}>
             <Route path="" element={<Olympiads />} />
