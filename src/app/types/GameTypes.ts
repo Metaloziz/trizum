@@ -19,7 +19,13 @@ export type PresetsGameSettings = {
   blinksCount?: number;
   errorAcceptable?: number;
   speed?: number;
-  rows?: number;
+  sizeX?: number;
+  sizeY?: number;
+  colorsMap?: string[];
+  delay?: number;
+  level?: number;
+  colorCount?: number;
+  forms?: number;
 };
 
 export type EditOrCreatePresetParamsT = {
