@@ -147,5 +147,9 @@ class ArticlesStore {
       this.isSuccessPost = null;
     });
   };
+
+  get getArticle() {
+    return this.article;
+  }
 }
 export default new ArticlesStore();

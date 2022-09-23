@@ -35,6 +35,7 @@ import OlympiadsListPage from 'components/olympiads-list-page/OlympiadsListPage'
 import { SecondaryRoutes } from 'app/enums/SecondaryRoutes';
 import { TestsList } from 'pages/testing/TestsList/TestsList';
 import AddNewsPage from 'components/add-news-page';
+import { ArticleFromEditor } from 'components/blog-page/ArticleFromEditor/ArticleFromEditor';
 
 const App = observer(() => (
   <LocalizationProvider dateAdapter={AdapterMoment}>
@@ -46,7 +47,7 @@ const App = observer(() => (
           <Route path={AppRoutes.Blog}>
             <Route path="" element={<Blog />} />
             <Route path={SecondaryRoutes.AddArticle} element={<AddNewsPage />} />
-            <Route path=":articleName" element={<Article />} />
+            <Route path=":articleName" element={<ArticleFromEditor />} />
             {/* <Route path={SecondaryRoutes.AddTest} element={<div>add test</div>} /> */}
           </Route>
 
