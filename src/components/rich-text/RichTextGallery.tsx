@@ -100,8 +100,8 @@ export const RichTextGallery: FC<RichGalleryProps> = observer(props => {
                 </div>
                 <img
                   className={styles.image}
-                  // src={`https://backschool.sitetopic.ru${image.path}`} // TODO change on prod / remote
-                  src={`https://lk.trizum.ru${image.path}`} // TODO change on prod / remote
+                  src={`https://backschool.sitetopic.ru${image.path}`} // TODO change on prod / remote
+                  // src={`https://lk.trizum.ru${image.path}`} // TODO change on prod / remote
                   alt={image.id}
                   loading="lazy"
                 />

@@ -101,6 +101,7 @@ export type ParentT = {
   phone: string;
   email: string;
   main: boolean;
+  password: string;
 };
 
 export type ParentDataT = {
@@ -118,6 +119,7 @@ export type ResponseOneUser = {
   tariff: null | any;
   payedUntill: null | any;
   isSecondChild: null | boolean;
+  password: string;
 } & ResponseUserT;
 
 export type RequestParenting = {

@@ -48,7 +48,6 @@ const ClassesPage = observer(() => {
     selectedGroup,
     nullableSelectedGroup,
   } = groupStore;
-  const { role } = appStore;
   const [currentPage, setCurrentPage] = useState((queryFields.page || 0) + 1);
 
   useEffect(() => {

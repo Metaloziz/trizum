@@ -36,6 +36,7 @@ export type RequestRegister = {
   groupId?: string;
   tariffId?: string;
   isSecondChild?: boolean;
+  password: string;
 };
 
 export type ResponseAvatar = {
@@ -44,6 +45,7 @@ export type ResponseAvatar = {
 
 export type ResponseEditSelf = {
   phone: string;
-  smsCode: number;
+  smsCode?: number;
+  password?: string;
   email: string;
 };

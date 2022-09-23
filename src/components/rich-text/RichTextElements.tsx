@@ -63,8 +63,8 @@ export const Elem: FC<RenderElementProps> = props => {
     case 'picture':
       return (
         <div style={style} {...attributes}>
-          {/* <img src={'https://backschool.sitetopic.ru' + fullPath} alt={element.path} /> */}
-          <img src={'https://lk.trizum.ru' + fullPath} alt={element.path} />
+          <img src={'https://backschool.sitetopic.ru' + fullPath} alt={element.path} />
+          {/* <img src={'https://lk.trizum.ru' + fullPath} alt={element.path} /> */}
           {children}
         </div>
       );

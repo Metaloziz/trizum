@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { convertEngRoleToRu } from 'utils/convertEngRoleToRu';
 import { getFullUserName } from 'utils/getFullUserName';
 
 import modals from '../../../app/stores/CardStudentExtended';
@@ -39,39 +40,39 @@ const CardStudentExtended: FC<Props> = ({
 }) => {
   const FULL_NAME = getFullUserName(middleName, firstName, lastName);
 
-  let role;
+  const role = convertEngRoleToRu(roleCode);
 
-  switch (roleCode) {
-    case Roles.Student:
-      role = RoleNames.student;
-      break;
-    case Roles.Parent:
-      role = RoleNames.parent;
-      break;
-    case Roles.Teacher:
-      role = RoleNames.teacher;
-      break;
-    case Roles.TeacherEducation:
-      role = RoleNames.teacherEducation;
-      break;
-    case Roles.Tutor:
-      role = RoleNames.tutor;
-      break;
-    case Roles.Methodist:
-      role = RoleNames.methodist;
-      break;
-    case Roles.Admin:
-      role = RoleNames.admin;
-      break;
-    case Roles.FranchiseeAdmin:
-      role = RoleNames.franchiseeAdmin;
-      break;
-    case Roles.Franchisee:
-      role = RoleNames.franchisee;
-      break;
-    default:
-      role = '-';
-  }
+  // switch (roleCode) {
+  //   case Roles.Student:
+  //     role = RoleNames.student;
+  //     break;
+  //   case Roles.Parent:
+  //     role = RoleNames.parent;
+  //     break;
+  //   case Roles.Teacher:
+  //     role = RoleNames.teacher;
+  //     break;
+  //   case Roles.TeacherEducation:
+  //     role = RoleNames.teacherEducation;
+  //     break;
+  //   case Roles.Tutor:
+  //     role = RoleNames.tutor;
+  //     break;
+  //   case Roles.Methodist:
+  //     role = RoleNames.methodist;
+  //     break;
+  //   case Roles.Admin:
+  //     role = RoleNames.admin;
+  //     break;
+  //   case Roles.FranchiseeAdmin:
+  //     role = RoleNames.franchiseeAdmin;
+  //     break;
+  //   case Roles.Franchisee:
+  //     role = RoleNames.franchisee;
+  //     break;
+  //   default:
+  //     role = '-';
+  // }
 
   const onEditUserClick = async () => {
     try {

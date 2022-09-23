@@ -135,10 +135,11 @@ class Game extends Component<any, any> {
   render() {
     const { started = false, isOpenModal } = this.state;
     const GameComponent = this.gameComponent;
-    const { actualPreset } = gamesStore;
+    const { actualPresets, gamePreset } = gamesStore;
     const { role } = appStore;
     const widthScreen = window.innerWidth;
 
+    console.log(gamePreset);
     let gameViewSize = 700;
     if (widthScreen <= 1000 && widthScreen > 760) {
       gameViewSize = widthScreen - 300;
@@ -155,7 +156,7 @@ class Game extends Component<any, any> {
       },
     ];
 
-    actualPreset.map(el =>
+    actualPresets.map(el =>
       presetArr.push({
         value: el.name,
         label: el.name,
