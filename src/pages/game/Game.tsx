@@ -138,8 +138,8 @@ class Game extends Component<any, any> {
     const { actualPresets, gamePreset } = gamesStore;
     const { role } = appStore;
     const widthScreen = window.innerWidth;
+    const settings = gamePreset.gamePreset.settings[0];
 
-    console.log(gamePreset);
     let gameViewSize = 700;
     if (widthScreen <= 1000 && widthScreen > 760) {
       gameViewSize = widthScreen - 300;
@@ -237,6 +237,7 @@ class Game extends Component<any, any> {
                           onRef={this.onRefGame}
                           width={gameViewSize}
                           onEnd={this.onEnd}
+                          {...settings}
                         />
                         {!started && <PlayButton onStart={this.onStart} />}
                       </div>
