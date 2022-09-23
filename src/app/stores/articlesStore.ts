@@ -59,6 +59,8 @@ class ArticlesStore {
     forTutor: true,
   };
 
+  isLoading: boolean = false;
+
   private searchArticlesParams: SearchParams = {
     page: 0,
     perPage: 10,
@@ -147,5 +149,9 @@ class ArticlesStore {
       this.isSuccessPost = null;
     });
   };
+
+  get getArticle() {
+    return this.article;
+  }
 }
 export default new ArticlesStore();

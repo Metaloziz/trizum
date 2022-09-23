@@ -18,6 +18,7 @@ import { exists } from 'fs';
 import styles from './RichText.module.scss';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { BASE_URL } from 'constants/constants';
 
 export const RichTextGallery: FC<RichGalleryProps> = observer(props => {
   const [open, setOpen] = React.useState(false);
@@ -28,8 +29,7 @@ export const RichTextGallery: FC<RichGalleryProps> = observer(props => {
     if (open) getImages();
   }, [open]);
   const handleSelect = (event: any) => {
-    setSelectedImagePath(event.target.src.replace('https://lk.trizum.ru', '')); // TODO change on prod / remote
-    // setSelectedImagePath(event.target.src.replace('https://backschool.sitetopic.ru', '')); // TODO change on prod / remote
+    setSelectedImagePath(event.target.src.replace(BASE_URL, '')); // TODO change on prod / remote
     // handleClose();
     props.callback();
   };
@@ -100,8 +100,7 @@ export const RichTextGallery: FC<RichGalleryProps> = observer(props => {
                 </div>
                 <img
                   className={styles.image}
-                  src={`https://backschool.sitetopic.ru${image.path}`} // TODO change on prod / remote
-                  // src={`https://lk.trizum.ru${image.path}`} // TODO change on prod / remote
+                  src={`${BASE_URL}/${image.path}`} // TODO change on prod / remote
                   alt={image.id}
                   loading="lazy"
                 />
