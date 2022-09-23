@@ -38,7 +38,7 @@ const CardStudentExtended: FC<Props> = ({
   },
   getOneUser,
 }) => {
-  const FULL_NAME = getFullUserName(middleName, firstName, lastName);
+  const FULL_NAME = getFullUserName(lastName, firstName, middleName);
 
   const role = convertEngRoleToRu(roleCode);
 

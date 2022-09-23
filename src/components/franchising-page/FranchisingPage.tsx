@@ -75,7 +75,7 @@ const FranchisingPage = observer(() => {
               }}
             >
               <Button size="small" variant="addUser" onClick={() => store.openDialog()}>
-                Добавить пользователя
+                Добавить франшизу
               </Button>
             </Stack>
             <Filter onChange={store.onChangeFilter} />

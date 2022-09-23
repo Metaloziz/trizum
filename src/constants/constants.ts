@@ -8,8 +8,8 @@ export const PHONE_LENGTH = 11;
 export const FIRST_ARRAY_ITEM = 0;
 
 // base url
-// export const BASE_URL = 'https://backschool.sitetopic.ru';
-export const BASE_URL = 'https://lk.trizum.ru';
+export const BASE_URL = 'https://backschool.sitetopic.ru';
+// export const BASE_URL = 'https://lk.trizum.ru';
 
 // for test
 export const MAX_TEST_RESULT = 100; // todo Дима попросил временно зафиксировать
