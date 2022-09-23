@@ -4,7 +4,7 @@ import React from 'react';
 import styles from './gameResultModal.module.scss';
 
 export const GameResultModal = (props: any) => {
-  const { time, result, error, onClose, open } = props;
+  const { time, error, onClose, open, success, onStart } = props;
   return (
     <Dialog open={open} fullWidth onClose={onClose}>
       <div className={styles.wrapper}>
@@ -13,16 +13,18 @@ export const GameResultModal = (props: any) => {
           <span className={styles.resultWrapper_result}>
             Время: <span className={styles.resultWrapper_result_count}>{time}</span>
           </span>
-          {/* <span className={styles.resultWrapper_result}> */}
-          {/*  Результат: <span className={styles.resultWrapper_result_count}>{result}</span> */}
-          {/* </span> */}
+          {success && (
+            <span className={styles.resultWrapper_result}>
+              Верных ответов: <span className={styles.resultWrapper_result_count}>{success}</span>
+            </span>
+          )}
           <span className={styles.resultWrapper_result}>
             Ошибок: <span className={styles.resultWrapper_result_count}>{error}</span>
           </span>
         </div>
         <div className={styles.btnBlock}>
           <Button onClick={onClose}>Закончить</Button>
-          <Button>Ещё раз</Button>
+          <Button onClick={onStart}>Ещё раз</Button>
         </div>
       </div>
     </Dialog>

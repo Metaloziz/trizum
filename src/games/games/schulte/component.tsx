@@ -1,6 +1,3 @@
-import {
-  GameResultModal
-} from "components/game-page/GameCommon/GameModal/GameResultModal/GameResultModal";
 import React, { Component } from 'react';
 import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { generateLayout } from './utils/logic';

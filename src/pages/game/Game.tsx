@@ -125,6 +125,13 @@ class Game extends Component<any, any> {
     );
   };
 
+  onRepeat = () => {
+    this.setState({
+      resultModal: false,
+    });
+    this.onStart();
+  };
+
   onRefGame = (ref: any) => {
     this.game = ref;
   };
@@ -179,9 +186,10 @@ class Game extends Component<any, any> {
         <GameResultModal
           open={resultModal}
           time={gameResult.time}
-          result={gameResult.result}
           error={gameResult.failed}
+          success={gameResult.success}
           onClose={this.closeResultModal}
+          onStart={this.onRepeat}
         />
         <div className={styles.gameList}>
           {Games.map(gam => (
