@@ -41,14 +41,15 @@ const BlogPage: FunctionComponent = observer(() => {
 
   return (
     <div className={styles.container}>
-      {whoCanUseIt([Roles.Admin, Roles.Methodist]) && (
-        <div className={styles.buttons}>
-          <Button onClick={onClickAddPost} variant="addUser" size="small">
-            Добавить статью
-          </Button>
-          <Button onClick={onClickAddTest} variant="addUser" size="small">
-            Добавить тест
-          </Button>
+      {whoCanUseIt([Roles.Admin, Roles.Methodist]) &&(
+        <div className={styles.buttonsBox}>
+          <div className={styles.buttonArticle}>
+            <Button onClick={onClickAddPost}>Добавить статью</Button>
+          </div>
+          <div>
+            <Button onClick={onClickAddTest}>Добавить тест</Button>
+          </div>
+
         </div>
       )}
       <ArticlePreview articles={articles} />
