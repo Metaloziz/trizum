@@ -204,7 +204,7 @@ export const GameModal: FC<PropsT> = observer(props => {
                       title="Необходимые цвета"
                       variant="input"
                       value={colorsMap.join(',')}
-                      onChange={e => setColorsMap(e.split(','))}
+                      onChange={e => setColorsMap(e.toLowerCase().split(','))}
                     />
                   </div>
                 </div>

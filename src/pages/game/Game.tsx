@@ -5,6 +5,7 @@ import { OptionT } from 'app/types/OptionT';
 import Button from 'components/button/Button';
 import { GameDesc } from 'components/game-page/GameCommon/GameDesc';
 import { GameModal } from 'components/game-page/GameCommon/GameModal/GameModal';
+import { GameResultModal } from 'components/game-page/GameCommon/GameModal/GameResultModal/GameResultModal';
 import { PlayButton } from 'components/game-page/GameCommon/PlayButton';
 import Image from 'components/image/Image';
 import InformationItem from 'components/information-item/InformationItem';
@@ -59,7 +60,8 @@ class Game extends Component<any, any> {
     this.state = {
       started: false,
       isOpenModal: false,
-      // game,
+      resultModal: false,
+      gameResult: [],
     };
   }
 
@@ -74,10 +76,19 @@ class Game extends Component<any, any> {
     });
   };
 
+  closeResultModal = () => {
+    this.setState({
+      resultModal: false,
+      gameResult: [],
+    });
+  };
+
   onEnd = (result: any) => {
     this.setState(
       {
         started: false,
+        resultModal: true,
+        gameResult: result,
       },
       async () => {
         await gamesStore.sendResults(result);
@@ -98,9 +109,7 @@ class Game extends Component<any, any> {
         if (result?.failed) {
           message.push(`Допущено ошибок: ${result.failed}`);
         }
-
-        /* eslint-disable no-alert */
-        alert(message.join('\n'));
+        console.log(message.join('\n'));
       },
     );
   };
@@ -133,7 +142,7 @@ class Game extends Component<any, any> {
   };
 
   render() {
-    const { started = false, isOpenModal } = this.state;
+    const { started = false, isOpenModal, resultModal, gameResult } = this.state;
     const GameComponent = this.gameComponent;
     const { actualPresets, gamePreset } = gamesStore;
     const { role } = appStore;
@@ -162,12 +171,18 @@ class Game extends Component<any, any> {
         label: el.name,
       }),
     );
-
     return (
       <div className={styles.innerContent}>
         {(role === Roles.Methodist || role === Roles.Admin) && (
           <GameModal open={isOpenModal} onClose={this.toggleModal} />
         )}
+        <GameResultModal
+          open={resultModal}
+          time={gameResult.time}
+          result={gameResult.result}
+          error={gameResult.failed}
+          onClose={this.closeResultModal}
+        />
         <div className={styles.gameList}>
           {Games.map(gam => (
             <div key={`game-${gam.name}`} className={styles.gameItem}>
@@ -206,8 +221,8 @@ class Game extends Component<any, any> {
               element={
                 <div className={styles.wrapGameBlock}>
                   <section>
-                    <div className={styles.wrapGameBlock_header}>
-                      {(role === Roles.Methodist || role === Roles.Admin) && (
+                    {(role === Roles.Methodist || role === Roles.Admin) && (
+                      <div className={styles.wrapGameBlock_header}>
                         <div className={styles.wrapGameBlock_header_select}>
                           <InformationItem
                             variant="select"
@@ -217,19 +232,20 @@ class Game extends Component<any, any> {
                             onChangeSelect={data => this.setPreset(data)}
                           />
                         </div>
-                      )}
-                      <div className={styles.wrapGameBlock_header_select}>
-                        <InformationItem variant="select" size="normal" placeholder="Год" />
+                        <div className={styles.wrapGameBlock_header_select}>
+                          <InformationItem variant="select" size="normal" placeholder="Год" />
+                        </div>
+                        <div className={styles.wrapGameBlock_header_select}>
+                          <InformationItem variant="select" size="normal" placeholder="Месяц" />
+                        </div>
+                        <div className={styles.wrapGameBlock_header_select}>
+                          <InformationItem variant="select" size="normal" placeholder="Группа" />
+                        </div>
+                        <Button onClick={() => this.toggleModal(true)}>
+                          {gamePreset?.gamePreset?.id ? 'Выбрать настройки' : 'Создать настройки'}
+                        </Button>
                       </div>
-                      <div className={styles.wrapGameBlock_header_select}>
-                        <InformationItem variant="select" size="normal" placeholder="Месяц" />
-                      </div>
-                      <div className={styles.wrapGameBlock_header_select}>
-                        <InformationItem variant="select" size="normal" placeholder="Группа" />
-                      </div>
-
-                      <Button onClick={() => this.toggleModal(true)}>Выбрать настройки</Button>
-                    </div>
+                    )}
 
                     <div className={styles.wrapGame}>
                       <div className={styles.wrapGame_overlay}>
