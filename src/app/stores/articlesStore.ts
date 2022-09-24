@@ -59,6 +59,8 @@ class ArticlesStore {
     forTutor: true,
   };
 
+  isLoading: boolean = false;
+
   private searchArticlesParams: SearchParams = {
     page: 0,
     perPage: 10,

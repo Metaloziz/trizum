@@ -10,6 +10,7 @@ import CustomImageWrapper from 'components/custom-image-wrapper/CustomImageWrapp
 import Image from 'components/image/Image';
 import Avatar from 'public/img/avatarDefault.png';
 import { EmptyUser } from 'app/stores/appStore';
+import { BASE_URL } from 'constants/constants';
 
 interface Props {
   user: EmptyUser;
@@ -24,10 +25,7 @@ const CardStudentForTeacher: FC<Props> = props => {
       <div className={styles.row}>
         <CustomImageWrapper className={styles.image} variant="circle">
           <Image
-            src={
-              // user.avatar?.path ? `https://lk.trizum.ru${user?.avatar?.path}` : Avatar
-              user.avatar?.path ? `https://backschool.sitetopic.ru${user?.avatar?.path}` : Avatar
-            }
+            src={user.avatar?.path ? `${BASE_URL}${user?.avatar?.path}` : Avatar}
             width="170"
             height="170"
             alt="student"

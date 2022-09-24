@@ -1,7 +1,7 @@
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import React, { FC, useEffect, useMemo } from 'react';
 import articlesStore from 'app/stores/articlesStore';
 import { observer } from 'mobx-react-lite';
-import { createEditor, Descendant } from 'slate';
+import { createEditor } from 'slate';
 import { Editable, Slate, withReact } from 'slate-react';
 import { Elem, Leaf } from 'components/rich-text/RichTextElements';
 import Paper from '@mui/material/Paper';
@@ -10,17 +10,14 @@ import { AppRoutes } from 'app/enums/AppRoutes';
 import { SecondaryRoutes } from 'app/enums/SecondaryRoutes';
 import style from './ArticleFromEditor.module.scss';
 import testsStore from 'app/stores/testsStore';
+import { Loader } from 'components/loader/Loader';
 
 export const ArticleFromEditor: FC = observer(() => {
-  const {
-    article: { title, content, test },
-    // getArticle: { title, content, test },
-  } = articlesStore;
   const { setOneTest } = testsStore;
-
-  const [value, setValue] = useState(content);
-
-  console.log('content', [...value]);
+  const {
+    getArticle: { title, content, test },
+    isLoading,
+  } = articlesStore;
 
   useEffect(() => {
     if (!!test) {
@@ -28,19 +25,19 @@ export const ArticleFromEditor: FC = observer(() => {
     }
   }, []);
 
-  useEffect(() => {
-    setValue(content);
-  }, [content]);
-
   const editor = useMemo(() => withReact(createEditor()), []);
   const renderElement = (props: any) => <Elem {...props} />;
   const renderLeaf = (props: any) => <Leaf {...props} />;
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className={style.container}>
       <Paper elevation={1} sx={{ width: '100%', padding: '20px' }}>
         <h2>{title}</h2>
-        <Slate editor={editor} value={content}>
+        <Slate editor={editor} value={[...content]}>
           <Editable readOnly renderElement={renderElement} renderLeaf={renderLeaf} />
         </Slate>
       </Paper>

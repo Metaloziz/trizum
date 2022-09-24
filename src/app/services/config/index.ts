@@ -1,10 +1,10 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 import TokenService from 'app/services/tokenService';
+import { BASE_URL } from 'constants/constants';
 
 const instance = axios.create({
-  baseURL: 'https://backschool.sitetopic.ru/api/v1/',
-  // baseURL: 'https://lk.trizum.ru/api/v1/',
+  baseURL: `${BASE_URL}/api/v1/`,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',

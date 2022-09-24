@@ -1,7 +1,6 @@
 import { FC, useCallback, useState } from 'react';
 
 import { observer } from 'mobx-react-lite';
-import { BASE_URL } from 'utils/consts';
 import { convertEngRoleToRu } from 'utils/convertEngRoleToRu';
 
 import styles from './Account.module.scss';
@@ -11,6 +10,7 @@ import appStore, { Roles } from 'app/stores/appStore';
 import mockAvatar from 'assets/images/avatar.png';
 import { DropDownStudents } from 'components/drop-down-student/DropDownStudents';
 import Image from 'components/image/Image';
+import { BASE_URL } from 'constants/constants';
 
 const Account: FC = observer(() => {
   const { user, setRole, isLoggedIn } = appStore;

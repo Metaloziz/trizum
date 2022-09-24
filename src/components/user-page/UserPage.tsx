@@ -13,6 +13,7 @@ import gag from 'assets/svgs/user.svg';
 import Button from 'components/button/Button';
 import Image from 'components/image/Image';
 import Setting from 'components/setting/Setting';
+import { BASE_URL } from 'constants/constants';
 
 const UserPage = observer(() => {
   const { user, setUser } = appStore;
@@ -105,8 +106,7 @@ const UserPage = observer(() => {
             {user?.avatar !== null ? (
               <Image
                 className={styles.avatarImage}
-                // src={`https://lk.trizum.ru${user?.avatar?.path}`}
-                src={`https://backschool.sitetopic.ru${user?.avatar?.path}`}
+                src={`${BASE_URL}${user?.avatar?.path}`}
                 width="320"
                 height="320"
                 alt="user"

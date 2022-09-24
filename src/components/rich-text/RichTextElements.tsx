@@ -7,6 +7,7 @@ import imagesStore from '../../app/stores/imagesStore';
 import ToggleButton from '@mui/material/ToggleButton';
 import { isBlockActive, isMarkActive, toggleBlock, toggleMark } from './RichTextHelpers';
 import { GetIcon } from './RichTextComponents';
+import { BASE_URL } from 'constants/constants';
 
 export const Leaf: FC<RenderLeafProps> = props => {
   const { attributes, leaf } = props;
@@ -63,8 +64,7 @@ export const Elem: FC<RenderElementProps> = props => {
     case 'picture':
       return (
         <div style={style} {...attributes}>
-          <img src={'https://backschool.sitetopic.ru' + fullPath} alt={element.path} />
-          {/* <img src={'https://lk.trizum.ru' + fullPath} alt={element.path} /> */}
+          <img src={BASE_URL + fullPath} alt={element.path} />
           {children}
         </div>
       );

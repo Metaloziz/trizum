@@ -1,6 +1,7 @@
 import Axios, { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
 import dateTransformer from 'axios-date-reviver';
 import { StatusCodes } from 'http-status-codes';
+import { BASE_URL } from 'constants/constants';
 
 export type PrerequestHook = () => Promise<void>;
 
@@ -23,8 +24,7 @@ export class HttpClient {
   }
 
   private readonly makeConfig = (): AxiosRequestConfig => ({
-    // baseURL: 'https://lk.trizum.ru/api/v1/',
-    baseURL: 'https://backschool.sitetopic.ru/api/v1/',
+    baseURL: `${BASE_URL}/api/v1/`,
     url: this.url,
     method: this.method,
     timeout: HttpClient.defaultTimeout,

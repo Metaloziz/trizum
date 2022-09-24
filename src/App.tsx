@@ -9,7 +9,6 @@ import { observer } from 'mobx-react-lite';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import { AppRoutes } from 'app/enums/AppRoutes';
-import { Article } from 'components/blog-page/Article/Article';
 import DefaultLayout from 'components/layout/default/DefaultLayout';
 import Blog from 'pages/blog/Blog';
 import Classes from 'pages/classes/Classes';
@@ -48,7 +47,6 @@ const App = observer(() => (
             <Route path="" element={<Blog />} />
             <Route path={SecondaryRoutes.AddArticle} element={<AddNewsPage />} />
             <Route path=":articleName" element={<ArticleFromEditor />} />
-            {/* <Route path={SecondaryRoutes.AddTest} element={<div>add test</div>} /> */}
           </Route>
 
           <Route path={AppRoutes.Classes} element={<Classes />} />

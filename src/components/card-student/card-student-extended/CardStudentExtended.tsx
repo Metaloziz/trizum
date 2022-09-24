@@ -14,7 +14,7 @@ import { EditUserIcon } from 'components/card-student/card-student-extended/edit
 import CustomImageWrapper from 'components/custom-image-wrapper/CustomImageWrapper';
 import Image from 'components/image/Image';
 import mockAvatar from 'public/img/avatarDefault.png';
-import { BASE_URL } from 'utils/consts';
+import { BASE_URL } from 'constants/constants';
 
 type Props = {
   user: ResponseUserT;
