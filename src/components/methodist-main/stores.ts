@@ -61,7 +61,8 @@ export class MethodistMainStore extends StoreBase {
   list = async () =>
     this.execute(async () => {
       const paginationResponse = await this._repository.list(this.pagination.page);
-      this.entities = paginationResponse.items;
+      // this.entities = paginationResponse.items;
+      this.entities = paginationResponse.items.filter(item=>item.status!=="archive");
       this.pagination = {
         page: paginationResponse.page,
         rowsPerPage: paginationResponse.perPage,

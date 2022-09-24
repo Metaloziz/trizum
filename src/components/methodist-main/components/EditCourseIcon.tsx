@@ -13,7 +13,7 @@ export const EditCourseIcon: FC<Props> = ({ onClick, status }) => (
     size="small"
     onClick={onClick}
     color="primary"
-    disabled={status !== StatusTypes.draft}
+    // disabled={status !== StatusTypes.draft}
   >
     <EditIcon fontSize="small" />
   </IconButton>
