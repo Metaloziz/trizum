@@ -134,15 +134,15 @@ const FranchisingPage = observer(() => {
                       },
                     }}
                   >
-                    {/* <TableCell>
-                      {entity.fullName && (
+                    <TableCell>
+                      {/* {entity && (
                         <>
-                          <Typography variant="caption">{entity.fullName || ''}</Typography>
+                          <Typography variant="caption">{entity.shortName || ''}</Typography>
                           <br />
                         </>
-                      )}
+                      )} */}
                       <Typography variant="caption">{entity.shortName || ''}</Typography>
-                    </TableCell> */}
+                    </TableCell>
                     <TableCell>
                       <Typography variant="caption">Город: {entity.city || '—'}</Typography>
                       <br />
