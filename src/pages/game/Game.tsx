@@ -70,6 +70,10 @@ class Game extends Component<any, any> {
     gamesStore.getGames();
   }
 
+  componentWillUnmount() {
+    gamesStore.getPreset('');
+  }
+
   toggleModal = (value: boolean) => {
     this.setState({
       isOpenModal: value,
