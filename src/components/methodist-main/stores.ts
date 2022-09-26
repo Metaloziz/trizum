@@ -1,5 +1,5 @@
 import coursesService from 'app/services/coursesService';
-import { makeObservable, observable } from 'mobx';
+import { makeObservable, observable, toJS } from 'mobx';
 import * as yup from 'yup';
 
 import { MethodistMainFilterViewModel } from './models/MethodistMainFilterViewModel';
@@ -91,22 +91,30 @@ export class MethodistMainStore extends StoreBase {
           status = this.editingEntity.status;
         }
       }
-      await this._repository.addOrEdit({
+      const data = {
         ...this.editingEntity,
         status: status || StatusTypes.draft,
         works: this.editingEntity.works?.length ? asd : undefined,
-      });
+      }
+      await this._repository.addOrEdit(data);
       await this.pull();
     });
   };
 
   remove = async (id: string) => {
+    const currentEntity = toJS(this.entities).find(ent => ent.id === id);
+    const status = currentEntity?.status
     try {
-      const res = await coursesService.deleteCourse(id);
-      console.log(res);
-      await this.pull();
-    } catch (e) {
-      console.warn(e);
+      if (status !== StatusTypes.draft) {
+        this.editingEntity = currentEntity ? { ...currentEntity, status: StatusTypes.archive } : this._defaultValue();
+        await this.addOrEdit();
+      } else {
+        const res = await coursesService.deleteCourse(id);
+        console.log(res);
+        await this.pull();
+      } 
+    } catch (error) {
+      console.warn(error);
     }
   };
 
