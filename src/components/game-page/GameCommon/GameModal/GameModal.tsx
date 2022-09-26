@@ -15,6 +15,7 @@ import styles from './gameModal.module.scss';
 type PropsT = {
   open: boolean;
   onClose: (value: boolean) => void;
+  deletePreset: (id: string) => void;
 };
 const defaultInputTextReader =
   'И нет сомнений, что некоторые особенности внутренней политики, превозмогая сложившуюся непростую экономическую ситуацию, ограничены исключительно образом мышления. Вот вам яркий пример современных тенденций - существующая теория позволяет оценить значение системы массового участия!';
@@ -29,7 +30,7 @@ const colorsObj = [
 ];
 
 export const GameModal: FC<PropsT> = observer(props => {
-  const { open, onClose } = props;
+  const { open, onClose, deletePreset } = props;
   const { createPresets, gamePreset, editPreset, game } = gamesStore;
 
   const settings = gamePreset?.gamePreset?.settings[0];
@@ -139,6 +140,13 @@ export const GameModal: FC<PropsT> = observer(props => {
     onClose(false);
   };
 
+  const deletedPreset = () => {
+    if (gamePreset.gamePreset.id) {
+      deletePreset(gamePreset.gamePreset.id);
+      onClose(false);
+    }
+  };
+
   return (
     <Dialog maxWidth="xl" fullWidth onClose={() => onClose(false)} open={open}>
       {colorModal && (
@@ -243,13 +251,6 @@ export const GameModal: FC<PropsT> = observer(props => {
                 </div>
                 <div className={styles.inputBlock}>
                   <div className={styles.gameModalColorBtn}>
-                    {/* <InformationItem */}
-                    {/*  title="Необходимые цвета" */}
-                    {/*  variant="input" */}
-                    {/*  value={colorsMap.join(',')} */}
-                    {/*  onChange={e => setColorsMap(e.toLowerCase().split(','))} */}
-                    {/* /> */}
-                    {/* Dodelat` knopky */}
                     <label>Необходимые цвета</label>
                     <button onClick={() => setColorModal(true)}>Выбор цвета</button>
                   </div>
@@ -347,6 +348,13 @@ export const GameModal: FC<PropsT> = observer(props => {
         </div>
       </div>
       <div className={styles.btn}>
+        <Button
+          onClick={deletedPreset}
+          variant="reset"
+          disabled={gamePreset.gamePreset.status !== 'draft'}
+        >
+          Удалить настройки
+        </Button>
         <Button
           disabled={gamePreset.gamePreset.status === 'active' || template.length < 1}
           onClick={savePreset}

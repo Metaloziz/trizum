@@ -155,7 +155,7 @@ class Game extends Component<any, any> {
   render() {
     const { started = false, isOpenModal, resultModal, gameResult } = this.state;
     const GameComponent = this.gameComponent;
-    const { actualPresets, gamePreset } = gamesStore;
+    const { actualPresets, gamePreset, deletePreset } = gamesStore;
     const { role } = appStore;
     const widthScreen = window.innerWidth;
     const settings = gamePreset.gamePreset.settings[0];
@@ -185,7 +185,7 @@ class Game extends Component<any, any> {
     return (
       <div className={styles.innerContent}>
         {(role === Roles.Methodist || role === Roles.Admin) && (
-          <GameModal open={isOpenModal} onClose={this.toggleModal} />
+          <GameModal open={isOpenModal} onClose={this.toggleModal} deletePreset={deletePreset} />
         )}
         <GameResultModal
           open={resultModal}

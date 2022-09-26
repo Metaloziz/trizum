@@ -1,5 +1,5 @@
 .gameModalWrapper {
-  width: 90%;
+  width: 92%;
   margin: 0 auto;
   background: #FFFFFF;
   padding: 40px 20px;
@@ -23,7 +23,7 @@
 }
 
 .inputBlock {
-  width: 100%;
+  width: 180px;
   display: flex;
   align-items: center;
   text-align: center;
@@ -48,7 +48,7 @@
 .presetNameInput {
   & input {
     background: linear-gradient(0deg, #E6EEF8, #E6EEF8), #CFD8DC;
-    width: auto;
+    width: 100%;
   }
 
 }
@@ -107,9 +107,9 @@
 
 .btn {
   width: 94%;
+  margin: 0 auto 20px auto;
   display: flex;
-  justify-content: end;
-  margin-bottom: 20px;
+  justify-content: space-between;
 }
 
 
@@ -131,7 +131,7 @@ input[type=number] {
   font-weight: 600;
 
   & button {
-    margin-left: 20px;
+    margin: 0 20px;
     background: #2E8DFD;
     width: 180px;
     height: 40px;
