@@ -1,12 +1,15 @@
 import gamesStore from 'app/stores/gamesStore';
 import Button from 'components/button/Button';
+import {
+  ColorObj,
+  GameColorPicker,
+} from 'components/game-page/GameCommon/GameModal/GameColorPicker';
 import InformationItem from 'components/information-item/InformationItem';
 import { InputRadio } from 'components/inputRadio/InputRadio';
 import { Dialog } from 'components/rate/ui/Dialog';
 import TextEditor from 'components/text-editor/TextEditor';
 import { observer } from 'mobx-react-lite';
-import React, { FC, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import styles from './gameModal.module.scss';
 
 type PropsT = {
@@ -16,12 +19,23 @@ type PropsT = {
 const defaultInputTextReader =
   'И нет сомнений, что некоторые особенности внутренней политики, превозмогая сложившуюся непростую экономическую ситуацию, ограничены исключительно образом мышления. Вот вам яркий пример современных тенденций - существующая теория позволяет оценить значение системы массового участия!';
 
+const colorsObj = [
+  { label: 'Зелёный', value: false, hex: '#076d4d', id: 0 },
+  { label: 'Чёрный', value: true, hex: '#000000', id: 1 },
+  { label: 'Красный', value: false, hex: '#e30d00', id: 2 },
+  { label: 'Синий', value: false, hex: '#699deb', id: 3 },
+  { label: 'Фиолетовый', value: false, hex: '#c3b8f9', id: 4 },
+  { label: 'Оранжевый', value: false, hex: '#f88e36', id: 5 },
+];
+
 export const GameModal: FC<PropsT> = observer(props => {
   const { open, onClose } = props;
   const { createPresets, gamePreset, editPreset, game } = gamesStore;
 
   const settings = gamePreset?.gamePreset?.settings[0];
   const gamePresetName = gamePreset?.gamePreset?.name;
+
+  const [colorModal, setColorModal] = useState<boolean>(false);
   const [template, setTemplate] = useState<string>(gamePresetName || '');
   const [timeComplete, setTimeComplete] = useState<string>(
     settings?.timeComplete?.toString() || '0',
@@ -39,6 +53,26 @@ export const GameModal: FC<PropsT> = observer(props => {
   );
   const [description, setDescription] = useState<string>(defaultInputTextReader);
   const [currentRadio, setCurrentRadio] = useState<string>('eachLevel');
+  const [colors, setColors] = useState<ColorObj[]>(colorsObj);
+
+  const changeColor = (index: number) => {
+    const copy: ColorObj[] = colors.map(el =>
+      el.id === index
+        ? {
+            ...el,
+            value: !el.value,
+          }
+        : el,
+    );
+    setColors(copy);
+  };
+
+  const setColor = useCallback((data: ColorObj[]) => {
+    const colorArr = [''];
+
+    data.filter(el => el.value && colorArr.push(el.hex));
+    setColorsMap(colorArr);
+  }, []);
 
   const rerenderPreset = () => {
     setTemplate(gamePresetName);
@@ -104,8 +138,17 @@ export const GameModal: FC<PropsT> = observer(props => {
     }
     onClose(false);
   };
+
   return (
     <Dialog maxWidth="xl" fullWidth onClose={() => onClose(false)} open={open}>
+      {colorModal && (
+        <GameColorPicker
+          colors={colors}
+          changeColor={changeColor}
+          setColor={setColor}
+          onClose={() => setColorModal(false)}
+        />
+      )}
       <div className={styles.gameModalWrapper}>
         <div className={styles.gameModalWrapper_settings}>
           <section>
@@ -199,13 +242,25 @@ export const GameModal: FC<PropsT> = observer(props => {
                   </div>
                 </div>
                 <div className={styles.inputBlock}>
-                  <div>
-                    <InformationItem
-                      title="Необходимые цвета"
-                      variant="input"
-                      value={colorsMap.join(',')}
-                      onChange={e => setColorsMap(e.toLowerCase().split(','))}
-                    />
+                  <div className={styles.gameModalColorBtn}>
+                    {/* <InformationItem */}
+                    {/*  title="Необходимые цвета" */}
+                    {/*  variant="input" */}
+                    {/*  value={colorsMap.join(',')} */}
+                    {/*  onChange={e => setColorsMap(e.toLowerCase().split(','))} */}
+                    {/* /> */}
+                    {/* Dodelat` knopky */}
+                    <label>Необходимые цвета</label>
+                    <button onClick={() => setColorModal(true)}>Выбор цвета</button>
+                  </div>
+                  <div style={{ display: 'flex' }}>
+                    {colorsMap.map(color => (
+                      <div
+                        key={color}
+                        style={{ backgroundColor: `${color}` }}
+                        className={styles.colorTemplate}
+                      />
+                    ))}
                   </div>
                 </div>
                 <div className={styles.inputBlock}>
@@ -219,14 +274,12 @@ export const GameModal: FC<PropsT> = observer(props => {
                   </div>
                 </div>
                 <div className={styles.inputBlock}>
-                  <div>
-                    <InformationItem
-                      title="Длина по оси Y"
-                      variant="numberInput"
-                      value={sizeY}
-                      onChange={setSizeY}
-                    />
-                  </div>
+                  <InformationItem
+                    title="Длина по оси Y"
+                    variant="numberInput"
+                    value={sizeY}
+                    onChange={setSizeY}
+                  />
                 </div>
               </>
             ) : null}
