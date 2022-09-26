@@ -29,7 +29,7 @@ const gamesService = {
     return data;
   },
   createPresentGame: async (params: EditOrCreatePresetParamsT): Promise<GamePresetT> => {
-    const { data } = await instance.post(Paths.Presets, params);
+    const { data } = await instance.post(Paths.Presets, { ...params, status: 'draft' });
     return data;
   },
   editPresetGame: async (id: string, params: EditOrCreatePresetParamsT): Promise<GamePresetT> => {
@@ -38,6 +38,10 @@ const gamesService = {
   },
   sendPlayResults: async (params: PlaySendResultT) => {
     const { data } = await instance.post(Paths.PlayResults, params);
+    return data;
+  },
+  deletePreset: async (id: string) => {
+    const { data } = await instance.delete(`${Paths.Presets}/${id}`);
     return data;
   },
   getPlayResults: async (): Promise<PlayResultsResponseT> => {

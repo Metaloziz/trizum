@@ -69,8 +69,8 @@ export const GameModal: FC<PropsT> = observer(props => {
 
   const setColor = useCallback((data: ColorObj[]) => {
     const colorArr = [''];
-
     data.filter(el => el.value && colorArr.push(el.hex));
+    colorArr.shift();
     setColorsMap(colorArr);
   }, []);
 

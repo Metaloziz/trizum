@@ -139,6 +139,11 @@ class GamesStore {
     await this.getPresets();
   };
 
+  deletePreset = async (id: string) => {
+    await gamesService.deletePreset(id);
+    await this.getPresets();
+  };
+
   sendResults = async (params: PlaySendResultT) => {
     await gamesService.sendPlayResults(params);
   };
