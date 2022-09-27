@@ -51,6 +51,10 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
     store?.editingEntity?.gamePresets?.push(gamePreset);
     setChooseGame(false);
   };
+
+  const deleteOnePreset = (id: string) => {
+    store.editingEntity.gamePresets = store?.editingEntity?.gamePresets.filter(pr => pr.id !== id);
+  };
   return (
     <Dialog
       PaperProps={{
@@ -155,15 +159,17 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
                       }}
                     >
                       <TableCell>
-                        <Typography>
-                          {store.editingEntity.gamePresets[0].game.name || ''}
-                        </Typography>
+                        <Typography>{preset.game.name || ''}</Typography>
                       </TableCell>
                       <TableCell>
-                        <Typography>{store.editingEntity.gamePresets[0].name || ''}</Typography>
+                        <Typography>{preset.name || ''}</Typography>
                       </TableCell>
                       <TableCell align="right">
-                        <IconButton size="small" onClick={() => {}} color="error">
+                        <IconButton
+                          size="small"
+                          onClick={() => deleteOnePreset(preset.id)}
+                          color="error"
+                        >
                           <DeleteIcon fontSize="small" />
                         </IconButton>
                       </TableCell>
