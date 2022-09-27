@@ -12,6 +12,7 @@ import {
 } from 'app/types/UserTypes';
 import { checkErrorMessage, ErrorMessageType } from 'utils/checkErrorMessage';
 import { SearchUserType } from 'app/types/SearchUserType';
+import { UpdateParentingPayloadType } from 'app/types/updateParentingPayloadType';
 
 class UsersStore {
   users: ResponseUserT[] = [];
@@ -115,10 +116,10 @@ class UsersStore {
 
   createParenting = async (data: RequestParenting) => {
     try {
-      const res = await usersService.createParenting(data);
-      await this.getUsers();
+      return await usersService.createParenting(data);
     } catch (e) {
       console.warn(e);
+      return undefined;
     }
   };
 
@@ -142,6 +143,14 @@ class UsersStore {
   cleanSearchUsersParams = () => {
     this.searchUsersParams = this.searchDefaultUsersParams;
     this.getFilteredUsers();
+  };
+
+  updateParenting = async (payload: UpdateParentingPayloadType) => {
+    const res = await usersService.updateParenting(payload);
+  };
+
+  deleteParenting = async (parentingId: string) => {
+    const res = await usersService.deleteParenting(parentingId);
   };
 
   resetCurrentUser = () => {

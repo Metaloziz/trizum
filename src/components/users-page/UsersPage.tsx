@@ -1,4 +1,4 @@
-import appStore, { EmptyUser, Roles } from 'app/stores/appStore';
+import appStore, { Roles } from 'app/stores/appStore';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import Pagination from '@mui/material/Pagination';
 import { observer } from 'mobx-react-lite';
@@ -10,7 +10,6 @@ import franchiseeStore from 'app/stores/franchiseeStore';
 import groupStore from 'app/stores/groupStore';
 import tariffsStore from 'app/stores/tariffsStore';
 import usersStore from 'app/stores/usersStore';
-import { RequestRegister } from 'app/types/AuthTypes';
 import BasicModal from 'components/basic-modal/BasicModal';
 import CardStudentExtended from 'components/card-student/card-student-extended/CardStudentExtended';
 import StudentPageFranchiseeModalAddUser from 'components/users-page/student-page-franchisee-modal-add-user/StudentPageFranchiseeModalAddUser';
@@ -21,7 +20,6 @@ const UsersPage = observer(() => {
   const {
     users,
     usersTotalCount,
-    createUser,
     getOneUser,
     currentUser,
     page,
@@ -42,14 +40,6 @@ const UsersPage = observer(() => {
     setCurrentPage(newCurrentPage);
     getFilteredUsers();
   };
-  const onAddUser = (data: RequestRegister) => {
-    setIsModalOpen(false);
-    createUser(data);
-  };
-
-  const onEditUserClick = (id: string) => {
-    console.log(id);
-  };
 
   useEffect(() => {
     role === Roles.Franchisee || role === Roles.FranchiseeAdmin
@@ -60,20 +50,18 @@ const UsersPage = observer(() => {
     getFilteredUsers();
   }, []);
 
-    useEffect(()=>{
-        setCurrentPage(page+1)
-    },[page])
+  useEffect(() => {
+    setCurrentPage(page + 1);
+  }, [page]);
 
-    return (
+  console.log('modals.isParents', [modals.isParents]);
+
+  return (
     <div className={styles.wrapper}>
       <Filter setIsModalOpen={setIsModalOpen} />
       <div className={styles.cardWrapper}>
         {users.map(u => (
-          <CardStudentExtended
-            getOneUser={getOneUser}
-            key={u.id}
-            user={u}
-          />
+          <CardStudentExtended getOneUser={getOneUser} key={u.id} user={u} />
         ))}
       </div>
       <div className={styles.pagination}>

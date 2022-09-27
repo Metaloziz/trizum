@@ -9,6 +9,7 @@ import {
   ResponseParenting,
   ResponseUserT,
 } from 'app/types/UserTypes';
+import { UpdateParentingPayloadType } from 'app/types/updateParentingPayloadType';
 
 const usersService = {
   getAllUsers: async (params?: RequestUsersForFilter): Promise<FullResponseUserT> => {
@@ -59,6 +60,16 @@ const usersService = {
   },
   createParenting: async (params: RequestParenting): Promise<ResponseParenting> => {
     const { data } = await instance.post(Paths.Parentings, params);
+    return data;
+  },
+
+  updateParenting: async ({ parentingId, payload }: UpdateParentingPayloadType) => {
+    const { data } = await instance.post(Paths.Parentings + '/' + parentingId, payload);
+    return data;
+  },
+
+  deleteParenting: async (parentingId: string) => {
+    const { data } = await instance.delete(Paths.Parentings + '/' + parentingId);
     return data;
   },
 };

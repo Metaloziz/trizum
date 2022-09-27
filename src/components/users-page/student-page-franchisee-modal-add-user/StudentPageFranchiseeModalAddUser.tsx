@@ -49,6 +49,7 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
     const { groups, loadCurrentGroups } = groupStore;
     const { tariffs } = tariffsStore;
     const { role, user } = appStore;
+
     const franchiseOptions = convertFranchiseeOptions(franchise);
     const sexOptions = convertSexOptions();
     const groupOptions = convertGroupOptions(groups);

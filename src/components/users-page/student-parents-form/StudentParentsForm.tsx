@@ -1,4 +1,3 @@
-import usersStore from 'app/stores/usersStore';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useState } from 'react';
 
@@ -9,7 +8,7 @@ import * as yup from 'yup';
 import { SexEnum } from 'app/enums/CommonEnums';
 import { Roles } from 'app/stores/appStore';
 import { RequestRegister } from 'app/types/AuthTypes';
-import { ParentT } from 'app/types/UserTypes';
+import { ParentT, ResponseOneUser, ResponseParenting } from 'app/types/UserTypes';
 import iconMedal from 'assets/svgs/medal.svg';
 import Button from 'components/button/Button';
 import Image from 'components/image/Image';
@@ -17,7 +16,6 @@ import CustomSelect from 'components/select-mui/CustomSelect';
 import styles from 'components/users-page/student-parents-form/StudentParentsForm.module.scss';
 import { action } from 'components/users-page/student-parents-form/utils/action';
 import { sexOptions } from 'components/users-page/student-parents-form/utils/sexOptions';
-import { MAIN_PARENT_ID } from 'components/users-page/student-parrents-form-container/store/store';
 import { MAX_NAMES_LENGTH, MIN_NAMES_LENGTH } from 'constants/constants';
 import { REG_EMAIL, REG_NAME } from 'constants/regExp';
 import { OptionT } from 'app/types/OptionT';
@@ -40,11 +38,13 @@ type Props = {
   studentId: string;
   franchiseId: string;
   isMainParent: boolean;
-  setIsMainParent: (value: boolean, id: number) => void;
-  setIsSubmitSuccessful: (isSuccess: boolean, id: number) => void;
+  setIsMainParent: (value: boolean, id: number, parentingId?: string) => void;
+  setSuccessForm: (isSuccess: boolean, id: number, parentingData?: ResponseParenting) => void;
+  deleteParenting: (parentingId: string) => void;
   parent?: ParentT;
-  isSubmitAnyForm: boolean;
+  isSuccessSubmit: boolean;
   isViewMode?: boolean;
+  currentUser?: ResponseOneUser;
 };
 
 type CreateParentPayloadT = Omit<
@@ -54,21 +54,28 @@ type CreateParentPayloadT = Omit<
 
 const StudentParentsForm: FC<Props> = observer(
   ({
-    setIsSubmitSuccessful,
+    setSuccessForm,
     studentId,
     franchiseId,
     localParentFormID,
     isMainParent,
     setIsMainParent,
     parent,
-    isSubmitAnyForm,
+    isSuccessSubmit,
     isViewMode,
+    currentUser,
+    deleteParenting,
   }) => {
-    const { currentUser } = usersStore;
     const [isDisableSubmit, setIsDisableSubmit] = useState(false);
 
-    const handlerRadioChange = () => {
-      setIsMainParent(!isMainParent, localParentFormID);
+    const radioChangeHandler = () => {
+      setIsMainParent(!isMainParent, localParentFormID, parent?.id);
+    };
+
+    const deleteParentingHandler = () => {
+      if (parent) {
+        deleteParenting(parent.id);
+      }
     };
 
     const userFranchiseId: string | undefined = currentUser?.franchise?.id as string | undefined;
@@ -173,7 +180,7 @@ const StudentParentsForm: FC<Props> = observer(
         setError,
         studentId,
         values.isMain,
-        setIsSubmitSuccessful,
+        setSuccessForm,
         localParentFormID,
       );
     };
@@ -330,41 +337,47 @@ const StudentParentsForm: FC<Props> = observer(
                 render={({ field }) => (
                   <div className={styles.selectWrapper}>
                     <div className={styles.label}>
-                      {localParentFormID === MAIN_PARENT_ID && (
-                        <>
-                          <FormGroup>
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  color="primary"
-                                  checked={isMainParent}
-                                  disabled={isSubmitAnyForm}
-                                  onChange={e => {
+                      <>
+                        <FormGroup>
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                color="primary"
+                                checked={isMainParent}
+                                onChange={e => {
+                                  if (!isMainParent) {
                                     field.onChange(e);
-                                    handlerRadioChange();
-                                  }}
-                                />
-                              }
-                              label="Основной"
-                            />
-                            <FormHelperText error={!errors.isMain?.message}>
-                              {errors.isMain?.message}
-                            </FormHelperText>
-                          </FormGroup>
+                                    radioChangeHandler();
+                                  }
+                                }}
+                              />
+                            }
+                            label="Основной"
+                          />
+                          <FormHelperText error={!errors.isMain?.message}>
+                            {errors.isMain?.message}
+                          </FormHelperText>
+                        </FormGroup>
+                        {isMainParent && (
                           <Image src={iconMedal} width="20" height="20" alt="medal" />
-                        </>
-                      )}
+                        )}
+                      </>
                     </div>
                   </div>
                 )}
               />
             </Grid>
             {isViewMode || (
-              <Grid item xs={12} sm={6}>
+              <div className={styles.buttons}>
                 <Button type="submit" disabled={isDisableSubmit} onClick={handleSubmit(onSubmit)}>
                   Сохранить
                 </Button>
-              </Grid>
+                {!isMainParent && (
+                  <Button variant="reset" size="thin" onClick={deleteParentingHandler}>
+                    Удалить
+                  </Button>
+                )}
+              </div>
             )}
           </Grid>
         </Box>

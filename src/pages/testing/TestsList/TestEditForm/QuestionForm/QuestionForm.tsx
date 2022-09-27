@@ -8,6 +8,7 @@ import {
   MAX_TEST_QUESTION_LENGTH,
   MAX_VARIANTS_ANSWERS_TEST,
   MIN_NAMES_LENGTH,
+  MIN_VARIANTS_ANSWER_COUNT,
 } from 'constants/constants';
 import style from './QuestionForm.module.scss';
 import { Button as EditButton } from '@mui/material';
@@ -27,7 +28,7 @@ type Props = {
 };
 
 export const QuestionForm: FC<Props> = ({ getQuestionFormData }) => {
-  const [answersCount, setAnswersCount] = useState(2);
+  const [answersCount, setAnswersCount] = useState(MIN_VARIANTS_ANSWER_COUNT);
   const [answers, setAnswers] = useState(new QuestionFormData());
 
   const inputRules = yup
@@ -56,6 +57,7 @@ export const QuestionForm: FC<Props> = ({ getQuestionFormData }) => {
   const onSubmit = handleSubmit(values => {
     getQuestionFormData(values);
     setAnswers(new QuestionFormData());
+    setAnswersCount(MIN_VARIANTS_ANSWER_COUNT);
     reset();
   });
 

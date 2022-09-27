@@ -89,7 +89,8 @@ export type FullResponseUserT = WithPagination<ResponseUserT[]>;
 export type UserStatusT = boolean;
 
 export type ParentT = {
-  id: string;
+  id: string; // parenting id
+  parentId: string; // user id
   firstName: string;
   middleName: string;
   lastName: string;
@@ -132,4 +133,5 @@ export type ResponseParenting = {
   id: string;
   childId: string;
   parentId: string;
+  isMain: boolean;
 };

@@ -1,7 +1,7 @@
 import usersService from 'app/services/usersService';
 import usersStore from 'app/stores/usersStore';
 import { RequestRegister } from 'app/types/AuthTypes';
-import { ParentT, RequestParenting } from 'app/types/UserTypes';
+import { ParentT, RequestParenting, ResponseParenting } from 'app/types/UserTypes';
 import { setErrorFormMessage } from 'utils/setErrorFormMessage';
 
 export const action = async (
@@ -11,7 +11,11 @@ export const action = async (
   setError: any,
   studentId: string,
   isMain: boolean,
-  setIsSubmitSuccessful: (isSuccess: boolean, id: number) => void,
+  setIsSubmitSuccessful: (
+    isSuccess: boolean,
+    id: number,
+    parentingData?: ResponseParenting,
+  ) => void,
   localIdParentForm: number,
 ) => {
   const { createUser, createParenting } = usersStore;
@@ -44,7 +48,8 @@ export const action = async (
         isMain,
       };
       const res = await createParenting(newParenting);
-      setIsSubmitSuccessful(true, localIdParentForm);
+
+      setIsSubmitSuccessful(true, localIdParentForm, res);
     }
   } catch (e) {
     setIsDisable(false);
