@@ -94,8 +94,10 @@ export const HomeworkPage = observer(() => {
                 }}
               >
                 <TableCell>Наименование</TableCell>
-                <TableCell width="auto">Описание</TableCell>
-                <TableCell>Количество игр</TableCell>
+                <TableCell align="center" width="auto">
+                  Описание
+                </TableCell>
+                <TableCell align="center">Количество игр</TableCell>
                 <TableCell />
               </TableRow>
             </TableHead>
@@ -114,9 +116,11 @@ export const HomeworkPage = observer(() => {
                     <TableCell>
                       <Typography>{entity.title || ''}</Typography>
                     </TableCell>
-                    <TableCell>{/* <Typography>{entity.text || "—"}</Typography> */}</TableCell>
-                    <TableCell>
-                      {/* <Typography>{entity.gamePresets.length || "0"}</Typography> */}
+                    <TableCell align="center">
+                      <Typography>{entity.text || '—'}</Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography>{entity.gamePresets?.length || '0'}</Typography>
                     </TableCell>
                     <TableCell>
                       <Stack direction="row" justifyContent="flex-end">

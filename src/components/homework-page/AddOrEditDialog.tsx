@@ -41,14 +41,15 @@ const statusTypesKeys = Object.keys(StatusEnum);
 
 export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
   const { store } = props;
+  console.log(store);
 
   const [chooseGame, setChooseGame] = useState<boolean>(false);
   const statusTypesOptions = Object.values(
     store.editingEntity?.id ? StatusEnum : ShortStatusEnum,
   ).map((el, index) => getOptionMui(statusTypesKeys[index], el));
   const getPresetGame = (gamePreset: GamePresetT) => {
+    store?.editingEntity?.gamePresets?.push(gamePreset);
     setChooseGame(false);
-    store.editingEntity?.gamePresets.push(gamePreset);
   };
   return (
     <Dialog
@@ -153,8 +154,14 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
                         },
                       }}
                     >
-                      <TableCell />
-                      <TableCell />
+                      <TableCell>
+                        <Typography>
+                          {store.editingEntity.gamePresets[0].game.name || ''}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography>{store.editingEntity.gamePresets[0].name || ''}</Typography>
+                      </TableCell>
                       <TableCell align="right">
                         <IconButton size="small" onClick={() => {}} color="error">
                           <DeleteIcon fontSize="small" />

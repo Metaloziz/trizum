@@ -4,7 +4,7 @@ import { GamePresetT } from 'app/types/GameTypes';
 import Button from 'components/button/Button';
 import { Dialog } from 'components/franchising-page/ui/Dialog';
 import { observer } from 'mobx-react-lite';
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import styles from './setGameHomework.module.scss';
 import { getOptionMui } from 'utils/getOption';
 
@@ -33,10 +33,21 @@ type SetGameHomeworkPropsT = {
   getPresetGame: (gamePreset: GamePresetT) => void;
 };
 export const SetGameHomework: FC<SetGameHomeworkPropsT> = observer(props => {
+  const [gameName, setGameName] = useState('');
+  const [presetName, setPresetName] = useState('');
   const { open, onClose, getPresetGame } = props;
   const { games, actualPresets, getGame, getPreset, gamePreset } = gamesStore;
   const gamesOptions = Games.map(game => getOptionMui(game.name, game.title));
   const presetOptions = actualPresets.map(pr => getOptionMui(pr.name, pr.name));
+  const setGame = (value: string) => {
+    setGameName(value);
+    getGame(value);
+  };
+  const setPreset = (value: string) => {
+    setPresetName(value);
+    getPreset(value);
+  };
+
   console.log(gamePreset);
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
@@ -47,8 +58,8 @@ export const SetGameHomework: FC<SetGameHomeworkPropsT> = observer(props => {
             <InputLabel>Игра</InputLabel>
             <Select
               label="Игра"
-              value={Games[0].title}
-              onChange={({ target: { value } }) => getGame(value)}
+              value={gameName}
+              onChange={({ target: { value } }) => setGame(value)}
               // error={
               //   !store.validateSchema.fields.status.isValidSync(store.editingEntity.status)
               // }
@@ -61,9 +72,9 @@ export const SetGameHomework: FC<SetGameHomeworkPropsT> = observer(props => {
           <FormControl fullWidth size="small">
             <InputLabel>Настройка</InputLabel>
             <Select
-              value={actualPresets[0]?.name}
+              value={presetName}
               label="Настройка"
-              onChange={({ target: { value } }) => getPreset(value)}
+              onChange={({ target: { value } }) => setPreset(value)}
               // error={
               //   !store.validateSchema.fields.status.isValidSync(store.editingEntity.status)
               // }
