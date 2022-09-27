@@ -101,6 +101,7 @@ class GamesStore {
 
   getPreset = async (presetName: string) => {
     try {
+      debugger;
       const preset = this.newPresets.items.filter(el => el.name === presetName);
       if (preset.length) {
         const res = await gamesService.getPreset(preset[0].id);

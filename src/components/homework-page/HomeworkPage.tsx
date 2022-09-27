@@ -1,3 +1,4 @@
+import gamesStore from 'app/stores/gamesStore';
 import { useEffect, useMemo } from 'react';
 
 import AddIcon from '@mui/icons-material/Add';
@@ -32,6 +33,8 @@ export const HomeworkPage = observer(() => {
 
   useEffect(() => {
     store.pull();
+    gamesStore.getGames();
+    gamesStore.getPresets();
   }, []);
 
   return (
@@ -74,7 +77,7 @@ export const HomeworkPage = observer(() => {
                 backgroundColor: '#2e8dfd',
               }}
             >
-              Добавить
+              Добавить домашнее задание
             </Button>
           </Stack>
         </Box>
@@ -92,7 +95,7 @@ export const HomeworkPage = observer(() => {
               >
                 <TableCell>Наименование</TableCell>
                 <TableCell width="auto">Описание</TableCell>
-                <TableCell>Колличество игр</TableCell>
+                <TableCell>Количество игр</TableCell>
                 <TableCell />
               </TableRow>
             </TableHead>

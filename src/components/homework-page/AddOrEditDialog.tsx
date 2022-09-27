@@ -19,7 +19,11 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import gamesStore from 'app/stores/gamesStore';
+import { GamePresetT } from 'app/types/GameTypes';
+import { SetGameHomework } from 'components/homework-page/setGameHomeWork/SetGameHomework';
 import { observer } from 'mobx-react';
+import { useState } from 'react';
 
 import { Dialog, DialogTitle } from '../franchising-page/ui/Dialog';
 
@@ -38,10 +42,14 @@ const statusTypesKeys = Object.keys(StatusEnum);
 export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
   const { store } = props;
 
+  const [chooseGame, setChooseGame] = useState<boolean>(false);
   const statusTypesOptions = Object.values(
     store.editingEntity?.id ? StatusEnum : ShortStatusEnum,
   ).map((el, index) => getOptionMui(statusTypesKeys[index], el));
-
+  const getPresetGame = (gamePreset: GamePresetT) => {
+    setChooseGame(false);
+    store.editingEntity?.gamePresets.push(gamePreset);
+  };
   return (
     <Dialog
       PaperProps={{
@@ -54,8 +62,15 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
       onClose={store.closeDialog}
       open={store.isDialogOpen}
     >
+      <SetGameHomework
+        getPresetGame={getPresetGame}
+        open={chooseGame}
+        onClose={() => setChooseGame(false)}
+      />
       <DialogTitle onClose={store.closeDialog}>
-        {store.editingEntity?.id ? 'Редактирование записи' : 'Добавление новой записи'}
+        {store.editingEntity?.id
+          ? 'Редактирование домашнего задания'
+          : 'Добавление нового домашнего задания'}
       </DialogTitle>
       <DialogContent dividers>
         <Stack spacing={1}>
@@ -120,7 +135,7 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
                         color: '#fff',
                       }}
                     >
-                      <AddIcon fontSize="small" />
+                      <AddIcon onClick={() => setChooseGame(true)} fontSize="small" />
                     </IconButton>
                   </TableCell>
                 </TableRow>
@@ -130,7 +145,7 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
                 {(store.editingEntity.gamePresets || []).length > 0 ? (
                   (store.editingEntity.gamePresets || []).map(preset => (
                     <TableRow
-                      key={preset}
+                      key={preset.id}
                       hover
                       sx={{
                         '& > td': {
