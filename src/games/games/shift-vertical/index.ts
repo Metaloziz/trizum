@@ -3,4 +3,7 @@ import Component from './component';
 
 export type Props = Propss;
 
-export { PropsDefault, Component };
+export {
+  PropsDefault,
+  Component
+};

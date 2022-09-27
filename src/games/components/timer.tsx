@@ -1,29 +1,31 @@
 import React, { Component } from 'react';
-
 import { View, Image, TouchableOpacity } from 'react-native';
 
 export default class extends Component<any, any> {
-  timer: any;
 
-  constructor(props: any) {
+  timer : any;
+
+  constructor(props : any) {
     super(props);
 
     this.timer = false;
 
     this.state = {
-      start: +new Date(),
-      time: 0,
+      start : +(new Date),
+      time : 0
     };
   }
 
-  getValue = () => this.state.time;
+  getValue = () => {
+    return this.state.time;
+  }
 
   componentDidMount() {
     this.startTick();
   }
 
   componentWillUnmount() {
-    if (this.timer === false) {
+    if(this.timer === false) {
       return;
     }
 
@@ -34,44 +36,45 @@ export default class extends Component<any, any> {
     this.timer = setTimeout(() => {
       this.onTick();
     }, 1000);
-  };
+  }
 
   onTick = () => {
-    const now = +new Date();
+    const now = +(new Date);
     const range = Math.round((now - this.state.start) / 1000);
 
-    const time = this.state.time + range;
+    let time = this.state.time + range;
 
-    this.setState(
-      {
-        start: now,
-        time,
-      },
-      () => {
-        this.startTick();
-      },
-    );
-  };
+    this.setState({
+      start : now,
+      time
+    }, () => {
+      this.startTick();
+    });
+  }
 
   clear = () => {
-    if (this.timer) {
+    if(this.timer) {
       clearTimeout(this.timer);
     }
 
-    this.setState(
-      {
-        start: +new Date(),
-        time: 0,
-      },
-      this.startTick,
-    );
-  };
+    this.setState({
+      start : +(new Date),
+      time : 0
+    }, this.startTick);
+  }
 
   render() {
-    const { time } = this.state;
+    const {
+      time
+    } = this.state;
 
-    const { renderTime = () => {} } = this.props;
+    const {
+      renderTime = () => {}
+    } = this.props;
 
-    return <>{renderTime(time)}</>;
+    return <>
+      {renderTime(time)}
+    </>;
   }
+
 }

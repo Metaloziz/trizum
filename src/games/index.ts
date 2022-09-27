@@ -1,6 +1,10 @@
 import { GameResult as GameResults } from './common/types';
-import { factory as Factory, GameList } from './factory';
+import { factory as Factory, GameList, GameIdentifiers } from './factory';
 
 export type GameResult = GameResults;
 
-export { Factory, GameList };
+export {
+  Factory,
+  GameList,
+  GameIdentifiers
+};

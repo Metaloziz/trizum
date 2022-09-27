@@ -12,9 +12,9 @@ import Tile from '../utils/tile'
 // Views
 import GameContainer from './gameContainer';
 
-class Container extends Component {
+class Container extends Component<any, any> {
 
-  constructor(props ) {
+  constructor(props : any) {
     super(props);
 
     this.state = {
@@ -45,22 +45,22 @@ class Container extends Component {
     } = this.props;
 
     return <SwipeGestures
-        style={{
-          width
-        }}
-        onSwipeUp={() => this.move(0)}
-        onSwipeDown={() => this.move(2)}
-        onSwipeLeft={() => this.move(3)}
-        onSwipeRight={() => this.move(1)}
+      style={{
+        width
+      }}
+      onSwipeUp={() => this.move(0)}
+      onSwipeDown={() => this.move(2)}
+      onSwipeLeft={() => this.move(3)}
+      onSwipeRight={() => this.move(1)}
     >
       <GameContainer
-          width={width}
-          size={this.state.size}
-          tiles={this.state.tiles}
-          won={this.state.won}
-          over={this.state.over}
-          onKeepGoing={() => this.keepGoing()}
-          onTryAagin={()=> this.restart()}
+        width={width}
+        size={this.state.size}
+        tiles={this.state.tiles}
+        won={this.state.won}
+        over={this.state.over}
+        onKeepGoing={() => this.keepGoing()}
+        onTryAagin={()=> this.restart()}
       />
     </SwipeGestures>;
   }
@@ -101,7 +101,7 @@ class Container extends Component {
     this.keepPlaying = true
     this.continueGame()  // Clear the game won/lost message
   }
-  // Return true if the game is lost, or has won and the user hasn't kept playing
+   // Return true if the game is lost, or has won and the user hasn't kept playing
   isGameTerminated() {
     return this.over || (this.won && !this.keepPlaying)
   }
@@ -112,7 +112,7 @@ class Container extends Component {
     this.won         = false;
     this.keepPlaying = false;
 
-    LayoutAnimation.easeInEaseOut();
+		LayoutAnimation.easeInEaseOut();
 
     this.setState({
       score: this.score,
@@ -159,7 +159,7 @@ class Container extends Component {
       });
     });
 
-    LayoutAnimation.easeInEaseOut();
+		LayoutAnimation.easeInEaseOut();
 
     this.setState({
       score: this.score,
@@ -240,7 +240,7 @@ class Container extends Component {
       this.addRandomTile();
       if (!this.movesAvailable()) {
         this.props.onEnd(
-            this.score
+          this.score
         );
         this.over = true; // Game over!
       }
@@ -281,7 +281,7 @@ class Container extends Component {
       previous = cell;
       cell     = { x: previous.x + vector.x, y: previous.y + vector.y };
     } while (this.grid.withinBounds(cell) &&
-    this.grid.cellAvailable(cell));
+             this.grid.cellAvailable(cell));
 
     return {
       farthest: previous,

@@ -1,14 +1,14 @@
-let _prog = 0;
+var _prog = 0;
 
-const Tile = function (position, value) {
-  this.x = position.x;
-  this.y = position.y;
-  this.value = value || 2;
+var Tile = function (position, value) {
+  this.x                = position.x;
+  this.y                = position.y;
+  this.value            = value || 2;
 
   this.previousPosition = null;
-  this.mergedFrom = null; // Tracks tiles that merged together
-  this.prog = _prog++;
-};
+  this.mergedFrom       = null; // Tracks tiles that merged together
+  this.prog             = _prog++;
+}
 
 Tile.prototype.savePosition = function () {
   this.previousPosition = { x: this.x, y: this.y };
@@ -23,10 +23,10 @@ Tile.prototype.serialize = function () {
   return {
     position: {
       x: this.x,
-      y: this.y,
+      y: this.y
     },
-    value: this.value,
+    value: this.value
   };
 };
 
-export default Tile;
+export default Tile

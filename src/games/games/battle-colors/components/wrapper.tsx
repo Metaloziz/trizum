@@ -37,10 +37,12 @@ export default class extends Component<any, any> {
     const timer: any = this.refs?.timer;
     const time = this.props.time - timer?.getValue();
 
-    onEnd({
-      ...result,
-      time
-    });
+    setTimeout(() => {
+      onEnd({
+        ...result,
+        time
+      });
+    }, 500);
   }
 
   onProgress = (color : any) => {
@@ -77,10 +79,9 @@ export default class extends Component<any, any> {
   render() {
     const {
       time,
-      delay,
       levels,
-      colors = 2,
-      forms = 2,
+      width,
+      colors = 2
     } = this.props;
 
     const {
@@ -92,16 +93,16 @@ export default class extends Component<any, any> {
       <LevelsView
         count={levels}
         progress={progress}
+        onLevel={1}
       />
       <View style={styles.inner}>
         <LevelView
           key={`level-${active}`}
           colors={colors}
-          forms={forms}
           onProgress={this.onProgress}
           onEnd={this.onLevelEnd}
           onResult={this.onResult}
-          delay={delay}
+          width={width}
         />
       </View>
       <View style={styles.progressTime}>

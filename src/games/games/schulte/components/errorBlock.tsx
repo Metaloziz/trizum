@@ -4,92 +4,99 @@ import { View, Image, TouchableOpacity, StyleSheet, Animated, Easing } from 'rea
 import { isWeb } from '../../../common/utils';
 
 export default class extends Component<any, any> {
-  constructor(props: any) {
+
+  constructor(props : any) {
     super(props);
 
     this.state = {
-      x: 0,
-      y: 0,
-      opacity: new Animated.Value(0),
+      x : 0,
+      y : 0,
+      opacity : new Animated.Value(0)
     };
   }
 
   componentDidMount() {
-    const { onRef = () => {} } = this.props;
+    const {
+      onRef = () => {}
+    } = this.props;
 
     onRef(this);
   }
 
-  show = (x: number = 0, y: number = 0) => {
-    this.setState(
-      {
-        x,
-        y,
-        opacity: new Animated.Value(1),
-      },
-      () => {
-        this.animateTo(0);
-      },
-    );
-  };
+  show = (x : number = 0, y : number = 0) => {
+    this.setState({
+      x,
+      y,
+      opacity : new Animated.Value(1)
+    }, () => {
+      this.animateTo(0);
+    });
+  }
 
-  animateTo = (value: any) => {
-    const { opacity } = this.state;
+  animateTo = (value : any) => {
+    const {
+      opacity
+    } = this.state;
 
-    if (isWeb()) {
+    if(isWeb()) {
       setTimeout(() => {
         this.setState({
-          opacity: new Animated.Value(value),
+          opacity : new Animated.Value(value)
         });
       }, 200);
       return;
     }
 
     Animated.timing(opacity, {
-      toValue: value,
-      duration: 200,
-      easing: Easing.linear,
-      useNativeDriver: true,
+      toValue : value,
+      duration : 200,
+      easing : Easing.linear,
+      useNativeDriver : true
     }).start();
-  };
+  }
 
   render() {
-    const { x = 0, y = 0, opacity } = this.state;
+    const {
+      x = 0,
+      y = 0,
+      opacity
+    } = this.state;
 
-    const { size = 0 } = this.props;
+    const {
+      size = 0
+    } = this.props;
 
     const sizeWithBorder = size;
 
-    return (
-      <View
+    return <View
+      style={{
+        ...styles.wrap,
+        width : sizeWithBorder,
+        height : sizeWithBorder,
+        top : (sizeWithBorder * y) - 1,
+        left : (sizeWithBorder * x) - 1
+      }}
+    >
+      <Animated.View
         style={{
-          ...styles.wrap,
-          width: sizeWithBorder,
-          height: sizeWithBorder,
-          top: sizeWithBorder * y - 1,
-          left: sizeWithBorder * x - 1,
+          ...styles.inner,
+          opacity : opacity.interpolate({
+            inputRange : [0, 1],
+            outputRange : [0, 1]
+          })
         }}
-      >
-        <Animated.View
-          style={{
-            ...styles.inner,
-            opacity: opacity.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, 1],
-            }),
-          }}
-        />
-      </View>
-    );
+      />
+    </View>;
   }
+
 }
 
 const styles = StyleSheet.create({
-  wrap: {
-    position: 'absolute',
+  wrap : {
+    position : 'absolute',
   },
-  inner: {
-    flex: 1,
-    backgroundColor: 'rgba(255,0,0,0.1)',
-  },
+  inner : {
+    flex : 1,
+    backgroundColor : 'rgba(255,0,0,0.1)'
+  }
 });

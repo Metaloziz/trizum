@@ -6,10 +6,12 @@ export interface Props extends GameProps {
   onEnd?(result?: GameResult): void;
 }
 
-const PropsDefault: Props = {
-  width: 200,
+const PropsDefault : Props = {
+  width : 200,
   size: 4,
-  startTiles: 2,
+  startTiles: 2
 };
 
-export { PropsDefault };
+export {
+  PropsDefault
+};

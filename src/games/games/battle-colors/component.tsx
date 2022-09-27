@@ -100,31 +100,6 @@ export default class extends Component<any, any> implements Game {
         required : true
       },
       {
-        name : 'delay',
-        title : 'Время на запоминание',
-        type : 'select',
-        option : [
-          {
-            title : '2 секунды',
-            value : 2
-          },
-          {
-            title : '3 секунды',
-            value : 3
-          },
-          {
-            title : '5 секунд',
-            value : 5
-          },
-          {
-            title : '10 секунд',
-            value : 10
-          },
-        ],
-        value : 3,
-        required : true
-      },
-      {
         name : 'levels',
         title : 'Кол-во уровней',
         type : 'select',
@@ -139,25 +114,15 @@ export default class extends Component<any, any> implements Game {
         option : counterSelect(3, 5),
         value : 3,
         required : true
-      },
-      {
-        name : 'forms',
-        title : 'Кол-во форм',
-        type : 'select',
-        option : counterSelect(3, 5),
-        value : 3,
-        required : true
-      },
+      }
     ];
   }
 
   public prepareConfig = (result : any) => {
     return {
       time : parseInt(result.time),
-      delay : parseInt(result.delay),
       levels : parseInt(result.levels),
       colors : parseInt(result.colors),
-      forms : parseInt(result.forms),
     };
   }
 

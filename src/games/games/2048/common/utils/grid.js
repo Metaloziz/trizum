@@ -1,18 +1,18 @@
-import Tile from './tile';
+import Tile from './tile'
 
 const Grid = function (size, previousState) {
   this.size = size;
   this.cells = previousState ? this.fromState(previousState) : this.empty();
-};
+}
 
 // Build a grid of the specified size
 Grid.prototype.empty = function () {
-  const cells = [];
+  var cells = [];
 
-  for (let x = 0; x < this.size; x++) {
-    const row = (cells[x] = []);
+  for (var x = 0; x < this.size; x++) {
+    var row = cells[x] = [];
 
-    for (let y = 0; y < this.size; y++) {
+    for (var y = 0; y < this.size; y++) {
       row.push(null);
     }
   }
@@ -21,13 +21,13 @@ Grid.prototype.empty = function () {
 };
 
 Grid.prototype.fromState = function (state) {
-  const cells = [];
+  var cells = [];
 
-  for (let x = 0; x < this.size; x++) {
-    const row = (cells[x] = []);
+  for (var x = 0; x < this.size; x++) {
+    var row = cells[x] = [];
 
-    for (let y = 0; y < this.size; y++) {
-      const tile = state[x][y];
+    for (var y = 0; y < this.size; y++) {
+      var tile = state[x][y];
       row.push(tile ? new Tile(tile.position, tile.value) : null);
     }
   }
@@ -37,7 +37,7 @@ Grid.prototype.fromState = function (state) {
 
 // Find the first available random position
 Grid.prototype.randomAvailableCell = function () {
-  const cells = this.availableCells();
+  var cells = this.availableCells();
 
   if (cells.length) {
     return cells[Math.floor(Math.random() * cells.length)];
@@ -45,11 +45,11 @@ Grid.prototype.randomAvailableCell = function () {
 };
 
 Grid.prototype.availableCells = function () {
-  const cells = [];
+  var cells = [];
 
-  this.eachCell((x, y, tile) => {
+  this.eachCell(function (x, y, tile) {
     if (!tile) {
-      cells.push({ x, y });
+      cells.push({ x: x, y: y });
     }
   });
 
@@ -58,8 +58,8 @@ Grid.prototype.availableCells = function () {
 
 // Call callback for every cell
 Grid.prototype.eachCell = function (callback) {
-  for (let x = 0; x < this.size; x++) {
-    for (let y = 0; y < this.size; y++) {
+  for (var x = 0; x < this.size; x++) {
+    for (var y = 0; y < this.size; y++) {
       callback(x, y, this.cells[x][y]);
     }
   }
@@ -82,8 +82,9 @@ Grid.prototype.cellOccupied = function (cell) {
 Grid.prototype.cellContent = function (cell) {
   if (this.withinBounds(cell)) {
     return this.cells[cell.x][cell.y];
+  } else {
+    return null;
   }
-  return null;
 };
 
 // Inserts a tile at its position
@@ -97,13 +98,14 @@ Grid.prototype.removeTile = function (tile) {
 };
 
 Grid.prototype.withinBounds = function (position) {
-  return position.x >= 0 && position.x < this.size && position.y >= 0 && position.y < this.size;
+  return position.x >= 0 && position.x < this.size &&
+         position.y >= 0 && position.y < this.size;
 };
 
 Grid.prototype.toString = function () {
-  const ret = [];
-  for (let y = 0; y < this.size; y++) {
-    for (let x = 0; x < this.size; x++) {
+  var ret = [];
+  for (var y = 0; y < this.size; y++) {
+    for (var x = 0; x < this.size; x++) {
       ret.push(this.cells[x][y] ? this.cells[x][y].value : '·');
     }
     ret.push('\n');
@@ -112,20 +114,20 @@ Grid.prototype.toString = function () {
 };
 
 Grid.prototype.serialize = function () {
-  const cellState = [];
+  var cellState = [];
 
-  for (let x = 0; x < this.size; x++) {
-    const row = (cellState[x] = []);
+  for (var x = 0; x < this.size; x++) {
+    var row = cellState[x] = [];
 
-    for (let y = 0; y < this.size; y++) {
+    for (var y = 0; y < this.size; y++) {
       row.push(this.cells[x][y] ? this.cells[x][y].serialize() : null);
     }
   }
 
   return {
     size: this.size,
-    cells: cellState,
+    cells: cellState
   };
 };
 
-export default Grid;
+export default Grid
