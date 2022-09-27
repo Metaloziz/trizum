@@ -27,7 +27,14 @@ export const StudentParentsFormContainer: FC<Props> = observer(
   ({ onCloseModal, studentId, parents, franchiseId, visibility, isViewMode }) => {
     const [parentState, setParentState] = useState(() => setInitialState(parents));
 
-    const { updateParenting } = usersStore;
+    const { updateParenting, currentUser, deleteParenting } = usersStore;
+
+    const deleteParentingHandler = (parentingId: string) => {
+      deleteParenting(parentingId);
+
+      const newParentState = parentState.filter(el => el.parent?.id !== parentingId);
+      setParentState(newParentState);
+    };
 
     const addForm = () => {
       const form: ParentsFormStateType = {
@@ -94,6 +101,8 @@ export const StudentParentsFormContainer: FC<Props> = observer(
                 parent={parent}
                 isSuccessSubmit={isSuccessSubmit}
                 isViewMode={isViewMode}
+                currentUser={currentUser}
+                deleteParenting={deleteParentingHandler}
               />
             ))}
           </div>

@@ -1,4 +1,3 @@
-import usersStore from 'app/stores/usersStore';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useState } from 'react';
 
@@ -9,7 +8,7 @@ import * as yup from 'yup';
 import { SexEnum } from 'app/enums/CommonEnums';
 import { Roles } from 'app/stores/appStore';
 import { RequestRegister } from 'app/types/AuthTypes';
-import { ParentT, ResponseParenting } from 'app/types/UserTypes';
+import { ParentT, ResponseOneUser, ResponseParenting } from 'app/types/UserTypes';
 import iconMedal from 'assets/svgs/medal.svg';
 import Button from 'components/button/Button';
 import Image from 'components/image/Image';
@@ -41,9 +40,11 @@ type Props = {
   isMainParent: boolean;
   setIsMainParent: (value: boolean, id: number, parentingId?: string) => void;
   setSuccessForm: (isSuccess: boolean, id: number, parentingData?: ResponseParenting) => void;
+  deleteParenting: (parentingId: string) => void;
   parent?: ParentT;
   isSuccessSubmit: boolean;
   isViewMode?: boolean;
+  currentUser?: ResponseOneUser;
 };
 
 type CreateParentPayloadT = Omit<
@@ -62,12 +63,19 @@ const StudentParentsForm: FC<Props> = observer(
     parent,
     isSuccessSubmit,
     isViewMode,
+    currentUser,
+    deleteParenting,
   }) => {
-    const { currentUser } = usersStore;
     const [isDisableSubmit, setIsDisableSubmit] = useState(false);
 
-    const handlerRadioChange = () => {
+    const radioChangeHandler = () => {
       setIsMainParent(!isMainParent, localParentFormID, parent?.id);
+    };
+
+    const deleteParentingHandler = () => {
+      if (parent) {
+        deleteParenting(parent.id);
+      }
     };
 
     const userFranchiseId: string | undefined = currentUser?.franchise?.id as string | undefined;
@@ -339,7 +347,7 @@ const StudentParentsForm: FC<Props> = observer(
                                 onChange={e => {
                                   if (!isMainParent) {
                                     field.onChange(e);
-                                    handlerRadioChange();
+                                    radioChangeHandler();
                                   }
                                 }}
                               />
@@ -360,11 +368,16 @@ const StudentParentsForm: FC<Props> = observer(
               />
             </Grid>
             {isViewMode || (
-              <Grid item xs={12} sm={6}>
+              <div className={styles.buttons}>
                 <Button type="submit" disabled={isDisableSubmit} onClick={handleSubmit(onSubmit)}>
                   Сохранить
                 </Button>
-              </Grid>
+                {!isMainParent && (
+                  <Button variant="reset" size="thin" onClick={deleteParentingHandler}>
+                    Удалить
+                  </Button>
+                )}
+              </div>
             )}
           </Grid>
         </Box>

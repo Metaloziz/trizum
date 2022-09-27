@@ -1,7 +1,7 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 
 import authService from 'app/services/authService';
-import usersService, { UpdateParentingPayloadType } from 'app/services/usersService';
+import usersService from 'app/services/usersService';
 import { RequestRegister } from 'app/types/AuthTypes';
 import { UpdateUserPayloadT } from 'app/types/UpdateUserPayloadT';
 import {
@@ -12,6 +12,7 @@ import {
 } from 'app/types/UserTypes';
 import { checkErrorMessage, ErrorMessageType } from 'utils/checkErrorMessage';
 import { SearchUserType } from 'app/types/SearchUserType';
+import { UpdateParentingPayloadType } from 'app/types/updateParentingPayloadType';
 
 class UsersStore {
   users: ResponseUserT[] = [];
@@ -146,6 +147,10 @@ class UsersStore {
 
   updateParenting = async (payload: UpdateParentingPayloadType) => {
     const res = await usersService.updateParenting(payload);
+  };
+
+  deleteParenting = async (parentingId: string) => {
+    const res = await usersService.deleteParenting(parentingId);
   };
 
   resetCurrentUser = () => {
