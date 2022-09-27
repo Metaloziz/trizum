@@ -95,7 +95,16 @@ class Game extends Component<any, any> {
         gameResult: result,
       },
       async () => {
-        await gamesStore.sendResults(result);
+        await gamesStore.sendResults({
+          userGroupId: '1ed25e67-b3ef-6bc2-9492-95bc14986080',
+          courseWorkId: '1ed25e4d-c767-6336-80f6-5d295491aaa1',
+          workGamePresetId: '1ed25e48-cd5b-67ec-8c22-390a41dd25b3',
+          finished: true,
+          workCompleted: false,
+          courseCompleted: false,
+          timeMax: 2,
+          ...result,
+        });
         const message = [`Ваше время: ${result.time} секунд`];
 
         if (result?.timeDiff) {
@@ -266,6 +275,7 @@ class Game extends Component<any, any> {
                           width={gameViewSize}
                           onEnd={this.onEnd}
                           {...settings}
+                          colors={settings?.colorsMap?.length || 1}
                         />
                         {!started && <PlayButton onStart={this.onStart} />}
                       </div>
