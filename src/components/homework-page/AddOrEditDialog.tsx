@@ -65,7 +65,9 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
   };
 
   const deleteOnePreset = (id: string) => {
+    console.log(id);
     store.presetsThisWork = store?.presetsThisWork.filter(prId => prId !== id);
+    console.log(store.presetsThisWork);
   };
   return (
     <Dialog
@@ -85,7 +87,7 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
         onClose={() => setChooseGame(false)}
       />
       <DialogTitle onClose={store.closeDialog}>
-        {store.editingEntity?.id
+        {store.oneWork?.work?.id
           ? 'Редактирование домашнего задания'
           : 'Добавление нового домашнего задания'}
       </DialogTitle>
@@ -160,9 +162,9 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
                 {/* {store.oneWork.work ? ( */}
                 {/*  (store.oneWork.work.gamePresets || []).map(preset => ( */}
                 {store.presetsThisWork ? (
-                  (store.presetsThisWork || []).map(preset => (
+                  (store.presetsThisWork || []).map((preset, id) => (
                     <TableRow
-                      key={preset}
+                      key={`${preset}${id}`}
                       hover
                       sx={{
                         '& > td': {
@@ -203,7 +205,7 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
           onClick={store.addOrEdit}
           disabled={!store.validateSchema.isValidSync(store.oneWork.work)}
         >
-          {store.editingEntity?.id ? 'Изменить' : 'Сохранить'}
+          {store.oneWork?.work?.id ? 'Изменить' : 'Сохранить'}
         </Button>
       </DialogActions>
     </Dialog>

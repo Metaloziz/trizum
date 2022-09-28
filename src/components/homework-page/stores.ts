@@ -2,7 +2,7 @@ import { WorkTypes } from 'app/enums/WorkTypes';
 import worksService from 'app/services/worksService';
 
 import { StoreBase } from 'app/stores/StoreBase';
-import { OneWorkResponseT } from 'app/types/WorkTypes';
+import { CreatOrEditWorkRequestT, OneWorkResponseT } from 'app/types/WorkTypes';
 import { HomeworkViewModel } from 'app/viewModels/HomeworkViewModel';
 import { makeObservable, observable } from 'mobx';
 import * as yup from 'yup';
@@ -66,6 +66,7 @@ export class HomeworkStore extends StoreBase {
       entities: observable,
       isDialogOpen: observable,
       oneWork: observable,
+      presetsThisWork: observable,
     });
   }
 
@@ -110,7 +111,15 @@ export class HomeworkStore extends StoreBase {
     this.closeDialog();
 
     this.execute(async () => {
-      await this._repository.addOrEdit(this.editingEntity);
+      const params: CreatOrEditWorkRequestT = {
+        id: this.oneWork?.work?.id,
+        title: this.oneWork?.work.title,
+        text: this.oneWork?.work.text,
+        type: this.oneWork?.work.type,
+        gamePresets: this.presetsThisWork,
+        status: this.oneWork.work.status,
+      };
+      await this._repository.addOrEdit(params);
       await this.pull();
     });
   };

@@ -61,14 +61,3 @@ export type CreatOrEditWorkRequestT = {
   type?: WorkTypes;
   status?: string;
 };
-
-export type CreateWorkResponseT = {
-  id: string;
-  status: string;
-  title: string;
-  text: string;
-  type: string;
-  createdAt: CreatedAtT;
-};
-
-export type EditWorkResponseT = {};
