@@ -5,7 +5,6 @@ import { HomeworkRepository } from './repositories';
 
 import { StoreBase } from 'app/stores/StoreBase';
 import { HomeworkViewModel } from 'app/viewModels/HomeworkViewModel';
-import { MethodistMainStore } from 'components/methodist-main/stores';
 
 export class HomeworkStore extends StoreBase {
   private _repository = new HomeworkRepository();
