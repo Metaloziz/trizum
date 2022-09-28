@@ -27,6 +27,7 @@ import { Filter } from './Filter';
 import { LoadingIndicator } from './ui/LoadingIndicator';
 
 import { FranchisingStore } from 'components/franchising-page/stores';
+import { Roles } from 'app/stores/appStore';
 
 const FranchisingPage = observer(() => {
   const store = useMemo(() => new FranchisingStore(), []);
@@ -133,15 +134,15 @@ const FranchisingPage = observer(() => {
                       },
                     }}
                   >
-                    {/* <TableCell>
-                      {entity.fullName && (
+                    <TableCell>
+                      {/* {entity && (
                         <>
-                          <Typography variant="caption">{entity.fullName || ''}</Typography>
+                          <Typography variant="caption">{entity.shortName || ''}</Typography>
                           <br />
                         </>
-                      )}
+                      )} */}
                       <Typography variant="caption">{entity.shortName || ''}</Typography>
-                    </TableCell> */}
+                    </TableCell>
                     <TableCell>
                       <Typography variant="caption">Город: {entity.city || '—'}</Typography>
                       <br />
@@ -189,13 +190,13 @@ const FranchisingPage = observer(() => {
                         >
                           <EditIcon fontSize="small" />
                         </IconButton>
-                        <IconButton
+                        {Roles.Tutor ? null : <IconButton
                           size="small"
                           onClick={() => store.remove(entity.id!)}
                           color="error"
                         >
                           <DeleteIcon fontSize="small" />
-                        </IconButton>
+                        </IconButton>}
                       </Stack>
                     </TableCell>
                   </TableRow>

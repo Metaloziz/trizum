@@ -9,7 +9,9 @@ type Props = {
 };
 
 export const DeleteCourseIcon: FC<Props> = ({ status, onClick }) => (
-  <IconButton size="small" onClick={onClick} color="error" disabled={status !== StatusTypes.draft}>
+  <IconButton size="small" onClick={onClick} color="error" 
+  // disabled={status !== StatusTypes.draft}
+  >
     <DeleteIcon fontSize="small" />
   </IconButton>
 );
