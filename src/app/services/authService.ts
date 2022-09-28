@@ -13,7 +13,7 @@ import {
   ResponseMe,
   ResponseSMS,
 } from 'app/types/AuthTypes';
-import { LoginPasswordFormType } from 'pages/login/loginWithPassword/LoginWithPassword';
+import { LoginInfo } from 'pages/login/Login';
 
 const authService = {
   authenticate: async (data: any) => {
@@ -59,7 +59,7 @@ const authService = {
     return data;
   },
 
-  loginWithPassword: async (loginData: LoginPasswordFormType) => {
+  loginWithPassword: async (loginData: LoginInfo) => {
     const { data } = await instance.post(Paths.Login, loginData);
     return data;
   },

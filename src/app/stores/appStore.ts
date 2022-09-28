@@ -11,7 +11,7 @@ import { canSwitchToT } from 'app/types/UserTypes';
 import { execute } from 'utils/execute';
 import { AvatarT } from 'app/types/AvatarT';
 import { FranchiseT } from 'app/types/FranchiseTypes';
-import { LoginPasswordFormType } from 'pages/login/loginWithPassword/LoginWithPassword';
+import { LoginInfo } from 'pages/login/Login';
 import tokenService from 'app/services/tokenService';
 
 export enum Roles {
@@ -126,7 +126,7 @@ class AppStore {
     });
   };
 
-  loginWithPassword = async (data: LoginPasswordFormType) => {
+  loginWithPassword = async (data: LoginInfo) => {
     await execute(async () => {
       const res = await authService.loginWithPassword(data);
       await tokenService.setUser(res.data.token);

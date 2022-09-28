@@ -1,25 +1,62 @@
-import { FC, useState } from 'react';
-import { LoginWithPassword } from 'pages/login/loginWithPassword/LoginWithPassword';
-import LoginWithSMS from 'pages/login/LoginWithSMS/LoginWithSMS';
-import Button from 'components/button/Button';
+import React, { FC } from 'react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import style from './Login.module.scss';
+import appStore from 'app/stores/appStore';
+
+export type LoginInfo = {
+  phone: string;
+  password: string;
+};
 
 export const Login: FC = () => {
-  const [value, setValue] = useState<boolean | null>(null);
+  const { loginWithPassword } = appStore;
 
-  if (value === null) {
-    return (
-      <div className={style.container}>
-        <h2>Войти через:</h2>
-        <Button size="large" type="submit" onClick={() => setValue(false)}>
-          SMS
-        </Button>
-        <Button size="large" onClick={() => setValue(true)}>
-          Пароль
-        </Button>
+  const schema = yup.object().shape({
+    phone: yup.string().required('обязательно поле'),
+    password: yup.string().required('обязательно поле'),
+  });
+
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+    control,
+  } = useForm<LoginInfo>({
+    resolver: yupResolver(schema),
+    defaultValues: { phone: '79101001010', password: '123123' },
+  });
+
+  const onSubmit = handleSubmit(loginData => {
+    loginWithPassword(loginData);
+  });
+
+  return (
+    <div className={style.modal}>
+      <div className={style.content}>
+        <div className={style.wrapContent}>
+          <p className={style.modalTitle}>Авторизация</p>
+          <form>
+            <div className={style.body}>
+              <div>
+                <p className={style.modalSubtitle}>Ваш номер телефона</p>
+                <input {...register('phone')} />
+                <p className={style.textErrorRed}>{errors.phone?.message}</p>
+              </div>
+
+              <div>
+                <p className={style.modalSubtitle}>Пароль</p>
+                <input {...register('password')} type="password" />
+                <p className={style.textErrorRed}>{errors.password?.message}</p>
+              </div>
+              <button type="submit" className={style.modalButton} onClick={onSubmit}>
+                Войти
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    );
-  }
-
-  return value ? <LoginWithPassword /> : <LoginWithSMS />;
+    </div>
+  );
 };

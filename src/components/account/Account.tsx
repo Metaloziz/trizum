@@ -7,7 +7,7 @@ import styles from './Account.module.scss';
 
 import tokenService from 'app/services/tokenService';
 import appStore, { Roles } from 'app/stores/appStore';
-import mockAvatar from 'assets/images/avatar.png';
+import defaultAvatar from 'public/img/avatarDefault.png';
 import { DropDownStudents } from 'components/drop-down-student/DropDownStudents';
 import Image from 'components/image/Image';
 import { BASE_URL } from 'constants/constants';
@@ -20,15 +20,9 @@ const Account: FC = observer(() => {
     user.canSwitchTo.length > 0 && setIsOpenChangeStudentModal(!isOpenChangeStudentModal);
   };
 
-  // const { Signout } = Routes;
-  const activeNotification = true;
-
   const logout = async () => {
     await tokenService.removeUser();
     setRole(Roles.Unauthorized);
-    // logOutUser();
-    // console.log(user);
-    // router.push(Routes.Index);
   };
 
   const onChangeStudent = useCallback(async (id: string) => {
@@ -46,7 +40,7 @@ const Account: FC = observer(() => {
           <button onClick={toggleChangeStudentModal} className={styles.avatar}>
             <Image
               // src={`https://lk.trizum.ru${user?.avatar?.path}`}
-              src={user?.avatar?.path ? `${BASE_URL}${user?.avatar?.path}` : mockAvatar}
+              src={user?.avatar?.path ? `${BASE_URL}${user?.avatar?.path}` : defaultAvatar}
               style={{ borderRadius: '50%' }}
               width={53}
               height={53}
@@ -55,7 +49,7 @@ const Account: FC = observer(() => {
             <div className={styles.notification} />
             {isOpenChangeStudentModal && (
               <DropDownStudents
-                avatar={mockAvatar}
+                avatar={defaultAvatar}
                 canSwitchTo={user.canSwitchTo}
                 onChangeStudent={onChangeStudent}
               />

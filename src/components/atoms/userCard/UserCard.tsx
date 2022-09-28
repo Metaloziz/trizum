@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import styles from './UserCard.module.scss';
 
-import avatar from 'assets/images/avatar.png';
+import avatar from 'public/img/avatarDefault.png';
 import Image from 'components/image/Image';
 
 type Props = {
