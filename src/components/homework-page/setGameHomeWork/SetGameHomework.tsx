@@ -30,7 +30,7 @@ const Games = [
 type SetGameHomeworkPropsT = {
   open: boolean;
   onClose: () => void;
-  getPresetGame: (gamePreset: GamePresetT) => void;
+  getPresetGame: (gamePresetId: string) => void;
 };
 export const SetGameHomework: FC<SetGameHomeworkPropsT> = observer(props => {
   const [gameName, setGameName] = useState('');
@@ -48,7 +48,6 @@ export const SetGameHomework: FC<SetGameHomeworkPropsT> = observer(props => {
     getPreset(value);
   };
 
-  console.log(gamePreset);
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
       <div className={styles.gameSetWrapper}>
@@ -84,7 +83,7 @@ export const SetGameHomework: FC<SetGameHomeworkPropsT> = observer(props => {
           </FormControl>
         </Grid>
 
-        <Button onClick={() => getPresetGame(gamePreset.gamePreset)} className={styles.btn}>
+        <Button onClick={() => getPresetGame(gamePreset.gamePreset.id)} className={styles.btn}>
           Сохранить
         </Button>
       </div>

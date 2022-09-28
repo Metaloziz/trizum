@@ -41,19 +41,25 @@ const statusTypesKeys = Object.keys(StatusEnum);
 
 export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
   const { store } = props;
-  console.log(store);
+  const { newPresets } = gamesStore;
+  console.log(newPresets);
 
   const [chooseGame, setChooseGame] = useState<boolean>(false);
   const statusTypesOptions = Object.values(
     store.editingEntity?.id ? StatusEnum : ShortStatusEnum,
   ).map((el, index) => getOptionMui(statusTypesKeys[index], el));
-  const getPresetGame = (gamePreset: GamePresetT) => {
+  const getPresetGame = (gamePreset: string) => {
     store?.editingEntity?.gamePresets?.push(gamePreset);
     setChooseGame(false);
   };
 
+  const getNamePreset = (id: string) => {
+    const preset = newPresets.items.filter(pr => pr.id === id);
+    return preset[0]?.name;
+  };
+
   const deleteOnePreset = (id: string) => {
-    store.editingEntity.gamePresets = store?.editingEntity?.gamePresets.filter(pr => pr.id !== id);
+    store.editingEntity.gamePresets = store?.editingEntity?.gamePresets.filter(prId => prId !== id);
   };
   return (
     <Dialog
@@ -147,8 +153,8 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
               </TableHead>
               <TableBody>
                 {/* TODO: доделать */}
-                {(store.editingEntity.gamePresets || []).length > 0 ? (
-                  (store.editingEntity.gamePresets || []).map(preset => (
+                {store.oneWork.work ? (
+                  (store.oneWork.work.gamePresets || []).map(preset => (
                     <TableRow
                       key={preset.id}
                       hover
@@ -159,10 +165,10 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
                       }}
                     >
                       <TableCell>
-                        <Typography>{preset.game.name || ''}</Typography>
+                        <Typography>{preset.gamePreset.game.name || ''}</Typography>
                       </TableCell>
                       <TableCell>
-                        <Typography>{preset.name || ''}</Typography>
+                        <Typography>{getNamePreset(preset.gamePreset.id) || ''}</Typography>
                       </TableCell>
                       <TableCell align="right">
                         <IconButton

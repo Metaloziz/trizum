@@ -11,6 +11,7 @@ const Homework: FC = observer(() => {
   switch (appStore.role) {
     case Roles.Methodist:
       return <HomeworkPage />;
+    case Roles.Unauthorized:
     default:
       return <Navigate to={AppRoutes.Index} />;
   }

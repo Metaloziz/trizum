@@ -1,5 +1,6 @@
 import { WorkTypes } from 'app/enums/WorkTypes';
 import { GamePresetT } from 'app/types/GameTypes';
+import { PaginationResponse } from 'app/types/PaginationResponse';
 
 export type PresetT = { gameId: string; id: string; name: string };
 
@@ -10,7 +11,7 @@ export type RequestCreateWork = {
   tests?: string[];
   gamePresets?: string[];
 };
-type createdAtT = {
+type CreatedAtT = {
   date: string;
   timezone_type: number;
   timezone: string;
@@ -23,14 +24,20 @@ export type WorksItemT = {
   type: WorkTypes.HW;
   gamePresetsCount: number;
   testsCount: number;
-  createdAt: createdAtT;
+  createdAt: CreatedAtT;
 };
 
-export type WorksResponseT = {
-  items: WorksItemT[];
-  page: number;
-  perPage: number;
-  total: number;
+export type WorksResponseT = PaginationResponse<WorksItemT>;
+// {
+//   items: WorksItemT[];
+//   page: number;
+//   perPage: number;
+//   total: number;
+// };
+
+export type WorkGamePresetT = {
+  id: string;
+  gamePreset: GamePresetT;
 };
 
 export type OneWorkResponseT = {
@@ -40,15 +47,28 @@ export type OneWorkResponseT = {
     title: string;
     text: string;
     type: WorkTypes.HW;
-    createdAt: createdAtT;
-    gamePresets: GamePresetT[];
+    createdAt: CreatedAtT;
+    gamePresets: WorkGamePresetT[];
   };
   usedInCourses: [];
 };
 
-export type CreatOrEditWorkRequest = {
+export type CreatOrEditWorkRequestT = {
+  id?: string;
   title?: string;
+  text?: string;
   gamePresets?: string[];
   type?: WorkTypes;
   status?: string;
 };
+
+export type CreateWorkResponseT = {
+  id: string;
+  status: string;
+  title: string;
+  text: string;
+  type: string;
+  createdAt: CreatedAtT;
+};
+
+export type EditWorkResponseT = {};

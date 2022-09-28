@@ -1,10 +1,13 @@
+import { WorkTypes } from 'app/enums/WorkTypes';
+import worksService from 'app/services/worksService';
+
+import { StoreBase } from 'app/stores/StoreBase';
+import { OneWorkResponseT } from 'app/types/WorkTypes';
+import { HomeworkViewModel } from 'app/viewModels/HomeworkViewModel';
 import { makeObservable, observable } from 'mobx';
 import * as yup from 'yup';
 
 import { HomeworkRepository } from './repositories';
-
-import { StoreBase } from 'app/stores/StoreBase';
-import { HomeworkViewModel } from 'app/viewModels/HomeworkViewModel';
 
 export class HomeworkStore extends StoreBase {
   private _repository = new HomeworkRepository();
@@ -27,9 +30,28 @@ export class HomeworkStore extends StoreBase {
     text: '',
     title: '',
     status: '',
-    type: 'hw',
+    id: '',
+    type: WorkTypes.HW,
     gamePresets: [],
+    gamePresetsCount: 0,
   });
+
+  oneWork: OneWorkResponseT = {
+    work: {
+      id: '',
+      status: 'draft',
+      title: '',
+      text: '',
+      type: WorkTypes.HW,
+      createdAt: {
+        date: '',
+        timezone_type: 0,
+        timezone: '',
+      },
+      gamePresets: [],
+    },
+    usedInCourses: [],
+  };
 
   editingEntity: HomeworkViewModel = this._defaultValue();
 
@@ -42,9 +64,18 @@ export class HomeworkStore extends StoreBase {
     });
   }
 
-  openDialog = (editingEntity?: HomeworkViewModel) => {
-    this.editingEntity = editingEntity ? { ...editingEntity } : this._defaultValue();
-    this.isDialogOpen = true;
+  openDialog = async (editingEntity?: HomeworkViewModel) => {
+    try {
+      if (editingEntity && editingEntity?.id) {
+        const res: OneWorkResponseT = await worksService.getOneWork(editingEntity.id);
+        this.oneWork = res;
+        console.log(this.oneWork);
+      }
+      this.editingEntity = editingEntity ? { ...editingEntity } : this._defaultValue();
+      this.isDialogOpen = true;
+    } catch (e) {
+      console.warn(e);
+    }
   };
 
   closeDialog = () => {

@@ -120,7 +120,7 @@ export const HomeworkPage = observer(() => {
                       <Typography>{entity.text || '—'}</Typography>
                     </TableCell>
                     <TableCell align="center">
-                      <Typography>{entity.gamePresets?.length || '0'}</Typography>
+                      <Typography>{entity.gamePresetsCount || '0'}</Typography>
                     </TableCell>
                     <TableCell>
                       <Stack direction="row" justifyContent="flex-end">

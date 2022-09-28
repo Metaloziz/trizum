@@ -1,6 +1,6 @@
 import { Paths } from 'app/enums/Paths';
 import instance from 'app/services/config';
-import { PresetT, RequestCreateWork } from 'app/types/WorkTypes';
+import { OneWorkResponseT, PresetT, RequestCreateWork } from 'app/types/WorkTypes';
 
 const worksService = {
   createWork: async (options: RequestCreateWork): Promise<any> => {
@@ -13,6 +13,11 @@ const worksService = {
   },
   deleteWork: async (id: string): Promise<any> => {
     const { data } = await instance.delete(`${Paths.Works}/${id}`);
+    return data;
+  },
+
+  getOneWork: async (id: string): Promise<OneWorkResponseT> => {
+    const { data } = await instance.get(`${Paths.Works}/${id}`);
     return data;
   },
 };
