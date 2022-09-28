@@ -2,7 +2,10 @@ import { DialogActions, DialogContent, Grid, TextField, Typography } from '@mui/
 import MuiPhoneNumber from 'material-ui-phone-number';
 import { observer } from 'mobx-react';
 
-import { numberWithoutLeadingZero, numberWithPossibleLeadingZero } from './helpers/numberWithoutLeadingZero';
+import {
+  numberWithoutLeadingZero,
+  numberWithPossibleLeadingZero,
+} from './helpers/numberWithoutLeadingZero';
 import { Dialog, DialogTitle } from './ui/Dialog';
 
 import Button from 'components/button/Button';
@@ -28,7 +31,7 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
       open={store.isDialogOpen}
     >
       <DialogTitle onClose={store.closeDialog}>
-        {store.editingEntity?.id ? 'Редактирование записи' : 'Добавление новой записи'}
+        {store.editingEntity?.id ? 'Редактирование записи' : 'Добавление новой франшизы'}
       </DialogTitle>
       <DialogContent dividers>
         <Grid container spacing={2}>
@@ -223,7 +226,7 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
               label="БИК банка"
               value={store.editingEntity.bankBik}
               onChange={({ currentTarget: { value } }) =>
-              numberWithPossibleLeadingZero(value, () => (store.editingEntity.bankBik = value))
+                numberWithPossibleLeadingZero(value, () => (store.editingEntity.bankBik = value))
               }
               fullWidth
               variant="outlined"

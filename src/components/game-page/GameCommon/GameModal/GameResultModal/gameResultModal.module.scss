@@ -1,0 +1,35 @@
+.wrapper {
+  text-align: center;
+  padding: 70px 62px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.header {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2E8DFD;
+  text-transform: uppercase;
+  margin-bottom: 34px;
+}
+
+.resultWrapper {
+  margin-bottom: 38px;
+  font-size: 18px;
+
+
+  &_result {
+    margin-right: 10px;
+
+    &_count {
+      background: linear-gradient(90deg, #7F28D9 0%, #7427CC 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 24px;
+    }
+  }
+}
+
+.btnBlock {
+  display: flex;
+  justify-content: space-around;
+}

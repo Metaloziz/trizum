@@ -1,11 +1,13 @@
-import { makeObservable, observable } from 'mobx';
+import { WorkTypes } from 'app/enums/WorkTypes';
+import worksService from 'app/services/worksService';
+
+import { StoreBase } from 'app/stores/StoreBase';
+import { CreatOrEditWorkRequestT, OneWorkResponseT } from 'app/types/WorkTypes';
+import { HomeworkViewModel } from 'app/viewModels/HomeworkViewModel';
+import { makeObservable, observable, runInAction } from 'mobx';
 import * as yup from 'yup';
 
 import { HomeworkRepository } from './repositories';
-
-import { StoreBase } from 'app/stores/StoreBase';
-import { HomeworkViewModel } from 'app/viewModels/HomeworkViewModel';
-import { MethodistMainStore } from 'components/methodist-main/stores';
 
 export class HomeworkStore extends StoreBase {
   private _repository = new HomeworkRepository();
@@ -24,28 +26,51 @@ export class HomeworkStore extends StoreBase {
     total: 0,
   };
 
-  private _defaultValue = (): HomeworkViewModel => ({
-    text: '',
-    title: '',
-    status: '',
-    type: 'hw',
-    gamePresets: [],
-  });
+  private _defaultOneWork: OneWorkResponseT = {
+    work: {
+      id: '',
+      status: 'draft',
+      title: '',
+      text: '',
+      type: WorkTypes.HW,
+      createdAt: {
+        date: '',
+        timezone_type: 0,
+        timezone: '',
+      },
+      gamePresets: [],
+    },
+    usedInCourses: [],
+  };
 
-  editingEntity: HomeworkViewModel = this._defaultValue();
+  presetsThisWork: string[] = [];
+
+  oneWork: OneWorkResponseT = this._defaultOneWork;
 
   constructor() {
     super();
     makeObservable(this, {
-      editingEntity: observable,
       entities: observable,
       isDialogOpen: observable,
+      oneWork: observable,
+      presetsThisWork: observable,
     });
   }
 
-  openDialog = (editingEntity?: HomeworkViewModel) => {
-    this.editingEntity = editingEntity ? { ...editingEntity } : this._defaultValue();
-    this.isDialogOpen = true;
+  openDialog = async (workId?: string) => {
+    try {
+      runInAction(async () => {
+        this.oneWork = workId
+          ? (this.oneWork = await worksService.getOneWork(workId))
+          : this._defaultOneWork;
+        this.presetsThisWork = this.oneWork.work.gamePresets
+          ? this.oneWork.work.gamePresets?.map(pr => pr.gamePreset.id)
+          : ([] as string[]);
+      });
+      this.isDialogOpen = true;
+    } catch (e) {
+      console.warn(e);
+    }
   };
 
   closeDialog = () => {
@@ -71,11 +96,22 @@ export class HomeworkStore extends StoreBase {
 
   addOrEdit = async () => {
     this.closeDialog();
-
-    this.execute(async () => {
-      await this._repository.addOrEdit(this.editingEntity);
-      await this.pull();
-    });
+    try {
+      this.execute(async () => {
+        const params: CreatOrEditWorkRequestT = {
+          id: this.oneWork?.work?.id,
+          title: this.oneWork?.work.title,
+          text: this.oneWork?.work.text,
+          type: this.oneWork?.work.type,
+          gamePresets: this.presetsThisWork,
+          status: this.oneWork.work.status,
+        };
+        await this._repository.addOrEdit(params);
+        await this.pull();
+      });
+    } catch (e) {
+      console.warn(e);
+    }
   };
 
   remove = async (id: string) => {
@@ -90,7 +126,6 @@ export class HomeworkStore extends StoreBase {
   };
 
   changePage = async (page: number) => {
-    console.log(page);
     this.pagination.page = page;
     this.execute(async () => this.list());
   };

@@ -2,6 +2,7 @@ import { Paths } from 'app/enums/Paths';
 import { HttpClient } from 'app/rest/HttpClient';
 import tokenService from 'app/services/tokenService';
 import { PaginationResponse } from 'app/types/PaginationResponse';
+import { CreatOrEditWorkRequestT, OneWorkResponseT } from 'app/types/WorkTypes';
 import { HomeworkViewModel } from 'app/viewModels/HomeworkViewModel';
 
 export class HomeworkRepository {
@@ -22,14 +23,14 @@ export class HomeworkRepository {
       .execute<PaginationResponse<HomeworkViewModel>>();
   };
 
-  readonly byId = async (id: string) =>
+  readonly getOneWork = async (id: string): Promise<OneWorkResponseT> =>
     new HttpClient(`${Paths.Works}/${id}`, 'GET')
       .withTimeout(10000)
       .withBearerAuthorization(this.token)
       .withJsonReviver()
-      .execute<HomeworkViewModel>();
+      .execute<OneWorkResponseT>();
 
-  readonly addOrEdit = async (model: HomeworkViewModel) =>
+  readonly addOrEdit = async (model: CreatOrEditWorkRequestT) =>
     new HttpClient(model.id ? `${Paths.Works}/${model.id}` : Paths.Works, 'POST')
       .withTimeout(10000)
       .withBearerAuthorization(this.token)

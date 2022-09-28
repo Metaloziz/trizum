@@ -5,6 +5,7 @@ import { OptionT } from 'app/types/OptionT';
 import Button from 'components/button/Button';
 import { GameDesc } from 'components/game-page/GameCommon/GameDesc';
 import { GameModal } from 'components/game-page/GameCommon/GameModal/GameModal';
+import { GameResultModal } from 'components/game-page/GameCommon/GameModal/GameResultModal/GameResultModal';
 import { PlayButton } from 'components/game-page/GameCommon/PlayButton';
 import Image from 'components/image/Image';
 import InformationItem from 'components/information-item/InformationItem';
@@ -59,7 +60,8 @@ class Game extends Component<any, any> {
     this.state = {
       started: false,
       isOpenModal: false,
-      // game,
+      resultModal: false,
+      gameResult: [],
     };
   }
 
@@ -68,9 +70,20 @@ class Game extends Component<any, any> {
     gamesStore.getGames();
   }
 
+  componentWillUnmount() {
+    gamesStore.getPreset('');
+  }
+
   toggleModal = (value: boolean) => {
     this.setState({
       isOpenModal: value,
+    });
+  };
+
+  closeResultModal = () => {
+    this.setState({
+      resultModal: false,
+      gameResult: [],
     });
   };
 
@@ -78,9 +91,20 @@ class Game extends Component<any, any> {
     this.setState(
       {
         started: false,
+        resultModal: true,
+        gameResult: result,
       },
       async () => {
-        await gamesStore.sendResults(result);
+        await gamesStore.sendResults({
+          userGroupId: '1ed25e67-b3ef-6bc2-9492-95bc14986080',
+          courseWorkId: '1ed25e4d-c767-6336-80f6-5d295491aaa1',
+          workGamePresetId: '1ed25e48-cd5b-67ec-8c22-390a41dd25b3',
+          finished: true,
+          workCompleted: false,
+          courseCompleted: false,
+          timeMax: 2,
+          ...result,
+        });
         const message = [`Ваше время: ${result.time} секунд`];
 
         if (result?.timeDiff) {
@@ -98,9 +122,7 @@ class Game extends Component<any, any> {
         if (result?.failed) {
           message.push(`Допущено ошибок: ${result.failed}`);
         }
-
-        /* eslint-disable no-alert */
-        alert(message.join('\n'));
+        console.log(message.join('\n'));
       },
     );
   };
@@ -114,6 +136,13 @@ class Game extends Component<any, any> {
         this.game?.start();
       },
     );
+  };
+
+  onRepeat = () => {
+    this.setState({
+      resultModal: false,
+    });
+    this.onStart();
   };
 
   onRefGame = (ref: any) => {
@@ -133,11 +162,12 @@ class Game extends Component<any, any> {
   };
 
   render() {
-    const { started = false, isOpenModal } = this.state;
+    const { started = false, isOpenModal, resultModal, gameResult } = this.state;
     const GameComponent = this.gameComponent;
-    const { actualPreset } = gamesStore;
+    const { actualPresets, gamePreset, deletePreset } = gamesStore;
     const { role } = appStore;
     const widthScreen = window.innerWidth;
+    const settings = gamePreset.gamePreset.settings[0];
 
     let gameViewSize = 700;
     if (widthScreen <= 1000 && widthScreen > 760) {
@@ -155,18 +185,25 @@ class Game extends Component<any, any> {
       },
     ];
 
-    actualPreset.map(el =>
+    actualPresets.map(el =>
       presetArr.push({
         value: el.name,
         label: el.name,
       }),
     );
-
     return (
       <div className={styles.innerContent}>
         {(role === Roles.Methodist || role === Roles.Admin) && (
-          <GameModal open={isOpenModal} onClose={this.toggleModal} />
+          <GameModal open={isOpenModal} onClose={this.toggleModal} deletePreset={deletePreset} />
         )}
+        <GameResultModal
+          open={resultModal}
+          time={gameResult.time}
+          error={gameResult.failed}
+          success={gameResult.success}
+          onClose={this.closeResultModal}
+          onStart={this.onRepeat}
+        />
         <div className={styles.gameList}>
           {Games.map(gam => (
             <div key={`game-${gam.name}`} className={styles.gameItem}>
@@ -205,8 +242,8 @@ class Game extends Component<any, any> {
               element={
                 <div className={styles.wrapGameBlock}>
                   <section>
-                    <div className={styles.wrapGameBlock_header}>
-                      {(role === Roles.Methodist || role === Roles.Admin) && (
+                    {(role === Roles.Methodist || role === Roles.Admin) && (
+                      <div className={styles.wrapGameBlock_header}>
                         <div className={styles.wrapGameBlock_header_select}>
                           <InformationItem
                             variant="select"
@@ -216,19 +253,20 @@ class Game extends Component<any, any> {
                             onChangeSelect={data => this.setPreset(data)}
                           />
                         </div>
-                      )}
-                      <div className={styles.wrapGameBlock_header_select}>
-                        <InformationItem variant="select" size="normal" placeholder="Год" />
+                        <div className={styles.wrapGameBlock_header_select}>
+                          <InformationItem variant="select" size="normal" placeholder="Год" />
+                        </div>
+                        <div className={styles.wrapGameBlock_header_select}>
+                          <InformationItem variant="select" size="normal" placeholder="Месяц" />
+                        </div>
+                        <div className={styles.wrapGameBlock_header_select}>
+                          <InformationItem variant="select" size="normal" placeholder="Группа" />
+                        </div>
+                        <Button onClick={() => this.toggleModal(true)}>
+                          {gamePreset?.gamePreset?.id ? 'Выбрать настройки' : 'Создать настройки'}
+                        </Button>
                       </div>
-                      <div className={styles.wrapGameBlock_header_select}>
-                        <InformationItem variant="select" size="normal" placeholder="Месяц" />
-                      </div>
-                      <div className={styles.wrapGameBlock_header_select}>
-                        <InformationItem variant="select" size="normal" placeholder="Группа" />
-                      </div>
-
-                      <Button onClick={() => this.toggleModal(true)}>Выбрать настройки</Button>
-                    </div>
+                    )}
 
                     <div className={styles.wrapGame}>
                       <div className={styles.wrapGame_overlay}>
@@ -236,6 +274,8 @@ class Game extends Component<any, any> {
                           onRef={this.onRefGame}
                           width={gameViewSize}
                           onEnd={this.onEnd}
+                          {...settings}
+                          colors={settings?.colorsMap?.length || 1}
                         />
                         {!started && <PlayButton onStart={this.onStart} />}
                       </div>

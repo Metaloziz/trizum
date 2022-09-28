@@ -1,6 +1,5 @@
 .gameModalWrapper {
-  width: 90%;
-  height: 800px;
+  width: 92%;
   margin: 0 auto;
   background: #FFFFFF;
   padding: 40px 20px;
@@ -24,7 +23,7 @@
 }
 
 .inputBlock {
-  width: 100%;
+  width: 180px;
   display: flex;
   align-items: center;
   text-align: center;
@@ -49,7 +48,7 @@
 .presetNameInput {
   & input {
     background: linear-gradient(0deg, #E6EEF8, #E6EEF8), #CFD8DC;
-    width: auto;
+    width: 100%;
   }
 
 }
@@ -108,9 +107,9 @@
 
 .btn {
   width: 94%;
+  margin: 0 auto 20px auto;
   display: flex;
-  justify-content: end;
-  margin-bottom: 20px ;
+  justify-content: space-between;
 }
 
 
@@ -122,4 +121,64 @@ input::-webkit-inner-spin-button {
 
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+.gameModalColorBtn {
+  display: flex;
+  text-align: center;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+
+  & button {
+    margin: 0 20px;
+    background: #2E8DFD;
+    width: 180px;
+    height: 40px;
+    color: #FFFFFF;
+    border-radius: 10px;
+    border: 2px solid black;
+    cursor: pointer;
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);
+  }
+
+  & button:hover {
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid black;
+    transition: 0.15s linear;
+
+  }
+}
+
+.colorsWrapper {
+  background: rgba(0, 0, 0, 0.4);
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+}
+
+.colorsContainer {
+  border-radius: 10px;
+  padding: 30px;
+  margin: -16% auto 0 auto;
+  background: #FFFFFF;
+}
+
+.colorsFormControl {
+  margin-bottom: 14px;
+
+  &_colorSettings {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.colorTemplate {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  margin: 2px;
 }

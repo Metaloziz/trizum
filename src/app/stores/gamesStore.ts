@@ -45,7 +45,7 @@ class GamesStore {
     name: '',
   };
 
-  actualPreset: Omit<GamePresetT, 'settings'>[] = [];
+  actualPresets: Omit<GamePresetT, 'settings'>[] = [];
 
   games: GamesT = [];
 
@@ -92,7 +92,7 @@ class GamesStore {
   filterPresets = (code: string) => {
     try {
       runInAction(() => {
-        this.actualPreset = this.newPresets.items.filter(pr => pr.game.code === code);
+        this.actualPresets = this.newPresets.items.filter(pr => pr.game.code === code);
       });
     } catch (e) {
       console.warn(e);
@@ -136,6 +136,11 @@ class GamesStore {
 
   editPreset = async (params: EditOrCreatePresetParamsT) => {
     await gamesService.editPresetGame(this.gamePreset.gamePreset.id, params);
+    await this.getPresets();
+  };
+
+  deletePreset = async (id: string) => {
+    await gamesService.deletePreset(id);
     await this.getPresets();
   };
 

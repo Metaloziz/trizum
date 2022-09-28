@@ -1,3 +1,4 @@
+import gamesStore from 'app/stores/gamesStore';
 import { useEffect, useMemo } from 'react';
 
 import AddIcon from '@mui/icons-material/Add';
@@ -32,6 +33,8 @@ export const HomeworkPage = observer(() => {
 
   useEffect(() => {
     store.pull();
+    gamesStore.getGames();
+    gamesStore.getPresets();
   }, []);
 
   return (
@@ -74,7 +77,7 @@ export const HomeworkPage = observer(() => {
                 backgroundColor: '#2e8dfd',
               }}
             >
-              Добавить
+              Добавить домашнее задание
             </Button>
           </Stack>
         </Box>
@@ -91,8 +94,10 @@ export const HomeworkPage = observer(() => {
                 }}
               >
                 <TableCell>Наименование</TableCell>
-                <TableCell width="auto">Описание</TableCell>
-                <TableCell>Колличество игр</TableCell>
+                <TableCell align="center" width="auto">
+                  Описание
+                </TableCell>
+                <TableCell align="center">Количество игр</TableCell>
                 <TableCell />
               </TableRow>
             </TableHead>
@@ -111,15 +116,17 @@ export const HomeworkPage = observer(() => {
                     <TableCell>
                       <Typography>{entity.title || ''}</Typography>
                     </TableCell>
-                    <TableCell>{/* <Typography>{entity.text || "—"}</Typography> */}</TableCell>
-                    <TableCell>
-                      {/* <Typography>{entity.gamePresets.length || "0"}</Typography> */}
+                    <TableCell align="center">
+                      <Typography>{entity.text || '—'}</Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography>{entity.gamePresetsCount || '0'}</Typography>
                     </TableCell>
                     <TableCell>
                       <Stack direction="row" justifyContent="flex-end">
                         <IconButton
                           size="small"
-                          onClick={() => store.openDialog(entity)}
+                          onClick={() => store.openDialog(entity.id)}
                           color="primary"
                         >
                           <EditIcon fontSize="small" />
