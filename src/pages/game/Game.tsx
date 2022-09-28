@@ -26,7 +26,7 @@ import styles from './Game.module.scss';
 const Games = [
   {
     title: 'Сдвиг по вертикали',
-    name: 'verticalShift',
+    name: 'shift-vertical',
     prevImg: VerticalShift,
   },
   {
@@ -44,6 +44,11 @@ const Games = [
     name: '2048',
     prevImg: Two048,
   },
+  {
+    title: 'battle-colors',
+    name: 'battle-colors',
+    prevImg: Two048,
+  },
 ];
 
 class Game extends Component<any, any> {
@@ -53,8 +58,9 @@ class Game extends Component<any, any> {
 
   constructor(props: any) {
     super(props);
-    const game = [Games[0].name];
 
+    const game = [Games[0].name];
+    debugger
     this.gameComponent = Factory(game);
 
     this.state = {
