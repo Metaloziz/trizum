@@ -4,7 +4,7 @@ import worksService from 'app/services/worksService';
 import { StoreBase } from 'app/stores/StoreBase';
 import { CreatOrEditWorkRequestT, OneWorkResponseT } from 'app/types/WorkTypes';
 import { HomeworkViewModel } from 'app/viewModels/HomeworkViewModel';
-import { makeObservable, observable } from 'mobx';
+import { makeObservable, observable, runInAction } from 'mobx';
 import * as yup from 'yup';
 
 import { HomeworkRepository } from './repositories';
@@ -25,16 +25,6 @@ export class HomeworkStore extends StoreBase {
     rowsPerPage: 5,
     total: 0,
   };
-
-  private _defaultValue = (): HomeworkViewModel => ({
-    text: '',
-    title: '',
-    status: '',
-    id: '',
-    type: WorkTypes.HW,
-    gamePresets: [],
-    gamePresetsCount: 0,
-  });
 
   private _defaultOneWork: OneWorkResponseT = {
     work: {
@@ -57,12 +47,9 @@ export class HomeworkStore extends StoreBase {
 
   oneWork: OneWorkResponseT = this._defaultOneWork;
 
-  editingEntity: HomeworkViewModel = this._defaultValue();
-
   constructor() {
     super();
     makeObservable(this, {
-      editingEntity: observable,
       entities: observable,
       isDialogOpen: observable,
       oneWork: observable,
@@ -70,16 +57,16 @@ export class HomeworkStore extends StoreBase {
     });
   }
 
-  // openDialog = async (editingEntity?: HomeworkViewModel, workId?: string) => {
   openDialog = async (workId?: string) => {
     try {
-      this.oneWork = workId
-        ? (this.oneWork = await worksService.getOneWork(workId))
-        : this._defaultOneWork;
-      this.presetsThisWork = this.oneWork.work.gamePresets
-        ? this.oneWork.work.gamePresets?.map(pr => pr.gamePreset.id)
-        : ([] as string[]);
-      // this.editingEntity = editingEntity ? { ...editingEntity } : this._defaultValue();
+      runInAction(async () => {
+        this.oneWork = workId
+          ? (this.oneWork = await worksService.getOneWork(workId))
+          : this._defaultOneWork;
+        this.presetsThisWork = this.oneWork.work.gamePresets
+          ? this.oneWork.work.gamePresets?.map(pr => pr.gamePreset.id)
+          : ([] as string[]);
+      });
       this.isDialogOpen = true;
     } catch (e) {
       console.warn(e);
@@ -109,19 +96,22 @@ export class HomeworkStore extends StoreBase {
 
   addOrEdit = async () => {
     this.closeDialog();
-
-    this.execute(async () => {
-      const params: CreatOrEditWorkRequestT = {
-        id: this.oneWork?.work?.id,
-        title: this.oneWork?.work.title,
-        text: this.oneWork?.work.text,
-        type: this.oneWork?.work.type,
-        gamePresets: this.presetsThisWork,
-        status: this.oneWork.work.status,
-      };
-      await this._repository.addOrEdit(params);
-      await this.pull();
-    });
+    try {
+      this.execute(async () => {
+        const params: CreatOrEditWorkRequestT = {
+          id: this.oneWork?.work?.id,
+          title: this.oneWork?.work.title,
+          text: this.oneWork?.work.text,
+          type: this.oneWork?.work.type,
+          gamePresets: this.presetsThisWork,
+          status: this.oneWork.work.status,
+        };
+        await this._repository.addOrEdit(params);
+        await this.pull();
+      });
+    } catch (e) {
+      console.warn(e);
+    }
   };
 
   remove = async (id: string) => {
@@ -136,7 +126,6 @@ export class HomeworkStore extends StoreBase {
   };
 
   changePage = async (page: number) => {
-    console.log(page);
     this.pagination.page = page;
     this.execute(async () => this.list());
   };

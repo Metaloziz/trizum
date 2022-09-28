@@ -51,7 +51,6 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
 
   const getPresetGame = (gamePresetId: string) => {
     store?.presetsThisWork?.push(gamePresetId);
-    console.log(store.presetsThisWork);
     setChooseGame(false);
   };
 
@@ -65,9 +64,7 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
   };
 
   const deleteOnePreset = (id: string) => {
-    console.log(id);
     store.presetsThisWork = store?.presetsThisWork.filter(prId => prId !== id);
-    console.log(store.presetsThisWork);
   };
   return (
     <Dialog
