@@ -42,14 +42,16 @@ const statusTypesKeys = Object.keys(StatusEnum);
 export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
   const { store } = props;
   const { newPresets } = gamesStore;
-  console.log(newPresets);
 
   const [chooseGame, setChooseGame] = useState<boolean>(false);
+
   const statusTypesOptions = Object.values(
-    store.editingEntity?.id ? StatusEnum : ShortStatusEnum,
+    store.oneWork?.work?.id ? StatusEnum : ShortStatusEnum,
   ).map((el, index) => getOptionMui(statusTypesKeys[index], el));
-  const getPresetGame = (gamePreset: string) => {
-    store?.editingEntity?.gamePresets?.push(gamePreset);
+
+  const getPresetGame = (gamePresetId: string) => {
+    store?.presetsThisWork?.push(gamePresetId);
+    console.log(store.presetsThisWork);
     setChooseGame(false);
   };
 
@@ -57,9 +59,13 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
     const preset = newPresets.items.filter(pr => pr.id === id);
     return preset[0]?.name;
   };
+  const getNameGamePreset = (id: string) => {
+    const preset = newPresets.items.filter(pr => pr.id === id);
+    return preset[0]?.game.name;
+  };
 
   const deleteOnePreset = (id: string) => {
-    store.editingEntity.gamePresets = store?.editingEntity?.gamePresets.filter(prId => prId !== id);
+    store.presetsThisWork = store?.presetsThisWork.filter(prId => prId !== id);
   };
   return (
     <Dialog
@@ -89,35 +95,33 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
             <Grid item xs={12} sm={6}>
               <TextField
                 label="Наименование"
-                value={store.editingEntity.title}
-                onChange={({ currentTarget: { value } }) => (store.editingEntity.title = value)}
+                value={store.oneWork.work.title}
+                onChange={({ currentTarget: { value } }) => (store.oneWork.work.title = value)}
                 fullWidth
                 variant="outlined"
                 size="small"
-                error={!store.validateSchema.fields.title.isValidSync(store.editingEntity.title)}
+                error={!store.validateSchema.fields.title.isValidSync(store.oneWork.work.title)}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
                 label="Описание"
-                value={store.editingEntity.text}
-                onChange={({ currentTarget: { value } }) => (store.editingEntity.text = value)}
+                value={store.oneWork.work.text}
+                onChange={({ currentTarget: { value } }) => (store.oneWork.work.text = value)}
                 fullWidth
                 variant="outlined"
                 size="small"
-                error={!store.validateSchema.fields.text.isValidSync(store.editingEntity.text)}
+                error={!store.validateSchema.fields.text.isValidSync(store.oneWork.work.text)}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth size="small">
                 <InputLabel>Статус</InputLabel>
                 <Select
-                  value={store.editingEntity.status}
+                  value={store.oneWork.work.status}
                   label="Статус"
-                  onChange={({ target: { value } }) => (store.editingEntity.status = value)}
-                  error={
-                    !store.validateSchema.fields.status.isValidSync(store.editingEntity.status)
-                  }
+                  onChange={({ target: { value } }) => (store.oneWork.work.status = value)}
+                  error={!store.validateSchema.fields.status.isValidSync(store.oneWork.work.status)}
                 >
                   {statusTypesOptions}
                 </Select>
@@ -153,10 +157,12 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
               </TableHead>
               <TableBody>
                 {/* TODO: доделать */}
-                {store.oneWork.work ? (
-                  (store.oneWork.work.gamePresets || []).map(preset => (
+                {/* {store.oneWork.work ? ( */}
+                {/*  (store.oneWork.work.gamePresets || []).map(preset => ( */}
+                {store.presetsThisWork ? (
+                  (store.presetsThisWork || []).map(preset => (
                     <TableRow
-                      key={preset.id}
+                      key={preset}
                       hover
                       sx={{
                         '& > td': {
@@ -165,15 +171,15 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
                       }}
                     >
                       <TableCell>
-                        <Typography>{preset.gamePreset.game.name || ''}</Typography>
+                        <Typography>{getNameGamePreset(preset) || ''}</Typography>
                       </TableCell>
                       <TableCell>
-                        <Typography>{getNamePreset(preset.gamePreset.id) || ''}</Typography>
+                        <Typography>{getNamePreset(preset) || ''}</Typography>
                       </TableCell>
                       <TableCell align="right">
                         <IconButton
                           size="small"
-                          onClick={() => deleteOnePreset(preset.id)}
+                          onClick={() => deleteOnePreset(preset)}
                           color="error"
                         >
                           <DeleteIcon fontSize="small" />
@@ -195,7 +201,7 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
         <Button
           variant="primary"
           onClick={store.addOrEdit}
-          disabled={!store.validateSchema.isValidSync(store.editingEntity)}
+          disabled={!store.validateSchema.isValidSync(store.oneWork.work)}
         >
           {store.editingEntity?.id ? 'Изменить' : 'Сохранить'}
         </Button>

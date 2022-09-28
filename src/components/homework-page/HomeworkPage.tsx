@@ -126,7 +126,7 @@ export const HomeworkPage = observer(() => {
                       <Stack direction="row" justifyContent="flex-end">
                         <IconButton
                           size="small"
-                          onClick={() => store.openDialog(entity)}
+                          onClick={() => store.openDialog(entity.id)}
                           color="primary"
                         >
                           <EditIcon fontSize="small" />

@@ -36,7 +36,7 @@ export const SetGameHomework: FC<SetGameHomeworkPropsT> = observer(props => {
   const [gameName, setGameName] = useState('');
   const [presetName, setPresetName] = useState('');
   const { open, onClose, getPresetGame } = props;
-  const { games, actualPresets, getGame, getPreset, gamePreset } = gamesStore;
+  const { actualPresets, getGame, getPreset, gamePreset } = gamesStore;
   const gamesOptions = Games.map(game => getOptionMui(game.name, game.title));
   const presetOptions = actualPresets.map(pr => getOptionMui(pr.name, pr.name));
   const setGame = (value: string) => {
@@ -59,9 +59,6 @@ export const SetGameHomework: FC<SetGameHomeworkPropsT> = observer(props => {
               label="Игра"
               value={gameName}
               onChange={({ target: { value } }) => setGame(value)}
-              // error={
-              //   !store.validateSchema.fields.status.isValidSync(store.editingEntity.status)
-              // }
             >
               {gamesOptions}
             </Select>
@@ -74,9 +71,6 @@ export const SetGameHomework: FC<SetGameHomeworkPropsT> = observer(props => {
               value={presetName}
               label="Настройка"
               onChange={({ target: { value } }) => setPreset(value)}
-              // error={
-              //   !store.validateSchema.fields.status.isValidSync(store.editingEntity.status)
-              // }
             >
               {presetOptions}
             </Select>

@@ -36,7 +36,7 @@ export class HomeworkStore extends StoreBase {
     gamePresetsCount: 0,
   });
 
-  oneWork: OneWorkResponseT = {
+  private _defaultOneWork: OneWorkResponseT = {
     work: {
       id: '',
       status: 'draft',
@@ -53,6 +53,10 @@ export class HomeworkStore extends StoreBase {
     usedInCourses: [],
   };
 
+  presetsThisWork: string[] = [];
+
+  oneWork: OneWorkResponseT = this._defaultOneWork;
+
   editingEntity: HomeworkViewModel = this._defaultValue();
 
   constructor() {
@@ -61,17 +65,20 @@ export class HomeworkStore extends StoreBase {
       editingEntity: observable,
       entities: observable,
       isDialogOpen: observable,
+      oneWork: observable,
     });
   }
 
-  openDialog = async (editingEntity?: HomeworkViewModel) => {
+  // openDialog = async (editingEntity?: HomeworkViewModel, workId?: string) => {
+  openDialog = async (workId?: string) => {
     try {
-      if (editingEntity && editingEntity?.id) {
-        const res: OneWorkResponseT = await worksService.getOneWork(editingEntity.id);
-        this.oneWork = res;
-        console.log(this.oneWork);
-      }
-      this.editingEntity = editingEntity ? { ...editingEntity } : this._defaultValue();
+      this.oneWork = workId
+        ? (this.oneWork = await worksService.getOneWork(workId))
+        : this._defaultOneWork;
+      this.presetsThisWork = this.oneWork.work.gamePresets
+        ? this.oneWork.work.gamePresets?.map(pr => pr.gamePreset.id)
+        : ([] as string[]);
+      // this.editingEntity = editingEntity ? { ...editingEntity } : this._defaultValue();
       this.isDialogOpen = true;
     } catch (e) {
       console.warn(e);
