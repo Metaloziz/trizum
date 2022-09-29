@@ -200,7 +200,10 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
         <Button
           variant="primary"
           onClick={store.addOrEdit}
-          disabled={!store.validateSchema.isValidSync(store.oneWork.work)}
+          disabled={
+            !store.validateSchema.isValidSync(store.oneWork.work) ||
+            store.oneWork?.work?.status === 'active'
+          }
         >
           {store.oneWork?.work?.id ? 'Изменить' : 'Сохранить'}
         </Button>

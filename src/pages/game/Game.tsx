@@ -62,7 +62,6 @@ class Game extends Component<any, any> {
     super(props);
 
     const game = [Games[0].name];
-    debugger;
     this.gameComponent = Factory(game);
 
     this.state = {
@@ -254,31 +253,33 @@ class Game extends Component<any, any> {
               element={
                 <div className={styles.wrapGameBlock}>
                   <section>
-                    {(role === Roles.Methodist || role === Roles.Admin) && (
-                      <div className={styles.wrapGameBlock_header}>
-                        <div className={styles.wrapGameBlock_header_select}>
-                          <InformationItem
-                            variant="select"
-                            size="normal"
-                            placeholder="Шаблон"
-                            option={presetArr}
-                            onChangeSelect={data => this.setPreset(data)}
-                          />
+                    <div style={{ minWidth: `${gameViewSize + 200}px` }}>
+                      {(role === Roles.Methodist || role === Roles.Admin) && (
+                        <div className={styles.wrapGameBlock_header}>
+                          <div className={styles.wrapGameBlock_header_select}>
+                            <InformationItem
+                              variant="select"
+                              size="normal"
+                              placeholder="Шаблон"
+                              option={presetArr}
+                              onChangeSelect={data => this.setPreset(data)}
+                            />
+                          </div>
+                          <div className={styles.wrapGameBlock_header_select}>
+                            <InformationItem variant="select" size="normal" placeholder="Год" />
+                          </div>
+                          <div className={styles.wrapGameBlock_header_select}>
+                            <InformationItem variant="select" size="normal" placeholder="Месяц" />
+                          </div>
+                          <div className={styles.wrapGameBlock_header_select}>
+                            <InformationItem variant="select" size="normal" placeholder="Группа" />
+                          </div>
+                          <Button onClick={() => this.toggleModal(true)}>
+                            {gamePreset?.gamePreset?.id ? 'Выбрать настройки' : 'Создать настройки'}
+                          </Button>
                         </div>
-                        <div className={styles.wrapGameBlock_header_select}>
-                          <InformationItem variant="select" size="normal" placeholder="Год" />
-                        </div>
-                        <div className={styles.wrapGameBlock_header_select}>
-                          <InformationItem variant="select" size="normal" placeholder="Месяц" />
-                        </div>
-                        <div className={styles.wrapGameBlock_header_select}>
-                          <InformationItem variant="select" size="normal" placeholder="Группа" />
-                        </div>
-                        <Button onClick={() => this.toggleModal(true)}>
-                          {gamePreset?.gamePreset?.id ? 'Выбрать настройки' : 'Создать настройки'}
-                        </Button>
-                      </div>
-                    )}
+                      )}
+                    </div>
 
                     <div className={styles.wrapGame}>
                       <div className={styles.wrapGame_overlay}>

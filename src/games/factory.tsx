@@ -8,8 +8,8 @@ import { PropsDefault as ShiftVerticalPropsDefault, Component as ShiftVerticalCo
 import { PropsDefault as BattleColorsPropsDefault, Component as BattleColorsComponent} from './games/battle-colors';
 
 export const GameIdentifiers = {
-  schulte : 'schulte',
-  Game2048 : 'Game2048',
+  schulte : 'shulte',
+  2048 : '2048',
   mental : 'mental',
   'shift-vertical' : 'shift-vertical',
   'battle-colors' : 'battle-colors'
@@ -21,7 +21,7 @@ export const GameList = {
     component : SchulteComponent,
     props : SchultePropsDefault
   },
-  [GameIdentifiers.Game2048] : {
+  [GameIdentifiers["2048"]] : {
     name : 'Игра 2048',
     component : Game2048Component,
     props : Game2048PropsDefault

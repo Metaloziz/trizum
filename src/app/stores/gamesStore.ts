@@ -92,7 +92,7 @@ class GamesStore {
   filterPresets = (code: string) => {
     try {
       runInAction(() => {
-        this.actualPresets = this.newPresets.items.filter(pr => pr.game.code === code);
+        this.actualPresets = this.newPresets?.items?.filter(pr => pr.game.code === code);
       });
     } catch (e) {
       console.warn(e);
