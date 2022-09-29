@@ -103,17 +103,6 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
-                label="Описание"
-                value={store.oneWork.work.text}
-                onChange={({ currentTarget: { value } }) => (store.oneWork.work.text = value)}
-                fullWidth
-                variant="outlined"
-                size="small"
-                error={!store.validateSchema.fields.text.isValidSync(store.oneWork.work.text)}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
               <FormControl fullWidth size="small">
                 <InputLabel>Статус</InputLabel>
                 <Select
@@ -125,6 +114,17 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
                   {statusTypesOptions}
                 </Select>
               </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <TextField
+                label="Описание"
+                value={store.oneWork.work.text}
+                onChange={({ currentTarget: { value } }) => (store.oneWork.work.text = value)}
+                fullWidth
+                variant="outlined"
+                size="medium"
+                error={!store.validateSchema.fields.text.isValidSync(store.oneWork.work.text)}
+              />
             </Grid>
           </Grid>
           <TableContainer component={Paper}>
@@ -155,9 +155,6 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {/* TODO: доделать */}
-                {/* {store.oneWork.work ? ( */}
-                {/*  (store.oneWork.work.gamePresets || []).map(preset => ( */}
                 {store.presetsThisWork ? (
                   (store.presetsThisWork || []).map((preset, id) => (
                     <TableRow

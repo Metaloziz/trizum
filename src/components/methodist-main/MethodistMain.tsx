@@ -152,7 +152,7 @@ const MethodistMain = observer(() => {
               >
                 <TableCell>Наименование</TableCell>
                 <TableCell align="center">Уровень</TableCell>
-                <TableCell align="center">Количество курсов</TableCell>
+                <TableCell align="center">Количество домашних заданий</TableCell>
                 <TableCell align="center">Дата создания</TableCell>
                 <TableCell />
               </TableRow>
