@@ -14,10 +14,12 @@ import { observer } from 'mobx-react';
 import React, { Component } from 'react';
 
 import { Navigate, NavLink, Route, Routes } from 'react-router-dom';
+
 import Two048 from '../../assets/images/game/2048.png';
 import Play from '../../assets/images/game/play.svg';
 import Schulte from '../../assets/images/game/shulte.png';
 import VerticalShift from '../../assets/images/game/vertical-shift.jpg';
+import BattleColors from '../../assets/images/game/battle-colors.png';
 
 import { Factory } from '../../games';
 
@@ -32,7 +34,7 @@ const Games = [
   {
     title: 'Ментальный счет',
     name: 'mental',
-    prevImg: Schulte,
+    // prevImg: Schulte,
   },
   {
     title: 'Таблица Шульте',
@@ -45,9 +47,9 @@ const Games = [
     prevImg: Two048,
   },
   {
-    title: 'battle-colors',
+    title: 'Битва полушарий',
     name: 'battle-colors',
-    prevImg: Two048,
+    prevImg: BattleColors,
   },
 ];
 
@@ -60,7 +62,7 @@ class Game extends Component<any, any> {
     super(props);
 
     const game = [Games[0].name];
-    debugger
+    debugger;
     this.gameComponent = Factory(game);
 
     this.state = {
@@ -234,7 +236,11 @@ class Game extends Component<any, any> {
                 <img className={styles.gameItem_play} src={Play} alt="" />
               </NavLink>
               {gam.prevImg && (
-                <Image className={styles.gameItem_prevImg} src={gam.prevImg} alt="Previous Games" />
+                <Image
+                  className={styles.gameItem_prevImg}
+                  src={gam?.prevImg}
+                  alt="Previous Games"
+                />
               )}
             </div>
           ))}
