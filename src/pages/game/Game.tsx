@@ -175,6 +175,7 @@ class Game extends Component<any, any> {
     const { role } = appStore;
     const widthScreen = window.innerWidth;
     const settings = gamePreset.gamePreset.settings[0];
+    console.log(Games);
 
     let gameViewSize = 700;
     if (widthScreen <= 1000 && widthScreen > 760) {
@@ -192,7 +193,7 @@ class Game extends Component<any, any> {
       },
     ];
 
-    actualPresets.map(el =>
+    actualPresets?.map(el =>
       presetArr.push({
         value: el.name,
         label: el.name,
