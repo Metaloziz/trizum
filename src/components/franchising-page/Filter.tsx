@@ -172,7 +172,7 @@ export const Filter = observer((props: FilterProps) => {
               px: 1,
             }}
           >
-            <Button size="small">Применить</Button>
+            <Button size="small" onClick={applyFilter}>Применить</Button>
             <Button size="small" variant="reset" onClick={clearFilter}>
               Сбросить
             </Button>

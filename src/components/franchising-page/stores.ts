@@ -7,6 +7,7 @@ import { StoreBase } from 'app/stores/StoreBase';
 import { Nullable } from 'app/types/Nullable';
 import { FranchisingViewModel } from 'app/viewModels/FranchisingViewModel';
 import { FranchisingRepository } from 'components/franchising-page/repositories';
+import _ from 'lodash';
 
 export class FranchisingStore extends StoreBase {
   private _repository = new FranchisingRepository();
@@ -72,13 +73,12 @@ export class FranchisingStore extends StoreBase {
   };
 
   addOrEdit = async () => {
-    
     this.closeDialog();
 
     this.execute(async () => {
       await this._repository.addOrEdit(this.editingEntity);
       await this.pull();
-      console.log(toJS(this.editingEntity))
+      console.log(toJS(this.editingEntity));
     });
   };
 
@@ -128,48 +128,44 @@ export class FranchisingStore extends StoreBase {
       return this.entities;
     }
 
-    let result: FranchisingViewModel[] = [];
+    let result: FranchisingViewModel[] = this.entities;
 
-    /* if (this.filter.fullName.trim()) {
-      result = this.entities.filter(entity =>
-        (entity.fullName ?? "").toLowerCase().includes(this.filter!.fullName.toLowerCase()),
-      );
-    } */
-
-    if (this.filter.shortName.trim()) {
-      result = this.entities.filter(entity =>
-        (entity.shortName ?? '').toLowerCase().includes(this.filter!.shortName.toLowerCase()),
+    if (this.filter.shortName.trim() && result.length) {
+      result = result.filter(entity =>
+        (entity.shortName ?? '')
+          .toLowerCase()
+          .includes(this.filter!.shortName.trim().toLowerCase()),
       );
     }
 
-    if (this.filter.inn.trim()) {
-      result = this.entities.filter(entity =>
+    if (this.filter.inn.trim() && result.length) {
+      result = result.filter(entity =>
         (entity.inn ?? '').toLowerCase().includes(this.filter!.inn.toLowerCase()),
       );
     }
 
-    if (this.filter.email.trim()) {
-      result = this.entities.filter(entity =>
+    if (this.filter.email.trim() && result.length) {
+      result = result.filter(entity =>
         (entity.email ?? '').toLowerCase().includes(this.filter!.email.toLowerCase()),
       );
     }
 
-    if (this.filter.city.trim()) {
-      result = this.entities.filter(entity =>
+    if (this.filter.city.trim() && result.length) {
+      result = result.filter(entity =>
         (entity.city ?? '').toLowerCase().includes(this.filter!.city.toLowerCase()),
       );
     }
 
-    if (this.filter.checkingAccount.trim()) {
-      result = this.entities.filter(entity =>
+    if (this.filter.checkingAccount.trim() && result.length) {
+      result = result.filter(entity =>
         (entity.checkingAccount ?? '')
           .toLowerCase()
           .includes(this.filter!.checkingAccount.toLowerCase()),
       );
     }
 
-    if (this.filter.phone) {
-      result = this.entities.filter(entity =>
+    if (this.filter.phone && result.length) {
+      result = result.filter(entity =>
         (entity.phone?.toString() ?? '').includes(this.filter!.phone.toString()),
       );
     }
