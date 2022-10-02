@@ -28,7 +28,7 @@ import styles from './Game.module.scss';
 const Games = [
   {
     title: 'Сдвиг по вертикали',
-    name: 'shift-vertical',
+    name: 'verticalShift',
     prevImg: VerticalShift,
   },
   {
@@ -38,17 +38,17 @@ const Games = [
   },
   {
     title: 'Таблица Шульте',
-    name: 'shulte',
+    name: 'schulte',
     prevImg: Schulte,
   },
   {
     title: '2048',
-    name: '2048',
+    name: 'game2048',
     prevImg: Two048,
   },
   {
     title: 'Битва полушарий',
-    name: 'battle-colors',
+    name: 'battleColors',
     prevImg: BattleColors,
   },
 ];

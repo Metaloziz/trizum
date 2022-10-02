@@ -19,11 +19,11 @@ const Games = [
   },
   {
     title: 'Таблица Шульте',
-    name: 'shulte',
+    name: 'schulte',
   },
   {
     title: '2048',
-    name: '2048',
+    name: 'game2048',
   },
 ];
 

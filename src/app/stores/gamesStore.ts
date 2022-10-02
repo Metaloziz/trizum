@@ -33,7 +33,7 @@ class GamesStore {
         type: '',
       },
       status: '',
-      level: '',
+      level: 'easy',
       settings: [],
     },
     usedInWorks: [],
