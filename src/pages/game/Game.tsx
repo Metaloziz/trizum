@@ -276,7 +276,9 @@ class Game extends Component<any, any> {
                             <InformationItem variant="select" size="normal" placeholder="Группа" />
                           </div>
                           <Button onClick={() => this.toggleModal(true)}>
-                            {gamePreset?.gamePreset?.id ? 'Выбрать настройки' : 'Создать настройки'}
+                            {gamePreset?.gamePreset?.id
+                              ? 'Изменить настройки'
+                              : 'Создать настройки'}
                           </Button>
                         </div>
                       )}

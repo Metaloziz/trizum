@@ -46,8 +46,8 @@ export const GameModal: FC<PropsT> = observer(props => {
   const [colorCount, setColorCount] = useState<string>(settings?.colorCount?.toString() || '0');
   const [forms, setForms] = useState<string>(settings?.forms?.toString() || '0');
   const [colorsMap, setColorsMap] = useState<string[]>(settings?.colorsMap || ['']);
-  const [sizeX, setSizeX] = useState<string>(settings?.sizeX?.toString() || '0');
-  const [sizeY, setSizeY] = useState<string>(settings?.sizeY?.toString() || '0');
+  // const [sizeX, setSizeX] = useState<string>(settings?.sizeX?.toString() || '0');
+  // const [sizeY, setSizeY] = useState<string>(settings?.sizeY?.toString() || '0');
   const [levelMaxCompleted, setLevelMaxCompleted] = useState<string>(
     settings?.levelMaxCompleted?.toString() || '0',
   );
@@ -94,8 +94,8 @@ export const GameModal: FC<PropsT> = observer(props => {
     setLevel(settings?.level?.toString() || '');
     setColorCount(settings?.colorCount?.toString() || '');
     setForms(settings?.forms?.toString() || '');
-    setSizeY(settings?.sizeY?.toString() || '');
-    setSizeX(settings?.sizeX?.toString() || '');
+    // setSizeY(settings?.sizeY?.toString() || '');
+    // setSizeX(settings?.sizeX?.toString() || '');
     setColorsMap(settings?.colorsMap || ['']);
   };
 
@@ -124,8 +124,8 @@ export const GameModal: FC<PropsT> = observer(props => {
           level: Number(level),
           colorCount: Number(colorCount),
           forms: Number(forms),
-          sizeX: Number(sizeX),
-          sizeY: Number(sizeY),
+          // sizeX: Number(sizeX),
+          // sizeY: Number(sizeY),
           colorsMap,
         },
       ],
@@ -152,8 +152,8 @@ export const GameModal: FC<PropsT> = observer(props => {
           level: Number(level),
           colorCount: Number(colorCount),
           forms: Number(forms),
-          sizeX: Number(sizeX),
-          sizeY: Number(sizeY),
+          // sizeX: Number(sizeX),
+          // sizeY: Number(sizeY),
           colorsMap,
         },
       ],
@@ -202,16 +202,16 @@ export const GameModal: FC<PropsT> = observer(props => {
               </div>
             </span>
             <span className={styles.title}>Настройка уровней</span>
-            <div className={styles.inputBlock}>
-              <div>
-                <InformationItem
-                  title="Необходимое количество баллов"
-                  variant="numberInput"
-                  value={elementsTotal}
-                  onChange={setElementsTotal}
-                />
-              </div>
-            </div>
+            {/* <div className={styles.inputBlock}> */}
+            {/*  <div> */}
+            {/*    <InformationItem */}
+            {/*      title="Необходимое количество баллов" */}
+            {/*      variant="numberInput" */}
+            {/*      value={elementsTotal} */}
+            {/*      onChange={setElementsTotal} */}
+            {/*    /> */}
+            {/*  </div> */}
+            {/* </div> */}
             <div className={styles.inputBlock}>
               <div>
                 <InformationItem
@@ -294,23 +294,33 @@ export const GameModal: FC<PropsT> = observer(props => {
                   </div>
                 </div>
                 <div className={styles.inputBlock}>
+                  {/*  <div> */}
+                  {/*    <InformationItem */}
+                  {/*      title="Длина по оси X" */}
+                  {/*      variant="numberInput" */}
+                  {/*      value={sizeX} */}
+                  {/*      onChange={setSizeX} */}
+                  {/*    /> */}
+                  {/*  </div> */}
+                  {/* </div> */}
+
                   <div>
                     <InformationItem
-                      title="Длина по оси X"
+                      title="Размер поля X на Х"
                       variant="numberInput"
-                      value={sizeX}
-                      onChange={setSizeX}
+                      value={elementsTotal}
+                      onChange={setElementsTotal}
                     />
                   </div>
                 </div>
-                <div className={styles.inputBlock}>
-                  <InformationItem
-                    title="Длина по оси Y"
-                    variant="numberInput"
-                    value={sizeY}
-                    onChange={setSizeY}
-                  />
-                </div>
+                {/* <div className={styles.inputBlock}> */}
+                {/*  <InformationItem */}
+                {/*    title="Длина по оси Y" */}
+                {/*    variant="numberInput" */}
+                {/*    value={sizeY} */}
+                {/*    onChange={setSizeY} */}
+                {/*  /> */}
+                {/* </div> */}
               </>
             ) : null}
           </section>

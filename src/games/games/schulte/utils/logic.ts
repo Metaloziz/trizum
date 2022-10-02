@@ -4,13 +4,12 @@ import { Props } from '../types';
 
 export function generateLayout(props : any) {
   const {
-    sizeX = 0,
-    sizeY = 0,
+    elementsTotal= 3,
     colors = 1,
     colorsMap = []
   } : Props = props;
 
-  const size = sizeX * sizeY;
+  const size =  elementsTotal * elementsTotal;
   const maxSizeColor = Math.ceil(size / colors);
   const resultMap = [];
 
@@ -28,8 +27,8 @@ export function generateLayout(props : any) {
   const normalizeMap = arrayShuffle(resultMap.slice(0, size));
   const result = [];
 
-  for(let i = 0;i<sizeY;i++) {
-    const row = normalizeMap.slice(i*sizeX, (i*sizeX) + sizeX);
+  for(let i = 0;i<elementsTotal;i++) {
+    const row = normalizeMap.slice(i*elementsTotal, (i*elementsTotal) + elementsTotal);
 
     result.push(row);
   }
