@@ -28,7 +28,7 @@ import styles from './Game.module.scss';
 const Games = [
   {
     title: 'Сдвиг по вертикали',
-    name: 'verticalShift',
+    name: 'shiftVertical',
     prevImg: VerticalShift,
   },
   {

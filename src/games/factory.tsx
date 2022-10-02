@@ -26,7 +26,7 @@ export const GameIdentifiers = {
     schulte: 'schulte',
     game2048: 'game2048',
     mental: 'mental',
-    verticalShift: 'verticalShift',
+    shiftVertical: 'shiftVertical',
     battleColors: 'battleColors'
 };
 
@@ -46,7 +46,7 @@ export const GameList = {
         component: MentalComponent,
         props: MentalPropsDefault
     },
-    [GameIdentifiers.verticalShift]: {
+    [GameIdentifiers.shiftVertical]: {
         name: 'Сдвиг по вертикали',
         component: ShiftVerticalComponent,
         props: ShiftVerticalPropsDefault

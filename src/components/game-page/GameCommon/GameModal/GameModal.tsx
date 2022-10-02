@@ -236,7 +236,7 @@ export const GameModal: FC<PropsT> = observer(props => {
                     />
                   </Grid>
                 </Grid>
-                {game.code === 'verticalShift' ? (
+                {game.code === 'shiftVertical' ? (
                   <>
                     <Grid container spacing={2}>
                       <Grid item xs={12} sm={6}>

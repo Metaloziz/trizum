@@ -7,7 +7,7 @@ export enum GameCodes {
 
   steamEngin = 'Паро-вик',
 
-  verticalShift = 'Сдвиг по вертикали',
+  shiftVertical = 'Сдвиг по вертикали',
 
-  hemisphereBattle = 'Битва полушарий',
+  battleColors = 'Битва полушарий',
 }
