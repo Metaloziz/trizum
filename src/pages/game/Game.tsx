@@ -14,6 +14,8 @@ import { observer } from 'mobx-react';
 import React, { Component } from 'react';
 
 import { Navigate, NavLink, Route, Routes } from 'react-router-dom';
+import { changedViewScreen } from 'utils/gameUtils/changeViewScreen';
+import { presetOptions } from 'utils/gameUtils/presetOptions';
 
 import Two048 from '../../assets/images/game/2048.png';
 import Play from '../../assets/images/game/play.svg';
@@ -175,30 +177,25 @@ class Game extends Component<any, any> {
     const { role } = appStore;
     const widthScreen = window.innerWidth;
     const settings = gamePreset.gamePreset.settings[0];
-    console.log(Games);
 
-    let gameViewSize = 700;
-    if (widthScreen <= 1000 && widthScreen > 760) {
-      gameViewSize = widthScreen - 300;
-    } else if (widthScreen < 760) {
-      gameViewSize = widthScreen - 200;
-    } else if (widthScreen < 420) {
-      gameViewSize = 200;
-    }
+    const gameViewSize = changedViewScreen(widthScreen, 700);
 
-    const presetArr: Option[] = [
-      {
-        value: 'Создать шаблон',
-        label: 'Создать шаблон',
-      },
-    ];
+    // const presetArr: Option[] = [
+    //   {
+    //     value: 'Создать шаблон',
+    //     label: 'Создать шаблон',
+    //   },
+    // ];
 
-    actualPresets?.map(el =>
-      presetArr.push({
-        value: el.name,
-        label: el.name,
-      }),
-    );
+    // actualPresets?.map(el =>
+    //   presetArr.push({
+    //     value: el.name,
+    //     label: el.name,
+    //   }),
+    // );
+
+    const presetArr = presetOptions(actualPresets);
+
     return (
       <div className={styles.innerContent}>
         {(role === Roles.Methodist || role === Roles.Admin) && (
@@ -254,7 +251,7 @@ class Game extends Component<any, any> {
               element={
                 <div className={styles.wrapGameBlock}>
                   <section>
-                    <div style={{ minWidth: `${gameViewSize + 200}px` }}>
+                    <div style={{ minWidth: `${gameViewSize + 100}px` }}>
                       {(role === Roles.Methodist || role === Roles.Admin) && (
                         <div className={styles.wrapGameBlock_header}>
                           <div className={styles.wrapGameBlock_header_select}>
