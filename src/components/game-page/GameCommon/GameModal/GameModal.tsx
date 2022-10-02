@@ -48,6 +48,17 @@ export const GameModal: FC<PropsT> = observer(props => {
   const [colorsMap, setColorsMap] = useState<string[]>(settings?.colorsMap || ['']);
   const [sizeX, setSizeX] = useState<string>(settings?.sizeX?.toString() || '0');
   const [sizeY, setSizeY] = useState<string>(settings?.sizeY?.toString() || '0');
+  const [levelMaxCompleted, setLevelMaxCompleted] = useState<string>(
+    settings?.levelMaxCompleted?.toString() || '0',
+  );
+  const [wordsCount, setWordsCount] = useState<string>(settings?.wordsCount?.toString() || '0');
+  const [digitMax, setDigitMax] = useState<string>(settings?.digitMax?.toString() || '0');
+  const [errorAcceptable, setErrorAcceptable] = useState<string>(
+    settings?.errorAcceptable?.toString() || '0',
+  );
+  const [speed, setSpeed] = useState<string>(settings?.speed?.toString() || '0');
+  const [blinksCount, setBlinksCount] = useState<string>(settings?.blinksCount?.toString() || '0');
+  const [cycleTime, setCycleTime] = useState<string>(settings?.cycleTime?.toString() || '0');
 
   const [elementsTotal, setElementsTotal] = useState<string>(
     settings?.elementsTotal?.toString() || '0',
@@ -100,6 +111,15 @@ export const GameModal: FC<PropsT> = observer(props => {
         {
           timeComplete: Number(timeComplete),
           elementsTotal: Number(elementsTotal),
+          levelMaxCompleted: Number(levelMaxCompleted),
+          gameCode: '',
+          wordsCount: Number(wordsCount),
+          digitMax: Number(digitMax),
+          templateCode: 0,
+          errorAcceptable: Number(errorAcceptable),
+          speed: Number(speed),
+          blinksCount: Number(blinksCount),
+          cycleTime: Number(cycleTime),
           delay: Number(delay),
           level: Number(level),
           colorCount: Number(colorCount),
@@ -119,6 +139,15 @@ export const GameModal: FC<PropsT> = observer(props => {
         {
           timeComplete: Number(timeComplete),
           elementsTotal: Number(elementsTotal),
+          levelMaxCompleted: Number(levelMaxCompleted),
+          gameCode: '',
+          wordsCount: Number(wordsCount),
+          digitMax: Number(digitMax),
+          templateCode: 0,
+          errorAcceptable: Number(errorAcceptable),
+          speed: Number(speed),
+          blinksCount: Number(blinksCount),
+          cycleTime: Number(cycleTime),
           delay: Number(delay),
           level: Number(level),
           colorCount: Number(colorCount),
