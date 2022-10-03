@@ -7,5 +7,6 @@ export const presetOptions = (presets: Omit<GamePresetT, 'settings'>[]) => {
       value: item.name,
       label: item.name,
     }));
-  return [{ value: '', label: 'Создать шаблон' }, ...presetOpt];
+  if (Array.isArray(presetOpt)) return [{ value: '', label: 'Создать шаблон' }, ...presetOpt];
+  return [{ value: '', label: 'Создать шаблон' }];
 };
