@@ -53,7 +53,7 @@ export const GameModal: FC<PropsT> = observer(props => {
     settings?.timeComplete?.toString() || '0',
   );
   const [delay, setDelay] = useState<string>(settings?.delay?.toString() || '0');
-  const [level, setLevel] = useState<string>(settings?.level?.toString() || '0');
+  const [level, setLevel] = useState<string>(gamePreset?.gamePreset?.level);
   const [colorCount, setColorCount] = useState<string>(settings?.colorCount?.toString() || '0');
   const [forms, setForms] = useState<string>(settings?.forms?.toString() || '0');
   const [colorsMap, setColorsMap] = useState<string[]>(settings?.colorsMap || ['']);
@@ -85,7 +85,8 @@ export const GameModal: FC<PropsT> = observer(props => {
   const levelOptions = Object.values(GroupLevels).map((el, index) =>
     getOptionMui(levelKeys[index], el),
   );
-
+  console.log(levelOptions);
+  console.log(level);
   const changeColor = (index: number) => {
     const copy: ColorObj[] = colors.map(el =>
       el.id === index
@@ -107,10 +108,10 @@ export const GameModal: FC<PropsT> = observer(props => {
 
   const rerenderPreset = () => {
     setTemplate(gamePresetName);
-    setTimeComplete(settings?.timeComplete?.toString());
-    setElementsTotal(settings?.elementsTotal?.toString());
+    setTimeComplete(settings?.timeComplete?.toString() || '');
+    setElementsTotal(settings?.elementsTotal?.toString() || '');
     setDelay(settings?.delay?.toString() || '');
-    setLevel(settings?.level?.toString() || '');
+    setLevel(gamePreset.gamePreset.level);
     setColorCount(settings?.colorCount?.toString() || '');
     setForms(settings?.forms?.toString() || '');
     setColorsMap(settings?.colorsMap || ['']);
@@ -137,6 +138,7 @@ export const GameModal: FC<PropsT> = observer(props => {
     createPresets({
       gameCode: game.code,
       name: template,
+      level,
       settings: [
         {
           timeComplete: Number(timeComplete),
@@ -149,7 +151,6 @@ export const GameModal: FC<PropsT> = observer(props => {
           blinksCount: Number(blinksCount),
           cycleTime: Number(cycleTime),
           delay: Number(delay),
-          level: Number(level),
           colorCount: Number(colorCount),
           forms: Number(forms),
           groupsCount: Number(groupsCount),
@@ -167,7 +168,10 @@ export const GameModal: FC<PropsT> = observer(props => {
 
   const onEditPreset = () => {
     editPreset({
+      gameCode: game.code,
       name: template,
+      level,
+      status: gamePreset.gamePreset.status,
       settings: [
         {
           timeComplete: Number(timeComplete),
@@ -180,7 +184,6 @@ export const GameModal: FC<PropsT> = observer(props => {
           blinksCount: Number(blinksCount),
           cycleTime: Number(cycleTime),
           delay: Number(delay),
-          level: Number(level),
           colorCount: Number(colorCount),
           forms: Number(forms),
           groupsCount: Number(groupsCount),
@@ -250,9 +253,9 @@ export const GameModal: FC<PropsT> = observer(props => {
                   <FormControl fullWidth size="small">
                     <InputLabel>Уровень</InputLabel>
                     <Select
-                      value={gamePreset.gamePreset.level}
+                      value={level}
                       label="Уровень"
-                      onChange={({ target: { value } }) => (gamePreset.gamePreset.level = value)}
+                      onChange={({ target: { value } }) => setLevel(value)}
                     >
                       {levelOptions}
                     </Select>

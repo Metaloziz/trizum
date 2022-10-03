@@ -65,7 +65,7 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
       homeworkStore.pull('active', 5, type);
     }
   }, [store.editingEntity.type]);
-
+  console.log(store.editingEntity.level);
   return (
     <Dialog
       PaperProps={{

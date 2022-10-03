@@ -7,8 +7,8 @@ export type GameT = {
 export type GamesT = Omit<GameT, 'code'>[];
 
 export type PresetsGameSettings = {
-  timeComplete: number;
-  elementsTotal: number;
+  timeComplete?: number;
+  elementsTotal?: number;
   levelMaxCompleted?: number;
   gameCode?: string;
   cycleTime?: number;
