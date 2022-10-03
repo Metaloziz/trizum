@@ -27,6 +27,11 @@ export type PresetsGameSettings = {
   colorCount?: number;
   forms?: number;
   description?: string;
+  size?: number;
+  startTiles?: number;
+  time?: number;
+  levels?: number;
+  colores?: number;
 };
 
 export type EditOrCreatePresetParamsT = {

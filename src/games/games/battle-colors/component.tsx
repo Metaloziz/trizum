@@ -108,7 +108,7 @@ export default class extends Component<any, any> implements Game {
         required : true
       },
       {
-        name : 'colors',
+        name : 'colores',
         title : 'Кол-во цветов',
         type : 'select',
         option : counterSelect(3, 5),
@@ -122,7 +122,7 @@ export default class extends Component<any, any> implements Game {
     return {
       time : parseInt(result.time),
       levels : parseInt(result.levels),
-      colors : parseInt(result.colors),
+      colores : parseInt(result.colores),
     };
   }
 

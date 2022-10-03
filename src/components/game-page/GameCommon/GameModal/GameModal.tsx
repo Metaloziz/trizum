@@ -69,13 +69,17 @@ export const GameModal: FC<PropsT> = observer(props => {
   const [blinksCount, setBlinksCount] = useState<string>(settings?.blinksCount?.toString() || '0');
   const [cycleTime, setCycleTime] = useState<string>(settings?.cycleTime?.toString() || '0');
   const [groupsCount, setGroupsCount] = useState<string>(settings?.groupsCount?.toString() || '0');
-
   const [elementsTotal, setElementsTotal] = useState<string>(
     settings?.elementsTotal?.toString() || '0',
   );
   const [description, setDescription] = useState<string>(defaultInputTextReader);
   // const [currentRadio, setCurrentRadio] = useState<string>('eachLevel');
   const [colors, setColors] = useState<ColorObj[]>(colorsObj);
+  const [size, setSize] = useState(settings?.size?.toString() || '0');
+  const [startTiles, setStartTiles] = useState(settings?.startTiles?.toString() || '0');
+  const [time, setTime] = useState(settings?.time?.toString() || '0');
+  const [levels, setLevels] = useState(settings?.levels?.toString() || '0');
+  const [colores, setColores] = useState(settings?.colores?.toString() || '0');
 
   const levelKeys = Object.keys(GroupLevels);
   const levelOptions = Object.values(GroupLevels).map((el, index) =>
@@ -118,6 +122,11 @@ export const GameModal: FC<PropsT> = observer(props => {
     setSpeed(settings?.speed?.toString() || '');
     setBlinksCount(settings?.blinksCount?.toString() || '');
     setDescription(settings?.description || '');
+    setTime(settings?.time?.toString() || '');
+    setLevels(settings?.levels?.toString() || '');
+    setColores(settings?.colores?.toString() || '');
+    setSize(settings?.size?.toString() || '');
+    setStartTiles(settings?.startTiles?.toString() || '');
   };
 
   useEffect(() => {
@@ -144,6 +153,11 @@ export const GameModal: FC<PropsT> = observer(props => {
           colorCount: Number(colorCount),
           forms: Number(forms),
           groupsCount: Number(groupsCount),
+          size: Number(size),
+          startTiles: Number(startTiles),
+          time: Number(time),
+          levels: Number(levels),
+          colores: Number(colores),
           description,
           colorsMap,
         },
@@ -170,6 +184,11 @@ export const GameModal: FC<PropsT> = observer(props => {
           colorCount: Number(colorCount),
           forms: Number(forms),
           groupsCount: Number(groupsCount),
+          size: Number(size),
+          startTiles: Number(startTiles),
+          time: Number(time),
+          levels: Number(levels),
+          colores: Number(colores),
           description,
           colorsMap,
         },
@@ -349,34 +368,35 @@ export const GameModal: FC<PropsT> = observer(props => {
                   <Grid item xs={12} sm={6}>
                     <TextField
                       label="Размер поля X на Х"
-                      value={groupsCount}
-                      onChange={({ currentTarget: { value } }) => setGroupsCount(value)}
+                      value={size}
+                      onChange={({ currentTarget: { value } }) => setSize(value)}
                       fullWidth
                       inputProps={{ type: 'number' }}
                       variant="outlined"
                       size="small"
                     />
                   </Grid>
-                  {/* <Grid item xs={12} sm={6}> */}
-                  {/*  <TextField */}
-                  {/*    label="Кол-во начальных блоков" */}
-                  {/*    value={startTiles} */}
-                  {/*    onChange={({ currentTarget: { value } }) => setStartTiles(value)} */}
-                  {/*    fullWidth */}
-                  {/*    inputProps={{ type: 'number' }} */}
-                  {/*    variant="outlined" */}
-                  {/*    size="small" */}
-                  {/*  /> */}
-                  {/* </Grid> */}
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label="Кол-во начальных блоков"
+                      value={startTiles}
+                      onChange={({ currentTarget: { value } }) => setStartTiles(value)}
+                      fullWidth
+                      inputProps={{ type: 'number' }}
+                      variant="outlined"
+                      size="small"
+                    />
+                  </Grid>
                 </Grid>
               )}
+
               {game.code === 'battleColors' && (
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
                     <TextField
                       label="Время на прохождение"
-                      value={timeComplete}
-                      onChange={({ currentTarget: { value } }) => setTimeComplete(value)}
+                      value={time}
+                      onChange={({ currentTarget: { value } }) => setTime(value)}
                       fullWidth
                       inputProps={{ type: 'number' }}
                       variant="outlined"
@@ -386,8 +406,8 @@ export const GameModal: FC<PropsT> = observer(props => {
                   <Grid item xs={12} sm={6}>
                     <TextField
                       label="Кол-во уровней в игре"
-                      value={levelMaxCompleted}
-                      onChange={({ currentTarget: { value } }) => setLevelMaxCompleted(value)}
+                      value={levels}
+                      onChange={({ currentTarget: { value } }) => setLevels(value)}
                       fullWidth
                       inputProps={{ type: 'number' }}
                       variant="outlined"
@@ -397,8 +417,8 @@ export const GameModal: FC<PropsT> = observer(props => {
                   <Grid item xs={12} sm={6}>
                     <TextField
                       label="Кол-во цветов для игры"
-                      value={colorCount}
-                      onChange={({ currentTarget: { value } }) => setColorCount(value)}
+                      value={colores}
+                      onChange={({ currentTarget: { value } }) => setColores(value)}
                       fullWidth
                       inputProps={{ type: 'number' }}
                       variant="outlined"
