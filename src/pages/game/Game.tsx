@@ -15,7 +15,6 @@ import React, { Component } from 'react';
 
 import { Navigate, NavLink, Route, Routes } from 'react-router-dom';
 import { changedViewScreen } from 'utils/gameUtils/changeViewScreen';
-import { presetOptions } from 'utils/gameUtils/presetOptions';
 
 import Two048 from '../../assets/images/game/2048.png';
 import Play from '../../assets/images/game/play.svg';
