@@ -23,7 +23,7 @@ import {
 } from './games/battle-colors';
 
 export const GameIdentifiers = {
-    schulte: 'schulte',
+    shulte: 'shulte',
     game2048: 'game2048',
     mental: 'mental',
     shiftVertical: 'shiftVertical',
@@ -31,7 +31,7 @@ export const GameIdentifiers = {
 };
 
 export const GameList = {
-    [GameIdentifiers.schulte]: {
+    [GameIdentifiers.shulte]: {
         name: 'Таблица Шульте',
         component: SchulteComponent,
         props: SchultePropsDefault

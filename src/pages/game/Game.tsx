@@ -40,7 +40,7 @@ const Games = [
   },
   {
     title: 'Таблица Шульте',
-    name: 'schulte',
+    name: 'shulte',
     prevImg: Schulte,
   },
   {
@@ -180,21 +180,22 @@ class Game extends Component<any, any> {
 
     const gameViewSize = changedViewScreen(widthScreen, 700);
 
-    // const presetArr: Option[] = [
-    //   {
-    //     value: 'Создать шаблон',
-    //     label: 'Создать шаблон',
-    //   },
-    // ];
+    const presetArr: Option[] = [
+      {
+        value: 'Создать шаблон',
+        label: 'Создать шаблон',
+      },
+    ];
 
-    // actualPresets?.map(el =>
-    //   presetArr.push({
-    //     value: el.name,
-    //     label: el.name,
-    //   }),
-    // );
+    actualPresets?.map(el =>
+      presetArr.push({
+        value: el.name,
+        label: el.name,
+      }),
+    );
 
-    const presetArr = presetOptions(actualPresets);
+    console.log(presetArr);
+    // const presetArr = presetOptions(actualPresets);
 
     return (
       <div className={styles.innerContent}>
