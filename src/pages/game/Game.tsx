@@ -194,7 +194,6 @@ class Game extends Component<any, any> {
       }),
     );
 
-    console.log(presetArr);
     // const presetArr = presetOptions(actualPresets);
 
     return (

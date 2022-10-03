@@ -30,8 +30,7 @@ type PropsT = {
   onClose: (value: boolean) => void;
   deletePreset: (id: string) => void;
 };
-const defaultInputTextReader =
-  'И нет сомнений, что некоторые особенности внутренней политики, превозмогая сложившуюся непростую экономическую ситуацию, ограничены исключительно образом мышления. Вот вам яркий пример современных тенденций - существующая теория позволяет оценить значение системы массового участия!';
+const defaultInputTextReader = 'И нет сомнений, что некоторые особенности внутренней политики...';
 
 const colorsObj = [
   { label: 'Зелёный', value: false, hex: '#076d4d', id: 0 },
@@ -118,6 +117,7 @@ export const GameModal: FC<PropsT> = observer(props => {
     setErrorAcceptable(settings?.errorAcceptable?.toString() || '');
     setSpeed(settings?.speed?.toString() || '');
     setBlinksCount(settings?.blinksCount?.toString() || '');
+    setDescription(settings?.description || '');
   };
 
   useEffect(() => {
@@ -144,6 +144,7 @@ export const GameModal: FC<PropsT> = observer(props => {
           colorCount: Number(colorCount),
           forms: Number(forms),
           groupsCount: Number(groupsCount),
+          description,
           colorsMap,
         },
       ],
@@ -169,6 +170,7 @@ export const GameModal: FC<PropsT> = observer(props => {
           colorCount: Number(colorCount),
           forms: Number(forms),
           groupsCount: Number(groupsCount),
+          description,
           colorsMap,
         },
       ],
@@ -548,16 +550,26 @@ export const GameModal: FC<PropsT> = observer(props => {
 
             <div className={styles.descriptionBlock}>
               <span className={styles.descriptionBlock_header}>память и ритм</span>
-              <TextEditor
-                onChange={date => {
-                  let allText = '';
-                  date?.blocks?.forEach((item: any) => {
-                    allText += item.text;
-                  });
-                  setDescription(allText);
-                }}
-                defaultText={description}
-              />
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Описание"
+                  value={description}
+                  onChange={({ currentTarget: { value } }) => setDescription(value)}
+                  fullWidth
+                  variant="outlined"
+                  size="medium"
+                />
+              </Grid>
+              {/* <TextEditor */}
+              {/*  onChange={date => { */}
+              {/*    let allText = ''; */}
+              {/*    date?.blocks?.forEach((item: any) => { */}
+              {/*      allText += item.text; */}
+              {/*    }); */}
+              {/*    setDescription(allText); */}
+              {/*  }} */}
+              {/*  defaultText={description} */}
+              {/* /> */}
             </div>
           </div>
         </Stack>
