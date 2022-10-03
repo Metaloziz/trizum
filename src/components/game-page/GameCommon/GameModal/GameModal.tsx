@@ -405,9 +405,7 @@ export const GameModal: FC<PropsT> = observer(props => {
                   </Grid>
                 </Grid>
               )}
-              {
-                // game.code === 'mental'
-                true && (
+              {game.code === 'mental' &&(
                   <Grid container spacing={2}>
                     <Grid item xs={6} sm={6}>
                       <TextField
@@ -497,9 +495,8 @@ export const GameModal: FC<PropsT> = observer(props => {
                         size="small"
                       />
                     </Grid>
-                  </Grid>
-                )
-              }
+                  </Grid>,
+                )}
               {/* </section> */}
 
               {/* <section> */}
