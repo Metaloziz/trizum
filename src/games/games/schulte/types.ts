@@ -1,16 +1,14 @@
 import { GameProps, GameResult } from '../../common/types';
 
 export interface Props extends GameProps {
-  sizeX?: number;
-  sizeY?: number;
+  elementsTotal?: number
   colors?: number;
   colorsMap?: string[];
   onEnd(result?: GameResult): void;
 }
 
 const PropsDefault : Props = {
-  sizeX : 3,
-  sizeY : 3,
+  elementsTotal: 3,
   colors : 1,
   colorsMap : [
     '#333',

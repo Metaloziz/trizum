@@ -14,24 +14,21 @@ const SizesConfig = [
     title : '3 на 3',
     value : 0,
     option : {
-      sizeX : 3,
-      sizeY : 3
+      elementsTotal: 3
     }
   },
   {
     title : '4 на 4',
     value : 1,
     option : {
-      sizeX : 4,
-      sizeY : 4
+      elementsTotal: 4
     }
   },
   {
     title : '6 на 6',
     value : 2,
     option : {
-      sizeX : 6,
-      sizeY : 6
+      elementsTotal: 6
     }
   },
 ];
@@ -207,8 +204,7 @@ export default class extends Component<any, any> implements Game {
     } = this.state;
 
     const {
-      sizeX,
-      sizeY,
+      elementsTotal,
       width
     } = this.props;
 
@@ -218,12 +214,12 @@ export default class extends Component<any, any> implements Game {
         style={{
           ...styles.game,
           width : width,
-          height : (width / sizeX) * sizeY
+          height : (width / elementsTotal) * elementsTotal
         }}
       >
         <ErrorBlock
           onRef={(ref : any) => this.errorBlock = ref}
-          size={width/sizeX}
+          size={width/elementsTotal}
         />
         {layout.map((row : any, ri : number) => <View
           key={`row-${ri}`}
@@ -297,7 +293,7 @@ const styles = StyleSheet.create({
     fontSize : 16,
     lineHeight : 20,
     textAlign : 'center',
-    marginBottom : 12
+    marginBottom : 26
   },
   timer : {
     textAlign : 'center',

@@ -11,7 +11,7 @@ import { getOptionMui } from 'utils/getOption';
 const Games = [
   {
     title: 'Сдвиг по вертикали',
-    name: 'verticalShift',
+    name: 'shiftVertical',
   },
   {
     title: 'Ментальный счет',
@@ -19,11 +19,11 @@ const Games = [
   },
   {
     title: 'Таблица Шульте',
-    name: 'shulte',
+    name: 'schulte',
   },
   {
     title: '2048',
-    name: '2048',
+    name: 'game2048',
   },
 ];
 

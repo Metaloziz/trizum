@@ -15,7 +15,7 @@ export type PresetsGameSettings = {
   wordsCount?: number;
   digitMax?: number;
   templateCode?: number;
-  groupsCount?: [];
+  groupsCount?: number;
   blinksCount?: number;
   errorAcceptable?: number;
   speed?: number;
