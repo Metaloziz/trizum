@@ -209,6 +209,7 @@ class Game extends Component<any, any> {
           onClose={this.closeResultModal}
           onStart={this.onRepeat}
         />
+        {!this.game && (
         <div className={styles.gameList}>
           {Games.map(gam => (
             <div key={`game-${gam.name}`} className={styles.gameItem}>
@@ -242,6 +243,7 @@ class Game extends Component<any, any> {
             </div>
           ))}
         </div>
+        )}
 
         <Routes>
           {Games.map(gam => (
