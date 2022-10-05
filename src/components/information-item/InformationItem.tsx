@@ -15,7 +15,7 @@ type VariantType = 'select' | 'input' | 'calendar' | 'file' | 'phone' | 'inn' | 
 
 type SizeType = 'large' | 'normal';
 
-interface Option {
+export interface Option {
   value: any;
   label: string;
 }

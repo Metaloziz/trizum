@@ -35,6 +35,7 @@ import { SecondaryRoutes } from 'app/enums/SecondaryRoutes';
 import { TestsList } from 'pages/testing/TestsList/TestsList';
 import AddNewsPage from 'components/add-news-page';
 import { ArticleFromEditor } from 'components/blog-page/ArticleFromEditor/ArticleFromEditor';
+import GameItems from 'pages/game/GameItems';
 
 const App = observer(() => (
   <LocalizationProvider dateAdapter={AdapterMoment}>
@@ -52,12 +53,12 @@ const App = observer(() => (
           <Route path={AppRoutes.Classes} element={<Classes />} />
           <Route path={AppRoutes.Courses} element={<Courses />} />
           <Route path={AppRoutes.Franchising} element={<Franchising />} />
-          <Route path={`${AppRoutes.Games}`}>
-            <Route path="" element={<GameWrapper />} />
-            <Route path={`${AppRoutes.Games}/*`} element={<GameWrapper />} />
-            {/* <Route path=":/game/:id" element={<GameModal open onClose={() => true} />} /> */}
-          </Route>
+          <Route path={`${AppRoutes.Games}`} element={<GameWrapper />} />
+          {/* <Route path=""  /> */}
 
+          {/* <Route path=":/game/:id" element={<GameModal open onClose={() => true} />} /> */}
+          {/* </Route> */}
+          <Route path={`${AppRoutes.Games}/:gameName`} element={<GameItems />} />
           {/* <Route path={AppRoutes.Games} element={<Game />} /> */}
           <Route path={AppRoutes.Homework} element={<Homework />} />
           <Route path={`${AppRoutes.Homework}${AppRoutes.Add}`} element={<HomeworkAddEdit />} />

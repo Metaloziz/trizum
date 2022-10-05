@@ -6,7 +6,7 @@
 import { Factory, GameIdentifiers } from '@trizum/games';
 
 const GameName = GameIdentifiers.Game2048;
-const GameItem = Factory(name);
+const GameItems = Factory(name);
 ```
 **Factory** - Фабрика по созданию инстанса игры, принимает в параметр идентификатор игры из объекта **GameIdentifiers**, инстанс игры необходимо создавать вне рендера, чтобы исключить перезапуск игры при перерендере родительского компонента.
 
@@ -16,7 +16,7 @@ const GameItem = Factory(name);
 import { Factory, GameIdentifiers } from '@trizum/games';
 
 const GameName = GameIdentifiers.Game2048;
-const GameItem = Factory(name);
+const GameItems = Factory(name);
 
 export const GameContainer = () => {
     const params = {
@@ -48,7 +48,7 @@ export const GameContainer = () => {
     };
 
     return <div>
-        <GameItem
+        <GameItems
             width={800}
             onEnd={onEnd}
             onRef={gameRef => ref = gameRef}

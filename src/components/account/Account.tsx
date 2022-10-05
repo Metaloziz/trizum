@@ -22,6 +22,7 @@ const Account: FC = observer(() => {
 
   const logout = async () => {
     await tokenService.removeUser();
+    appStore.logout();
     setRole(Roles.Unauthorized);
   };
 
