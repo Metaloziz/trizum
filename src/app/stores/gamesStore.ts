@@ -51,6 +51,8 @@ class GamesStore {
 
   playResults: PlayResultsResponseT = {} as PlayResultsResponseT;
 
+  isCurrentGameView: boolean = false;
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -157,6 +159,10 @@ class GamesStore {
     } catch (e) {
       console.warn(e);
     }
+  };
+
+  setIsCurrentGameView = (value: boolean) => {
+    this.isCurrentGameView = value;
   };
 }
 
