@@ -60,8 +60,8 @@
       text-transform: uppercase;
     }
 
-    @media(max-width: 600px){
-      &_title{
+    @media(max-width: 600px) {
+      &_title {
         margin-left: 6px;
       }
     }
@@ -165,15 +165,25 @@
 
 }
 
+.wrap {
+  padding: 24px;
+
+  .wrapInner {
+    padding-top: 24px;
+  }
+}
+
 .wrapGame {
   display: flex;
   position: relative;
   justify-content: center;
   height: 820px;
+  width: 820px;
   border-radius: 70px;
   overflow: hidden;
   margin-bottom: 50px;
   background: #FCFBFE;
+  justify-self: center;
 
   &_overlay {
     position: absolute;
