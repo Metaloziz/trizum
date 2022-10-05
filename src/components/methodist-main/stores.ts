@@ -62,6 +62,7 @@ export class MethodistMainStore extends StoreBase {
     this.execute(async () => {
       const paginationResponse = await this._repository.list(this.pagination.page);
       this.entities = paginationResponse.items;
+      console.log(toJS(this.entities))
       // this.entities = paginationResponse.items.filter(item=>item.status!=="archive");
       this.pagination = {
         page: paginationResponse.page,
@@ -155,10 +156,21 @@ export class MethodistMainStore extends StoreBase {
     }
 
     if (this.filter.level.trim()) {
+      if(this.filter.level==="Младшая группа"){
+        this.filter.level="easy"
+      }else if(this.filter.level==="Средняя группа"){
+        this.filter.level="medium"
+      }else if(this.filter.level==="Старшая группа") {
+        this.filter.level="hard"
+      }
       result = this.entities.filter(entity =>
         (entity.level ?? '').toLowerCase().includes(this.filter!.level.toLowerCase()),
       );
     }
+
+    // if(this.filter.createdAt){
+      
+    // }
 
     // TODO: дописать остальные фильтры
 
