@@ -1,5 +1,5 @@
 .innerContent {
-  padding: 35px 20px 0 20px;
+  padding: 10px 20px 0 20px;
   box-sizing: border-box;
 
   @media(max-width: 550px) {
@@ -11,7 +11,7 @@
   width: 100%;
   height: auto;
   position: relative;
-  margin: 10px 0px;
+  margin: 10px 0;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -38,7 +38,7 @@
   margin-bottom: 15px;
   font-size: 14px;
   border-radius: 30px;
-  cursor: pointer;
+  //cursor: pointer;
   color: #333;
 
   &_header {
@@ -107,9 +107,13 @@
 }
 
 .wrapGameBlock {
-  margin: 20px 0 50px 0;
+  margin: 0 0 50px 0;
   display: flex;
   justify-content: space-evenly;
+
+  .redirectButton {
+    width: 200px;
+  }
 
   &_header {
     display: flex;
