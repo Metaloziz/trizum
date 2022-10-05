@@ -73,9 +73,9 @@ const ReportPage = observer(() => {
             />
           </div>
         </div>
-        <div className={styles.rightBlock}>
+        {/* <div className={styles.rightBlock}>
           <AdminInfoList />
-        </div>
+        </div> */}
       </div>
     </div>
   );

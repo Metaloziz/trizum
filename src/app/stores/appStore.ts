@@ -154,6 +154,10 @@ class AppStore {
     });
   };
 
+  logout = () => {
+    usersStore.resetUsersFilter();
+  };
+
   setRole = (role: Roles): void => {
     this.role = role;
     if (role === Roles.Unauthorized) {
