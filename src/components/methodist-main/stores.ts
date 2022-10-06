@@ -9,6 +9,8 @@ import { StoreBase } from 'app/stores/StoreBase';
 import { Nullable } from 'app/types/Nullable';
 import { CourseViewModel } from 'app/viewModels/CourseViewModel';
 import { StatusTypes } from 'app/enums/StatusTypes';
+import { getCorrectDate } from 'assets/helperFunctions/helperFunctions';
+
 
 export class MethodistMainStore extends StoreBase {
   private _repository = new MethodistMainRepository();
@@ -33,6 +35,8 @@ export class MethodistMainStore extends StoreBase {
   editingEntity: CourseViewModel = this._defaultValue();
 
   entities: CourseViewModel[] = [];
+  
+  filtered: CourseViewModel[] = [];
 
   isDialogOpen: boolean = false;
 
@@ -62,7 +66,6 @@ export class MethodistMainStore extends StoreBase {
     this.execute(async () => {
       const paginationResponse = await this._repository.list(this.pagination.page);
       this.entities = paginationResponse.items;
-      console.log(toJS(this.entities))
       // this.entities = paginationResponse.items.filter(item=>item.status!=="archive");
       this.pagination = {
         page: paginationResponse.page,
@@ -128,7 +131,6 @@ export class MethodistMainStore extends StoreBase {
   };
 
   changePage = async (page: number) => {
-    console.log(page);
     this.pagination.page = page;
     this.execute(async () => this.list());
   };
@@ -147,14 +149,14 @@ export class MethodistMainStore extends StoreBase {
       return this.entities;
     }
 
-    let result: CourseViewModel[] = [];
 
     if (this.filter.title.trim()) {
-      result = this.entities.filter(entity =>
+       this.filtered = this.entities.filter(entity =>
         (entity.title ?? '').toLowerCase().includes(this.filter!.title.toLowerCase()),
+        console.log(toJS(this.filtered))
       );
     }
-
+    
     if (this.filter.level.trim()) {
       if(this.filter.level==="Младшая группа"){
         this.filter.level="easy"
@@ -163,17 +165,21 @@ export class MethodistMainStore extends StoreBase {
       }else if(this.filter.level==="Старшая группа") {
         this.filter.level="hard"
       }
-      result = this.entities.filter(entity =>
+      this.filtered = (this.filtered || this.entities).filter(entity =>
         (entity.level ?? '').toLowerCase().includes(this.filter!.level.toLowerCase()),
       );
     }
+    
+    if(this.filter.createdAt){
+      const date=this.filter.createdAt.format('DD.MM.YYYY')
+      this.filtered = (this.filtered || this.entities).filter(entity=>{
+        const entityDate=getCorrectDate(entity.createdAt?.date as string)
+        return entityDate===date
+      })
+    }
 
-    // if(this.filter.createdAt){
-      
-    // }
-
-    // TODO: дописать остальные фильтры
-
-    return result;
+    return this.filtered;
   }
 }
+
+
