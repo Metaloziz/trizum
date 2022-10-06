@@ -109,7 +109,8 @@ export class MethodistMainStore extends StoreBase {
     const currentEntity = toJS(this.entities).find(ent => ent.id === id);
     const status = currentEntity?.status
     try {
-      if (status !== StatusTypes.draft) {
+      if (status) {  /* change status of the course to archive  */
+      // if (status !== StatusTypes.draft) { delete course if its status draft
         this.editingEntity = currentEntity ? { ...currentEntity, status: StatusTypes.archive } : this._defaultValue();
         await this.addOrEdit();
       } else {
