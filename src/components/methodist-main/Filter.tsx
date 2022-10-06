@@ -42,7 +42,7 @@ export const Filter = observer((props: FilterProps) => {
   });
 
   const [filter, setFilter] = useState(_defaultFilter());
-  console.log(filter.createdAt)
+    
   const [open, setOpen] = useState(false);
 
   const applyFilter = () => {
