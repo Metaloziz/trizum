@@ -23,10 +23,13 @@ export const TestsList = observer(() => {
     postTest,
     isSuccessPost,
     setIsSuccessPost,
+    setOneTest,
+    currentTest,
   } = testsStore;
 
   const [currentPage, setCurrentPage] = useState(page + 1);
-  const [showModal, setShowModal] = useState(false);
+  const [isShowAddTestModal, setIsShowAddTestModal] = useState(false);
+  const [isShowEditTestModal, setIsShowEditTestModal] = useState(false);
 
   const onPageChange = (event: ChangeEvent<unknown>, newCurrentPage: number) => {
     setCurrentPage(newCurrentPage);
@@ -43,17 +46,26 @@ export const TestsList = observer(() => {
     editTest(testId, { status: 'removal' });
   };
 
+  const showAddTestModal = () => {
+    setIsShowAddTestModal(true);
+  };
+
+  const showEditTestModal = (testId: string) => {
+    setOneTest(testId);
+    setIsShowEditTestModal(true);
+  };
+
   return (
     <div className={style.container}>
       <h2>Список тестов</h2>
-      <Button onClick={() => setShowModal(true)}>Добавить тест</Button>
+      <Button onClick={showAddTestModal}>Добавить тест</Button>
       <Table colNames={colNames}>
         {tests.map(({ id, title }, index) => (
           <tr key={id}>
             <td>{index + 1}</td>
             <td>{title}</td>
             <td>
-              <EditButton>Редактировать</EditButton>
+              <EditButton onClick={() => showEditTestModal(id)}>Редактировать</EditButton>
               <EditButton color="error" onClick={() => markTestRemoval(id)}>
                 Удалить
               </EditButton>
@@ -72,13 +84,23 @@ export const TestsList = observer(() => {
           onChange={onPageChange}
         />
       </div>
-      <BasicModal visibility={showModal} changeVisibility={setShowModal}>
+      <BasicModal visibility={isShowAddTestModal} changeVisibility={setIsShowAddTestModal}>
         <TestEditForm
-          changeVisibility={setShowModal}
+          changeVisibility={setIsShowAddTestModal}
           postTest={postTest}
           isSuccessPost={isSuccessPost}
           setIsSuccessPost={setIsSuccessPost}
           setTests={setTests}
+        />
+      </BasicModal>
+      <BasicModal visibility={isShowEditTestModal} changeVisibility={setIsShowEditTestModal}>
+        <TestEditForm
+          changeVisibility={setIsShowEditTestModal}
+          postTest={postTest}
+          isSuccessPost={isSuccessPost}
+          setIsSuccessPost={setIsSuccessPost}
+          setTests={setTests}
+          testData={currentTest}
         />
       </BasicModal>
     </div>
