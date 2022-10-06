@@ -110,7 +110,7 @@ export class FranchisingStore extends StoreBase {
       email: yup.string().email().required('*'),
       legalAddress: yup.string().required('*'),
       actualAddress: yup.string().required('*'),
-      kpp: yup.string().min(9).max(9).required('*'),
+      kpp: yup.string(),
       ogrn: yup.string().min(13).max(15).required('*'),
       city: yup.string().required('*'),
       schoolName: yup.string().required('*'),
