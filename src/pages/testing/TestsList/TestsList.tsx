@@ -12,7 +12,18 @@ import { TestEditForm } from 'pages/testing/TestsList/TestEditForm/TestEditForm'
 const colNames = ['№', 'Наименование', 'Редактировать'];
 
 export const TestsList = observer(() => {
-  const { setTests, tests, total, perPage, page, setSearchParams, editTest } = testsStore;
+  const {
+    setTests,
+    tests,
+    total,
+    perPage,
+    page,
+    setSearchParams,
+    editTest,
+    postTest,
+    isSuccessPost,
+    setIsSuccessPost,
+  } = testsStore;
 
   const [currentPage, setCurrentPage] = useState(page + 1);
   const [showModal, setShowModal] = useState(false);
@@ -62,7 +73,13 @@ export const TestsList = observer(() => {
         />
       </div>
       <BasicModal visibility={showModal} changeVisibility={setShowModal}>
-        <TestEditForm changeVisibility={setShowModal} />
+        <TestEditForm
+          changeVisibility={setShowModal}
+          postTest={postTest}
+          isSuccessPost={isSuccessPost}
+          setIsSuccessPost={setIsSuccessPost}
+          setTests={setTests}
+        />
       </BasicModal>
     </div>
   );

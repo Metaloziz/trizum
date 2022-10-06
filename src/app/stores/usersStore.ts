@@ -59,6 +59,10 @@ class UsersStore {
     makeAutoObservable(this);
   }
 
+  resetUsersFilter = () => {
+    this.searchUsersParams = { ...this.searchDefaultUsersParams };
+  };
+
   getUsers = async (params?: RequestUsersForFilter) => {
     const res = await usersService.getAllUsers(params);
     runInAction(() => {

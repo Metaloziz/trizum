@@ -1,34 +1,42 @@
-import React, { FC, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import TextField from '@mui/material/TextField';
+import testsStore from 'app/stores/testsStore';
+import { OneTestBodyT, TestPayloadT } from 'app/types/TestsT';
+import BasicModal from 'components/basic-modal/BasicModal';
+import Button from 'components/button/Button';
 import {
   MAX_NAMES_LENGTH,
   MAX_TEST_RESULT,
   MIN_NAMES_LENGTH,
   MIN_QUESTIONS_TEST,
 } from 'constants/constants';
-import TextField from '@mui/material/TextField';
-import style from './TestEditForm.module.scss';
-import Button from 'components/button/Button';
-import BasicModal from 'components/basic-modal/BasicModal';
-import { QuestionForm, QuestionFormData } from './QuestionForm/QuestionForm';
-import { OneTestBodyT, TestPayloadT } from 'app/types/TestsT';
-import { observer } from 'mobx-react-lite';
-import testsStore from 'app/stores/testsStore';
+import React, { FC, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { mixElements } from 'utils/mixElements';
+import * as yup from 'yup';
+import { QuestionForm, QuestionFormData } from './QuestionForm/QuestionForm';
+import style from './TestEditForm.module.scss';
 
 type TestInputType = Pick<OneTestBodyT, 'title' | 'maxResult'>;
 
 type Props = {
   changeVisibility: (value: boolean) => void;
+  postTest: typeof testsStore.postTest;
+  isSuccessPost: typeof testsStore.isSuccessPost;
+  setIsSuccessPost: typeof testsStore.setIsSuccessPost;
+  setTests: typeof testsStore.setTests;
 };
 
-export const TestEditForm: FC<Props> = observer(({ changeVisibility }) => {
-  const { postTest, isSuccessPost, setIsSuccessPost } = testsStore;
-
+export const TestEditForm: FC<Props> = ({
+  changeVisibility,
+  postTest,
+  isSuccessPost,
+  setIsSuccessPost,
+  setTests,
+}) => {
   useEffect(() => {
     if (isSuccessPost) {
+      setTests();
       changeVisibility(false);
       setIsSuccessPost(null);
     }
@@ -127,4 +135,4 @@ export const TestEditForm: FC<Props> = observer(({ changeVisibility }) => {
       </BasicModal>
     </div>
   );
-});
+};

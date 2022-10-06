@@ -95,6 +95,7 @@ class Game extends Component<any, any> {
     });
   };
 
+  // eslint-disable-next-line react/no-unused-class-component-methods
   onEnd = (result: any) => {
     this.setState(
       {
@@ -153,6 +154,7 @@ class Game extends Component<any, any> {
     this.onStart();
   };
 
+  // eslint-disable-next-line react/no-unused-class-component-methods
   onRefGame = (ref: any) => {
     this.game = ref;
   };
@@ -163,10 +165,6 @@ class Game extends Component<any, any> {
       started: false,
     });
     gamesStore.getGame(game);
-  };
-
-  setPreset = (data: OptionT) => {
-    gamesStore.getPreset(data.value);
   };
 
   render() {
@@ -241,64 +239,6 @@ class Game extends Component<any, any> {
             </div>
           ))}
         </div>
-
-        <Routes>
-          {Games.map(gam => (
-            <Route
-              key={gam.name}
-              path={gam.name}
-              element={
-                <div className={styles.wrapGameBlock}>
-                  <section>
-                    <div style={{ minWidth: `${gameViewSize + 100}px` }}>
-                      {(role === Roles.Methodist || role === Roles.Admin) && (
-                        <div className={styles.wrapGameBlock_header}>
-                          <div className={styles.wrapGameBlock_header_select}>
-                            <InformationItem
-                              variant="select"
-                              size="normal"
-                              placeholder="Шаблон"
-                              option={presetArr}
-                              onChangeSelect={data => this.setPreset(data)}
-                            />
-                          </div>
-                          <div className={styles.wrapGameBlock_header_select}>
-                            <InformationItem variant="select" size="normal" placeholder="Год" />
-                          </div>
-                          <div className={styles.wrapGameBlock_header_select}>
-                            <InformationItem variant="select" size="normal" placeholder="Месяц" />
-                          </div>
-                          <div className={styles.wrapGameBlock_header_select}>
-                            <InformationItem variant="select" size="normal" placeholder="Группа" />
-                          </div>
-                          <Button onClick={() => this.toggleModal(true)}>
-                            {gamePreset?.gamePreset?.id
-                              ? 'Изменить настройки'
-                              : 'Создать настройки'}
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className={styles.wrapGame}>
-                      <div className={styles.wrapGame_overlay}>
-                        <GameComponent
-                          onRef={this.onRefGame}
-                          width={gameViewSize}
-                          onEnd={this.onEnd}
-                          {...settings}
-                          colors={settings?.colorsMap?.length || 1}
-                        />
-                        {!started && <PlayButton onStart={this.onStart} />}
-                      </div>
-                    </div>
-                  </section>
-                  <GameDesc started={started} gameTitle={gam.title} />
-                </div>
-              }
-            />
-          ))}
-        </Routes>
       </div>
     );
   }

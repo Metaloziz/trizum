@@ -42,6 +42,7 @@ export const Filter = observer((props: FilterProps) => {
   });
 
   const [filter, setFilter] = useState(_defaultFilter());
+    
   const [open, setOpen] = useState(false);
 
   const applyFilter = () => {
@@ -53,6 +54,7 @@ export const Filter = observer((props: FilterProps) => {
     setFilter(_defaultFilter());
     props.onChange(null);
   };
+ 
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={ru}>

@@ -116,7 +116,7 @@ const RichTextEditor = observer((editorProps: RichTextEditorProps): JSX.Element 
           />
         </Paper>
         <Editable
-          style={{ height: '300px' }}
+          style={{ minHeight: '300px' }}
           renderElement={renderElement}
           renderLeaf={renderLeaf}
           onKeyDown={event => {

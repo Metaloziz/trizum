@@ -52,9 +52,18 @@
 .span{
   position: absolute;
   top: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 150px;
+  font-size: 14px;
   left: 70px;
   color: #d7c4e8;
   opacity: 0.5;
+  @media (max-width: 600px) {
+   max-width: 60px;
+    font-size: 12px;
+  }
 }
 .notification {
   display: none;
@@ -70,7 +79,8 @@
 $logout-font-map: (text-decoration: underline);
 
 .logout {
-
+  position: relative;
+  z-index: 1000;
   @include disable-default-button-style();
 
   @include link-font($logout-font-map...);
