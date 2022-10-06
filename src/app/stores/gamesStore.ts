@@ -132,16 +132,19 @@ class GamesStore {
   createPresets = async (params: EditOrCreatePresetParamsT) => {
     await gamesService.createPresentGame(params);
     await this.getPresets();
+    this.filterPresets(this.game.code)
   };
 
   editPreset = async (params: EditOrCreatePresetParamsT) => {
     await gamesService.editPresetGame(this.gamePreset.gamePreset.id, params);
     await this.getPresets();
+    this.filterPresets(this.game.code)
   };
 
   deletePreset = async (id: string) => {
     await gamesService.deletePreset(id);
     await this.getPresets();
+    this.filterPresets(this.game.code)
   };
 
   sendResults = async (params: PlaySendResultT) => {
