@@ -2,8 +2,8 @@ import coursesService from 'app/services/coursesService';
 import { makeObservable, observable, toJS } from 'mobx';
 import * as yup from 'yup';
 
-import { MethodistMainFilterViewModel } from './models/MethodistMainFilterViewModel';
-import { MethodistMainRepository } from './repositories';
+import { MethodistMainFilterViewModel } from '../../components/methodist-main/models/MethodistMainFilterViewModel';
+import { MethodistMainRepository } from '../../components/methodist-main/repositories';
 
 import { StoreBase } from 'app/stores/StoreBase';
 import { Nullable } from 'app/types/Nullable';
@@ -11,8 +11,7 @@ import { CourseViewModel } from 'app/viewModels/CourseViewModel';
 import { StatusTypes } from 'app/enums/StatusTypes';
 import { getCorrectDate } from 'assets/helperFunctions/helperFunctions';
 
-
-export class MethodistMainStore extends StoreBase {
+class MethodistStore extends StoreBase {
   private _repository = new MethodistMainRepository();
 
   private _defaultValue = (): CourseViewModel => ({
@@ -35,7 +34,7 @@ export class MethodistMainStore extends StoreBase {
   editingEntity: CourseViewModel = this._defaultValue();
 
   entities: CourseViewModel[] = [];
-  
+
   filtered: CourseViewModel[] = [];
 
   isDialogOpen: boolean = false;
@@ -99,7 +98,7 @@ export class MethodistMainStore extends StoreBase {
         ...this.editingEntity,
         status: status || StatusTypes.draft,
         works: this.editingEntity.works?.length ? asd : undefined,
-      }
+      };
       await this._repository.addOrEdit(data);
       await this.pull();
     });
@@ -107,17 +106,20 @@ export class MethodistMainStore extends StoreBase {
 
   remove = async (id: string) => {
     const currentEntity = toJS(this.entities).find(ent => ent.id === id);
-    const status = currentEntity?.status
+    const status = currentEntity?.status;
     try {
-      if (status) {  /* change status of the course to archive  */
-      // if (status !== StatusTypes.draft) { delete course if its status draft
-        this.editingEntity = currentEntity ? { ...currentEntity, status: StatusTypes.archive } : this._defaultValue();
+      if (status) {
+        /* change status of the course to archive  */
+        // if (status !== StatusTypes.draft) { delete course if its status draft
+        this.editingEntity = currentEntity
+          ? { ...currentEntity, status: StatusTypes.archive }
+          : this._defaultValue();
         await this.addOrEdit();
       } else {
         const res = await coursesService.deleteCourse(id);
         console.log(res);
         await this.pull();
-      } 
+      }
     } catch (error) {
       console.warn(error);
     }
@@ -150,37 +152,36 @@ export class MethodistMainStore extends StoreBase {
       return this.entities;
     }
 
-
     if (this.filter.title.trim()) {
-       this.filtered = this.entities.filter(entity =>
-        (entity.title ?? '').toLowerCase().includes(this.filter!.title.toLowerCase()),
-        console.log(toJS(this.filtered))
+      this.filtered = this.entities.filter(
+        entity => (entity.title ?? '').toLowerCase().includes(this.filter!.title.toLowerCase()),
+        console.log(toJS(this.filtered)),
       );
     }
-    
+
     if (this.filter.level.trim()) {
-      if(this.filter.level==="Младшая группа"){
-        this.filter.level="easy"
-      }else if(this.filter.level==="Средняя группа"){
-        this.filter.level="medium"
-      }else if(this.filter.level==="Старшая группа") {
-        this.filter.level="hard"
+      if (this.filter.level === 'Младшая группа') {
+        this.filter.level = 'easy';
+      } else if (this.filter.level === 'Средняя группа') {
+        this.filter.level = 'medium';
+      } else if (this.filter.level === 'Старшая группа') {
+        this.filter.level = 'hard';
       }
       this.filtered = (this.filtered || this.entities).filter(entity =>
         (entity.level ?? '').toLowerCase().includes(this.filter!.level.toLowerCase()),
       );
     }
-    
-    if(this.filter.createdAt){
-      const date=this.filter.createdAt.format('DD.MM.YYYY')
-      this.filtered = (this.filtered || this.entities).filter(entity=>{
-        const entityDate=getCorrectDate(entity.createdAt?.date as string)
-        return entityDate===date
-      })
+
+    if (this.filter.createdAt) {
+      const date = this.filter.createdAt.format('DD.MM.YYYY');
+      this.filtered = (this.filtered || this.entities).filter(entity => {
+        const entityDate = getCorrectDate(entity.createdAt?.date as string);
+        return entityDate === date;
+      });
     }
 
     return this.filtered;
   }
 }
 
-
+export default new MethodistStore();

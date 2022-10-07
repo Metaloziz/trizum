@@ -7,9 +7,10 @@ import { HomeworkViewModel } from 'app/viewModels/HomeworkViewModel';
 import { makeObservable, observable, runInAction } from 'mobx';
 import * as yup from 'yup';
 
-import { HomeworkRepository } from './repositories';
+import { HomeworkRepository } from '../../components/homework-page/repositories';
+import { StatusEnum, StatusTypes } from '../enums/StatusTypes';
 
-export class HomeworkStore extends StoreBase {
+class HomeworkStore extends StoreBase {
   private _repository = new HomeworkRepository();
 
   isDialogOpen: boolean = false;
@@ -115,13 +116,18 @@ export class HomeworkStore extends StoreBase {
   };
 
   remove = async (id: string) => {
-    this.execute(async () => {
-      await this._repository.remove(id);
-      await this.pull();
-    });
+    try {
+      this.execute(async () => {
+        await this._repository.addOrEdit({ id, status: StatusTypes.archive });
+        await this.pull();
+      });
+    } catch (e) {
+      console.warn(e);
+    }
   };
 
-  pull = async (status?: string, perPage?: number, type?: string) => {
+  // по дефолту загружаются черновики
+  pull = async (status: string = StatusTypes.draft, perPage?: number, type?: string) => {
     this.execute(async () => this.list(status, perPage, type));
   };
 
@@ -138,3 +144,5 @@ export class HomeworkStore extends StoreBase {
     });
   }
 }
+
+export default new HomeworkStore();
