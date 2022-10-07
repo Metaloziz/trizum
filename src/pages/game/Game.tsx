@@ -177,27 +177,8 @@ class Game extends Component<any, any> {
 
     const gameViewSize = changedViewScreen(widthScreen, 700);
 
-    const presetArr: Option[] = [
-      {
-        value: 'Создать шаблон',
-        label: 'Создать шаблон',
-      },
-    ];
-
-    actualPresets?.map(el =>
-      presetArr.push({
-        value: el.name,
-        label: el.name,
-      }),
-    );
-
-    // const presetArr = presetOptions(actualPresets);
-
     return (
       <div className={styles.innerContent}>
-        {(role === Roles.Methodist || role === Roles.Admin) && (
-          <GameModal open={isOpenModal} onClose={this.toggleModal} deletePreset={deletePreset} />
-        )}
         <GameResultModal
           open={resultModal}
           time={gameResult.time}

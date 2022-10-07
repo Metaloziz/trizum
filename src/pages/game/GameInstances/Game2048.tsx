@@ -1,22 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import { GameModal } from 'components/game-page/GameCommon/GameModal/GameModal';
+import { observer } from 'mobx-react-lite';
+import React, { FC, useState } from 'react';
 import { Factory, GameIdentifiers } from 'games';
 import { PlayButton } from 'components/game-page/GameCommon/PlayButton';
 import styles from '../Game.module.scss';
 import { changedViewScreen } from 'utils/gameUtils/changeViewScreen';
 import gamesStore from 'app/stores/gamesStore';
 import { GameDesc } from 'components/game-page/GameCommon/GameDesc';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Button from 'components/button/Button';
 import appStore, { Roles } from 'app/stores/appStore';
 import InformationItem from 'components/information-item/InformationItem';
-import { presetArr } from 'constants/presetArr';
 import { Option } from 'components/select-mui/CustomSelect';
 
-const gameName = GameIdentifiers.game2048;
-const GameInstance = Factory(gameName);
-
-const Shulte = () => {
-  const { actualPresets, gamePreset, deletePreset } = gamesStore;
+type Game2048PropsT = {
+  actualPresets?: Option[];
+};
+const Game2048: FC<Game2048PropsT> = observer(({ actualPresets }) => {
+  const gameName = GameIdentifiers.game2048;
+  const GameInstance = Factory(gameName);
+  const { gamePreset, deletePreset } = gamesStore;
   const { role } = appStore;
   const [started, setStarted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -71,59 +74,64 @@ const Shulte = () => {
   };
 
   return (
-    <div className={styles.wrapGameBlock} key={gameTitle}>
-      <section>
-        <div style={{ minWidth: `${gameViewSize + 100}px` }}>
-          {(role === Roles.Methodist || role === Roles.Admin) && (
-            <div className={styles.wrapGameBlock_header}>
-              <div className={styles.wrapGameBlock_header_select}>
-                <InformationItem
-                  variant="select"
-                  size="normal"
-                  placeholder="Шаблон"
-                  option={presetArr}
-                  onChangeSelect={data => setPreset(data)}
-                />
+    <>
+      {(role === Roles.Methodist || role === Roles.Admin) && (
+        <GameModal open={isModalOpen} onClose={toggleModal} deletePreset={deletePreset} />
+      )}
+      <div className={styles.wrapGameBlock} key={gameTitle}>
+        <section>
+          <div style={{ minWidth: `${gameViewSize + 100}px` }}>
+            <Button onClick={() => navigate(-1)}>Назад</Button>
+            {(role === Roles.Methodist || role === Roles.Admin) && (
+              <div className={styles.wrapGameBlock_header}>
+                <div className={styles.wrapGameBlock_header_select}>
+                  <InformationItem
+                    variant="select"
+                    size="normal"
+                    placeholder="Шаблон"
+                    option={actualPresets}
+                    onChangeSelect={data => setPreset(data)}
+                  />
+                </div>
+                <div className={styles.wrapGameBlock_header_select}>
+                  <InformationItem variant="select" size="normal" placeholder="Год" />
+                </div>
+                <div className={styles.wrapGameBlock_header_select}>
+                  <InformationItem variant="select" size="normal" placeholder="Месяц" />
+                </div>
+                <div className={styles.wrapGameBlock_header_select}>
+                  <InformationItem variant="select" size="normal" placeholder="Группа" />
+                </div>
+                <Button onClick={() => toggleModal(true)}>
+                  {gamePreset?.gamePreset?.id ? 'Изменить настройки' : 'Создать настройки'}
+                </Button>
               </div>
-              <div className={styles.wrapGameBlock_header_select}>
-                <InformationItem variant="select" size="normal" placeholder="Год" />
-              </div>
-              <div className={styles.wrapGameBlock_header_select}>
-                <InformationItem variant="select" size="normal" placeholder="Месяц" />
-              </div>
-              <div className={styles.wrapGameBlock_header_select}>
-                <InformationItem variant="select" size="normal" placeholder="Группа" />
-              </div>
-              <Button onClick={() => toggleModal(true)}>
-                {gamePreset?.gamePreset?.id ? 'Изменить настройки' : 'Создать настройки'}
-              </Button>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
 
-        <div className={styles.wrap}>
-          <Button onClick={() => navigate(-1)}>Назад</Button>
-          <div className={styles.wrapInner}>
-            <div className={styles.wrapGame}>
-              <div className={styles.wrapGame_overlay}>
-                <GameInstance
-                  width={gameViewSize}
-                  onEnd={onEnd}
-                  onRef={onRef}
-                  {...params}
-                  {...settings}
-                  colors={settings?.colorsMap?.length || 1}
-                />
+          <div className={styles.wrap}>
+            <div className={styles.wrapInner}>
+              <div className={styles.wrapGame}>
+                <div className={styles.wrapGame_overlay}>
+                  <GameInstance
+                    width={gameViewSize}
+                    onEnd={onEnd}
+                    onRef={onRef}
+                    {...params}
+                    {...settings}
+                    colors={settings?.colorsMap?.length || 1}
+                  />
 
-                {!started && <PlayButton onStart={startGame} />}
+                  {!started && <PlayButton onStart={startGame} />}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
-      <GameDesc started={started} gameTitle={gameTitle} />
-    </div>
+        </section>
+        <GameDesc started={started} gameTitle={gameTitle} />
+      </div>
+    </>
   );
-};
+});
 
-export default Shulte;
+export default Game2048;

@@ -24,7 +24,7 @@ const MethodistChoice: FC = () => (
         <InformationItem
           className={styles.input}
           variant="input"
-          title="Колличество уроков"
+          title="Количество уроков"
           placeholder="От"
         />
         <InformationItem className={styles.input} variant="input" placeholder="До" />
