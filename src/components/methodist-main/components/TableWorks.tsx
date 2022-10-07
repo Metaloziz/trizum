@@ -49,10 +49,10 @@ export const TableWorks: FC = observer(() => {
           </TableContainer>
 
           <TablePagination
-            rowsPerPageOptions={[pagination.rowsPerPage]}
+            rowsPerPageOptions={[pagination.perPage]}
             component="div"
             count={pagination.total}
-            rowsPerPage={pagination.rowsPerPage}
+            rowsPerPage={pagination.perPage}
             page={pagination.page}
             onPageChange={(__, page) => changePage(page)}
             labelDisplayedRows={({ from, to, count }) =>

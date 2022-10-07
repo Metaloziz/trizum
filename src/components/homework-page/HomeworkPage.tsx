@@ -11,15 +11,16 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TablePagination,
   TableRow,
 } from '@mui/material';
+import Pagination from '@mui/material/Pagination';
 import gamesStore from 'app/stores/gamesStore';
 
 import { LoadingIndicator } from 'components/franchising-page/ui/LoadingIndicator';
 import { observer } from 'mobx-react-lite';
-import { useEffect } from 'react';
+import React, { useEffect, ChangeEvent, useState } from 'react';
 import homeworkStore from '../../app/stores/homeworkStore';
+import styles from '../users-page/UsersPage.module.scss';
 
 import { AddOrEditDialog } from './AddOrEditDialog';
 import { HomeWorkItem } from './HomeWorkItem/HomeWorkItem';
@@ -32,6 +33,14 @@ export const HomeworkPage = observer(() => {
     gamesStore.getGames();
     gamesStore.getPresets();
   }, []);
+
+  const [currentPage, setCurrentPage] = useState(store.pagination.page + 1);
+
+  const onPageChange = (event: ChangeEvent<unknown>, newCurrentPage: number) => {
+    store.setSearchParams({ page: newCurrentPage - 1 });
+    setCurrentPage(newCurrentPage);
+    store.pull();
+  };
 
   return (
     <Box
@@ -115,17 +124,16 @@ export const HomeworkPage = observer(() => {
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[store.pagination.rowsPerPage]}
-          component="div"
-          count={store.pagination.total}
-          rowsPerPage={store.pagination.rowsPerPage}
-          page={store.pagination.page}
-          onPageChange={(_, page) => store.changePage(page)}
-          labelDisplayedRows={({ from, to, count }) =>
-            `${from}–${to} из ${count !== -1 ? count : `больше чем ${to}`}`
-          }
-        />
+        <div className={styles.pagination}>
+          <Pagination
+            count={Math.ceil(store.pagination.total / store.pagination.perPage)}
+            color="primary"
+            size="large"
+            page={currentPage}
+            boundaryCount={1}
+            onChange={onPageChange}
+          />
+        </div>
       </Box>
     </Box>
   );

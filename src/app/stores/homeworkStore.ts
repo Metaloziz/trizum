@@ -8,7 +8,10 @@ import { makeObservable, observable, runInAction } from 'mobx';
 import * as yup from 'yup';
 
 import { HomeworkRepository } from '../../components/homework-page/repositories';
-import { StatusEnum, StatusTypes } from '../enums/StatusTypes';
+import { StatusTypes } from '../enums/StatusTypes';
+import { PaginationResponse } from '../types/PaginationResponse';
+
+type PaginationType = Omit<PaginationResponse<any>, 'items'>;
 
 class HomeworkStore extends StoreBase {
   private _repository = new HomeworkRepository();
@@ -17,13 +20,9 @@ class HomeworkStore extends StoreBase {
 
   entities: HomeworkViewModel[] = [];
 
-  pagination: {
-    page: number;
-    rowsPerPage: number;
-    total: number;
-  } = {
+  pagination: PaginationType = {
     page: 0,
-    rowsPerPage: 5,
+    perPage: 5,
     total: 0,
   };
 
@@ -55,6 +54,7 @@ class HomeworkStore extends StoreBase {
       isDialogOpen: observable,
       oneWork: observable,
       presetsThisWork: observable,
+      pagination: observable,
     });
   }
 
@@ -83,14 +83,14 @@ class HomeworkStore extends StoreBase {
       const paginationResponse = await this._repository.list(
         this.pagination.page,
         status,
-        perPage,
+        this.pagination.perPage,
         type,
       );
 
       this.entities = paginationResponse.items;
       this.pagination = {
         page: paginationResponse.page,
-        rowsPerPage: paginationResponse.perPage,
+        perPage: paginationResponse.perPage,
         total: paginationResponse.total,
       };
     });
@@ -134,6 +134,14 @@ class HomeworkStore extends StoreBase {
   changePage = async (page: number) => {
     this.pagination.page = page;
     this.execute(async () => this.list());
+  };
+
+  setSearchParams = (params: Partial<PaginationType>) => {
+    this.pagination = { ...this.pagination, ...params };
+  };
+
+  clearSearchParams = () => {
+    this.pagination = { page: 0, perPage: 5, total: 1 };
   };
 
   get validateSchema() {
