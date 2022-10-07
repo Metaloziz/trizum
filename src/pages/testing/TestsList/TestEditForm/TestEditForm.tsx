@@ -15,6 +15,7 @@ import { useForm } from 'react-hook-form';
 import { mixElements } from 'utils/mixElements';
 import * as yup from 'yup';
 import { StatusTypes } from '../../../../app/enums/StatusTypes';
+import { Loader } from '../../../../components/loader/Loader';
 import { QuestionForm, QuestionFormData } from './QuestionForm/QuestionForm';
 import style from './TestEditForm.module.scss';
 
@@ -27,6 +28,8 @@ type Props = {
   setIsSuccessPost: typeof testsStore.setIsSuccessPost;
   setTests: typeof testsStore.setTests;
   testData?: OneTestT;
+  editTest?: typeof testsStore.editTest;
+  isLoading?: boolean;
 };
 
 export const TestEditForm: FC<Props> = ({
@@ -36,6 +39,8 @@ export const TestEditForm: FC<Props> = ({
   setIsSuccessPost,
   setTests,
   testData,
+  isLoading,
+  editTest,
 }) => {
   console.log('testData', [testData]); // todo draft
 
@@ -73,9 +78,32 @@ export const TestEditForm: FC<Props> = ({
     handleSubmit,
     register,
     setError,
+    setValue,
     clearErrors,
     formState: { errors },
   } = useForm<TestInputType>({ resolver: yupResolver(schema), defaultValues });
+
+  useEffect(() => {
+    if (testData) {
+      // eslint-disable-next-line guard-for-in
+      for (const key in testData.test) {
+        // @ts-ignore
+        setValue(key, testData.test[key]);
+      }
+
+      setQuestions(
+        testData.test.content.map(el => ({
+          correctAnswer: el.correctAnswer,
+          question: el.question,
+          wrongAnswer1: el.answers[0],
+          wrongAnswer2: el.answers[1],
+          wrongAnswer3: el.answers[2] || '',
+          wrongAnswer4: el.answers[3] || '',
+          wrongAnswer5: el.answers[4] || '',
+        })),
+      );
+    }
+  }, [testData]);
 
   const onSubmit = handleSubmit(async ({ maxResult, title }) => {
     const newTestPayload: TestPayloadT = {
@@ -94,6 +122,11 @@ export const TestEditForm: FC<Props> = ({
       return;
     }
 
+    if (testData && editTest) {
+      editTest(testData.test.id, newTestPayload);
+      return;
+    }
+
     postTest(newTestPayload);
   });
 
@@ -105,6 +138,10 @@ export const TestEditForm: FC<Props> = ({
   const getQuestionFormData = (data: QuestionFormData) => {
     setQuestions([...questions, data]);
   };
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className={style.container}>

@@ -25,6 +25,7 @@ export const TestsList = observer(() => {
     setIsSuccessPost,
     setOneTest,
     currentTest,
+    isLoading,
   } = testsStore;
 
   const [currentPage, setCurrentPage] = useState(page + 1);
@@ -101,6 +102,7 @@ export const TestsList = observer(() => {
           setIsSuccessPost={setIsSuccessPost}
           setTests={setTests}
           testData={currentTest}
+          isLoading={isLoading}
         />
       </BasicModal>
     </div>
