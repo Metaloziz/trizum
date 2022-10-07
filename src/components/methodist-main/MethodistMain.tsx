@@ -1,5 +1,3 @@
-import { useEffect, useMemo } from 'react';
-
 import AddIcon from '@mui/icons-material/Add';
 import {
   Alert,
@@ -16,17 +14,18 @@ import {
   TablePagination,
   TableRow,
 } from '@mui/material';
+
+import { LoadingIndicator } from 'components/franchising-page/ui/LoadingIndicator';
+import { DeleteCourseIcon } from 'components/methodist-main/components/DeleteCourseIcon';
+import { EditCourseIcon } from 'components/methodist-main/components/EditCourseIcon';
 import { observer } from 'mobx-react-lite';
+import { useEffect } from 'react';
 import { transformDate } from 'utils/transformData';
 
 import { AddOrEditDialog } from './AddOrEditDialog';
 import { Filter } from './Filter';
-import { MethodistMainStore } from './stores';
-
-import { LoadingIndicator } from 'components/franchising-page/ui/LoadingIndicator';
 import { translateStatus } from './helpers';
-import { EditCourseIcon } from 'components/methodist-main/components/EditCourseIcon';
-import { DeleteCourseIcon } from 'components/methodist-main/components/DeleteCourseIcon';
+import methodistStore from '../../app/stores/methodistStore';
 
 export enum LevelHomeWork {
   easy = 'Младшая группа',
@@ -87,7 +86,7 @@ const MethodistMain = observer(() => {
   //   }
   // };
 
-  const store = useMemo(() => new MethodistMainStore(), []);
+  const store = methodistStore;
 
   useEffect(() => {
     store.pull();
@@ -101,7 +100,7 @@ const MethodistMain = observer(() => {
       }}
     >
       <LoadingIndicator isLoading={store.isLoading} />
-      <AddOrEditDialog store={store} />
+      <AddOrEditDialog />
       <Snackbar
         open={store.success !== null}
         autoHideDuration={6000}

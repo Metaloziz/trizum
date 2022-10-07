@@ -1,14 +1,8 @@
-import gamesStore from 'app/stores/gamesStore';
-import { useEffect, useMemo } from 'react';
-
 import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import {
   Alert,
   Box,
   Button,
-  IconButton,
   Paper,
   Snackbar,
   Stack,
@@ -19,17 +13,19 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography,
 } from '@mui/material';
-import { observer } from 'mobx-react-lite';
-
-import { AddOrEditDialog } from './AddOrEditDialog';
-import { HomeworkStore } from './stores';
+import gamesStore from 'app/stores/gamesStore';
 
 import { LoadingIndicator } from 'components/franchising-page/ui/LoadingIndicator';
+import { observer } from 'mobx-react-lite';
+import { useEffect } from 'react';
+import homeworkStore from '../../app/stores/homeworkStore';
+
+import { AddOrEditDialog } from './AddOrEditDialog';
+import { HomeWorkItem } from './HomeWorkItem/HomeWorkItem';
 
 export const HomeworkPage = observer(() => {
-  const store = useMemo(() => new HomeworkStore(), []);
+  const store = homeworkStore;
 
   useEffect(() => {
     store.pull();
@@ -45,7 +41,7 @@ export const HomeworkPage = observer(() => {
       }}
     >
       <LoadingIndicator isLoading={store.isLoading} />
-      <AddOrEditDialog store={store} />
+      <AddOrEditDialog />
       <Snackbar
         open={store.success !== null}
         autoHideDuration={6000}
@@ -102,45 +98,14 @@ export const HomeworkPage = observer(() => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {store.entities.length > 0 ? (
+              {store.entities.length ? (
                 store.entities.map(entity => (
-                  <TableRow
+                  <HomeWorkItem
                     key={entity.id}
-                    hover
-                    sx={{
-                      '& > td': {
-                        verticalAlign: 'top',
-                      },
-                    }}
-                  >
-                    <TableCell>
-                      <Typography>{entity.title || ''}</Typography>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Typography>{entity.text || '—'}</Typography>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Typography>{entity.gamePresetsCount || '0'}</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Stack direction="row" justifyContent="flex-end">
-                        <IconButton
-                          size="small"
-                          onClick={() => store.openDialog(entity.id)}
-                          color="primary"
-                        >
-                          <EditIcon fontSize="small" />
-                        </IconButton>
-                        <IconButton
-                          size="small"
-                          onClick={() => store.remove(entity.id!)}
-                          color="error"
-                        >
-                          <DeleteIcon fontSize="small" />
-                        </IconButton>
-                      </Stack>
-                    </TableCell>
-                  </TableRow>
+                    entity={entity}
+                    onClick={() => store.openDialog(entity.id)}
+                    onClick1={() => store.remove(entity.id!)}
+                  />
                 ))
               ) : (
                 <TableRow>

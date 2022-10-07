@@ -1,9 +1,9 @@
 import { CourseViewModel } from 'app/viewModels/CourseViewModel';
-import { MethodistMainStore } from 'components/methodist-main/stores';
+import methodistStore from 'app/stores/methodistStore';
 
 type InputNameType = keyof Pick<CourseViewModel, 'title' | 'level' | 'type' | 'status'>;
 
-export const isError = (store: MethodistMainStore, inputName: InputNameType): boolean => {
+export const isError = (store: typeof methodistStore, inputName: InputNameType): boolean => {
   if (!!store.editingEntity[inputName]) {
     return (
       store.editingEntity[inputName] !== null &&

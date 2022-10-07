@@ -1,5 +1,4 @@
 import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
 import {
   DialogActions,
   DialogContent,
@@ -17,33 +16,28 @@ import {
   TableHead,
   TableRow,
   TextField,
-  Typography,
 } from '@mui/material';
+import { ShortStatusEnum, StatusEnum } from 'app/enums/StatusTypes';
 import gamesStore from 'app/stores/gamesStore';
-import { GamePresetT } from 'app/types/GameTypes';
+
+import Button from 'components/button/Button';
 import { SetGameHomework } from 'components/homework-page/setGameHomeWork/SetGameHomework';
 import { observer } from 'mobx-react';
 import { useState } from 'react';
-
-import { Dialog, DialogTitle } from '../franchising-page/ui/Dialog';
-
-import { HomeworkStore } from './stores';
-
-import Button from 'components/button/Button';
-import { ShortStatusEnum, StatusEnum } from 'app/enums/StatusTypes';
 import { getOptionMui } from 'utils/getOption';
 
-interface AddOrEditDialogProps {
-  store: HomeworkStore;
-}
+import homeworkStore from '../../app/stores/homeworkStore';
 
-const statusTypesKeys = Object.keys(StatusEnum);
+import { Dialog, DialogTitle } from '../franchising-page/ui/Dialog';
+import { PresetElement } from './PresetElement/PresetElement';
 
-export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
-  const { store } = props;
+export const AddOrEditDialog = observer(() => {
+  const store = homeworkStore;
   const { newPresets } = gamesStore;
 
   const [chooseGame, setChooseGame] = useState<boolean>(false);
+
+  const statusTypesKeys = Object.keys(StatusEnum);
 
   const statusTypesOptions = Object.values(
     store.oneWork?.work?.id ? StatusEnum : ShortStatusEnum,
@@ -99,7 +93,7 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
                 fullWidth
                 variant="outlined"
                 size="small"
-                error={!store.validateSchema.fields.title.isValidSync(store.oneWork.work.title)}
+                // error={!store.validateSchema.fields.title.isValidSync(store.oneWork.work.title)}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -123,7 +117,7 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
                 fullWidth
                 variant="outlined"
                 size="medium"
-                error={!store.validateSchema.fields.text.isValidSync(store.oneWork.work.text)}
+                // error={!store.validateSchema.fields.text.isValidSync(store.oneWork.work.text)}
               />
             </Grid>
           </Grid>
@@ -156,32 +150,13 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
               </TableHead>
               <TableBody>
                 {store.presetsThisWork ? (
-                  (store.presetsThisWork || []).map((preset, id) => (
-                    <TableRow
-                      key={`${preset}${id}`}
-                      hover
-                      sx={{
-                        '& > td': {
-                          verticalAlign: 'top',
-                        },
-                      }}
-                    >
-                      <TableCell>
-                        <Typography>{getNameGamePreset(preset) || ''}</Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography>{getNamePreset(preset) || ''}</Typography>
-                      </TableCell>
-                      <TableCell align="right">
-                        <IconButton
-                          size="small"
-                          onClick={() => deleteOnePreset(preset)}
-                          color="error"
-                        >
-                          <DeleteIcon fontSize="small" />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
+                  (store.presetsThisWork || []).map(preset => (
+                    <PresetElement
+                      key={Math.random()}
+                      nameGamePreset={getNameGamePreset(preset)}
+                      namePreset={getNamePreset(preset)}
+                      onClick={() => deleteOnePreset(preset)}
+                    />
                   ))
                 ) : (
                   <TableRow>
