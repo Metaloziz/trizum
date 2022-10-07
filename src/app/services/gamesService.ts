@@ -13,7 +13,7 @@ import {
 
 const gamesService = {
   getPresets: async (): Promise<GamePresetsResponseT> => {
-    const { data } = await instance.get(`${Paths.Presets}?per_page=30`);
+    const { data } = await instance.get(`${Paths.Presets}?per_page=1000`);
     return data;
   },
   getPreset: async (id: string): Promise<OneGamePresent> => {
