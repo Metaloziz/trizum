@@ -79,6 +79,9 @@ const BattleColors: FC<BattleColorsPropsT> = observer(({ actualPresets }) => {
         <GameModal open={isModalOpen} onClose={toggleModal} deletePreset={deletePreset} />
       )}
       <div className={styles.wrapGameBlock} key={gameTitle}>
+        <Button className={styles.goBack} onClick={() => navigate(-1)}>
+          Назад
+        </Button>
         <section>
           <div style={{ minWidth: `${gameViewSize + 100}px` }}>
             {(role === Roles.Methodist || role === Roles.Admin) && (
@@ -109,7 +112,6 @@ const BattleColors: FC<BattleColorsPropsT> = observer(({ actualPresets }) => {
           </div>
 
           <div className={styles.wrap}>
-            <Button onClick={() => navigate(-1)}>Назад</Button>
             <div className={styles.wrapInner}>
               <div className={styles.wrapGame}>
                 <div className={styles.wrapGame_overlay}>

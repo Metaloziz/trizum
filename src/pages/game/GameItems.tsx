@@ -1,11 +1,9 @@
 import gamesStore from 'app/stores/gamesStore';
-import { Option } from 'components/select-mui/CustomSelect';
 import { actualPresets } from 'constants/presetArr';
 import { observer } from 'mobx-react-lite';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import Shulte from 'pages/game/GameInstances/Shulte';
-import Game from 'pages/game/Game';
 import { AppRoutes } from 'app/enums/AppRoutes';
 import BattleColors from 'pages/game/GameInstances/BattleColors';
 import Game2048 from 'pages/game/GameInstances/Game2048';

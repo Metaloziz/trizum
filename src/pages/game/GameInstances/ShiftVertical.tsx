@@ -78,9 +78,11 @@ const ShiftVertical: FC<ShiftVerticalPropsT> = observer(({ actualPresets }) => {
         <GameModal open={isModalOpen} onClose={toggleModal} deletePreset={deletePreset} />
       )}
       <div className={styles.wrapGameBlock} key={gameTitle}>
+        <Button className={styles.goBack} onClick={() => navigate(-1)}>
+          Назад
+        </Button>
         <section>
           <div style={{ minWidth: `${gameViewSize + 100}px` }}>
-            <Button onClick={() => navigate(-1)}>Назад</Button>
             {(role === Roles.Methodist || role === Roles.Admin) && (
               <div className={styles.wrapGameBlock_header}>
                 <div className={styles.wrapGameBlock_header_select}>

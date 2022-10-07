@@ -1,4 +1,5 @@
 import { GameModal } from 'components/game-page/GameCommon/GameModal/GameModal';
+import { GameResultModal } from 'components/game-page/GameCommon/GameModal/GameResultModal/GameResultModal';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useEffect, useState } from 'react';
 import { Factory, GameIdentifiers } from 'games';
@@ -17,6 +18,21 @@ type ShultePropsT = {
   actualPresets?: Option[];
 };
 
+type ResultT = {
+  time: number;
+  timeDiff: number;
+  score: number;
+  success: number;
+  failed: number;
+};
+const defaultResult = {
+  time: 0,
+  timeDiff: 0,
+  score: 0,
+  success: 0,
+  failed: 0,
+};
+
 const Shulte: FC<ShultePropsT> = observer(props => {
   const gameName = GameIdentifiers.shulte;
   const GameInstance = Factory(gameName);
@@ -25,6 +41,8 @@ const Shulte: FC<ShultePropsT> = observer(props => {
   const { role } = appStore;
   const [started, setStarted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [resultModal, setResultModal] = useState(false);
+  const [gameResult, setGameResult] = useState<ResultT>(defaultResult);
   const gameTitle = 'Таблица Шульте';
 
   // console.log(actualPresets);
@@ -45,6 +63,10 @@ const Shulte: FC<ShultePropsT> = observer(props => {
   };
 
   const onEnd = (result: any) => {
+    setResultModal(true);
+    setStarted(false);
+    setGameResult(result);
+    console.log(result);
     // Пример использования результатов игры
     const message = [`Ваше время: ${result.time} секунд`];
     if (result?.timeDiff) {
@@ -77,15 +99,33 @@ const Shulte: FC<ShultePropsT> = observer(props => {
     setIsModalOpen(value);
   };
 
+  const onRepeat = () => {
+    setResultModal(false);
+    startGame();
+  };
+  const closeResultModal = () => {
+    setResultModal(false);
+    setGameResult(defaultResult);
+  };
   return (
     <>
       {(role === Roles.Methodist || role === Roles.Admin) && (
         <GameModal open={isModalOpen} onClose={toggleModal} deletePreset={deletePreset} />
       )}
-      <div className={styles.wrapGameBlock} key={gameTitle}>
+      <GameResultModal
+        open={resultModal}
+        time={gameResult?.time}
+        error={gameResult?.failed}
+        success={gameResult?.success}
+        onClose={closeResultModal}
+        onStart={onRepeat}
+      />
+      <div className={styles.wrapGameBlock}>
+        <Button className={styles.goBack} onClick={() => navigate(-1)}>
+          Назад
+        </Button>
         <section>
           <div style={{ minWidth: `${gameViewSize + 100}px` }}>
-            <Button onClick={() => navigate(-1)}>Назад</Button>
             {(role === Roles.Methodist || role === Roles.Admin) && (
               <div className={styles.wrapGameBlock_header}>
                 <div className={styles.wrapGameBlock_header_select}>
