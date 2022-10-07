@@ -45,8 +45,6 @@ const Shulte: FC<ShultePropsT> = observer(props => {
   const [gameResult, setGameResult] = useState<ResultT>(defaultResult);
   const gameTitle = 'Таблица Шульте';
 
-  // console.log(actualPresets);
-
   const params = {
     size: 4,
     startTiles: 2,

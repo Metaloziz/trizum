@@ -23,6 +23,7 @@ const ShiftVertical: FC<ShiftVerticalPropsT> = observer(({ actualPresets }) => {
   const { role } = appStore;
   const [started, setStarted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [game, setGame] = useState<any>();
   const gameTitle = 'Сдвиг по вертикали';
   const params = {
     size: 4,

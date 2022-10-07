@@ -167,6 +167,11 @@ class Game extends Component<any, any> {
     gamesStore.getGame(game);
   };
 
+  openModalSettings = (game: string) => () => {
+    this.toggleModal(true);
+    gamesStore.getGame(game);
+  };
+
   render() {
     const { started = false, isOpenModal, resultModal, gameResult } = this.state;
     const GameComponent = this.gameComponent;
@@ -179,6 +184,9 @@ class Game extends Component<any, any> {
 
     return (
       <div className={styles.innerContent}>
+        {(role === Roles.Methodist || role === Roles.Admin) && (
+          <GameModal open={isOpenModal} onClose={this.toggleModal} deletePreset={deletePreset} />
+        )}
         <GameResultModal
           open={resultModal}
           time={gameResult.time}
@@ -194,7 +202,7 @@ class Game extends Component<any, any> {
                 <span className={styles.gameItem_header_title}>{gam.title}</span>
               </div>
               <svg
-                onClick={() => this.toggleModal(true)}
+                onClick={this.openModalSettings(gam.name)}
                 className={styles.gameItem_settings}
                 width="16"
                 height="16"
