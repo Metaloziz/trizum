@@ -29,6 +29,7 @@ import { convertFranchiseeOptions } from 'utils/convertFranchiseeOptions';
 import { convertGroupOptions } from 'utils/convertGroupOptions';
 import { convertSexOptions } from 'utils/convertSexOptions';
 import { convertTariffOptions } from 'utils/convertTariffOptions';
+import { maxBirthdayYearAll, maxBirthdayYearStudent, minBirthdayYear } from 'utils/dateMask';
 import { filterRoleOptions } from 'utils/filterRoleOptions';
 import { removeEmptyFields } from 'utils/removeEmptyFields';
 import * as yup from 'yup';
@@ -44,7 +45,6 @@ type Props = {
 
 export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
   ({ currentUser, onCloseModal, visibility }) => {
-    const studentIdx = currentUser?.id;
     const { franchise } = franchiseeStore;
     const { groups, loadCurrentGroups } = groupStore;
     const { tariffs } = tariffsStore;
@@ -58,7 +58,6 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
     const [studentId, setStudentId] = useState('');
     const [selectedRole, setSelectedRole] = useState<Roles>();
     const [currentFranchiseId, setCurrentFranchiseId] = useState<string>('');
-
     useEffect(() => {
       if (currentUser?.roleCode) {
         setSelectedRole(currentUser.roleCode as Roles);
@@ -80,9 +79,6 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
       group: currentUser?.groups[0]?.groupId || '', // не изменяется при редактировании
       password: currentUser?.password || '', // не обязателен при редактировании
     };
-    const maxBirthdayYearStudent = new Date().getFullYear() - 3;
-    const maxBirthdayYearAll = new Date().getFullYear() - 18;
-    const minBirthdayYear = new Date().getFullYear() - 102;
 
     const isFranchiseRole = role === Roles.Franchisee || role === Roles.FranchiseeAdmin;
 
@@ -118,8 +114,7 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
           selectedRole === Roles.Student
             ? yup.string().notRequired()
             : yup.string().required('Обязательное поле'),
-        /* .matches(REG_PHONE, 'необходим формат 7 ХХХ ХХХ ХХ ХХХ')
-                                                                                                                                                                                                                                                                    .length(PHONE_LENGTH, `номер должен быть из ${PHONE_LENGTH} цифр`), */
+        /* .matches(REG_PHONE, 'необходим формат 7 ХХХ ХХХ ХХ ХХХ')                                                                                                                                                                                                                                                     .length(PHONE_LENGTH, `номер должен быть из ${PHONE_LENGTH} цифр`), */
         birthdate: yup
           .date()
           .required('Обязательное поле')
@@ -153,21 +148,14 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
           selectedRole === Roles.Student
             ? yup.string().required('Обязательное поле')
             : yup.string().notRequired(),
-        password: currentUser?.id
-          ? yup
-              .string()
-              .nullable()
-              .notRequired()
-              .nullable()
-              .when('password', {
-                is: (value: any) => value?.length,
-                then: rule => rule.min(6, 'Минимум 6 символов').max(30, 'Максимум 30 символов'),
-              })
-          : yup
-              .string()
-              .required('Обязательное поле')
-              .min(6, 'Минимум 6 символов')
-              .max(30, 'Максимум 30 символов'),
+        password: yup
+          .string()
+          .nullable()
+          .notRequired()
+          .when('password', {
+            is: (value: any) => value?.length,
+            then: rule => rule.min(6, 'Минимум 6 символов').max(30, 'Максимум 30 символов'),
+          }),
       },
       [['password', 'password']],
     );

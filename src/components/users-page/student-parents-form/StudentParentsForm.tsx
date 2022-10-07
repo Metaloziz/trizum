@@ -3,6 +3,7 @@ import React, { FC, useState } from 'react';
 
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { maxBirthdayYearAll, minBirthdayYear } from 'utils/dateMask';
 import * as yup from 'yup';
 
 import { SexEnum } from 'app/enums/CommonEnums';
@@ -90,10 +91,10 @@ const StudentParentsForm: FC<Props> = observer(
           .min(MIN_NAMES_LENGTH, `минимальная длинна ${MIN_NAMES_LENGTH} символа`),
         middleName: yup
           .string()
-          .required('Обязательное поле')
+          .notRequired()
           .matches(REG_NAME, 'Допустима только кириллица')
-          .max(MAX_NAMES_LENGTH, `Максимальная длинна ${MAX_NAMES_LENGTH} символов`)
-          .min(MIN_NAMES_LENGTH, `Минимальная длинна ${MIN_NAMES_LENGTH} символа`),
+          .max(MAX_NAMES_LENGTH, `Максимальная длинна ${MAX_NAMES_LENGTH} символов`),
+        // .min(MIN_NAMES_LENGTH, `Минимальная длинна ${MIN_NAMES_LENGTH} символа`),
         lastName: yup
           .string()
           .required('Обязательное поле')
@@ -115,20 +116,19 @@ const StudentParentsForm: FC<Props> = observer(
         birthdate: yup
           .date()
           .required('Обязательное поле')
-          .min('01-01-1920', 'Возраст выбран не верно'),
+          .min(`01-01-${minBirthdayYear}`, 'Не верно выбран возраст')
+          .max(`01-01-${maxBirthdayYearAll}`, 'Возраст выбран не верно'),
         sex: yup.string().required('Обязательное поле'),
         isMain: yup.boolean().required('Обязательное поле'),
-        password: parent?.id
-          ? yup
-              .string()
-              .nullable()
-              .notRequired()
-              .nullable()
-              .when('password', {
-                is: (value: any) => value?.length,
-                then: rule => rule.min(6, 'Минимум 6 символов').max(30, 'Максимум 30 символов'),
-              })
-          : yup.string().required('Обязательное поле').min(6).max(30),
+        password: yup
+          .string()
+          .nullable()
+          .notRequired()
+          .nullable()
+          .when('password', {
+            is: (value: any) => value?.length,
+            then: rule => rule.min(6, 'Минимум 6 символов').max(30, 'Максимум 30 символов'),
+          }),
       },
       [['password', 'password']],
     );
@@ -140,7 +140,7 @@ const StudentParentsForm: FC<Props> = observer(
       city: parent?.city || '',
       phone: parent?.phone || '',
       email: parent?.email || '',
-      birthdate: parent?.birthdate?.date || '',
+      birthdate: parent?.birthdate?.date || '01.01.2000',
       sex: sexOptions[0]?.value,
       isMain: parent?.main || false,
       franchiseId: userFranchiseId,
