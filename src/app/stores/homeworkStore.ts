@@ -8,6 +8,7 @@ import { makeObservable, observable, runInAction } from 'mobx';
 import * as yup from 'yup';
 
 import { HomeworkRepository } from '../../components/homework-page/repositories';
+import { MAX_NAMES_LENGTH, MIN_NAMES_LENGTH } from '../../constants/constants';
 import { StatusTypes } from '../enums/StatusTypes';
 import { PaginationResponse } from '../types/PaginationResponse';
 
@@ -146,8 +147,16 @@ class HomeworkStore extends StoreBase {
 
   get validateSchema() {
     return yup.object<Record<keyof HomeworkViewModel, any>>().shape({
-      title: yup.string().required('*'),
-      text: yup.string().required('*'),
+      title: yup
+        .string()
+        .required('*')
+        .max(MAX_NAMES_LENGTH, `Максимальная длинна ${MAX_NAMES_LENGTH} символов`)
+        .min(MIN_NAMES_LENGTH, `Минимальная длинна ${MIN_NAMES_LENGTH} символа`),
+      text: yup
+        .string()
+        .required('*')
+        .max(MAX_NAMES_LENGTH, `Максимальная длинна ${MAX_NAMES_LENGTH} символов`)
+        .min(MIN_NAMES_LENGTH, `Минимальная длинна ${MIN_NAMES_LENGTH} символа`),
       status: yup.string().required('*'),
     });
   }

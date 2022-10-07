@@ -60,6 +60,7 @@ export const AddOrEditDialog = observer(() => {
   const deleteOnePreset = (id: string) => {
     store.presetsThisWork = store?.presetsThisWork.filter(prId => prId !== id);
   };
+
   return (
     <Dialog
       PaperProps={{
@@ -93,6 +94,9 @@ export const AddOrEditDialog = observer(() => {
                 fullWidth
                 variant="outlined"
                 size="small"
+                required
+                inputMode="text"
+
                 // error={!store.validateSchema.fields.title.isValidSync(store.oneWork.work.title)}
               />
             </Grid>
@@ -103,7 +107,7 @@ export const AddOrEditDialog = observer(() => {
                   value={store.oneWork.work.status}
                   label="Статус"
                   onChange={({ target: { value } }) => (store.oneWork.work.status = value)}
-                  error={!store.validateSchema.fields.status.isValidSync(store.oneWork.work.status)}
+                  // error={!store.validateSchema.fields.status.isValidSync(store.oneWork.work.status)}
                 >
                   {statusTypesOptions}
                 </Select>
@@ -117,6 +121,8 @@ export const AddOrEditDialog = observer(() => {
                 fullWidth
                 variant="outlined"
                 size="medium"
+                required
+                inputMode="text"
                 // error={!store.validateSchema.fields.text.isValidSync(store.oneWork.work.text)}
               />
             </Grid>
