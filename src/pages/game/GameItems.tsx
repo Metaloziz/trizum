@@ -1,7 +1,5 @@
-import gamesStore from 'app/stores/gamesStore';
-import { actualPresets } from 'constants/presetArr';
 import { observer } from 'mobx-react-lite';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import Shulte from 'pages/game/GameInstances/Shulte';
 import { AppRoutes } from 'app/enums/AppRoutes';
@@ -12,20 +10,19 @@ import ShiftVertical from 'pages/game/GameInstances/ShiftVertical';
 
 const GameItems = observer(() => {
   const params = useParams();
-  const { actualPresets: presets } = gamesStore;
-  const presetArr = actualPresets(presets);
+
   if ('gameName' in params) {
     switch (params.gameName) {
       case 'shulte':
-        return <Shulte actualPresets={presetArr} />;
+        return <Shulte />;
       case 'battleColors':
-        return <BattleColors actualPresets={presetArr} />;
+        return <BattleColors />;
       case 'game2048':
-        return <Game2048 actualPresets={presetArr} />;
+        return <Game2048 />;
       case 'mental':
-        return <Mental actualPresets={presetArr} />;
+        return <Mental />;
       case 'shiftVertical':
-        return <ShiftVertical actualPresets={presetArr} />;
+        return <ShiftVertical />;
       default:
         return <Navigate to={AppRoutes.Games} />;
     }

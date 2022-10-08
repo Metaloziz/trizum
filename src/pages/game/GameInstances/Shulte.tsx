@@ -1,22 +1,18 @@
 import { GameModal } from 'components/game-page/GameCommon/GameModal/GameModal';
 import { GameResultModal } from 'components/game-page/GameCommon/GameModal/GameResultModal/GameResultModal';
-import { observer } from 'mobx-react-lite';
-import React, { FC, useEffect, useState } from 'react';
+import { presetArray } from 'constants/presetArr';
+import React, { useEffect, useState } from 'react';
 import { Factory, GameIdentifiers } from 'games';
 import { PlayButton } from 'components/game-page/GameCommon/PlayButton';
 import styles from '../Game.module.scss';
 import { changedViewScreen } from 'utils/gameUtils/changeViewScreen';
 import gamesStore from 'app/stores/gamesStore';
 import { GameDesc } from 'components/game-page/GameCommon/GameDesc';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Button from 'components/button/Button';
 import appStore, { Roles } from 'app/stores/appStore';
 import InformationItem from 'components/information-item/InformationItem';
 import { Option } from 'components/select-mui/CustomSelect';
-
-type ShultePropsT = {
-  actualPresets?: Option[];
-};
 
 type ResultT = {
   time: number;
@@ -33,11 +29,11 @@ const defaultResult = {
   failed: 0,
 };
 
-const Shulte: FC<ShultePropsT> = observer(props => {
-  const gameName = GameIdentifiers.shulte;
-  const GameInstance = Factory(gameName);
-  const { actualPresets } = props;
-  const { gamePreset, deletePreset, game, getGame } = gamesStore;
+const gameName = GameIdentifiers.shulte;
+const GameInstance = Factory(gameName);
+
+const Shulte = () => {
+  const { actualPresets, gamePreset, deletePreset } = gamesStore;
   const { role } = appStore;
   const [started, setStarted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -59,12 +55,13 @@ const Shulte: FC<ShultePropsT> = observer(props => {
     setStarted(true);
     ref?.start();
   };
+  const presetArrs: Option[] = presetArray(actualPresets);
+  // const presetArrs: Option[] = [];
 
   const onEnd = (result: any) => {
     setResultModal(true);
     setStarted(false);
     setGameResult(result);
-    console.log(result);
     // Пример использования результатов игры
     const message = [`Ваше время: ${result.time} секунд`];
     if (result?.timeDiff) {
@@ -80,7 +77,7 @@ const Shulte: FC<ShultePropsT> = observer(props => {
       message.push(`Допущено ошибок: ${result.failed}`);
     }
     /* eslint-disable no-alert */
-    alert(message.join('\n'));
+    console.log(message.join('\n'));
   };
 
   const navigate = useNavigate();
@@ -131,7 +128,7 @@ const Shulte: FC<ShultePropsT> = observer(props => {
                     variant="select"
                     size="normal"
                     placeholder="Шаблон"
-                    option={actualPresets}
+                    option={presetArrs}
                     onChangeSelect={data => setPreset(data)}
                   />
                 </div>
@@ -174,6 +171,6 @@ const Shulte: FC<ShultePropsT> = observer(props => {
       </div>
     </>
   );
-});
+};
 
 export default Shulte;

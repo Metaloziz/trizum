@@ -1,7 +1,7 @@
 import { GamePresetT } from 'app/types/GameTypes';
 import { Option } from 'components/select-mui/CustomSelect';
 
-export const actualPresets = (actualPreset: Omit<GamePresetT, 'settings'>[]) => {
+export const presetArray = (actualPreset: Omit<GamePresetT, 'settings'>[]) => {
   const presetArr: Option[] = [
     {
       value: 'Создать шаблон',
