@@ -7,7 +7,14 @@ import { StoreBase } from 'app/stores/StoreBase';
 import { Nullable } from 'app/types/Nullable';
 import { FranchisingViewModel } from 'app/viewModels/FranchisingViewModel';
 import { FranchisingRepository } from 'components/franchising-page/repositories';
+
 import _ from 'lodash';
+import { innValidation } from 'utils/innValidation';
+import { orgnValidation } from 'utils/orgnValidation';
+import { kppValidation } from 'utils/kppValidation';
+import { isUniquePhone } from 'components/franchising-page/helpers/isUniquePhone';
+import { isUniqueInn } from 'components/franchising-page/helpers/isUniqueInn';
+import { isUniqueCheckingAccount } from 'components/franchising-page/helpers/isUniqueCheckingAccount';
 
 export class FranchisingStore extends StoreBase {
   private _repository = new FranchisingRepository();
@@ -38,6 +45,8 @@ export class FranchisingStore extends StoreBase {
 
   isDialogOpen: boolean = false;
 
+  editingEntityId: string = '';
+
   filter: Nullable<FranchisingFilterViewModel> = null;
 
   constructor() {
@@ -54,9 +63,11 @@ export class FranchisingStore extends StoreBase {
   openDialog = (editingEntity?: FranchisingViewModel) => {
     this.editingEntity = editingEntity ? { ...editingEntity } : this._defaultValue();
     this.isDialogOpen = true;
+    this.editingEntityId = editingEntity && editingEntity?.id ? editingEntity?.id : ''
   };
 
   closeDialog = () => {
+    this.editingEntityId = '';
     this.isDialogOpen = false;
   };
 
@@ -104,22 +115,24 @@ export class FranchisingStore extends StoreBase {
   get validateSchema() {
     return yup.object<Record<keyof FranchisingViewModel, any>>().shape({
       // fullName: yup.string().required('*'),
-      shortName: yup.string().required('*'),
-      inn: yup.string().min(10).max(12).required('*'),
-      phone: yup.number().required('*'),
+      shortName: yup.string().min(3).max(30).required('*'),
+      inn: yup.number().test('innValid', 'Неверный ИНН', value => innValidation(value as number))
+      .test('isUniqueInn', 'Не уникальный ИНН', value => isUniqueInn(value as number))
+      .required(),
+      phone: yup.number().test('isUnique', 'Банковский счет', (value) => isUniquePhone(value as number)).required('*').required('*'),
       email: yup.string().email().required('*'),
-      legalAddress: yup.string().required('*'),
-      actualAddress: yup.string().required('*'),
+      legalAddress: yup.string().max(200).required('*'),
+      actualAddress: yup.string().max(200).required('*'),
       kpp: yup.string(),
-      ogrn: yup.string().min(13).max(15).required('*'),
-      city: yup.string().required('*'),
-      schoolName: yup.string().required('*'),
-      bankName: yup.string().required('*'),
-      bankBik: yup.string().required('*'),
-      bankInn: yup.string().min(10).max(12).required('*'),
-      bankKpp: yup.string().min(9).max(9).required('*'),
-      bankBill: yup.string().required('*'),
-      checkingAccount: yup.string().required('*'),
+      ogrn: yup.number().test('orgnValid','Неверный ИНН', value => orgnValidation(value as number)).required(),
+      city: yup.string().max(30).required('*'),
+      schoolName: yup.string().max(120).required('*'),
+      bankName: yup.string().max(30).required('*'),
+      bankBik: yup.string().length(9).required('*'),
+      bankInn: yup.number().test('innValid', 'Неверный ИНН', value => innValidation(value as number)).required(),
+      bankKpp: yup.string().test('innValid', 'Неверный KПП', value => kppValidation(value as string)).required('*'),
+      bankBill: yup.string().length(20).required('*'),
+      checkingAccount: yup.string().max(20).test('isUnique', 'Банковский счет', (value) => isUniqueCheckingAccount(value as string)).required('*').required('*')
     });
   }
 
