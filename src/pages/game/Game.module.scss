@@ -116,9 +116,6 @@
     position: absolute;
     top: 10px;
     left: 10px;
-  }
-
-  .redirectButton {
     width: 200px;
   }
 
@@ -143,7 +140,7 @@
   @media(max-width: 1440px) {
     flex-direction: column;
     &_header {
-      margin: 10px 0;
+      margin:100px 0 10px 0;
     }
   }
   @media(max-width: 800px) {
