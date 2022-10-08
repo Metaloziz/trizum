@@ -1,9 +1,11 @@
+import { ResultT } from 'app/types/GameTypes';
 import { GameModal } from 'components/game-page/GameCommon/GameModal/GameModal';
 import { GameResultModal } from 'components/game-page/GameCommon/GameModal/GameResultModal/GameResultModal';
 import { presetArray } from 'constants/presetArr';
 import React, { useEffect, useState } from 'react';
 import { Factory, GameIdentifiers } from 'games';
 import { PlayButton } from 'components/game-page/GameCommon/PlayButton';
+import { defaultResult } from 'utils/gameUtils/defaultResultValue';
 import styles from '../Game.module.scss';
 import { changedViewScreen } from 'utils/gameUtils/changeViewScreen';
 import gamesStore from 'app/stores/gamesStore';
@@ -16,21 +18,6 @@ import { Option } from 'components/select-mui/CustomSelect';
 
 const gameName = GameIdentifiers.battleColors;
 const GameInstance = Factory(gameName);
-
-type ResultT = {
-  time: number;
-  timeDiff: number;
-  score: number;
-  success: number;
-  failed: number;
-};
-const defaultResult = {
-  time: 0,
-  timeDiff: 0,
-  score: 0,
-  success: 0,
-  failed: 0,
-};
 
 const BattleColors = () => {
   const { actualPresets, gamePreset, deletePreset } = gamesStore;
@@ -45,7 +32,10 @@ const BattleColors = () => {
     size: 4,
     startTiles: 2,
   }; // Уникальные параметры для конкретной игры
+
   let ref: any = null;
+
+  const presetArrs: Option[] = presetArray(actualPresets);
 
   const onRef = (refGame: any) => {
     ref = refGame;
@@ -101,9 +91,6 @@ const BattleColors = () => {
     setResultModal(false);
     setGameResult(defaultResult);
   };
-
-  const presetArrs: Option[] = presetArray(actualPresets);
-  // const presetArrs: Option[] = [];
 
   return (
     <>

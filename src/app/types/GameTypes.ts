@@ -119,3 +119,11 @@ export type PlaySendResultT = {
   speed: number;
   blinksCount: number;
 };
+
+export type ResultT = {
+  time: number;
+  timeDiff: number;
+  score: number;
+  success: number;
+  failed: number;
+};
