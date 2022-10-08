@@ -18,6 +18,7 @@ import {
 import { LoadingIndicator } from 'components/franchising-page/ui/LoadingIndicator';
 import { observer } from 'mobx-react-lite';
 import { useEffect } from 'react';
+import { StatusTypes } from '../../app/enums/StatusTypes';
 import methodistStore from '../../app/stores/methodistStore';
 
 import { AddOrEditDialog } from './AddOrEditDialog';
@@ -71,7 +72,7 @@ const MethodistMain = observer(() => {
               variant="contained"
               size="small"
               startIcon={<AddIcon fontSize="small" />}
-              onClick={() => store.openDialog()}
+              onClick={() => store.openDialog({ status: StatusTypes.draft })}
               sx={{
                 alignSelf: 'flex-start',
                 backgroundColor: '#2e8dfd',
@@ -98,6 +99,7 @@ const MethodistMain = observer(() => {
                 <TableCell align="center">Уровень</TableCell>
                 <TableCell align="center">Количество домашних заданий</TableCell>
                 <TableCell align="center">Дата создания</TableCell>
+                <TableCell align="center">Статус</TableCell>
                 <TableCell />
               </TableRow>
             </TableHead>
