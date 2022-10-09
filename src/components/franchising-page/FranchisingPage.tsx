@@ -29,8 +29,10 @@ import { LoadingIndicator } from './ui/LoadingIndicator';
 import { FranchisingStore } from 'components/franchising-page/stores';
 import { Roles } from 'app/stores/appStore';
 
+export const _store = new FranchisingStore();
+
 const FranchisingPage = observer(() => {
-  const store = useMemo(() => new FranchisingStore(), []);
+  const store = useMemo(() => _store, []);
 
   useEffect(() => {
     store.pull();

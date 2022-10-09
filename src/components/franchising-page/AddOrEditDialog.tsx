@@ -155,9 +155,7 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
             <TextField
               label="КПП"
               value={store.editingEntity.kpp}
-              onChange={({ currentTarget: { value } }) =>
-                numberWithoutLeadingZero(value, () => (store.editingEntity.kpp = value))
-              }
+              onChange={({ currentTarget: { value } }) => (store.editingEntity.kpp = value)}
               fullWidth
               variant="outlined"
               size="small"
@@ -211,7 +209,7 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
               label="Корр. счёт банка"
               value={store.editingEntity.bankBill}
               onChange={({ currentTarget: { value } }) =>
-                numberWithoutLeadingZero(value, () => (store.editingEntity.bankBill = value))
+                numberWithPossibleLeadingZero(value, () => (store.editingEntity.bankBill = value))
               }
               fullWidth
               variant="outlined"
@@ -251,9 +249,7 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
             <TextField
               label="КПП банка"
               value={store.editingEntity.bankKpp}
-              onChange={({ currentTarget: { value } }) =>
-                numberWithoutLeadingZero(value, () => (store.editingEntity.bankKpp = value))
-              }
+              onChange={({ currentTarget: { value } }) => (store.editingEntity.bankKpp = value)}
               fullWidth
               variant="outlined"
               size="small"
@@ -265,7 +261,7 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
               label="Расчётный счёт"
               value={store.editingEntity.checkingAccount}
               onChange={({ currentTarget: { value } }) =>
-                numberWithoutLeadingZero(value, () => (store.editingEntity.checkingAccount = value))
+                numberWithPossibleLeadingZero(value, () => (store.editingEntity.checkingAccount = value))
               }
               fullWidth
               variant="outlined"
