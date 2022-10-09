@@ -85,8 +85,6 @@ export const GameModal: FC<PropsT> = observer(props => {
   const levelOptions = Object.values(GroupLevels).map((el, index) =>
     getOptionMui(levelKeys[index], el),
   );
-  console.log(levelOptions);
-  console.log(level);
   const changeColor = (index: number) => {
     const copy: ColorObj[] = colors.map(el =>
       el.id === index
@@ -199,11 +197,15 @@ export const GameModal: FC<PropsT> = observer(props => {
     });
   };
 
-  const savePreset = () => {
+  const savePreset = async () => {
     if (gamePreset.gamePreset.id) {
       onEditPreset();
     } else {
       onCreatePreset();
+    }
+    await gamesStore.getPresets()
+    if(gamesStore.gamePreset.gamePreset.name){
+      await gamesStore.getPreset(gamesStore.gamePreset.gamePreset.name)
     }
     onClose(false);
   };
@@ -287,17 +289,17 @@ export const GameModal: FC<PropsT> = observer(props => {
                         size="small"
                       />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        label="Уровень"
-                        value={level}
-                        onChange={({ currentTarget: { value } }) => setLevel(value)}
-                        fullWidth
-                        inputProps={{ type: 'number' }}
-                        variant="outlined"
-                        size="small"
-                      />
-                    </Grid>
+                    {/* <Grid item xs={12} sm={6}> */}
+                    {/*  <TextField */}
+                    {/*    label="Уровень" */}
+                    {/*    value={level} */}
+                    {/*    onChange={({ currentTarget: { value } }) => setLevel(value)} */}
+                    {/*    fullWidth */}
+                    {/*    inputProps={{ type: 'number' }} */}
+                    {/*    variant="outlined" */}
+                    {/*    size="small" */}
+                    {/*  /> */}
+                    {/* </Grid> */}
                     <Grid item xs={12} sm={6}>
                       <TextField
                         label="Кол-во цветов"

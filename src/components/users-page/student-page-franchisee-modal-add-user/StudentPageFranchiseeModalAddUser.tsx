@@ -135,7 +135,6 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
                 .email('Обязательное поле')
                 .matches(
                   /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
-
                   'Введите валидный email',
                 )
                 .required('Обязательное поле'),

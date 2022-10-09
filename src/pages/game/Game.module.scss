@@ -110,15 +110,19 @@
   margin: 0 0 50px 0;
   display: flex;
   justify-content: space-evenly;
+  position: relative;
 
-  .redirectButton {
+  & .goBack {
+    position: absolute;
+    top: 10px;
+    left: 10px;
     width: 200px;
   }
 
   &_header {
     display: flex;
     justify-content: space-evenly;
-    margin: 20px;
+    margin: 100px 20px -20px 20px;
     align-items: center;
 
     &_select {
@@ -136,7 +140,7 @@
   @media(max-width: 1440px) {
     flex-direction: column;
     &_header {
-      margin: 10px 0;
+      margin:100px 0 10px 0;
     }
   }
   @media(max-width: 800px) {

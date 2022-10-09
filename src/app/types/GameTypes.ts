@@ -63,7 +63,7 @@ export type GamePresetT = {
 
 export type OneGamePresent = {
   gamePreset: GamePresetT;
-  usedInWorks: [];
+  usedInWorks: any[];
 };
 
 export type GamePresetsResponseT = {
@@ -118,4 +118,12 @@ export type PlaySendResultT = {
   phraseSpeedAv: number;
   speed: number;
   blinksCount: number;
+};
+
+export type ResultT = {
+  time: number;
+  timeDiff: number;
+  score: number;
+  success: number;
+  failed: number;
 };
