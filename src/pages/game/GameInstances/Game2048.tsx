@@ -26,21 +26,22 @@ const Game2048 = () => {
   const [resultModal, setResultModal] = useState(false);
   const [gameResult, setGameResult] = useState<ResultT>(defaultResult);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [refs, setRef] = useState<any>(null);
   const gameTitle = '2048';
 
   const params = {
     size: 4,
     startTiles: 2,
   }; // Уникальные параметры для конкретной игры
-  let ref: any = null;
+  // let ref: any = null;
 
   const onRef = (refGame: any) => {
-    ref = refGame;
+    setRef(refGame);
   };
 
   const startGame = () => {
     setStarted(true);
-    ref?.start();
+    refs?.start();
   };
 
   const onEnd = (result: any) => {
@@ -81,6 +82,7 @@ const Game2048 = () => {
   };
   const onRepeat = () => {
     setResultModal(false);
+    onRef(refs);
     startGame();
   };
   const closeResultModal = () => {

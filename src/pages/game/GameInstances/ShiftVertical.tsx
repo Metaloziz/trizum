@@ -26,20 +26,21 @@ const ShiftVertical = () => {
   const [resultModal, setResultModal] = useState(false);
   const [gameResult, setGameResult] = useState<ResultT>(defaultResult);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [refs, setRef] = useState<any>(null);
   const gameTitle = 'Сдвиг по вертикали';
   const params = {
     size: 4,
     startTiles: 2,
   }; // Уникальные параметры для конкретной игры
-  let ref: any = null;
+  const ref: any = null;
 
   const onRef = (refGame: any) => {
-    ref = refGame;
+    setRef(refGame);
   };
 
   const startGame = () => {
     setStarted(true);
-    ref?.start();
+    refs?.start();
   };
 
   const onEnd = (result: any) => {
@@ -80,6 +81,7 @@ const ShiftVertical = () => {
   };
   const onRepeat = () => {
     setResultModal(false);
+    onRef(refs);
     startGame();
   };
   const closeResultModal = () => {

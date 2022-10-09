@@ -27,23 +27,25 @@ const Shulte = () => {
   const [resultModal, setResultModal] = useState(false);
   const [gameResult, setGameResult] = useState<ResultT>(defaultResult);
   const [settings, setSettings] = useState(gamePreset.gamePreset.settings[0]);
+  const [refs, setRef] = useState<any>(null);
+  const navigate = useNavigate();
+  const widthScreen = window.innerWidth;
+  const gameViewSize = changedViewScreen(widthScreen, 700);
   const gameTitle = 'Таблица Шульте';
   const params = {
     size: 4,
     startTiles: 2,
   }; // Уникальные параметры для конкретной игры
-  let ref: any = null;
 
+  // let ref: any = null;
   const onRef = (refGame: any) => {
-    ref = refGame;
+    setRef(refGame);
   };
-
   const startGame = () => {
     setStarted(true);
-    ref?.start();
+    refs?.start();
   };
   const presetArrs: Option[] = presetArray(actualPresets);
-  // const presetArrs: Option[] = [];
 
   const onEnd = (result: any) => {
     setResultModal(true);
@@ -67,10 +69,6 @@ const Shulte = () => {
     console.log(message.join('\n'));
   };
 
-  const navigate = useNavigate();
-  const widthScreen = window.innerWidth;
-  const gameViewSize = changedViewScreen(widthScreen, 700);
-
   const setPreset = (data: Option) => {
     getPreset(data.value);
   };
@@ -81,6 +79,7 @@ const Shulte = () => {
 
   const onRepeat = () => {
     setResultModal(false);
+    onRef(refs);
     startGame();
   };
   const closeResultModal = () => {
