@@ -28,7 +28,7 @@ const gamesService = {
     const { data } = await instance.get(Paths.Games);
     return data;
   },
-  createPresentGame: async (params: EditOrCreatePresetParamsT): Promise<GamePresetT> => {
+  createPresetGame: async (params: EditOrCreatePresetParamsT): Promise<GamePresetT> => {
     const { data } = await instance.post(Paths.Presets, { ...params, status: 'draft' });
     return data;
   },

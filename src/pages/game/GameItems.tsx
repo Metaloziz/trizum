@@ -6,26 +6,30 @@ import BattleColors from 'pages/game/GameInstances/BattleColors';
 import Game2048 from 'pages/game/GameInstances/Game2048';
 import Mental from 'pages/game/GameInstances/Mental';
 import ShiftVertical from 'pages/game/GameInstances/ShiftVertical';
+import { observer } from 'mobx-react';
+import gamesStore from 'app/stores/gamesStore';
 
-const GameItems = () => {
+const GameItems = observer(() => {
   const params = useParams();
   if ('gameName' in params) {
     switch (params.gameName) {
       case 'shulte':
-        return <Shulte />;
+        return (
+          <Shulte gamePreset={gamesStore.gamePreset} actualPresets={gamesStore.actualPresets} />
+        );
       case 'battleColors':
-        return <BattleColors />;
+        return <BattleColors gamePreset={gamesStore.gamePreset} actualPresets={gamesStore.actualPresets} />;
       case 'game2048':
-        return <Game2048 />;
+        return <Game2048 gamePreset={gamesStore.gamePreset} actualPresets={gamesStore.actualPresets} />;
       case 'mental':
-        return <Mental />;
+        return <Mental gamePreset={gamesStore.gamePreset} actualPresets={gamesStore.actualPresets} />;
       case 'shiftVertical':
-        return <ShiftVertical />;
+        return <ShiftVertical gamePreset={gamesStore.gamePreset} actualPresets={gamesStore.actualPresets} />;
       default:
         return <Navigate to={AppRoutes.Games} />;
     }
   }
   return <Navigate to={AppRoutes.Games} />;
-};
+});
 
 export default GameItems;

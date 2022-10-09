@@ -1,8 +1,8 @@
-import { ResultT } from 'app/types/GameTypes';
+import { GamePresetT, OneGamePresent, PresetsGameSettings, ResultT } from 'app/types/GameTypes';
 import { GameModal } from 'components/game-page/GameCommon/GameModal/GameModal';
 import { GameResultModal } from 'components/game-page/GameCommon/GameModal/GameResultModal/GameResultModal';
 import { presetArray } from 'constants/presetArr';
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Factory, GameIdentifiers } from 'games';
 import { PlayButton } from 'components/game-page/GameCommon/PlayButton';
 import { defaultResult } from 'utils/gameUtils/defaultResultValue';
@@ -15,25 +15,34 @@ import Button from 'components/button/Button';
 import appStore, { Roles } from 'app/stores/appStore';
 import InformationItem from 'components/information-item/InformationItem';
 import { Option } from 'components/select-mui/CustomSelect';
+import _ from "lodash";
 
 const gameName = GameIdentifiers.shiftVertical;
 const GameInstance = Factory(gameName);
 
-const ShiftVertical = () => {
-  const { actualPresets, gamePreset, deletePreset } = gamesStore;
+type Props = {
+  actualPresets: Omit<GamePresetT, 'settings'>[];
+  gamePreset: OneGamePresent;
+};
+
+const ShiftVertical: FC<Props> = props => {
+  const { actualPresets, gamePreset } = props;
+  const { deletePreset, getPreset } = gamesStore;
   const { role } = appStore;
   const [started, setStarted] = useState(false);
   const [resultModal, setResultModal] = useState(false);
   const [gameResult, setGameResult] = useState<ResultT>(defaultResult);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [refs, setRef] = useState<any>(null);
-  const gameTitle = 'Сдвиг по вертикали';
-  const params = {
-    size: 4,
-    startTiles: 2,
-  }; // Уникальные параметры для конкретной игры
-  const ref: any = null;
+  const [settings, setSettings] = useState<PresetsGameSettings>();
 
+  const navigate = useNavigate();
+
+  const widthScreen = window.innerWidth;
+  const gameViewSize = changedViewScreen(widthScreen, 700);
+  const gameTitle = 'Сдвиг по вертикали';
+  const presetArr: Option[] = presetArray(actualPresets);
+  console.log(_.cloneDeep(gamePreset), 'gamePreset::ShiftVertical');
   const onRef = (refGame: any) => {
     setRef(refGame);
   };
@@ -44,36 +53,13 @@ const ShiftVertical = () => {
   };
 
   const onEnd = (result: any) => {
-    // Пример использования результатов игры
     setResultModal(true);
     setStarted(false);
     setGameResult(result);
-    // Пример использования результа
-    const message = [`Ваше время: ${result.time} секунд`];
-    if (result?.timeDiff) {
-      message.push(`Среднее время: ${result.timeDiff} секунд`);
-    }
-    if (result?.score) {
-      message.push(`Ваш результат: ${result.score}`);
-    }
-    if (result?.success) {
-      message.push(`Правильных ответов: ${result.success}`);
-    }
-    if (result?.failed) {
-      message.push(`Допущено ошибок: ${result.failed}`);
-    }
-    /* eslint-disable no-alert */
-    console.log(message.join('\n'));
   };
 
-  const navigate = useNavigate();
-
-  const settings = gamePreset.gamePreset.settings[0];
-  const widthScreen = window.innerWidth;
-  const gameViewSize = changedViewScreen(widthScreen, 700);
-
   const setPreset = (data: Option) => {
-    gamesStore.getPreset(data.value);
+    getPreset(data.value);
   };
 
   const toggleModal = (value: boolean) => {
@@ -89,8 +75,12 @@ const ShiftVertical = () => {
     setGameResult(defaultResult);
   };
 
-  const presetArrs: Option[] = presetArray(actualPresets);
-  // const presetArrs: Option[] = [];
+  useEffect(() => {
+    if (gamePreset.gamePreset.settings.length) {
+      setSettings(gamePreset.gamePreset.settings[0]);
+    }
+  }, [gamePreset]);
+
   return (
     <>
       {' '}
@@ -118,7 +108,7 @@ const ShiftVertical = () => {
                     variant="select"
                     size="normal"
                     placeholder="Шаблон"
-                    option={presetArrs}
+                    option={presetArr}
                     onChangeSelect={data => setPreset(data)}
                   />
                 </div>
@@ -146,7 +136,6 @@ const ShiftVertical = () => {
                     width={gameViewSize}
                     onEnd={onEnd}
                     onRef={onRef}
-                    {...params}
                     {...settings}
                     colors={settings?.colorsMap?.length || 1}
                   />

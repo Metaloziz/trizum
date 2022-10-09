@@ -1,8 +1,8 @@
-import { ResultT } from 'app/types/GameTypes';
+import { GamePresetT, OneGamePresent, PresetsGameSettings, ResultT } from 'app/types/GameTypes';
 import { GameModal } from 'components/game-page/GameCommon/GameModal/GameModal';
 import { GameResultModal } from 'components/game-page/GameCommon/GameModal/GameResultModal/GameResultModal';
 import { presetArray } from 'constants/presetArr';
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Factory, GameIdentifiers } from 'games';
 import { PlayButton } from 'components/game-page/GameCommon/PlayButton';
 import { defaultResult } from 'utils/gameUtils/defaultResultValue';
@@ -15,26 +15,34 @@ import Button from 'components/button/Button';
 import appStore, { Roles } from 'app/stores/appStore';
 import InformationItem from 'components/information-item/InformationItem';
 import { Option } from 'components/select-mui/CustomSelect';
+import _ from "lodash";
 
 const gameName = GameIdentifiers.game2048;
 const GameInstance = Factory(gameName);
 
-const Game2048 = () => {
-  const { actualPresets, gamePreset, deletePreset } = gamesStore;
+type Props = {
+  actualPresets: Omit<GamePresetT, 'settings'>[];
+  gamePreset: OneGamePresent;
+};
+
+const Game2048: FC<Props> = props => {
+  const { actualPresets, gamePreset } = props;
+  const { deletePreset, getPreset } = gamesStore;
   const { role } = appStore;
+
   const [started, setStarted] = useState(false);
   const [resultModal, setResultModal] = useState(false);
   const [gameResult, setGameResult] = useState<ResultT>(defaultResult);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [refs, setRef] = useState<any>(null);
+  const [settings, setSettings] = useState<PresetsGameSettings>();
+
+  const navigate = useNavigate();
+
+  const widthScreen = window.innerWidth;
+  const gameViewSize = changedViewScreen(widthScreen, 700);
   const gameTitle = '2048';
-
-  const params = {
-    size: 4,
-    startTiles: 2,
-  }; // Уникальные параметры для конкретной игры
-  // let ref: any = null;
-
+  console.log(_.cloneDeep(gamePreset), 'gamePreset::Game2048');
   const onRef = (refGame: any) => {
     setRef(refGame);
   };
@@ -49,49 +57,35 @@ const Game2048 = () => {
     setResultModal(true);
     setStarted(false);
     setGameResult(result);
-    // Пример использования результа
-    const message = [`Ваше время: ${result.time} секунд`];
-    if (result?.timeDiff) {
-      message.push(`Среднее время: ${result.timeDiff} секунд`);
-    }
-    if (result?.score) {
-      message.push(`Ваш результат: ${result.score}`);
-    }
-    if (result?.success) {
-      message.push(`Правильных ответов: ${result.success}`);
-    }
-    if (result?.failed) {
-      message.push(`Допущено ошибок: ${result.failed}`);
-    }
-    /* eslint-disable no-alert */
-    console.log(message.join('\n'));
   };
 
-  const navigate = useNavigate();
-
-  const settings = gamePreset.gamePreset.settings[0];
-  const widthScreen = window.innerWidth;
-  const gameViewSize = changedViewScreen(widthScreen, 700);
-
   const setPreset = (data: Option) => {
-    gamesStore.getPreset(data.value);
+    getPreset(data.value);
   };
 
   const toggleModal = (value: boolean) => {
     setIsModalOpen(value);
   };
+
   const onRepeat = () => {
     setResultModal(false);
     onRef(refs);
     startGame();
   };
+
   const closeResultModal = () => {
     setResultModal(false);
     setGameResult(defaultResult);
   };
 
-  const presetArrs: Option[] = presetArray(actualPresets);
-  // const presetArrs: Option[] = [];
+  const presetArr: Option[] = presetArray(actualPresets);
+
+  useEffect(() => {
+    if (gamePreset.gamePreset.settings.length) {
+      setSettings(gamePreset.gamePreset.settings[0]);
+    }
+  }, [gamePreset]);
+
   return (
     <>
       {(role === Roles.Methodist || role === Roles.Admin) && (
@@ -118,7 +112,7 @@ const Game2048 = () => {
                     variant="select"
                     size="normal"
                     placeholder="Шаблон"
-                    option={presetArrs}
+                    option={presetArr}
                     onChangeSelect={data => setPreset(data)}
                   />
                 </div>
@@ -146,7 +140,6 @@ const Game2048 = () => {
                     width={gameViewSize}
                     onEnd={onEnd}
                     onRef={onRef}
-                    {...params}
                     {...settings}
                     colors={settings?.colorsMap?.length || 1}
                   />

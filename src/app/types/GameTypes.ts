@@ -63,7 +63,7 @@ export type GamePresetT = {
 
 export type OneGamePresent = {
   gamePreset: GamePresetT;
-  usedInWorks: [];
+  usedInWorks: any[];
 };
 
 export type GamePresetsResponseT = {

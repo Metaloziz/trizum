@@ -197,11 +197,15 @@ export const GameModal: FC<PropsT> = observer(props => {
     });
   };
 
-  const savePreset = () => {
+  const savePreset = async () => {
     if (gamePreset.gamePreset.id) {
       onEditPreset();
     } else {
       onCreatePreset();
+    }
+    await gamesStore.getPresets()
+    if(gamesStore.gamePreset.gamePreset.name){
+      await gamesStore.getPreset(gamesStore.gamePreset.gamePreset.name)
     }
     onClose(false);
   };
