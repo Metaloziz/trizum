@@ -1,5 +1,4 @@
-import { observer } from 'mobx-react-lite';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import Shulte from 'pages/game/GameInstances/Shulte';
 import { AppRoutes } from 'app/enums/AppRoutes';
@@ -8,9 +7,8 @@ import Game2048 from 'pages/game/GameInstances/Game2048';
 import Mental from 'pages/game/GameInstances/Mental';
 import ShiftVertical from 'pages/game/GameInstances/ShiftVertical';
 
-const GameItems = observer(() => {
+const GameItems = () => {
   const params = useParams();
-
   if ('gameName' in params) {
     switch (params.gameName) {
       case 'shulte':
@@ -28,6 +26,6 @@ const GameItems = observer(() => {
     }
   }
   return <Navigate to={AppRoutes.Games} />;
-});
+};
 
 export default GameItems;

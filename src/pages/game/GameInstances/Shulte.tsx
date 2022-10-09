@@ -10,7 +10,7 @@ import styles from '../Game.module.scss';
 import { changedViewScreen } from 'utils/gameUtils/changeViewScreen';
 import gamesStore from 'app/stores/gamesStore';
 import { GameDesc } from 'components/game-page/GameCommon/GameDesc';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Button from 'components/button/Button';
 import appStore, { Roles } from 'app/stores/appStore';
 import InformationItem from 'components/information-item/InformationItem';
@@ -20,14 +20,14 @@ const gameName = GameIdentifiers.shulte;
 const GameInstance = Factory(gameName);
 
 const Shulte = () => {
-  const { actualPresets, gamePreset, deletePreset } = gamesStore;
+  const { actualPresets, gamePreset, deletePreset, getPreset } = gamesStore;
   const { role } = appStore;
   const [started, setStarted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [resultModal, setResultModal] = useState(false);
   const [gameResult, setGameResult] = useState<ResultT>(defaultResult);
+  const [settings, setSettings] = useState(gamePreset.gamePreset.settings[0]);
   const gameTitle = 'Таблица Шульте';
-
   const params = {
     size: 4,
     startTiles: 2,
@@ -68,13 +68,11 @@ const Shulte = () => {
   };
 
   const navigate = useNavigate();
-
-  const settings = gamePreset.gamePreset.settings[0];
   const widthScreen = window.innerWidth;
   const gameViewSize = changedViewScreen(widthScreen, 700);
 
   const setPreset = (data: Option) => {
-    gamesStore.getPreset(data.value);
+    getPreset(data.value);
   };
 
   const toggleModal = (value: boolean) => {
