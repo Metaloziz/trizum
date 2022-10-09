@@ -7,22 +7,23 @@ import { HomeworkViewModel } from 'app/viewModels/HomeworkViewModel';
 import { makeObservable, observable, runInAction } from 'mobx';
 import * as yup from 'yup';
 
-import { HomeworkRepository } from './repositories';
+import { HomeworkRepository } from '../../components/homework-page/repositories';
+import { MAX_NAMES_LENGTH, MIN_NAMES_LENGTH } from '../../constants/constants';
+import { StatusTypes } from '../enums/StatusTypes';
+import { PaginationResponse } from '../types/PaginationResponse';
 
-export class HomeworkStore extends StoreBase {
+type PaginationType = Omit<PaginationResponse<any>, 'items'>;
+
+class HomeworkStore extends StoreBase {
   private _repository = new HomeworkRepository();
 
   isDialogOpen: boolean = false;
 
   entities: HomeworkViewModel[] = [];
 
-  pagination: {
-    page: number;
-    rowsPerPage: number;
-    total: number;
-  } = {
+  pagination: PaginationType = {
     page: 0,
-    rowsPerPage: 5,
+    perPage: 5,
     total: 0,
   };
 
@@ -54,6 +55,7 @@ export class HomeworkStore extends StoreBase {
       isDialogOpen: observable,
       oneWork: observable,
       presetsThisWork: observable,
+      pagination: observable,
     });
   }
 
@@ -82,14 +84,14 @@ export class HomeworkStore extends StoreBase {
       const paginationResponse = await this._repository.list(
         this.pagination.page,
         status,
-        perPage,
+        this.pagination.perPage,
         type,
       );
 
       this.entities = paginationResponse.items;
       this.pagination = {
         page: paginationResponse.page,
-        rowsPerPage: paginationResponse.perPage,
+        perPage: paginationResponse.perPage,
         total: paginationResponse.total,
       };
     });
@@ -115,13 +117,18 @@ export class HomeworkStore extends StoreBase {
   };
 
   remove = async (id: string) => {
-    this.execute(async () => {
-      await this._repository.remove(id);
-      await this.pull();
-    });
+    try {
+      this.execute(async () => {
+        await this._repository.addOrEdit({ id, status: StatusTypes.archive });
+        await this.pull();
+      });
+    } catch (e) {
+      console.warn(e);
+    }
   };
 
-  pull = async (status?: string, perPage?: number, type?: string) => {
+  // по дефолту загружаются черновики
+  pull = async (status: string = StatusTypes.draft, perPage?: number, type?: string) => {
     this.execute(async () => this.list(status, perPage, type));
   };
 
@@ -130,11 +137,29 @@ export class HomeworkStore extends StoreBase {
     this.execute(async () => this.list());
   };
 
+  setSearchParams = (params: Partial<PaginationType>) => {
+    this.pagination = { ...this.pagination, ...params };
+  };
+
+  clearSearchParams = () => {
+    this.pagination = { page: 0, perPage: 5, total: 1 };
+  };
+
   get validateSchema() {
     return yup.object<Record<keyof HomeworkViewModel, any>>().shape({
-      title: yup.string().required('*'),
-      text: yup.string().required('*'),
+      title: yup
+        .string()
+        .required('*')
+        .max(MAX_NAMES_LENGTH, `Максимальная длинна ${MAX_NAMES_LENGTH} символов`)
+        .min(MIN_NAMES_LENGTH, `Минимальная длинна ${MIN_NAMES_LENGTH} символа`),
+      text: yup
+        .string()
+        .required('*')
+        .max(MAX_NAMES_LENGTH, `Максимальная длинна ${MAX_NAMES_LENGTH} символов`)
+        .min(MIN_NAMES_LENGTH, `Минимальная длинна ${MIN_NAMES_LENGTH} символа`),
       status: yup.string().required('*'),
     });
   }
 }
+
+export default new HomeworkStore();

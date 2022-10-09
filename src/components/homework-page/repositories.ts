@@ -37,9 +37,5 @@ export class HomeworkRepository {
       .withJsonRequest(model)
       .execute();
 
-  readonly remove = async (id: string) =>
-    new HttpClient(`${Paths.Works}/${id}`, 'DELETE')
-      .withTimeout(10000)
-      .withBearerAuthorization(this.token)
-      .execute();
+  readonly remove = async (model: CreatOrEditWorkRequestT) => this.addOrEdit(model);
 }

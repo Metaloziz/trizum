@@ -1,5 +1,3 @@
-import { useEffect, useMemo } from 'react';
-
 import AddIcon from '@mui/icons-material/Add';
 import {
   Alert,
@@ -16,17 +14,16 @@ import {
   TablePagination,
   TableRow,
 } from '@mui/material';
-import { observer } from 'mobx-react-lite';
-import { transformDate } from 'utils/transformData';
-
-import { AddOrEditDialog } from './AddOrEditDialog';
-import { Filter } from './Filter';
-import { MethodistMainStore } from './stores';
 
 import { LoadingIndicator } from 'components/franchising-page/ui/LoadingIndicator';
-import { translateStatus } from './helpers';
-import { EditCourseIcon } from 'components/methodist-main/components/EditCourseIcon';
-import { DeleteCourseIcon } from 'components/methodist-main/components/DeleteCourseIcon';
+import { observer } from 'mobx-react-lite';
+import { useEffect } from 'react';
+import { StatusTypes } from '../../app/enums/StatusTypes';
+import methodistStore from '../../app/stores/methodistStore';
+
+import { AddOrEditDialog } from './AddOrEditDialog';
+import { CourseItem } from './CourseItem/CourseItem';
+import { Filter } from './Filter';
 
 export enum LevelHomeWork {
   easy = 'Младшая группа',
@@ -35,59 +32,7 @@ export enum LevelHomeWork {
 }
 
 const MethodistMain = observer(() => {
-  // const {
-  //   getCourses,
-  //   createCourse,
-  //   courses,
-  //   currentCourse,
-  //   getOneCourse,
-  //   editCourse,
-  //   setCurrentCourse,
-  // } = coursesStore;
-  // const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [title, setTitle] = useState("");
-  // const [level, setLevel] = useState<OptionT>(groupLevelOptions[0]);
-  // const navigate = useNavigate();
-
-  // const onSaveCourseClick = async () => {
-  //   if (!currentCourse) {
-  //     createCourse({ title, level: level.label, works: [] });
-  //   }
-  //   if (currentCourse) {
-  //     const { id } = currentCourse;
-  //     const newCourse: RequestEditCourse = {
-  //       level: level.value,
-  //       title,
-  //       works: currentCourse?.works
-  //         ? currentCourse.works.map(el => ({
-  //             type: el.work.type,
-  //             workId: el.work.id,
-  //             index: el.index,
-  //           }))
-  //         : [],
-  //     };
-  //     await editCourse(newCourse, id);
-  //     setCurrentCourse();
-  //   }
-  //   setTitle("");
-  //   setLevel(groupLevelOptions[0]);
-  //   setIsModalOpen(false);
-  // };
-
-  // const onSettingsClick = async (id: string) => {
-  //   const course = courses.find(el => el.id === id);
-  //   if (course) {
-  //     await getOneCourse(course.id);
-  //     setIsModalOpen(true);
-  //     // setCurrentCourseItem(course);
-  //     // setTitle(course.title);
-  //     // const lvl = groupLevelOptions.filter(el => el.label === course.level)[0];
-  //     // setLevel(lvl);
-  //     // setIsModalOpen(true);
-  //   }
-  // };
-
-  const store = useMemo(() => new MethodistMainStore(), []);
+  const store = methodistStore;
 
   useEffect(() => {
     store.pull();
@@ -101,7 +46,7 @@ const MethodistMain = observer(() => {
       }}
     >
       <LoadingIndicator isLoading={store.isLoading} />
-      <AddOrEditDialog store={store} />
+      <AddOrEditDialog />
       <Snackbar
         open={store.success !== null}
         autoHideDuration={6000}
@@ -127,7 +72,7 @@ const MethodistMain = observer(() => {
               variant="contained"
               size="small"
               startIcon={<AddIcon fontSize="small" />}
-              onClick={() => store.openDialog()}
+              onClick={() => store.openDialog({ status: StatusTypes.draft })}
               sx={{
                 alignSelf: 'flex-start',
                 backgroundColor: '#2e8dfd',
@@ -154,42 +99,19 @@ const MethodistMain = observer(() => {
                 <TableCell align="center">Уровень</TableCell>
                 <TableCell align="center">Количество домашних заданий</TableCell>
                 <TableCell align="center">Дата создания</TableCell>
+                <TableCell align="center">Статус</TableCell>
                 <TableCell />
               </TableRow>
             </TableHead>
             <TableBody>
               {store.filteredEntities.length ? (
                 store.filteredEntities.map(entity => (
-                  <TableRow
+                  <CourseItem
                     key={entity.id}
-                    hover
-                    sx={{
-                      '& > td': {
-                        verticalAlign: 'top',
-                      },
-                    }}
-                  >
-                    <TableCell>{entity.title}</TableCell>
-                    {/* <TableCell>{LevelHomeWork[entity.level]}</TableCell> */}
-                    <TableCell align="center">{translateStatus(entity.level)}</TableCell>
-                    <TableCell align="center">{entity.worksCount}</TableCell>
-                    <TableCell align="center">
-                      {transformDate(entity?.createdAt?.date || '')}
-                    </TableCell>
-                    <TableCell>
-                      <Stack direction="row" justifyContent="flex-end">
-                        <EditCourseIcon
-                          status={entity.status}
-                          onClick={() => store.openDialog(entity)}
-                        />
-
-                        <DeleteCourseIcon
-                          status={entity.status}
-                          onClick={() => store.remove(entity.id!)}
-                        />
-                      </Stack>
-                    </TableCell>
-                  </TableRow>
+                    entity={entity}
+                    onClick={() => store.openDialog(entity)}
+                    onClick1={() => store.remove(entity.id!)}
+                  />
                 ))
               ) : (
                 <TableRow>

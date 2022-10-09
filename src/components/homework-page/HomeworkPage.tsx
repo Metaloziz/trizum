@@ -1,14 +1,8 @@
-import gamesStore from 'app/stores/gamesStore';
-import { useEffect, useMemo } from 'react';
-
 import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import {
   Alert,
   Box,
   Button,
-  IconButton,
   Paper,
   Snackbar,
   Stack,
@@ -17,25 +11,36 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TablePagination,
   TableRow,
-  Typography,
 } from '@mui/material';
-import { observer } from 'mobx-react-lite';
-
-import { AddOrEditDialog } from './AddOrEditDialog';
-import { HomeworkStore } from './stores';
+import Pagination from '@mui/material/Pagination';
+import gamesStore from 'app/stores/gamesStore';
 
 import { LoadingIndicator } from 'components/franchising-page/ui/LoadingIndicator';
+import { observer } from 'mobx-react-lite';
+import React, { useEffect, ChangeEvent, useState } from 'react';
+import homeworkStore from '../../app/stores/homeworkStore';
+import styles from '../users-page/UsersPage.module.scss';
+
+import { AddOrEditDialog } from './AddOrEditDialog';
+import { HomeWorkItem } from './HomeWorkItem/HomeWorkItem';
 
 export const HomeworkPage = observer(() => {
-  const store = useMemo(() => new HomeworkStore(), []);
+  const store = homeworkStore;
 
   useEffect(() => {
     store.pull();
     gamesStore.getGames();
     gamesStore.getPresets();
   }, []);
+
+  const [currentPage, setCurrentPage] = useState(store.pagination.page + 1);
+
+  const onPageChange = (event: ChangeEvent<unknown>, newCurrentPage: number) => {
+    store.setSearchParams({ page: newCurrentPage - 1 });
+    setCurrentPage(newCurrentPage);
+    store.pull();
+  };
 
   return (
     <Box
@@ -45,7 +50,7 @@ export const HomeworkPage = observer(() => {
       }}
     >
       <LoadingIndicator isLoading={store.isLoading} />
-      <AddOrEditDialog store={store} />
+      <AddOrEditDialog />
       <Snackbar
         open={store.success !== null}
         autoHideDuration={6000}
@@ -102,45 +107,14 @@ export const HomeworkPage = observer(() => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {store.entities.length > 0 ? (
+              {store.entities.length ? (
                 store.entities.map(entity => (
-                  <TableRow
+                  <HomeWorkItem
                     key={entity.id}
-                    hover
-                    sx={{
-                      '& > td': {
-                        verticalAlign: 'top',
-                      },
-                    }}
-                  >
-                    <TableCell>
-                      <Typography>{entity.title || ''}</Typography>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Typography>{entity.text || '—'}</Typography>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Typography>{entity.gamePresetsCount || '0'}</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Stack direction="row" justifyContent="flex-end">
-                        <IconButton
-                          size="small"
-                          onClick={() => store.openDialog(entity.id)}
-                          color="primary"
-                        >
-                          <EditIcon fontSize="small" />
-                        </IconButton>
-                        <IconButton
-                          size="small"
-                          onClick={() => store.remove(entity.id!)}
-                          color="error"
-                        >
-                          <DeleteIcon fontSize="small" />
-                        </IconButton>
-                      </Stack>
-                    </TableCell>
-                  </TableRow>
+                    entity={entity}
+                    onClick={() => store.openDialog(entity.id)}
+                    onClick1={() => store.remove(entity.id!)}
+                  />
                 ))
               ) : (
                 <TableRow>
@@ -150,17 +124,16 @@ export const HomeworkPage = observer(() => {
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[store.pagination.rowsPerPage]}
-          component="div"
-          count={store.pagination.total}
-          rowsPerPage={store.pagination.rowsPerPage}
-          page={store.pagination.page}
-          onPageChange={(_, page) => store.changePage(page)}
-          labelDisplayedRows={({ from, to, count }) =>
-            `${from}–${to} из ${count !== -1 ? count : `больше чем ${to}`}`
-          }
-        />
+        <div className={styles.pagination}>
+          <Pagination
+            count={Math.ceil(store.pagination.total / store.pagination.perPage)}
+            color="primary"
+            size="large"
+            page={currentPage}
+            boundaryCount={1}
+            onChange={onPageChange}
+          />
+        </div>
       </Box>
     </Box>
   );

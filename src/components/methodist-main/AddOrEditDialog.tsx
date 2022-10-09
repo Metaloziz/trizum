@@ -1,5 +1,3 @@
-import { useEffect, useMemo } from 'react';
-
 import {
   DialogActions,
   DialogContent,
@@ -10,24 +8,21 @@ import {
   Stack,
   TextField,
 } from '@mui/material';
+
+import { GroupLevels } from 'app/enums/GroupLevels';
+import { GroupTypes } from 'app/enums/GroupTypes';
+import { ShortStatusEnum, StatusEnum } from 'app/enums/StatusTypes';
+import Button from 'components/button/Button';
+import { TableWorks } from 'components/methodist-main/components/TableWorks';
+import { isError } from 'components/methodist-main/utils/IsError';
 import { observer } from 'mobx-react';
+import { useEffect } from 'react';
+import { getOptionMui } from 'utils/getOption';
+import homeworkStore from '../../app/stores/homeworkStore';
+import methodistStore from '../../app/stores/methodistStore';
 
 import { Dialog, DialogTitle } from '../franchising-page/ui/Dialog';
 
-import { MethodistMainStore } from './stores';
-
-import { GroupLevels } from 'app/enums/GroupLevels';
-import Button from 'components/button/Button';
-import { HomeworkStore } from 'components/homework-page/stores';
-import { GroupTypes } from 'app/enums/GroupTypes';
-import { getOptionMui } from 'utils/getOption';
-import { ShortStatusEnum, StatusEnum } from 'app/enums/StatusTypes';
-import { TableWorks } from 'components/methodist-main/components/TableWorks';
-import { isError } from 'components/methodist-main/utils/IsError';
-
-interface AddOrEditDialogProps {
-  store: MethodistMainStore;
-}
 const groupTypesKeys = Object.keys(GroupTypes);
 const statusTypesKeys = Object.keys(StatusEnum);
 const levelKeys = Object.keys(GroupLevels);
@@ -39,14 +34,13 @@ const levelOptions = Object.values(GroupLevels).map((el, index) =>
   getOptionMui(levelKeys[index], el),
 );
 
-export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
-  const { store } = props;
+export const AddOrEditDialog = observer(() => {
+  const store = methodistStore;
+  const { pull } = homeworkStore;
 
   const statusTypesOptions = Object.values(
     store.editingEntity?.id ? StatusEnum : ShortStatusEnum,
   ).map((el, index) => getOptionMui(statusTypesKeys[index], el));
-
-  const homeworkStore = useMemo(() => new HomeworkStore(), [store.isDialogOpen]);
 
   useEffect(() => {
     if (store.editingEntity.type) {
@@ -62,10 +56,10 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
         default:
           type = '';
       }
-      homeworkStore.pull('active', 5, type);
+      pull('active', 5, type);
     }
   }, [store.editingEntity.type]);
-  console.log(store.editingEntity.level);
+
   return (
     <Dialog
       PaperProps={{
@@ -135,7 +129,7 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
               </FormControl>
             </Grid>
           </Grid>
-          <TableWorks store={store} homeworkStore={homeworkStore} />
+          <TableWorks />
         </Stack>
       </DialogContent>
       <DialogActions>
