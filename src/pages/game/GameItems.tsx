@@ -1,16 +1,22 @@
-import React from 'react';
-import { Navigate, useParams } from 'react-router-dom';
-import Shulte from 'pages/game/GameInstances/Shulte';
 import { AppRoutes } from 'app/enums/AppRoutes';
+import appStore, { Roles } from 'app/stores/appStore';
+import gamesStore from 'app/stores/gamesStore';
+import { observer } from 'mobx-react';
 import BattleColors from 'pages/game/GameInstances/BattleColors';
 import Game2048 from 'pages/game/GameInstances/Game2048';
 import Mental from 'pages/game/GameInstances/Mental';
 import ShiftVertical from 'pages/game/GameInstances/ShiftVertical';
-import { observer } from 'mobx-react';
-import gamesStore from 'app/stores/gamesStore';
+import Shulte from 'pages/game/GameInstances/Shulte';
+import React from 'react';
+import { Navigate, useParams } from 'react-router-dom';
 
 const GameItems = observer(() => {
+  const { role } = appStore;
   const params = useParams();
+  if (role === Roles.Unauthorized) {
+    return <Navigate to={AppRoutes.Index} />;
+  }
+
   if ('gameName' in params) {
     switch (params.gameName) {
       case 'shulte':
@@ -18,13 +24,27 @@ const GameItems = observer(() => {
           <Shulte gamePreset={gamesStore.gamePreset} actualPresets={gamesStore.actualPresets} />
         );
       case 'battleColors':
-        return <BattleColors gamePreset={gamesStore.gamePreset} actualPresets={gamesStore.actualPresets} />;
+        return (
+          <BattleColors
+            gamePreset={gamesStore.gamePreset}
+            actualPresets={gamesStore.actualPresets}
+          />
+        );
       case 'game2048':
-        return <Game2048 gamePreset={gamesStore.gamePreset} actualPresets={gamesStore.actualPresets} />;
+        return (
+          <Game2048 gamePreset={gamesStore.gamePreset} actualPresets={gamesStore.actualPresets} />
+        );
       case 'mental':
-        return <Mental gamePreset={gamesStore.gamePreset} actualPresets={gamesStore.actualPresets} />;
+        return (
+          <Mental gamePreset={gamesStore.gamePreset} actualPresets={gamesStore.actualPresets} />
+        );
       case 'shiftVertical':
-        return <ShiftVertical gamePreset={gamesStore.gamePreset} actualPresets={gamesStore.actualPresets} />;
+        return (
+          <ShiftVertical
+            gamePreset={gamesStore.gamePreset}
+            actualPresets={gamesStore.actualPresets}
+          />
+        );
       default:
         return <Navigate to={AppRoutes.Games} />;
     }

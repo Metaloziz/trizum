@@ -1,7 +1,3 @@
-type UserStorageT = {
-  accessToken?: string;
-  refreshToken?: string;
-};
 class TokenService {
   getLocalRefreshToken() {
     const temp = localStorage.getItem('user_secret');
