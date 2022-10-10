@@ -19,6 +19,7 @@ import gamesStore from 'app/stores/gamesStore';
 import { LoadingIndicator } from 'components/franchising-page/ui/LoadingIndicator';
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, ChangeEvent, useState } from 'react';
+import { StatusTypes } from '../../app/enums/StatusTypes';
 import homeworkStore from '../../app/stores/homeworkStore';
 import styles from '../users-page/UsersPage.module.scss';
 
@@ -55,6 +56,18 @@ export const HomeworkPage = observer(() => {
     getHomeWorks();
   };
 
+  const deleteCurrentWork = (id: string, status: StatusTypes) => {
+    if (status === 'draft') {
+      remove(id, StatusTypes.removal);
+    } else {
+      remove(id, StatusTypes.archive);
+    }
+  };
+
+  if (isLoading) {
+    return <LoadingIndicator isLoading={isLoading} />;
+  }
+
   return (
     <Box
       sx={{
@@ -62,7 +75,6 @@ export const HomeworkPage = observer(() => {
         overflow: 'auto',
       }}
     >
-      <LoadingIndicator isLoading={isLoading} />
       <AddOrEditDialog />
       <Snackbar open={success !== null} autoHideDuration={6000} onClose={() => setSuccess(null)}>
         <Alert onClose={() => setSuccess(null)} severity="success" sx={{ width: '100%' }}>
@@ -108,6 +120,7 @@ export const HomeworkPage = observer(() => {
                   Описание
                 </TableCell>
                 <TableCell align="center">Количество игр</TableCell>
+                <TableCell align="center">Статус</TableCell>
                 <TableCell />
               </TableRow>
             </TableHead>
@@ -118,7 +131,9 @@ export const HomeworkPage = observer(() => {
                     key={entity.id}
                     entity={entity}
                     openDialogCallBack={() => openDialog(entity.id)}
-                    removeCallBack={() => remove(entity.id!)}
+                    removeCallBack={() =>
+                      deleteCurrentWork(entity.id!, entity.status as StatusTypes)
+                    }
                   />
                 ))
               ) : (

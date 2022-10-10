@@ -6,17 +6,14 @@ import { CreatOrEditWorkRequestT, OneWorkResponseT } from 'app/types/WorkTypes';
 import { HomeworkViewModel } from 'app/viewModels/HomeworkViewModel';
 import { makeObservable, observable, runInAction } from 'mobx';
 import * as yup from 'yup';
-
-import { HomeworkRepository } from '../../components/homework-page/repositories';
 import { MAX_NAMES_LENGTH, MIN_NAMES_LENGTH } from '../../constants/constants';
 import { StatusTypes } from '../enums/StatusTypes';
+import homeWorksService from '../services/homeWorksService';
 import { PaginationResponse } from '../types/PaginationResponse';
 
 type PaginationType = Omit<PaginationResponse<any>, 'items'>;
 
 class HomeworkStore extends StoreBase {
-  private _repository = new HomeworkRepository();
-
   isDialogOpen: boolean = false;
 
   worksArray: HomeworkViewModel[] = [];
@@ -79,21 +76,23 @@ class HomeworkStore extends StoreBase {
     this.isDialogOpen = false;
   };
 
-  list = async (status?: string, perPage?: number, type?: string) =>
+  getHomeWorks = async (status?: string, perPage?: number, type?: string) =>
     this.execute(async () => {
-      const paginationResponse = await this._repository.list(
+      const paginationResponse = await homeWorksService.getHomeWorks(
         this.pagination.page,
         status,
         this.pagination.perPage,
         type,
       );
 
-      this.worksArray = paginationResponse.items;
-      this.pagination = {
-        page: paginationResponse.page,
-        perPage: paginationResponse.perPage,
-        total: paginationResponse.total,
-      };
+      runInAction(() => {
+        this.worksArray = paginationResponse.items;
+        this.pagination = {
+          page: paginationResponse.page,
+          perPage: paginationResponse.perPage,
+          total: paginationResponse.total,
+        };
+      });
     });
 
   addOrEdit = async () => {
@@ -108,7 +107,7 @@ class HomeworkStore extends StoreBase {
           gamePresets: this.presetsThisWork,
           status: this.oneWork.work.status,
         };
-        await this._repository.addOrEdit(params);
+        await homeWorksService.addOrEditWork(params);
         await this.getHomeWorks();
       });
     } catch (e) {
@@ -116,25 +115,20 @@ class HomeworkStore extends StoreBase {
     }
   };
 
-  remove = async (id: string) => {
+  remove = async (id: string, status: StatusTypes) => {
     try {
       this.execute(async () => {
-        await this._repository.addOrEdit({ id, status: StatusTypes.archive });
+        await homeWorksService.addOrEditWork({ id, status });
         await this.getHomeWorks();
       });
     } catch (e) {
       console.warn(e);
     }
-  };
-
-  // по дефолту загружаются черновики
-  getHomeWorks = async (status: string = StatusTypes.draft, perPage?: number, type?: string) => {
-    this.execute(async () => this.list(status, perPage, type));
   };
 
   changePage = async (page: number) => {
     this.pagination.page = page;
-    this.execute(async () => this.list());
+    this.execute(async () => this.getHomeWorks());
   };
 
   setSearchParams = (params: Partial<PaginationType>) => {
