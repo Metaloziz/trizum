@@ -36,7 +36,11 @@ const Shulte: FC<Props> = props => {
   const [settings, setSettings] = useState<PresetsGameSettings>();
   const [refs, setRef] = useState<any>(null);
   const navigate = useNavigate();
-  console.log(game);
+  const widthScreen = window.innerWidth;
+  const gameViewSize = changedViewScreen(widthScreen, 700);
+  const gameTitle = 'Таблица Шульте';
+  const presetArr: Option[] = presetArray(actualPresets);
+
   useEffect(() => {
     getPresets();
     getGame('shulte');
@@ -45,20 +49,15 @@ const Shulte: FC<Props> = props => {
   console.log(_.cloneDeep(gamePreset), 'gamePreset::Shulte');
   console.log(_.cloneDeep(actualPresets), 'actualPresets::Shulte');
   console.log('-------------------------------------------------');
-  const widthScreen = window.innerWidth;
-  const gameViewSize = changedViewScreen(widthScreen, 700);
-  const gameTitle = 'Таблица Шульте';
-  const presetArr: Option[] = presetArray(actualPresets);
 
-  const onRef = (refGame: any) => {
-    setRef(refGame);
-  };
+  const onRef = (refGame: any) => setRef(refGame);
+
   const startGame = () => {
     setStarted(true);
     refs?.start();
   };
 
-  const onEnd = (result: any) => {
+  const onEnd = (result?: any) => {
     setResultModal(true);
     setStarted(false);
     setGameResult(result);
@@ -68,9 +67,7 @@ const Shulte: FC<Props> = props => {
     getPreset(data.value);
   };
 
-  const toggleModal = (value: boolean) => {
-    setIsModalOpen(value);
-  };
+  const toggleModal = (value: boolean) => setIsModalOpen(value);
 
   const onRepeat = () => {
     setResultModal(false);
@@ -107,7 +104,7 @@ const Shulte: FC<Props> = props => {
           Назад
         </Button>
         <section>
-          <div style={{ minWidth: `${gameViewSize + 100}px` }}>
+          <div className={styles.centerBlock} style={{ minWidth: `${gameViewSize + 100}px` }}>
             {(role === Roles.Methodist || role === Roles.Admin) && (
               <div className={styles.wrapGameBlock_header}>
                 <div className={styles.wrapGameBlock_header_select}>
@@ -134,7 +131,6 @@ const Shulte: FC<Props> = props => {
               </div>
             )}
           </div>
-
           <div className={styles.wrap}>
             <div className={styles.wrapInner}>
               <div className={styles.wrapGame}>
@@ -146,7 +142,6 @@ const Shulte: FC<Props> = props => {
                     {...settings}
                     colors={settings?.colorsMap?.length || 1}
                   />
-
                   {!started && <PlayButton onStart={startGame} />}
                 </div>
               </div>

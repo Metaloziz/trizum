@@ -105,6 +105,10 @@
     }
   }
 }
+.centerBlock{
+  display: flex;
+  justify-content: center;
+}
 
 .wrapGameBlock {
   margin: 0 0 50px 0;
@@ -121,20 +125,19 @@
 
   &_header {
     display: flex;
-    justify-content: space-evenly;
-    margin: 100px 20px -20px 20px;
+    //justify-content: space-evenly;
+    margin: 100px 20px 0 20px;
     align-items: center;
 
     &_select {
-      width: 150px;
-      margin-bottom: 5px;
+      width: 155px;
+      margin: 8px;
     }
 
     & button {
       height: 60px;
-      width: 250px;
+      width: 240px;
     }
-
   }
 
   @media(max-width: 1440px) {
@@ -146,6 +149,8 @@
   @media(max-width: 800px) {
     &_header {
       flex-wrap: wrap;
+      justify-content: center;
+      padding: 0 20px;
     }
   }
 
@@ -174,7 +179,7 @@
 }
 
 .wrap {
-  padding: 24px;
+  padding: 0 24px 24px;
 
   .wrapInner {
     padding-top: 24px;
@@ -186,7 +191,7 @@
   position: relative;
   justify-content: center;
   height: 820px;
-  width: 820px;
+  //width: 820px;
   border-radius: 70px;
   overflow: hidden;
   margin-bottom: 50px;
