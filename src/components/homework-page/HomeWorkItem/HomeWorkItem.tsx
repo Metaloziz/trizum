@@ -16,7 +16,9 @@ export const HomeWorkItem: FC<Props> = ({ entity, openDialogCallBack, removeCall
 
   const status = StatusEnum[name].toLowerCase();
 
-  const isDisable = entity.status === StatusTypes.archive;
+  const isDisableDelete = entity.status === StatusTypes.archive;
+
+  const isDisableEdit = entity.status !== StatusTypes.draft;
 
   return (
     <TableRow
@@ -45,11 +47,16 @@ export const HomeWorkItem: FC<Props> = ({ entity, openDialogCallBack, removeCall
             size="small"
             onClick={openDialogCallBack}
             color="primary"
-            disabled={isDisable}
+            disabled={isDisableEdit}
           >
             <EditIcon fontSize="small" />
           </IconButton>
-          <IconButton size="small" onClick={removeCallBack} color="error" disabled={isDisable}>
+          <IconButton
+            size="small"
+            onClick={removeCallBack}
+            color="error"
+            disabled={isDisableDelete}
+          >
             <DeleteIcon fontSize="small" />
           </IconButton>
         </Stack>
