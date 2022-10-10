@@ -154,7 +154,6 @@ export class MethodistMainStore extends StoreBase {
     if (this.filter.title.trim()) {
        this.filtered = this.entities.filter(entity =>
         (entity.title ?? '').toLowerCase().includes(this.filter!.title.toLowerCase()),
-        console.log(toJS(this.filtered))
       );
     }
     
@@ -166,14 +165,15 @@ export class MethodistMainStore extends StoreBase {
       }else if(this.filter.level==="Старшая группа") {
         this.filter.level="hard"
       }
-      this.filtered = (this.filtered || this.entities).filter(entity =>
+      this.filtered = (this.filter.title ? this.filtered : this.entities).filter(entity =>
         (entity.level ?? '').toLowerCase().includes(this.filter!.level.toLowerCase()),
       );
+      
     }
     
     if(this.filter.createdAt){
       const date=this.filter.createdAt.format('DD.MM.YYYY')
-      this.filtered = (this.filtered || this.entities).filter(entity=>{
+      this.filtered = (this.filter.title || this.filter.level ? this.filtered : this.entities).filter(entity=>{
         const entityDate=getCorrectDate(entity.createdAt?.date as string)
         return entityDate===date
       })
