@@ -20,7 +20,7 @@ class HomeworkStore extends StoreBase {
 
   pagination: PaginationType = {
     page: 0,
-    perPage: 5,
+    perPage: 10,
     total: 0,
   };
 

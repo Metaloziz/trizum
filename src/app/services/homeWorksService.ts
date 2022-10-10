@@ -8,7 +8,7 @@ const homeWorksService = {
       page,
     };
     status && (params.status = status);
-    perPage && (params.perPage = perPage);
+    perPage && (params.per_page = perPage);
     type && (params.type = type);
 
     const { data } = await instance.get(Paths.Works, { params });
