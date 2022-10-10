@@ -26,20 +26,33 @@ import { AddOrEditDialog } from './AddOrEditDialog';
 import { HomeWorkItem } from './HomeWorkItem/HomeWorkItem';
 
 export const HomeworkPage = observer(() => {
-  const store = homeworkStore;
+  const {
+    setSearchParams,
+    getHomeWorks,
+    isLoading,
+    success,
+    error,
+    openDialog,
+    worksArray,
+    remove,
+    pagination,
+    setSuccess,
+    setError,
+  } = homeworkStore;
+  const { getGames, getPresets } = gamesStore;
 
   useEffect(() => {
-    store.pull();
-    gamesStore.getGames();
-    gamesStore.getPresets();
+    getHomeWorks();
+    getGames();
+    getPresets();
   }, []);
 
-  const [currentPage, setCurrentPage] = useState(store.pagination.page + 1);
+  const [currentPage, setCurrentPage] = useState(pagination.page + 1);
 
   const onPageChange = (event: ChangeEvent<unknown>, newCurrentPage: number) => {
-    store.setSearchParams({ page: newCurrentPage - 1 });
+    setSearchParams({ page: newCurrentPage - 1 });
     setCurrentPage(newCurrentPage);
-    store.pull();
+    getHomeWorks();
   };
 
   return (
@@ -49,24 +62,16 @@ export const HomeworkPage = observer(() => {
         overflow: 'auto',
       }}
     >
-      <LoadingIndicator isLoading={store.isLoading} />
+      <LoadingIndicator isLoading={isLoading} />
       <AddOrEditDialog />
-      <Snackbar
-        open={store.success !== null}
-        autoHideDuration={6000}
-        onClose={() => (store.success = null)}
-      >
-        <Alert onClose={() => (store.success = null)} severity="success" sx={{ width: '100%' }}>
-          {store.success}
+      <Snackbar open={success !== null} autoHideDuration={6000} onClose={() => setSuccess(null)}>
+        <Alert onClose={() => setSuccess(null)} severity="success" sx={{ width: '100%' }}>
+          {success}
         </Alert>
       </Snackbar>
-      <Snackbar
-        open={store.error !== null}
-        autoHideDuration={6000}
-        onClose={() => (store.error = null)}
-      >
-        <Alert onClose={() => (store.error = null)} severity="error" sx={{ width: '100%' }}>
-          {store.error?.message || 'Произошла ошибка!'}
+      <Snackbar open={error !== null} autoHideDuration={6000} onClose={() => setError(null)}>
+        <Alert onClose={() => setError(null)} severity="error" sx={{ width: '100%' }}>
+          {error?.message || 'Произошла ошибка!'}
         </Alert>
       </Snackbar>
       <Box p={2}>
@@ -76,7 +81,7 @@ export const HomeworkPage = observer(() => {
               variant="contained"
               size="small"
               startIcon={<AddIcon fontSize="small" />}
-              onClick={() => store.openDialog()}
+              onClick={() => openDialog()}
               sx={{
                 alignSelf: 'flex-start',
                 backgroundColor: '#2e8dfd',
@@ -107,13 +112,13 @@ export const HomeworkPage = observer(() => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {store.entities.length ? (
-                store.entities.map(entity => (
+              {worksArray.length ? (
+                worksArray.map(entity => (
                   <HomeWorkItem
                     key={entity.id}
                     entity={entity}
-                    onClick={() => store.openDialog(entity.id)}
-                    onClick1={() => store.remove(entity.id!)}
+                    openDialogCallBack={() => openDialog(entity.id)}
+                    removeCallBack={() => remove(entity.id!)}
                   />
                 ))
               ) : (
@@ -126,7 +131,7 @@ export const HomeworkPage = observer(() => {
         </TableContainer>
         <div className={styles.pagination}>
           <Pagination
-            count={Math.ceil(store.pagination.total / store.pagination.perPage)}
+            count={Math.ceil(pagination.total / pagination.perPage)}
             color="primary"
             size="large"
             page={currentPage}

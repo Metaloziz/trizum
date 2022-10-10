@@ -36,16 +36,16 @@ const levelOptions = Object.values(GroupLevels).map((el, index) =>
 
 export const AddOrEditDialog = observer(() => {
   const store = methodistStore;
-  const { pull } = homeworkStore;
+  const { getHomeWorks } = homeworkStore;
 
   const statusTypesOptions = Object.values(
-    store.editingEntity?.id ? StatusEnum : ShortStatusEnum,
+    store.currentCourse?.id ? StatusEnum : ShortStatusEnum,
   ).map((el, index) => getOptionMui(statusTypesKeys[index], el));
 
   useEffect(() => {
-    if (store.editingEntity.type) {
+    if (store.currentCourse.type) {
       let type: string;
-      switch (store.editingEntity.type) {
+      switch (store.currentCourse.type) {
         case 'blocks':
           type = 'block';
           break;
@@ -56,9 +56,9 @@ export const AddOrEditDialog = observer(() => {
         default:
           type = '';
       }
-      pull('active', 5, type);
+      getHomeWorks('active', 5, type);
     }
-  }, [store.editingEntity.type]);
+  }, [store.currentCourse.type]);
 
   return (
     <Dialog
@@ -73,7 +73,7 @@ export const AddOrEditDialog = observer(() => {
       open={store.isDialogOpen}
     >
       <DialogTitle onClose={store.closeDialog}>
-        {store.editingEntity?.id ? 'Редактирование курса' : 'Добавление нового курса'}
+        {store.currentCourse?.id ? 'Редактирование курса' : 'Добавление нового курса'}
       </DialogTitle>
       <DialogContent dividers>
         <Stack spacing={1}>
@@ -81,8 +81,8 @@ export const AddOrEditDialog = observer(() => {
             <Grid item xs={12} sm={6}>
               <TextField
                 label="Наименование"
-                value={store.editingEntity.title}
-                onChange={({ currentTarget: { value } }) => (store.editingEntity.title = value)}
+                value={store.currentCourse.title}
+                onChange={({ currentTarget: { value } }) => (store.currentCourse.title = value)}
                 fullWidth
                 variant="outlined"
                 size="small"
@@ -93,9 +93,9 @@ export const AddOrEditDialog = observer(() => {
               <FormControl fullWidth size="small">
                 <InputLabel>Уровень</InputLabel>
                 <Select
-                  value={store.editingEntity.level}
+                  value={store.currentCourse.level}
                   label="Уровень"
-                  onChange={({ target: { value } }) => (store.editingEntity.level = value)}
+                  onChange={({ target: { value } }) => (store.currentCourse.level = value)}
                   error={isError(store, 'level')}
                 >
                   {levelOptions}
@@ -106,9 +106,9 @@ export const AddOrEditDialog = observer(() => {
               <FormControl fullWidth size="small">
                 <InputLabel>Тип</InputLabel>
                 <Select
-                  value={store.editingEntity.type}
+                  value={store.currentCourse.type}
                   label="Тип"
-                  onChange={({ target: { value } }) => (store.editingEntity.type = value)}
+                  onChange={({ target: { value } }) => (store.currentCourse.type = value)}
                   error={isError(store, 'type')}
                 >
                   {groupTypesOptions}
@@ -119,9 +119,9 @@ export const AddOrEditDialog = observer(() => {
               <FormControl fullWidth size="small">
                 <InputLabel>Статус</InputLabel>
                 <Select
-                  value={store.editingEntity.status}
+                  value={store.currentCourse.status}
                   label="Статус"
-                  onChange={({ target: { value } }) => (store.editingEntity.status = value)}
+                  onChange={({ target: { value } }) => (store.currentCourse.status = value)}
                   error={isError(store, 'status')}
                 >
                   {statusTypesOptions}
@@ -136,9 +136,9 @@ export const AddOrEditDialog = observer(() => {
         <Button
           variant="primary"
           onClick={store.addOrEdit}
-          disabled={!store.validateSchema.isValidSync(store.editingEntity)}
+          disabled={!store.validateSchema.isValidSync(store.currentCourse)}
         >
-          {store.editingEntity?.id ? 'Изменить' : 'Сохранить'}
+          {store.currentCourse?.id ? 'Изменить' : 'Сохранить'}
         </Button>
       </DialogActions>
     </Dialog>

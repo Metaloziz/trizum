@@ -19,7 +19,7 @@ class HomeworkStore extends StoreBase {
 
   isDialogOpen: boolean = false;
 
-  entities: HomeworkViewModel[] = [];
+  worksArray: HomeworkViewModel[] = [];
 
   pagination: PaginationType = {
     page: 0,
@@ -51,7 +51,7 @@ class HomeworkStore extends StoreBase {
   constructor() {
     super();
     makeObservable(this, {
-      entities: observable,
+      worksArray: observable,
       isDialogOpen: observable,
       oneWork: observable,
       presetsThisWork: observable,
@@ -88,7 +88,7 @@ class HomeworkStore extends StoreBase {
         type,
       );
 
-      this.entities = paginationResponse.items;
+      this.worksArray = paginationResponse.items;
       this.pagination = {
         page: paginationResponse.page,
         perPage: paginationResponse.perPage,
@@ -109,7 +109,7 @@ class HomeworkStore extends StoreBase {
           status: this.oneWork.work.status,
         };
         await this._repository.addOrEdit(params);
-        await this.pull();
+        await this.getHomeWorks();
       });
     } catch (e) {
       console.warn(e);
@@ -120,7 +120,7 @@ class HomeworkStore extends StoreBase {
     try {
       this.execute(async () => {
         await this._repository.addOrEdit({ id, status: StatusTypes.archive });
-        await this.pull();
+        await this.getHomeWorks();
       });
     } catch (e) {
       console.warn(e);
@@ -128,7 +128,7 @@ class HomeworkStore extends StoreBase {
   };
 
   // по дефолту загружаются черновики
-  pull = async (status: string = StatusTypes.draft, perPage?: number, type?: string) => {
+  getHomeWorks = async (status: string = StatusTypes.draft, perPage?: number, type?: string) => {
     this.execute(async () => this.list(status, perPage, type));
   };
 
@@ -143,6 +143,14 @@ class HomeworkStore extends StoreBase {
 
   clearSearchParams = () => {
     this.pagination = { page: 0, perPage: 5, total: 1 };
+  };
+
+  setSuccess = (value: boolean | null) => {
+    this.success = value;
+  };
+
+  setError = (value: Error | null) => {
+    this.error = value;
   };
 
   get validateSchema() {

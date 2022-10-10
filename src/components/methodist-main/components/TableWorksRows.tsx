@@ -5,12 +5,12 @@ import homeworkStore from 'app/stores/homeworkStore';
 import methodistStore from 'app/stores/methodistStore';
 
 export const TableWorksRows: FC = observer(() => {
-  const { editingEntity } = methodistStore;
-  const { entities } = homeworkStore;
+  const { currentCourse } = methodistStore;
+  const { worksArray } = homeworkStore;
 
   return (
     <>
-      {entities.map(work => (
+      {worksArray.map(work => (
         <TableRow
           key={work.id}
           hover
@@ -22,12 +22,12 @@ export const TableWorksRows: FC = observer(() => {
         >
           <TableCell role="checkbox">
             <Checkbox
-              checked={(editingEntity.works || []).some(w => w.id === work.id)}
+              checked={(currentCourse.works || []).some(w => w.id === work.id)}
               size="small"
               onChange={(__, checked) => {
-                editingEntity.works = checked
-                  ? [...(editingEntity.works || []), work]
-                  : editingEntity.works?.filter(w => w.id !== work.id);
+                currentCourse.works = checked
+                  ? [...(currentCourse.works || []), work]
+                  : currentCourse.works?.filter(w => w.id !== work.id);
               }}
             />
           </TableCell>

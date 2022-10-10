@@ -30,11 +30,11 @@ class MethodistMainStore extends StoreBase {
     total: 0,
   };
 
-  editingEntity: CourseViewModel = this._defaultValue();
+  currentCourse: CourseViewModel = this._defaultValue();
 
-  entities: CourseViewModel[] = [];
+  coursesArray: CourseViewModel[] = [];
 
-  filtered: CourseViewModel[] = [];
+  filteredCourses: CourseViewModel[] = [];
 
   isDialogOpen: boolean = false;
 
@@ -44,15 +44,15 @@ class MethodistMainStore extends StoreBase {
     super();
 
     makeObservable(this, {
-      editingEntity: observable,
-      entities: observable,
+      currentCourse: observable,
+      coursesArray: observable,
       isDialogOpen: observable,
       filter: observable,
     });
   }
 
   openDialog = (editingEntity?: Partial<CourseViewModel>) => {
-    this.editingEntity = editingEntity
+    this.currentCourse = editingEntity
       ? {
           status: editingEntity.status || null,
           title: editingEntity.title || null,
@@ -70,7 +70,7 @@ class MethodistMainStore extends StoreBase {
   list = async () =>
     this.execute(async () => {
       const paginationResponse = await this._repository.list(this.pagination.page);
-      this.entities = paginationResponse.items;
+      this.coursesArray = paginationResponse.items;
       // this.entities = paginationResponse.items.filter(item=>item.status!=="archive");
       this.pagination = {
         page: paginationResponse.page,
@@ -83,27 +83,27 @@ class MethodistMainStore extends StoreBase {
     this.closeDialog();
 
     this.execute(async () => {
-      const asd = this.editingEntity.works?.length
-        ? this.editingEntity.works.map((el, index) => ({
+      const asd = this.currentCourse.works?.length
+        ? this.currentCourse.works.map((el, index) => ({
             index,
             workId: el.id || '',
           }))
         : [];
       let status;
-      if (this.editingEntity?.id) {
-        status = this.editingEntity.status;
+      if (this.currentCourse?.id) {
+        status = this.currentCourse.status;
       }
-      if (!this.editingEntity?.id) {
-        if (this.editingEntity.status === 'draft') {
+      if (!this.currentCourse?.id) {
+        if (this.currentCourse.status === 'draft') {
           status = undefined;
         } else {
-          status = this.editingEntity.status;
+          status = this.currentCourse.status;
         }
       }
       const data = {
-        ...this.editingEntity,
+        ...this.currentCourse,
         status: status || StatusTypes.draft,
-        works: this.editingEntity.works?.length ? asd : undefined,
+        works: this.currentCourse.works?.length ? asd : undefined,
       };
       await this._repository.addOrEdit(data);
       await this.pull();
@@ -112,17 +112,17 @@ class MethodistMainStore extends StoreBase {
 
   remove = async (id: string) => {
     const newStatus =
-      this.editingEntity.status === StatusTypes.active ? StatusTypes.removal : StatusTypes.archive;
+      this.currentCourse.status === StatusTypes.active ? StatusTypes.removal : StatusTypes.archive;
 
     console.log('newStatus', [newStatus]);
 
-    const currentEntity = toJS(this.entities).find(ent => ent.id === id);
+    const currentEntity = toJS(this.coursesArray).find(ent => ent.id === id);
     const status = currentEntity?.status;
     try {
       if (status) {
         /* change status of the course to archive  */
         // if (status !== StatusTypes.draft) { delete course if its status draft
-        this.editingEntity = currentEntity
+        this.currentCourse = currentEntity
           ? { ...currentEntity, status: newStatus }
           : this._defaultValue();
         await this.addOrEdit();
@@ -160,13 +160,12 @@ class MethodistMainStore extends StoreBase {
 
   get filteredEntities() {
     if (!this.filter) {
-      return this.entities;
+      return this.coursesArray;
     }
 
     if (this.filter.title.trim()) {
-      this.filtered = this.entities.filter(
-        entity => (entity.title ?? '').toLowerCase().includes(this.filter!.title.toLowerCase()),
-        console.log(toJS(this.filtered)),
+      this.filteredCourses = this.coursesArray.filter(entity =>
+        (entity.title ?? '').toLowerCase().includes(this.filter!.title.toLowerCase()),
       );
     }
 
@@ -178,20 +177,20 @@ class MethodistMainStore extends StoreBase {
       } else if (this.filter.level === 'Старшая группа') {
         this.filter.level = 'hard';
       }
-      this.filtered = (this.filtered || this.entities).filter(entity =>
+      this.filteredCourses = (this.filteredCourses || this.coursesArray).filter(entity =>
         (entity.level ?? '').toLowerCase().includes(this.filter!.level.toLowerCase()),
       );
     }
 
     if (this.filter.createdAt) {
       const date = this.filter.createdAt.format('DD.MM.YYYY');
-      this.filtered = (this.filtered || this.entities).filter(entity => {
+      this.filteredCourses = (this.filteredCourses || this.coursesArray).filter(entity => {
         const entityDate = getCorrectDate(entity.createdAt?.date as string);
         return entityDate === date;
       });
     }
 
-    return this.filtered;
+    return this.filteredCourses;
   }
 }
 

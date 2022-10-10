@@ -6,11 +6,11 @@ import { HomeworkViewModel } from '../../../app/viewModels/HomeworkViewModel';
 
 type Props = {
   entity: HomeworkViewModel;
-  onClick: () => Promise<void>;
-  onClick1: () => Promise<void>;
+  openDialogCallBack: () => Promise<void>;
+  removeCallBack: () => Promise<void>;
 };
 
-export const HomeWorkItem: FC<Props> = ({ entity, onClick, onClick1 }) => (
+export const HomeWorkItem: FC<Props> = ({ entity, openDialogCallBack, removeCallBack }) => (
   <TableRow
     hover
     sx={{
@@ -30,10 +30,10 @@ export const HomeWorkItem: FC<Props> = ({ entity, onClick, onClick1 }) => (
     </TableCell>
     <TableCell>
       <Stack direction="row" justifyContent="flex-end">
-        <IconButton size="small" onClick={onClick} color="primary">
+        <IconButton size="small" onClick={openDialogCallBack} color="primary">
           <EditIcon fontSize="small" />
         </IconButton>
-        <IconButton size="small" onClick={onClick1} color="error">
+        <IconButton size="small" onClick={removeCallBack} color="error">
           <DeleteIcon fontSize="small" />
         </IconButton>
       </Stack>
