@@ -27,21 +27,24 @@ type Props = {
 
 const Shulte: FC<Props> = props => {
   const { actualPresets, gamePreset } = props;
-  const { deletePreset, getPreset } = gamesStore;
+  const { deletePreset, getPreset, getPresets, game, getGame } = gamesStore;
   const { role } = appStore;
-
   const [started, setStarted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [resultModal, setResultModal] = useState(false);
   const [gameResult, setGameResult] = useState<ResultT>(defaultResult);
   const [settings, setSettings] = useState<PresetsGameSettings>();
   const [refs, setRef] = useState<any>(null);
-
   const navigate = useNavigate();
+  console.log(game);
+  useEffect(() => {
+    getPresets();
+    getGame('shulte');
+  }, []);
 
   console.log(_.cloneDeep(gamePreset), 'gamePreset::Shulte');
   console.log(_.cloneDeep(actualPresets), 'actualPresets::Shulte');
-  console.log('-------------------------------------------------')
+  console.log('-------------------------------------------------');
   const widthScreen = window.innerWidth;
   const gameViewSize = changedViewScreen(widthScreen, 700);
   const gameTitle = 'Таблица Шульте';
@@ -150,7 +153,7 @@ const Shulte: FC<Props> = props => {
             </div>
           </div>
         </section>
-        <GameDesc started={started} gameTitle={gameTitle} />
+        <GameDesc presetDesc={settings?.description} started={started} gameTitle={gameTitle} />
       </div>
     </>
   );

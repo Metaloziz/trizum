@@ -27,7 +27,7 @@ type Props = {
 
 const BattleColors: FC<Props> = props => {
   const { actualPresets, gamePreset } = props;
-  const { deletePreset, getPreset } = gamesStore;
+  const { deletePreset, getPreset, getGame, getPresets } = gamesStore;
   const { role } = appStore;
   const [started, setStarted] = useState(false);
   const [resultModal, setResultModal] = useState(false);
@@ -35,9 +35,12 @@ const BattleColors: FC<Props> = props => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [refs, setRef] = useState<any>(null);
   const [settings, setSettings] = useState<PresetsGameSettings>();
-
   const navigate = useNavigate();
 
+  useEffect(() => {
+    getPresets();
+    getGame('battleColors');
+  }, []);
   const widthScreen = window.innerWidth;
   const gameViewSize = changedViewScreen(widthScreen, 700);
   const gameTitle = 'Битва полушарий';
@@ -79,7 +82,7 @@ const BattleColors: FC<Props> = props => {
   };
 
   useEffect(() => {
-    if(gamePreset.gamePreset.settings.length){
+    if (gamePreset.gamePreset.settings.length) {
       setSettings(gamePreset.gamePreset.settings[0]);
     }
   }, [gamePreset]);
@@ -147,7 +150,7 @@ const BattleColors: FC<Props> = props => {
             </div>
           </div>
         </section>
-        <GameDesc started={started} gameTitle={gameTitle} />
+        <GameDesc presetDesc={settings?.description} started={started} gameTitle={gameTitle} />
       </div>
     </>
   );

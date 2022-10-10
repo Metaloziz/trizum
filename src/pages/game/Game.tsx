@@ -1,19 +1,13 @@
 import { AppRoutes } from 'app/enums/AppRoutes';
 import appStore, { Roles } from 'app/stores/appStore';
 import gamesStore from 'app/stores/gamesStore';
-import { OptionT } from 'app/types/OptionT';
-import Button from 'components/button/Button';
-import { GameDesc } from 'components/game-page/GameCommon/GameDesc';
 import { GameModal } from 'components/game-page/GameCommon/GameModal/GameModal';
 import { GameResultModal } from 'components/game-page/GameCommon/GameModal/GameResultModal/GameResultModal';
-import { PlayButton } from 'components/game-page/GameCommon/PlayButton';
 import Image from 'components/image/Image';
-import InformationItem from 'components/information-item/InformationItem';
-import { Option } from 'components/select-mui/CustomSelect';
 import { observer } from 'mobx-react';
 import React, { Component } from 'react';
 
-import { Navigate, NavLink, Route, Routes } from 'react-router-dom';
+import { Navigate, NavLink } from 'react-router-dom';
 import { changedViewScreen } from 'utils/gameUtils/changeViewScreen';
 
 import Two048 from '../../assets/images/game/2048.png';
@@ -181,7 +175,7 @@ class Game extends Component<any, any> {
     const settings = gamePreset.gamePreset.settings[0];
 
     const gameViewSize = changedViewScreen(widthScreen, 700);
-
+    console.log(this.game);
     return (
       <div className={styles.innerContent}>
         {(role === Roles.Methodist || role === Roles.Admin) && (

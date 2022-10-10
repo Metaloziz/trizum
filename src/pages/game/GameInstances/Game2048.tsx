@@ -15,7 +15,7 @@ import Button from 'components/button/Button';
 import appStore, { Roles } from 'app/stores/appStore';
 import InformationItem from 'components/information-item/InformationItem';
 import { Option } from 'components/select-mui/CustomSelect';
-import _ from "lodash";
+import _ from 'lodash';
 
 const gameName = GameIdentifiers.game2048;
 const GameInstance = Factory(gameName);
@@ -27,7 +27,7 @@ type Props = {
 
 const Game2048: FC<Props> = props => {
   const { actualPresets, gamePreset } = props;
-  const { deletePreset, getPreset } = gamesStore;
+  const { deletePreset, getPreset, getPresets, getGame } = gamesStore;
   const { role } = appStore;
 
   const [started, setStarted] = useState(false);
@@ -37,6 +37,10 @@ const Game2048: FC<Props> = props => {
   const [refs, setRef] = useState<any>(null);
   const [settings, setSettings] = useState<PresetsGameSettings>();
 
+  useEffect(() => {
+    getPresets();
+    getGame('game2048');
+  }, []);
   const navigate = useNavigate();
 
   const widthScreen = window.innerWidth;
@@ -150,7 +154,7 @@ const Game2048: FC<Props> = props => {
             </div>
           </div>
         </section>
-        <GameDesc started={started} gameTitle={gameTitle} />
+        <GameDesc presetDesc={settings?.description} started={started} gameTitle={gameTitle} />
       </div>
     </>
   );

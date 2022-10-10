@@ -15,7 +15,7 @@ import Button from 'components/button/Button';
 import appStore, { Roles } from 'app/stores/appStore';
 import InformationItem from 'components/information-item/InformationItem';
 import { Option } from 'components/select-mui/CustomSelect';
-import _ from "lodash";
+import _ from 'lodash';
 
 const gameName = GameIdentifiers.shiftVertical;
 const GameInstance = Factory(gameName);
@@ -27,7 +27,7 @@ type Props = {
 
 const ShiftVertical: FC<Props> = props => {
   const { actualPresets, gamePreset } = props;
-  const { deletePreset, getPreset } = gamesStore;
+  const { deletePreset, getPreset, getPresets, getGame } = gamesStore;
   const { role } = appStore;
   const [started, setStarted] = useState(false);
   const [resultModal, setResultModal] = useState(false);
@@ -35,8 +35,12 @@ const ShiftVertical: FC<Props> = props => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [refs, setRef] = useState<any>(null);
   const [settings, setSettings] = useState<PresetsGameSettings>();
-
   const navigate = useNavigate();
+
+  useEffect(() => {
+    getPresets();
+    getGame('shiftVertical');
+  }, []);
 
   const widthScreen = window.innerWidth;
   const gameViewSize = changedViewScreen(widthScreen, 700);
@@ -83,7 +87,6 @@ const ShiftVertical: FC<Props> = props => {
 
   return (
     <>
-      {' '}
       {(role === Roles.Methodist || role === Roles.Admin) && (
         <GameModal open={isModalOpen} onClose={toggleModal} deletePreset={deletePreset} />
       )}
@@ -146,7 +149,7 @@ const ShiftVertical: FC<Props> = props => {
             </div>
           </div>
         </section>
-        <GameDesc started={started} gameTitle={gameTitle} />
+        <GameDesc presetDesc={settings?.description} started={started} gameTitle={gameTitle} />
       </div>
     </>
   );

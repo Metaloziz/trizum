@@ -50,36 +50,36 @@ export const GameModal: FC<PropsT> = observer(props => {
   const [colorModal, setColorModal] = useState<boolean>(false);
   const [template, setTemplate] = useState<string>(gamePresetName || '');
   const [timeComplete, setTimeComplete] = useState<string>(
-    settings?.timeComplete?.toString() || '0',
+    settings?.timeComplete?.toString() || '1',
   );
-  const [delay, setDelay] = useState<string>(settings?.delay?.toString() || '0');
+  const [delay, setDelay] = useState<string>(settings?.delay?.toString() || '1');
   const [level, setLevel] = useState<string>(gamePreset?.gamePreset?.level);
-  const [colorCount, setColorCount] = useState<string>(settings?.colorCount?.toString() || '0');
-  const [forms, setForms] = useState<string>(settings?.forms?.toString() || '0');
-  const [colorsMap, setColorsMap] = useState<string[]>(settings?.colorsMap || ['']);
+  const [colorCount, setColorCount] = useState<string>(settings?.colorCount?.toString() || '1');
+  const [forms, setForms] = useState<string>(settings?.forms?.toString() || '1');
+  const [colorsMap, setColorsMap] = useState<string[]>(settings?.colorsMap || ['black']);
   const [levelMaxCompleted, setLevelMaxCompleted] = useState<string>(
-    settings?.levelMaxCompleted?.toString() || '0',
+    settings?.levelMaxCompleted?.toString() || '1',
   );
-  const [wordsCount, setWordsCount] = useState<string>(settings?.wordsCount?.toString() || '0');
-  const [digitMax, setDigitMax] = useState<string>(settings?.digitMax?.toString() || '0');
+  const [wordsCount, setWordsCount] = useState<string>(settings?.wordsCount?.toString() || '1');
+  const [digitMax, setDigitMax] = useState<string>(settings?.digitMax?.toString() || '1');
   const [errorAcceptable, setErrorAcceptable] = useState<string>(
-    settings?.errorAcceptable?.toString() || '0',
+    settings?.errorAcceptable?.toString() || '1',
   );
-  const [speed, setSpeed] = useState<string>(settings?.speed?.toString() || '0');
-  const [blinksCount, setBlinksCount] = useState<string>(settings?.blinksCount?.toString() || '0');
-  const [cycleTime, setCycleTime] = useState<string>(settings?.cycleTime?.toString() || '0');
-  const [groupsCount, setGroupsCount] = useState<string>(settings?.groupsCount?.toString() || '0');
+  const [speed, setSpeed] = useState<string>(settings?.speed?.toString() || '1');
+  const [blinksCount, setBlinksCount] = useState<string>(settings?.blinksCount?.toString() || '1');
+  const [cycleTime, setCycleTime] = useState<string>(settings?.cycleTime?.toString() || '1');
+  const [groupsCount, setGroupsCount] = useState<string>(settings?.groupsCount?.toString() || '1');
   const [elementsTotal, setElementsTotal] = useState<string>(
-    settings?.elementsTotal?.toString() || '0',
+    settings?.elementsTotal?.toString() || '1',
   );
   const [description, setDescription] = useState<string>(defaultInputTextReader);
   // const [currentRadio, setCurrentRadio] = useState<string>('eachLevel');
   const [colors, setColors] = useState<ColorObj[]>(colorsObj);
-  const [size, setSize] = useState(settings?.size?.toString() || '0');
-  const [startTiles, setStartTiles] = useState(settings?.startTiles?.toString() || '0');
-  const [time, setTime] = useState(settings?.time?.toString() || '0');
-  const [levels, setLevels] = useState(settings?.levels?.toString() || '0');
-  const [colores, setColores] = useState(settings?.colores?.toString() || '0');
+  const [size, setSize] = useState(settings?.size?.toString() || '1');
+  const [startTiles, setStartTiles] = useState(settings?.startTiles?.toString() || '1');
+  const [time, setTime] = useState(settings?.time?.toString() || '1');
+  const [levels, setLevels] = useState(settings?.levels?.toString() || '1');
+  const [colores, setColores] = useState(settings?.colores?.toString() || '1');
 
   const levelKeys = Object.keys(GroupLevels);
   const levelOptions = Object.values(GroupLevels).map((el, index) =>
@@ -109,7 +109,7 @@ export const GameModal: FC<PropsT> = observer(props => {
     setTimeComplete(settings?.timeComplete?.toString() || '');
     setElementsTotal(settings?.elementsTotal?.toString() || '');
     setDelay(settings?.delay?.toString() || '');
-    setLevel(gamePreset.gamePreset.level);
+    setLevel(gamePreset?.gamePreset?.level);
     setColorCount(settings?.colorCount?.toString() || '');
     setForms(settings?.forms?.toString() || '');
     setColorsMap(settings?.colorsMap || ['']);
@@ -203,9 +203,9 @@ export const GameModal: FC<PropsT> = observer(props => {
     } else {
       onCreatePreset();
     }
-    await gamesStore.getPresets()
-    if(gamesStore.gamePreset.gamePreset.name){
-      await gamesStore.getPreset(gamesStore.gamePreset.gamePreset.name)
+    await gamesStore.getPresets();
+    if (gamesStore.gamePreset.gamePreset.name) {
+      await gamesStore.getPreset(gamesStore.gamePreset.gamePreset.name);
     }
     onClose(false);
   };
@@ -602,12 +602,12 @@ export const GameModal: FC<PropsT> = observer(props => {
           <Button
             onClick={deletedPreset}
             variant="reset"
-            disabled={gamePreset.gamePreset.status !== 'draft'}
+            disabled={gamePreset?.gamePreset?.status !== 'draft'}
           >
             Удалить настройки
           </Button>
           <Button
-            disabled={gamePreset.gamePreset.status === 'active' || template.length < 1}
+            disabled={gamePreset?.gamePreset?.status === 'active' || template.length < 1}
             onClick={savePreset}
           >
             Сохранить

@@ -117,6 +117,7 @@ class GamesStore {
   getGame = async (game: string) => {
     try {
       const res = await gamesService.getGame(game);
+      console.log(res);
       runInAction(() => {
         this.game = res;
         this.filterPresets(res.code);

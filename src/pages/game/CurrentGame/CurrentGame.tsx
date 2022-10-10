@@ -88,7 +88,7 @@ export const CurrentGame: FC<Props> = ({ GameComponent, ...props }) => {
           </div>
         </div>
       </section>
-      <GameDesc started={props.started} gameTitle={props.gam.title} />
+      {/* <GameDesc presetDesc={settings?.description} started={props.started} gameTitle={props.gam.title} /> */}
     </div>
   );
 };

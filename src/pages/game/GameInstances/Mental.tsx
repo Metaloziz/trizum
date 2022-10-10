@@ -27,7 +27,7 @@ type Props = {
 
 const Mental: FC<Props> = props => {
   const { actualPresets, gamePreset } = props;
-  const { deletePreset, getPreset } = gamesStore;
+  const { deletePreset, getPreset, getPresets, getGame } = gamesStore;
   const { role } = appStore;
   const [started, setStarted] = useState(false);
   const [resultModal, setResultModal] = useState(false);
@@ -35,8 +35,12 @@ const Mental: FC<Props> = props => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [refs, setRef] = useState<any>(null);
   const [settings, setSettings] = useState<PresetsGameSettings>();
-
   const navigate = useNavigate();
+
+  useEffect(() => {
+    getPresets();
+    getGame('mental');
+  }, []);
 
   const widthScreen = window.innerWidth;
   const gameViewSize = changedViewScreen(widthScreen, 700);
@@ -148,7 +152,7 @@ const Mental: FC<Props> = props => {
             </div>
           </div>
         </section>
-        <GameDesc started={started} gameTitle={gameTitle} />
+        <GameDesc presetDesc={settings?.description} started={started} gameTitle={gameTitle} />
       </div>
     </>
   );
