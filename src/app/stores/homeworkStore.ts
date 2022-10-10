@@ -152,12 +152,10 @@ class HomeworkStore extends StoreBase {
       title: yup
         .string()
         .required('*')
-        .max(MAX_NAMES_LENGTH, `Максимальная длинна ${MAX_NAMES_LENGTH} символов`)
         .min(MIN_NAMES_LENGTH, `Минимальная длинна ${MIN_NAMES_LENGTH} символа`),
       text: yup
         .string()
         .required('*')
-        .max(MAX_NAMES_LENGTH, `Максимальная длинна ${MAX_NAMES_LENGTH} символов`)
         .min(MIN_NAMES_LENGTH, `Минимальная длинна ${MIN_NAMES_LENGTH} символа`),
       status: yup.string().required('*'),
     });
