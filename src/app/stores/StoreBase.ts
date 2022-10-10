@@ -1,7 +1,6 @@
+import { Nullable } from 'app/types/Nullable';
 import axios from 'axios';
 import { makeObservable, observable } from 'mobx';
-
-import { Nullable } from 'app/types/Nullable';
 
 export class StoreBase {
   isLoading: boolean = false;

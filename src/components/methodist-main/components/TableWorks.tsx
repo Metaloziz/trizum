@@ -17,12 +17,12 @@ import { observer } from 'mobx-react-lite';
 import { FC } from 'react';
 
 export const TableWorks: FC = observer(() => {
-  const { editingEntity } = methodistStore;
-  const { entities, pagination, changePage } = homeworkStore;
+  const { currentCourse } = methodistStore;
+  const { worksArray, pagination, changePage } = homeworkStore;
 
   return (
     <>
-      {editingEntity.status === StatusTypes.active && !!entities.length && (
+      {currentCourse.status === StatusTypes.active && !!worksArray.length && (
         <>
           <TableContainer component={Paper}>
             <Table size="small">
@@ -61,7 +61,7 @@ export const TableWorks: FC = observer(() => {
           />
         </>
       )}
-      {editingEntity.type && !entities.length && <Typography>Пока что нет домашек</Typography>}
+      {currentCourse.type && !worksArray.length && <Typography>Пока что нет домашек</Typography>}
     </>
   );
 });
