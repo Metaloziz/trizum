@@ -11,7 +11,7 @@ import {
 
 import { GroupLevels } from 'app/enums/GroupLevels';
 import { GroupTypes } from 'app/enums/GroupTypes';
-import { ShortStatusEnum, StatusEnum } from 'app/enums/StatusTypes';
+import { AddStatusEnum, StatusEnum } from 'app/enums/StatusTypes';
 import Button from 'components/button/Button';
 import { TableWorks } from 'components/methodist-main/components/TableWorks';
 import { isError } from 'components/methodist-main/utils/IsError';
@@ -39,7 +39,7 @@ export const AddOrEditDialog = observer(() => {
   const { getHomeWorks } = homeworkStore;
 
   const statusTypesOptions = Object.values(
-    store.currentCourse?.id ? StatusEnum : ShortStatusEnum,
+    store.currentCourse?.id ? StatusEnum : AddStatusEnum,
   ).map((el, index) => getOptionMui(statusTypesKeys[index], el));
 
   useEffect(() => {

@@ -11,7 +11,14 @@ export enum StatusEnum {
   removal = 'На удаление',
   archive = 'Архивный',
 }
-export enum ShortStatusEnum {
+
+// for add homework
+export enum AddStatusEnum {
+  draft = 'Черновик',
+}
+
+// for edit homework
+export enum EditStatusEnum {
   draft = 'Черновик',
   active = 'Активный',
 }

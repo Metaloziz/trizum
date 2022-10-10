@@ -57,7 +57,7 @@ export const HomeworkPage = observer(() => {
   };
 
   const deleteCurrentWork = (id: string, status: StatusTypes) => {
-    if (status === 'draft') {
+    if (status === StatusTypes.draft || status === StatusTypes.active) {
       remove(id, StatusTypes.removal);
     } else {
       remove(id, StatusTypes.archive);

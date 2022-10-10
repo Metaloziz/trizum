@@ -17,7 +17,7 @@ import {
   TableRow,
   TextField,
 } from '@mui/material';
-import { ShortStatusEnum, StatusEnum } from 'app/enums/StatusTypes';
+import { AddStatusEnum, StatusEnum, EditStatusEnum } from 'app/enums/StatusTypes';
 import gamesStore from 'app/stores/gamesStore';
 
 import Button from 'components/button/Button';
@@ -40,7 +40,7 @@ export const AddOrEditDialog = observer(() => {
   const statusTypesKeys = Object.keys(StatusEnum);
 
   const statusTypesOptions = Object.values(
-    store.oneWork?.work?.id ? StatusEnum : ShortStatusEnum,
+    store.oneWork?.work?.id ? EditStatusEnum : AddStatusEnum,
   ).map((el, index) => getOptionMui(statusTypesKeys[index], el));
 
   const getPresetGame = (gamePresetId: string) => {
@@ -178,10 +178,7 @@ export const AddOrEditDialog = observer(() => {
         <Button
           variant="primary"
           onClick={store.addOrEdit}
-          disabled={
-            !store.validateSchema.isValidSync(store.oneWork.work) ||
-            store.oneWork?.work?.status === 'active'
-          }
+          disabled={!store.validateSchema.isValidSync(store.oneWork.work)}
         >
           {store.oneWork?.work?.id ? 'Изменить' : 'Сохранить'}
         </Button>
