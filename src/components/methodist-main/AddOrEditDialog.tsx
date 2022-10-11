@@ -71,6 +71,8 @@ export const AddOrEditDialog = observer(() => {
     }
   }, [currentCourse?.type]);
 
+  const addCourse = () => {};
+
   return (
     <Dialog
       PaperProps={{

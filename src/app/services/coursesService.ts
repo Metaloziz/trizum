@@ -1,21 +1,13 @@
 import { Paths } from 'app/enums/Paths';
 import instance from 'app/services/config';
 import {
-  GetCoursesParams,
-  RequestCreateCourse,
-  RequestEditCourse,
   ShortCourseType,
   ResponseDeleteCourse,
-  ResponseOneCourse,
-  ResponseOneFullCourse,
   ResponseWork,
   CourseType,
 } from 'app/types/CourseTypes';
 import { WithPagination } from 'app/types/WithPagination';
 import { SearchCoursesParamsType } from '../stores/coursesStore';
-import { PaginationResponse } from '../types/PaginationResponse';
-import { CreatOrEditWorkRequestT } from '../types/WorkTypes';
-import { CourseViewModel, CourseViewModelAddEdit } from '../viewModels/CourseViewModel';
 
 export type CreateCoursePayloadType = Pick<CourseType, 'level' | 'status' | 'title' | 'type'> & {
   works?: { index: number; workId: string }[];

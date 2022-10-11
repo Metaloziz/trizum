@@ -26,7 +26,7 @@ export type ShortCourseType = {
 // full course type
 export type CourseType = ShortCourseType & {
   works: WorkWithCourseBonded[];
-  usedInGroups: string[]; // todo not sure
+  // usedInGroups: string[]; // todo not sure
 };
 
 export type ResponseOneCourse = {
