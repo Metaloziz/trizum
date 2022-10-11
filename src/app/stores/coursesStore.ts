@@ -22,12 +22,16 @@ export type SearchCoursesParamsType = Pick<ShortCourseType, 'title' | 'level'> &
   created_since: string;
 };
 
+export type NewWorkType = { index: number; workId: string };
+
+export type NewCourseType = Nullable<Partial<Omit<CourseType, 'works'> & { works: NewWorkType[] }>>;
+
 class CoursesStore extends StoreBase {
   courses: Nullable<ShortCourseType[]> = null;
 
-  currentCourse: Nullable<Partial<CourseType>> = null;
+  currentCourse: NewCourseType = null;
 
-  homeworks: ResponseWork[] = [];
+  // homeworks: ResponseWork[] = [];
 
   isDialogOpen: boolean = false;
 
@@ -45,7 +49,7 @@ class CoursesStore extends StoreBase {
     makeObservable(this, {
       getCourses: observable,
       createCourse: observable,
-      homeworks: observable,
+      // homeworks: observable,
       isDialogOpen: observable,
       courses: observable,
     });
@@ -77,22 +81,27 @@ class CoursesStore extends StoreBase {
         };
 
         if (this.currentCourse.works) {
+          console.log('currentCourse', [this.currentCourse]);
           data.works = this.currentCourse.works?.map(el => ({
-            index: Number(el.id),
-            workId: el.work.id,
+            index: Number(el.index),
+            workId: el.workId,
           }));
         }
 
+        console.log('data', [data]);
+
         const res = await coursesService.createCourse(data);
-        this.getCourses();
+        await this.getCourses();
       }
+
+      this.setIsDialogOpen(false);
     });
   };
 
   editCourse = async () => {
     await this.execute(async () => {
       if (this.currentCourse) {
-        await coursesService.editCourse(this.currentCourse);
+        // await coursesService.editCourse(this.currentCourse);
         await this.getCourses();
       }
     });
@@ -100,14 +109,23 @@ class CoursesStore extends StoreBase {
 
   setIsDialogOpen = (isOpen: boolean) => {
     this.isDialogOpen = isOpen;
+    this.setCurrentCourse(null);
   };
 
   onChangeFilter = (filter: Partial<SearchCoursesParamsType>) => {
     this.searchCoursesParams = { ...this.searchCoursesParams, ...filter };
   };
 
-  setCurrentCourse = (course: Partial<CourseType>) => {
-    this.currentCourse = { ...this.currentCourse, ...course };
+  setCurrentCourse = (course: NewCourseType) => {
+    if (course === null) {
+      this.currentCourse = null;
+    } else {
+      this.currentCourse = { ...this.currentCourse, ...course };
+    }
+  };
+
+  setSearchCoursesParams = (params: Partial<SearchCoursesParamsType>) => {
+    this.searchCoursesParams = { ...this.searchCoursesParams, ...params };
   };
 
   get validateSchema() {
@@ -119,16 +137,24 @@ class CoursesStore extends StoreBase {
     });
   }
 
+  get pagination(): Pick<SearchCoursesParamsType, 'total' | 'per_page' | 'page'> {
+    return {
+      page: this.searchCoursesParams.page,
+      per_page: this.searchCoursesParams.per_page,
+      total: Math.ceil(this.searchCoursesParams.total / this.searchCoursesParams.per_page),
+    };
+  }
+
   /// ////////////////////
 
-  getOneCourse = async (id: string) => {
-    try {
-      const res = await coursesService.getOneCourse(id);
-      this.setCurrentCourse(res);
-    } catch (e) {
-      console.warn(e);
-    }
-  };
+  // getOneCourse = async (id: string) => {
+  //   try {
+  //     const res = await coursesService.getOneCourse(id);
+  //     this.setCurrentCourse(res);
+  //   } catch (e) {
+  //     console.warn(e);
+  //   }
+  // };
 
   // createCourse = async (data: RequestCreateCourse) => {
   //   try {
@@ -139,23 +165,11 @@ class CoursesStore extends StoreBase {
   //   }
   // };
 
-  getHomeworks = async () => {
-    const res = await coursesService.getAllWorks();
-    runInAction(() => {
-      this.homeworks = res.reverse();
-    });
-  };
-
-  setSearchCoursesParams = (params: Partial<SearchCoursesParamsType>) => {
-    this.searchCoursesParams = { ...this.searchCoursesParams, ...params };
-  };
-
-  get pagination(): Pick<SearchCoursesParamsType, 'total' | 'per_page' | 'page'> {
-    return {
-      page: this.searchCoursesParams.page,
-      per_page: this.searchCoursesParams.per_page,
-      total: Math.ceil(this.searchCoursesParams.total / this.searchCoursesParams.per_page),
-    };
-  }
+  // getHomeworks = async () => {
+  //   const res = await coursesService.getAllWorks();
+  //   runInAction(() => {
+  //     this.homeworks = res.reverse();
+  //   });
+  // };
 }
 export default new CoursesStore();
