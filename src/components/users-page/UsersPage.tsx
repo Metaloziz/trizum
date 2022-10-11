@@ -54,8 +54,6 @@ const UsersPage = observer(() => {
     setCurrentPage(page + 1);
   }, [page]);
 
-  console.log('modals.isParents', [modals.isParents]);
-
   return (
     <div className={styles.wrapper}>
       <Filter setIsModalOpen={setIsModalOpen} />
