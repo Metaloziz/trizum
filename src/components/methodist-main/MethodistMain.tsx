@@ -18,7 +18,6 @@ import { observer } from 'mobx-react-lite';
 import React, { useEffect, ChangeEvent, useState } from 'react';
 import { StatusTypes } from '../../app/enums/StatusTypes';
 import coursesStore from '../../app/stores/coursesStore';
-import methodistStore from '../../app/stores/methodistStore';
 import styles from '../users-page/UsersPage.module.scss';
 
 import { AddOrEditDialog } from './AddOrEditDialog';
@@ -32,9 +31,21 @@ export enum LevelHomeWork {
 }
 
 const MethodistMain = observer(() => {
-  const store = methodistStore;
+  const {
+    getCourses,
+    courses,
+    pagination,
+    setSearchCoursesParams,
+    editCourse,
+    isLoading,
+    setIsDialogOpen,
+    onChangeFilter,
+    setCurrentCourse,
+  } = coursesStore;
 
-  const { getCourses, getCoursesArray, pagination, setSearchCoursesParams } = coursesStore;
+  useEffect(() => {
+    getCourses();
+  }, []);
 
   const [currentPage, setCurrentPage] = useState(pagination.page + 1);
 
@@ -44,10 +55,19 @@ const MethodistMain = observer(() => {
     getCourses();
   };
 
-  useEffect(() => {
-    getCourses();
-    // store.pull();
-  }, []);
+  const deleteCurrentCourse = (id: string, status: StatusTypes) => {
+    if (status === StatusTypes.draft || status === StatusTypes.active) {
+      setCurrentCourse({ id, status: StatusTypes.removal });
+      editCourse();
+    } else {
+      setCurrentCourse({ id, status: StatusTypes.archive });
+      editCourse();
+    }
+  };
+
+  if (isLoading) {
+    return <LoadingIndicator isLoading={isLoading} />;
+  }
 
   return (
     <Box
@@ -56,7 +76,6 @@ const MethodistMain = observer(() => {
         overflow: 'auto',
       }}
     >
-      <LoadingIndicator isLoading={store.isLoading} />
       <AddOrEditDialog />
 
       <Box p={2}>
@@ -66,7 +85,7 @@ const MethodistMain = observer(() => {
               variant="contained"
               size="small"
               startIcon={<AddIcon fontSize="small" />}
-              onClick={() => store.openDialog({ status: StatusTypes.draft })}
+              onClick={() => setIsDialogOpen(true)}
               sx={{
                 alignSelf: 'flex-start',
                 backgroundColor: '#2e8dfd',
@@ -74,7 +93,7 @@ const MethodistMain = observer(() => {
             >
               Добавить курс
             </Button>
-            <Filter onChange={store.onChangeFilter} />
+            <Filter onChange={onChangeFilter} />
           </Stack>
         </Box>
         <TableContainer component={Paper}>
@@ -98,15 +117,14 @@ const MethodistMain = observer(() => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {getCoursesArray ? (
-                getCoursesArray.map(course => (
+              {courses ? (
+                courses.map(course => (
                   <CourseItem
                     key={course.id}
                     course={course}
                     // onClick={() => store.openDialog(course)}
-                    onClick={() => {}}
-                    // onClick1={() => store.remove(course.id!)}
-                    onClick1={() => store.remove(course.id!)}
+                    openDialogCallBack={() => {}}
+                    removeCallBack={() => deleteCurrentCourse(course.id, course.status)}
                   />
                 ))
               ) : (

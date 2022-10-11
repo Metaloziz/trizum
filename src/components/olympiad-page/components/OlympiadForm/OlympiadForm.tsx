@@ -40,11 +40,11 @@ export const OlympiadForm: FC<Props> = observer(({ setShowModal, mode = 'add', g
   const title = <h2>{IS_ADD_MODE ? 'Добавление' : 'Редактирование'} олимпиады</h2>;
 
   const { franchise } = franchiseeStore;
-  const { getCoursesArray } = coursesStore;
+  const { courses } = coursesStore;
   const { groups, getGroups } = groupStore;
 
   const franchiseOptions = convertFranchiseeOptions(franchise);
-  const courseOptions = convertCourseOptions(getCoursesArray);
+  const courseOptions = convertCourseOptions(courses);
   const levelOptions = convertEnumOptions(GroupLevels);
   const groupsOptions = convertGroupOptions(groups);
   const statusOptions = convertEnumOptions(GroupStatus);

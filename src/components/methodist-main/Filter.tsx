@@ -24,6 +24,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import ru from 'dayjs/locale/ru';
 import { observer } from 'mobx-react';
+import { SearchCoursesParamsType } from '../../app/stores/coursesStore';
 
 import { MethodistMainFilterViewModel } from './models/MethodistMainFilterViewModel';
 
@@ -31,7 +32,7 @@ import { GroupLevels } from 'app/enums/GroupLevels';
 import { Nullable } from 'app/types/Nullable';
 
 interface FilterProps {
-  onChange: (filter: Nullable<MethodistMainFilterViewModel>) => void;
+  onChange: (filter: Partial<SearchCoursesParamsType>) => void;
 }
 
 export const Filter = observer((props: FilterProps) => {
@@ -42,7 +43,7 @@ export const Filter = observer((props: FilterProps) => {
   });
 
   const [filter, setFilter] = useState(_defaultFilter());
-    
+
   const [open, setOpen] = useState(false);
 
   const applyFilter = () => {
@@ -50,11 +51,10 @@ export const Filter = observer((props: FilterProps) => {
   };
 
   const clearFilter = () => {
-    setOpen(false);
+    // setOpen(false);
     setFilter(_defaultFilter());
-    props.onChange(null);
+    props.onChange({});
   };
- 
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={ru}>
