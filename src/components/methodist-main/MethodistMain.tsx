@@ -19,6 +19,7 @@ import { LoadingIndicator } from 'components/franchising-page/ui/LoadingIndicato
 import { observer } from 'mobx-react-lite';
 import { useEffect } from 'react';
 import { StatusTypes } from '../../app/enums/StatusTypes';
+import coursesStore from '../../app/stores/coursesStore';
 import methodistStore from '../../app/stores/methodistStore';
 
 import { AddOrEditDialog } from './AddOrEditDialog';
@@ -34,8 +35,11 @@ export enum LevelHomeWork {
 const MethodistMain = observer(() => {
   const store = methodistStore;
 
+  const { getCourses, getCoursesArray } = coursesStore;
+
   useEffect(() => {
-    store.pull();
+    getCourses();
+    // store.pull();
   }, []);
 
   return (
@@ -47,24 +51,7 @@ const MethodistMain = observer(() => {
     >
       <LoadingIndicator isLoading={store.isLoading} />
       <AddOrEditDialog />
-      <Snackbar
-        open={store.success !== null}
-        autoHideDuration={6000}
-        onClose={() => (store.success = null)}
-      >
-        <Alert onClose={() => (store.success = null)} severity="success" sx={{ width: '100%' }}>
-          {store.success}
-        </Alert>
-      </Snackbar>
-      <Snackbar
-        open={store.error !== null}
-        autoHideDuration={6000}
-        onClose={() => (store.error = null)}
-      >
-        <Alert onClose={() => (store.error = null)} severity="error" sx={{ width: '100%' }}>
-          {store.error?.message || 'Произошла ошибка!'}
-        </Alert>
-      </Snackbar>
+
       <Box p={2}>
         <Box mb={1}>
           <Stack spacing={1}>
@@ -104,13 +91,15 @@ const MethodistMain = observer(() => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {store.filteredEntities.length ? (
-                store.filteredEntities.map(entity => (
+              {getCoursesArray ? (
+                getCoursesArray.map(course => (
                   <CourseItem
-                    key={entity.id}
-                    entity={entity}
-                    onClick={() => store.openDialog(entity)}
-                    onClick1={() => store.remove(entity.id!)}
+                    key={course.id}
+                    course={course}
+                    // onClick={() => store.openDialog(course)}
+                    onClick={() => {}}
+                    // onClick1={() => store.remove(course.id!)}
+                    onClick1={() => store.remove(course.id!)}
                   />
                 ))
               ) : (

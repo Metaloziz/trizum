@@ -6,7 +6,7 @@ import { CreatOrEditWorkRequestT, OneWorkResponseT } from 'app/types/WorkTypes';
 import { HomeworkViewModel } from 'app/viewModels/HomeworkViewModel';
 import { makeObservable, observable, runInAction } from 'mobx';
 import * as yup from 'yup';
-import { MAX_NAMES_LENGTH, MIN_NAMES_LENGTH } from '../../constants/constants';
+import { MIN_NAMES_LENGTH } from '../../constants/constants';
 import { StatusTypes } from '../enums/StatusTypes';
 import homeWorksService from '../services/homeWorksService';
 import { PaginationResponse } from '../types/PaginationResponse';

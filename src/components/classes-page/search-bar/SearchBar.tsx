@@ -45,7 +45,7 @@ const SearchBar = observer(() => {
 
   const getFranchises = async () => {
     const res = await franchiseService.getAll();
-    const res1 = await coursesService.getAllCourses({ perPage: 10000 });
+    const res1 = await coursesService.getAllCourses({ per_page: 10000 });
     const options = res.map(el => (el.id ? getOptionMui(el.id, el.shortName) : <></>));
     setFranchiseOptions(options);
     setCourseOptions(res1.items.map(el => (el.id ? getOptionMui(el.id, el.title) : <></>)));

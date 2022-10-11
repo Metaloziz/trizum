@@ -4,28 +4,34 @@ import {
   GetCoursesParams,
   RequestCreateCourse,
   RequestEditCourse,
-  ResponseCourse,
+  ShortCourseType,
   ResponseDeleteCourse,
   ResponseOneCourse,
   ResponseOneFullCourse,
   ResponseWork,
+  CourseType,
 } from 'app/types/CourseTypes';
 import { WithPagination } from 'app/types/WithPagination';
+import { SearchCoursesParamsType } from '../stores/coursesStore';
+import { PaginationResponse } from '../types/PaginationResponse';
+import { CourseViewModel } from '../viewModels/CourseViewModel';
 
 const coursesService = {
-  getAllCourses: async (params?: GetCoursesParams): Promise<WithPagination<ResponseCourse[]>> => {
+  getAllCourses: async (
+    params?: Partial<SearchCoursesParamsType>,
+  ): Promise<WithPagination<ShortCourseType[]>> => {
     const { data } = await instance.get(Paths.Courses, { params });
     return data;
   },
-  getOneCourse: async (id: string): Promise<ResponseOneFullCourse> => {
+  getOneCourse: async (id: string): Promise<CourseType> => {
     const { data } = await instance.get(`${Paths.Courses}/${id}`);
     return data;
   },
-  createCourse: async (options: RequestCreateCourse): Promise<ResponseCourse> => {
+  createCourse: async (options: RequestCreateCourse): Promise<ShortCourseType> => {
     const { data } = await instance.post(Paths.Courses, options);
     return data;
   },
-  editCourse: async (options: RequestEditCourse, id: string): Promise<ResponseOneFullCourse> => {
+  editCourse: async (options: RequestEditCourse, id: string): Promise<CourseType> => {
     const { data } = await instance.post(`${Paths.Courses}/${id}`, options);
     return data;
   },
