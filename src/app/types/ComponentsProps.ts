@@ -1,5 +1,7 @@
 // Containers
 
+import { WorksT } from 'app/types/GroupTypes';
+
 export interface WeeklyGrowthProps {
   className?: string;
   weeklyGrowth: SkillGrowProps[];
@@ -13,6 +15,7 @@ export interface HomeworksProps {
 export interface KeepPlayingProps {
   className?: string;
   games: KeepPlayingItemProps[];
+  works?: WorksT[];
 }
 
 // Components
@@ -23,6 +26,7 @@ export interface KeepPlayingItemProps {
   colorTheme: string;
   id: number;
   onClick?: () => void;
+  code?: string | undefined;
 }
 
 export interface HomeworkProps {

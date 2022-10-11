@@ -105,7 +105,8 @@
     }
   }
 }
-.centerBlock{
+
+.centerBlock {
   display: flex;
   justify-content: center;
 }
@@ -178,12 +179,17 @@
 
 }
 
+
 .wrap {
   padding: 0 24px 24px;
 
   .wrapInner {
     padding-top: 24px;
   }
+}
+
+.isStudent {
+  margin-top: 60px;
 }
 
 .wrapGame {

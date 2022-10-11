@@ -12,12 +12,18 @@ import styles from 'pages/home/Home.module.scss';
 
 export const StudentMain: FC = observer(() => {
   const { user } = appStore;
+
+  console.log(user);
   return (
     <main className={styles.main}>
       <CardStudent user={user} />
       <WeeklyGrowth className={styles.weeklyGrowth} weeklyGrowth={weeklyGrowth} />
       <Homeworks className={styles.homeworks} homeworks={homeworks} />
-      <KeepPlaying className={styles.keepPlaying} games={games} />
+      <KeepPlaying
+        className={styles.keepPlaying}
+        works={user.groups[0].group.course.works}
+        games={games}
+      />
     </main>
   );
 });

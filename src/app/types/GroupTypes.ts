@@ -60,7 +60,7 @@ export class ResponseOneGroupCourse {
 
   createdAt = new TimeZoneType();
 
-  works: any[] = [];
+  works: WorksT[] = [];
 }
 
 type LocalUserT = ResponseOneUserTypeForLoadMe & {

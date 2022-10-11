@@ -77,27 +77,62 @@ export const homeworks = [
 
 export const games = [
   {
-    title: 'Память и ритм',
+    title: 'Битва полушарий',
+    code: 'battleColors',
     minutesLeft: 18,
     colorTheme: 'blue',
     id: +new Date().toDateString(),
   },
   {
-    title: 'Найди слова/числа/фигуры',
+    title: '2048',
+    code: 'game2048',
     minutesLeft: 36,
     colorTheme: 'gradient-violet',
     id: +new Date().toDateString(),
   },
   {
-    title: 'Мухи в кубе',
+    title: 'Таблица шульте',
+    code: 'shulte',
+    minutesLeft: 20,
+    colorTheme: 'blue',
+    id: +new Date().toDateString(),
+  },
+  {
+    title: 'Сдвиг по вертикали',
+    code: 'shiftVertical',
     minutesLeft: 44,
     colorTheme: 'gradient-blue-darker',
     id: +new Date().toDateString(),
   },
   {
-    title: 'Антипазл',
+    title: 'Ментальный счет',
+    code: 'mental',
     minutesLeft: 31,
     colorTheme: 'aquamarine',
     id: +new Date().toDateString(),
   },
+  // {
+  //   title: 'Память и ритм',
+  //   minutesLeft: 18,
+  //   colorTheme: 'blue',
+  //   id: +new Date().toDateString(),
+  // },
+  // {
+  //   title: 'Найди слова/числа/фигуры',
+  //   minutesLeft: 36,
+  //   colorTheme: 'gradient-violet',
+  //   id: +new Date().toDateString(),
+  // },
+  // {
+  //   title: 'Мухи в кубе',
+  //   minutesLeft: 44,
+  //   colorTheme: 'gradient-blue-darker',
+  //   id: +new Date().toDateString(),
+  // },
+  // {
+  //   title: 'Антипазл',
+  //   minutesLeft: 31,
+  //   colorTheme: 'aquamarine',
+  //   id: +new Date().toDateString(),
+  // },
 ];

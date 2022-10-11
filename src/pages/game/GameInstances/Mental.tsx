@@ -133,8 +133,7 @@ const Mental: FC<Props> = props => {
             )}
           </div>
 
-          <div className={styles.wrap}>
-            <Button onClick={() => navigate(-1)}>Назад</Button>
+          <div className={`${styles.wrap} ${role === Roles.Student && styles.isStudent}`}>
             <div className={styles.wrapInner}>
               <div className={styles.wrapGame}>
                 <div className={styles.wrapGame_overlay}>

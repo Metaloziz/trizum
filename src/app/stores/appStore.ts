@@ -64,7 +64,7 @@ export class EmptyUser {
 
   avatar: AvatarT;
 
-  groups?: GroupsDataT[];
+  groups: GroupsDataT[];
 
   canSwitchTo: canSwitchToT[];
 
@@ -100,6 +100,7 @@ export class EmptyUser {
       id: '',
       path: '',
     };
+    this.groups = [];
     this.canSwitchTo = [];
     this.parent = {} as ResponseLoadMeParentT;
   }

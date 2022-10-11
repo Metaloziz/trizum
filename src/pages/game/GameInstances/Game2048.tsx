@@ -136,7 +136,7 @@ const Game2048: FC<Props> = props => {
             )}
           </div>
 
-          <div className={styles.wrap}>
+          <div className={`${styles.wrap} ${role === Roles.Student && styles.isStudent}`}>
             <div className={styles.wrapInner}>
               <div className={styles.wrapGame}>
                 <div className={styles.wrapGame_overlay}>
