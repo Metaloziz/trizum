@@ -1,50 +1,57 @@
-import { makeAutoObservable, runInAction } from 'mobx';
-
 import coursesService from 'app/services/coursesService';
 import {
-  GetCoursesParams,
   RequestCreateCourse,
   RequestEditCourse,
-  ResponseCourse,
-  ResponseOneFullCourse,
+  ShortCourseType,
   ResponseWork,
+  CourseType,
 } from 'app/types/CourseTypes';
+import { Nullable } from 'app/types/Nullable';
+import { makeAutoObservable, runInAction } from 'mobx';
+import { removeEmptyFields } from '../../utils/removeEmptyFields';
 
-type NewCourse = {
-  title: string;
-  level: string;
+export type SearchCoursesParamsType = Pick<ShortCourseType, 'title' | 'level'> & {
+  per_page: number;
+  page: number;
+  total: number;
+  created_since: string;
 };
 
 class CoursesStore {
-  courses: ResponseCourse[] = [
-    {
-      id: '',
-      title: '',
-      level: '',
-      works: [],
-      createdAt: { date: '', timezone: '', timezone_type: 0 },
-      worksCount: 0,
-      type: '',
-    },
-  ];
+  private courses: Nullable<ShortCourseType[]> = null;
 
-  currentCourse?: ResponseOneFullCourse = undefined;
+  currentCourse?: Nullable<CourseType> = null;
 
   homeworks: ResponseWork[] = [];
+
+  private searchCoursesParams: SearchCoursesParamsType = {
+    per_page: 10,
+    page: 0,
+    total: 1,
+    title: '',
+    level: '',
+    created_since: '',
+  };
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  setCurrentCourse = (course?: ResponseOneFullCourse) => {
-    this.currentCourse = course;
+  getCourses = async () => {
+    const params = removeEmptyFields(this.searchCoursesParams);
+    delete params.total;
+
+    const { items, page, perPage, total } = await coursesService.getAllCourses(params);
+    runInAction(() => {
+      this.courses = items;
+      this.searchCoursesParams.page = page;
+      this.searchCoursesParams.per_page = perPage;
+      this.searchCoursesParams.total = total;
+    });
   };
 
-  getCourses = async (params?: GetCoursesParams) => {
-    const res = await coursesService.getAllCourses(params);
-    runInAction(() => {
-      this.courses = res.items;
-    });
+  setCurrentCourse = (course?: CourseType) => {
+    this.currentCourse = course;
   };
 
   getOneCourse = async (id: string) => {
@@ -80,5 +87,13 @@ class CoursesStore {
       this.homeworks = res.reverse();
     });
   };
+
+  setSearchCoursesParams = (params: Partial<SearchCoursesParamsType>) => {
+    this.searchCoursesParams = { ...this.searchCoursesParams, ...params };
+  };
+
+  get getCoursesArray() {
+    return this.courses;
+  }
 }
 export default new CoursesStore();

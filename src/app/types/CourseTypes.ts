@@ -1,6 +1,7 @@
 import { TimeZoneType } from 'app/types/TimeZoneType';
 import { GroupTypes } from 'app/enums/GroupTypes';
 import { HomeworkViewModel } from 'app/viewModels/HomeworkViewModel';
+import { StatusTypes } from '../enums/StatusTypes';
 
 export type ResponseWork = {
   id: string;
@@ -10,14 +11,21 @@ export type ResponseWork = {
   gamePresetCount: number;
 };
 
-export type ResponseCourse = {
+// course type from array
+export type ShortCourseType = {
   id: string;
+  type: string;
+  status: StatusTypes;
   title: string;
   level: string;
-  works?: ResponseWork[];
   worksCount: number;
   createdAt: TimeZoneType;
-  type: string;
+  // works?: ResponseWork[];
+};
+
+export type CourseType = ShortCourseType & {
+  works: WorkWithCourseBonded[];
+  usedInGroups: string[]; // todo not sure
 };
 
 export type ResponseOneCourse = {
@@ -58,16 +66,6 @@ export type ResponseDeleteCourse = {
 export type AnswerT = {
   text: string;
   correct: boolean;
-};
-
-export type QuestionT = {
-  index: number;
-  question: {
-    id: string;
-    code: string;
-    text: string;
-    answers: AnswerT[];
-  };
 };
 
 export type GamePresetT = {

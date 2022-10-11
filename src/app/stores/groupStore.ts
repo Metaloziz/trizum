@@ -8,7 +8,7 @@ import coursesService from 'app/services/coursesService';
 import franchiseService from 'app/services/franchiseService';
 import groupsService from 'app/services/groupsService';
 import { Roles } from 'app/stores/appStore';
-import { ResponseCourse } from 'app/types/CourseTypes';
+import { ShortCourseType } from 'app/types/CourseTypes';
 import { FranchiseT } from 'app/types/FranchiseTypes';
 import {
   CreateGroupFroUI,
@@ -93,7 +93,7 @@ class GroupStore {
 
   teachers: ResponseUserT[] = [];
 
-  courses: ResponseCourse[] = [];
+  courses: ShortCourseType[] = [];
 
   isLoad = false;
 
@@ -125,7 +125,7 @@ class GroupStore {
   loadInitialModal = () => {
     this.execute(async () => {
       const resFranchise = await franchiseService.getAll();
-      const res1 = await coursesService.getAllCourses({ perPage: 10000 });
+      const res1 = await coursesService.getAllCourses({ per_page: 10000 });
       runInAction(() => {
         // @ts-ignore
         this.franchise = resFranchise;

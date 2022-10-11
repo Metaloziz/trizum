@@ -14,6 +14,7 @@ class MethodistMainStore extends StoreBase {
   private _repository = new MethodistMainRepository();
 
   private _defaultValue = (): CourseViewModel => ({
+    id: '',
     title: null,
     level: null,
     type: null,
@@ -48,6 +49,7 @@ class MethodistMainStore extends StoreBase {
       coursesArray: observable,
       isDialogOpen: observable,
       filter: observable,
+      pagination: observable,
     });
   }
 
