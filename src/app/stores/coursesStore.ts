@@ -95,5 +95,13 @@ class CoursesStore {
   get getCoursesArray() {
     return this.courses;
   }
+
+  get pagination(): Pick<SearchCoursesParamsType, 'total' | 'per_page' | 'page'> {
+    return {
+      page: this.searchCoursesParams.page,
+      per_page: this.searchCoursesParams.per_page,
+      total: Math.ceil(this.searchCoursesParams.total / this.searchCoursesParams.per_page),
+    };
+  }
 }
 export default new CoursesStore();

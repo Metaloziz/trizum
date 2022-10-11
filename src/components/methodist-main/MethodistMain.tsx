@@ -1,26 +1,25 @@
 import AddIcon from '@mui/icons-material/Add';
 import {
-  Alert,
   Box,
   Button,
   Paper,
-  Snackbar,
   Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
-  TablePagination,
   TableRow,
 } from '@mui/material';
+import Pagination from '@mui/material/Pagination';
 
 import { LoadingIndicator } from 'components/franchising-page/ui/LoadingIndicator';
 import { observer } from 'mobx-react-lite';
-import { useEffect } from 'react';
+import React, { useEffect, ChangeEvent, useState } from 'react';
 import { StatusTypes } from '../../app/enums/StatusTypes';
 import coursesStore from '../../app/stores/coursesStore';
 import methodistStore from '../../app/stores/methodistStore';
+import styles from '../users-page/UsersPage.module.scss';
 
 import { AddOrEditDialog } from './AddOrEditDialog';
 import { CourseItem } from './CourseItem/CourseItem';
@@ -35,7 +34,15 @@ export enum LevelHomeWork {
 const MethodistMain = observer(() => {
   const store = methodistStore;
 
-  const { getCourses, getCoursesArray } = coursesStore;
+  const { getCourses, getCoursesArray, pagination, setSearchCoursesParams } = coursesStore;
+
+  const [currentPage, setCurrentPage] = useState(pagination.page + 1);
+
+  const onPageChange = (event: ChangeEvent<unknown>, newCurrentPage: number) => {
+    setSearchCoursesParams({ page: newCurrentPage - 1 });
+    setCurrentPage(newCurrentPage);
+    getCourses();
+  };
 
   useEffect(() => {
     getCourses();
@@ -110,17 +117,16 @@ const MethodistMain = observer(() => {
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[store.pagination.rowsPerPage]}
-          component="div"
-          count={store.pagination.total}
-          rowsPerPage={store.pagination.rowsPerPage}
-          page={store.pagination.page}
-          onPageChange={(_, page) => store.changePage(page)}
-          labelDisplayedRows={({ from, to, count }) =>
-            `${from}–${to} из ${count !== -1 ? count : `больше чем ${to}`}`
-          }
-        />
+        <div className={styles.pagination}>
+          <Pagination
+            count={pagination.total}
+            color="primary"
+            size="large"
+            page={currentPage}
+            boundaryCount={1}
+            onChange={onPageChange}
+          />
+        </div>
       </Box>
     </Box>
   );
