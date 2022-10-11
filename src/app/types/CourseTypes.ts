@@ -23,6 +23,7 @@ export type ShortCourseType = {
   // works?: ResponseWork[];
 };
 
+// full course type
 export type CourseType = ShortCourseType & {
   works: WorkWithCourseBonded[];
   usedInGroups: string[]; // todo not sure
@@ -54,9 +55,11 @@ export type RequestEditCourseWork = {
 };
 
 export type RequestEditCourse = {
-  title: string;
-  level: string;
-  works: RequestEditCourseWork[];
+  id?: string;
+  title?: string;
+  level?: string;
+  status?: StatusTypes;
+  works?: RequestEditCourseWork[];
 };
 
 export type ResponseDeleteCourse = {

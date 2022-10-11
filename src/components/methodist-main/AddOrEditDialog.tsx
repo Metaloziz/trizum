@@ -11,13 +11,14 @@ import {
 
 import { GroupLevels } from 'app/enums/GroupLevels';
 import { GroupTypes } from 'app/enums/GroupTypes';
-import { AddStatusEnum, StatusEnum } from 'app/enums/StatusTypes';
+import { StatusEnum, StatusTypes, EditStatusEnum, AddStatusEnum } from 'app/enums/StatusTypes';
 import Button from 'components/button/Button';
 import { TableWorks } from 'components/methodist-main/components/TableWorks';
 import { isError } from 'components/methodist-main/utils/IsError';
 import { observer } from 'mobx-react';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { getOptionMui } from 'utils/getOption';
+import coursesStore from '../../app/stores/coursesStore';
 import homeworkStore from '../../app/stores/homeworkStore';
 import methodistStore from '../../app/stores/methodistStore';
 
@@ -38,14 +39,24 @@ export const AddOrEditDialog = observer(() => {
   const store = methodistStore;
   const { getHomeWorks } = homeworkStore;
 
-  const statusTypesOptions = Object.values(
-    store.currentCourse?.id ? StatusEnum : AddStatusEnum,
-  ).map((el, index) => getOptionMui(statusTypesKeys[index], el));
+  const {
+    currentCourse,
+    isDialogOpen,
+    setIsDialogOpen,
+    setCurrentCourse,
+    validateSchema,
+    editCourse,
+    createCourse,
+  } = coursesStore;
+
+  const statusTypesOptions = Object.values(currentCourse?.id ? EditStatusEnum : AddStatusEnum).map(
+    (el, index) => getOptionMui(statusTypesKeys[index], el),
+  );
 
   useEffect(() => {
-    if (store.currentCourse.type) {
+    if (currentCourse?.type) {
       let type: string;
-      switch (store.currentCourse.type) {
+      switch (currentCourse?.type) {
         case 'blocks':
           type = 'block';
           break;
@@ -58,7 +69,7 @@ export const AddOrEditDialog = observer(() => {
       }
       getHomeWorks('active', 5, type);
     }
-  }, [store.currentCourse.type]);
+  }, [currentCourse?.type]);
 
   return (
     <Dialog
@@ -69,11 +80,11 @@ export const AddOrEditDialog = observer(() => {
       }}
       maxWidth="md"
       fullWidth
-      onClose={store.closeDialog}
-      open={store.isDialogOpen}
+      onClose={() => setIsDialogOpen(false)}
+      open={isDialogOpen}
     >
-      <DialogTitle onClose={store.closeDialog}>
-        {store.currentCourse?.id ? 'Редактирование курса' : 'Добавление нового курса'}
+      <DialogTitle onClose={() => setIsDialogOpen(false)}>
+        {currentCourse?.id ? 'Редактирование курса' : 'Добавление нового курса'}
       </DialogTitle>
       <DialogContent dividers>
         <Stack spacing={1}>
@@ -81,22 +92,30 @@ export const AddOrEditDialog = observer(() => {
             <Grid item xs={12} sm={6}>
               <TextField
                 label="Наименование"
-                value={store.currentCourse.title}
-                onChange={({ currentTarget: { value } }) => (store.currentCourse.title = value)}
+                value={currentCourse?.title}
+                onChange={event =>
+                  setCurrentCourse({
+                    title: event.currentTarget.value,
+                  })
+                }
                 fullWidth
                 variant="outlined"
                 size="small"
-                error={isError(store, 'title')}
+                error={isError('title')}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth size="small">
                 <InputLabel>Уровень</InputLabel>
                 <Select
-                  value={store.currentCourse.level}
+                  value={currentCourse?.level}
                   label="Уровень"
-                  onChange={({ target: { value } }) => (store.currentCourse.level = value)}
-                  error={isError(store, 'level')}
+                  onChange={event =>
+                    setCurrentCourse({
+                      level: event.target.value,
+                    })
+                  }
+                  error={isError('level')}
                 >
                   {levelOptions}
                 </Select>
@@ -106,10 +125,14 @@ export const AddOrEditDialog = observer(() => {
               <FormControl fullWidth size="small">
                 <InputLabel>Тип</InputLabel>
                 <Select
-                  value={store.currentCourse.type}
+                  value={currentCourse?.type}
                   label="Тип"
-                  onChange={({ target: { value } }) => (store.currentCourse.type = value)}
-                  error={isError(store, 'type')}
+                  onChange={event =>
+                    setCurrentCourse({
+                      type: event.target.value,
+                    })
+                  }
+                  error={isError('type')}
                 >
                   {groupTypesOptions}
                 </Select>
@@ -119,10 +142,14 @@ export const AddOrEditDialog = observer(() => {
               <FormControl fullWidth size="small">
                 <InputLabel>Статус</InputLabel>
                 <Select
-                  value={store.currentCourse.status}
+                  value={currentCourse?.status}
                   label="Статус"
-                  onChange={({ target: { value } }) => (store.currentCourse.status = value)}
-                  error={isError(store, 'status')}
+                  onChange={event =>
+                    setCurrentCourse({
+                      status: event.target.value as StatusTypes,
+                    })
+                  }
+                  error={isError('status')}
                 >
                   {statusTypesOptions}
                 </Select>
@@ -135,10 +162,10 @@ export const AddOrEditDialog = observer(() => {
       <DialogActions>
         <Button
           variant="primary"
-          onClick={store.addOrEdit}
-          disabled={!store.validateSchema.isValidSync(store.currentCourse)}
+          onClick={currentCourse?.id ? editCourse : createCourse}
+          // disabled={!validateSchema.isValidSync(currentCourse)}
         >
-          {store.currentCourse?.id ? 'Изменить' : 'Сохранить'}
+          {currentCourse?.id ? 'Изменить' : 'Сохранить'}
         </Button>
       </DialogActions>
     </Dialog>

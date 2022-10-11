@@ -14,7 +14,12 @@ import {
 import { WithPagination } from 'app/types/WithPagination';
 import { SearchCoursesParamsType } from '../stores/coursesStore';
 import { PaginationResponse } from '../types/PaginationResponse';
-import { CourseViewModel } from '../viewModels/CourseViewModel';
+import { CreatOrEditWorkRequestT } from '../types/WorkTypes';
+import { CourseViewModel, CourseViewModelAddEdit } from '../viewModels/CourseViewModel';
+
+export type CreateCoursePayloadType = Pick<CourseType, 'level' | 'status' | 'title' | 'type'> & {
+  works?: { index: number; workId: string }[];
+};
 
 const coursesService = {
   getAllCourses: async (
@@ -23,18 +28,30 @@ const coursesService = {
     const { data } = await instance.get(Paths.Courses, { params });
     return data;
   },
+
+  editCourse: async (model: Partial<CourseType>): Promise<CourseType> => {
+    const { data } = await instance.post(`${Paths.Courses}/${model.id}`, model);
+    return data;
+  },
+
+  createCourse: async (model: CreateCoursePayloadType): Promise<ShortCourseType> => {
+    const { data } = await instance.post(Paths.Courses, model);
+    return data;
+  },
+
+  /// ////////////////////////////////////////
   getOneCourse: async (id: string): Promise<CourseType> => {
     const { data } = await instance.get(`${Paths.Courses}/${id}`);
     return data;
   },
-  createCourse: async (options: RequestCreateCourse): Promise<ShortCourseType> => {
-    const { data } = await instance.post(Paths.Courses, options);
-    return data;
-  },
-  editCourse: async (options: RequestEditCourse, id: string): Promise<CourseType> => {
-    const { data } = await instance.post(`${Paths.Courses}/${id}`, options);
-    return data;
-  },
+  // createCourse: async (options: RequestCreateCourse): Promise<ShortCourseType> => {
+  //   const { data } = await instance.post(Paths.Courses, options);
+  //   return data;
+  // },
+  // editCourse: async (options: RequestEditCourse, id: string): Promise<CourseType> => {
+  //   const { data } = await instance.post(`${Paths.Courses}/${id}`, options);
+  //   return data;
+  // },
   deleteCourse: async (id: string): Promise<ResponseDeleteCourse> => {
     const { data } = await instance.delete(`${Paths.Courses}/${id}`);
     return data;
