@@ -1,10 +1,13 @@
 // Containers
 
 import { WorksT } from 'app/types/GroupTypes';
+import { PersonalRecordT } from 'app/types/ResponseLoadMeBaseT';
+import { PersonalRecordsArrT } from 'utils/personalRecordsArr';
 
 export interface WeeklyGrowthProps {
   className?: string;
-  weeklyGrowth: SkillGrowProps[];
+  // weeklyGrowth: SkillGrowProps[];
+  records?: PersonalRecordsArrT[];
 }
 
 export interface HomeworksProps {
@@ -45,6 +48,7 @@ export interface HomeworkProps {
 
 export interface SkillGrowProps {
   skillTitle: string;
+  code?: string;
   color: string;
   percents: number;
   id: number;

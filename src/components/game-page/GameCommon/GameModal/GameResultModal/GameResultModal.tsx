@@ -13,7 +13,7 @@ export const GameResultModal = (props: any) => {
           <span className={styles.resultWrapper_result}>
             Время: <span className={styles.resultWrapper_result_count}>{time}</span>
           </span>
-          {success && (
+          {success > 0 && (
             <span className={styles.resultWrapper_result}>
               Верных ответов: <span className={styles.resultWrapper_result_count}>{success}</span>
             </span>

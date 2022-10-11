@@ -3,24 +3,28 @@ const randomPercent = () => Math.floor(Math.random() * 100);
 export const weeklyGrowth = [
   {
     skillTitle: 'Логика',
+    type: 'logic',
     color: 'red',
     id: +new Date().toDateString(),
     percents: randomPercent(),
   },
   {
     skillTitle: 'Внимание',
+    type: 'attention',
     color: 'violet',
     id: +new Date().toDateString(),
     percents: randomPercent(),
   },
   {
     skillTitle: 'Мышление',
+    type: 'mind',
     color: 'aquamarine',
     id: +new Date().toDateString(),
     percents: randomPercent(),
   },
   {
     skillTitle: 'Концентрация',
+    type: 'vision',
     color: 'yellow',
     id: +new Date().toDateString(),
     percents: randomPercent(),

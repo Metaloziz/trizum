@@ -397,20 +397,20 @@ export const GameModal: FC<PropsT> = observer(props => {
 
               {game.code === 'battleColors' && (
                 <Grid container spacing={2}>
+                  {/* <Grid item xs={12} sm={6}> */}
+                  {/*  <TextField */}
+                  {/*    label="Время на прохождение" */}
+                  {/*    value={time} */}
+                  {/*    onChange={({ currentTarget: { value } }) => setTime(value)} */}
+                  {/*    fullWidth */}
+                  {/*    inputProps={{ type: 'number' }} */}
+                  {/*    variant="outlined" */}
+                  {/*    size="small" */}
+                  {/*  /> */}
+                  {/* </Grid> */}
                   <Grid item xs={12} sm={6}>
                     <TextField
-                      label="Время на прохождение"
-                      value={time}
-                      onChange={({ currentTarget: { value } }) => setTime(value)}
-                      fullWidth
-                      inputProps={{ type: 'number' }}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Кол-во уровней в игре"
+                      label={`Кол-во уровней в игре ${levels}`}
                       value={levels}
                       onChange={({ currentTarget: { value } }) => setLevels(value)}
                       fullWidth

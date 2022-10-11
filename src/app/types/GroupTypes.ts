@@ -1,3 +1,4 @@
+import { GamePresetT } from 'app/types/GameTypes';
 import moment from 'moment';
 
 import { TimeZoneType } from 'app/types/TimeZoneType';
@@ -32,6 +33,7 @@ export type WorkT = {
   title: string;
   text: null | string;
   type: string;
+  gamePresets: Omit<GamePresetT, 'settings'>[];
   createdAt: {
     date: string;
     timezone_type: number;
@@ -101,6 +103,7 @@ export class ResponseOneGroup {
 
   teacherId: string = '';
 }
+
 export class LessonT {
   id: string;
 

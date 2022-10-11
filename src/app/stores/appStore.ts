@@ -74,7 +74,7 @@ export class EmptyUser {
 
   password: string;
 
-  personalRecord?: PersonalRecordT;
+  personalRecord: PersonalRecordT;
 
   constructor() {
     this.id = '';
@@ -89,6 +89,13 @@ export class EmptyUser {
       date: '',
       timezone_type: 0,
       timezone: '',
+    };
+    this.personalRecord = {
+      attention: 0,
+      logic: 0,
+      memory: 0,
+      mind: 0,
+      vision: 0,
     };
     this.password = '';
     this.sex = '';
@@ -149,6 +156,7 @@ class AppStore {
           this.isLoggedIn = true;
           this.role = res.data.role as Roles;
           this.user = res.data;
+          console.log(this.user);
           this.isInitialized = true;
         });
       }

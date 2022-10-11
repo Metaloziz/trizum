@@ -8,9 +8,11 @@ import { canSwitchToT, ParentT, ResponseOneUser } from 'app/types/UserTypes';
 export type ResponseLoadMeParentT = Omit<ParentT, 'avatar' | 'role' | 'sex' | 'birthdate' | 'city'>;
 
 export type PersonalRecordT = {
-  a: Nullable<number>;
-  b: Nullable<number>;
-  c: Nullable<number>;
+  attention: number;
+  logic: number;
+  memory: number;
+  mind: number;
+  vision: number;
 };
 
 export type GroupsDataT = {

@@ -1,12 +1,19 @@
 export const changedViewScreen = (widthScreen: number, gameViewSize: number) => {
+  if (widthScreen >= 1200) {
+    gameViewSize = widthScreen - 700;
+    return gameViewSize;
+  }
   if (widthScreen <= 1000 && widthScreen > 760) {
-    return (gameViewSize = widthScreen - 300);
+    gameViewSize = widthScreen - 300;
+    return gameViewSize;
   }
   if (widthScreen < 760) {
-    return (gameViewSize = widthScreen - 200);
+    gameViewSize = widthScreen - 220;
+    return gameViewSize;
   }
   if (widthScreen < 420) {
-    return (gameViewSize = 200);
+    gameViewSize = 200;
+    return gameViewSize;
   }
   return gameViewSize;
 };
