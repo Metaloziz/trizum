@@ -16,6 +16,7 @@ import {
   MenuItem,
   Paper,
   Select,
+  SelectChangeEvent,
   Stack,
   TextField,
   Typography,
@@ -29,6 +30,7 @@ import { MethodistMainFilterViewModel } from './models/MethodistMainFilterViewMo
 
 import { GroupLevels } from 'app/enums/GroupLevels';
 import { Nullable } from 'app/types/Nullable';
+import { Moment } from 'moment';
 
 interface FilterProps {
   onChange: (filter: Nullable<MethodistMainFilterViewModel>) => void;
@@ -54,6 +56,14 @@ export const Filter = observer((props: FilterProps) => {
     setFilter(_defaultFilter());
     props.onChange(null);
   };
+
+const [title,setTitle]=('');
+const [level,setLevel]=('');
+const [createdDataSince, setCreatedDataSince] = useState<Moment | null>(null);
+
+  const onSearchClick = () => {
+
+  }
  
 
   return (
@@ -72,10 +82,8 @@ export const Filter = observer((props: FilterProps) => {
               <Grid item xs={12} sm={4}>
                 <TextField
                   label="Наименование"
-                  value={filter.title}
-                  onChange={({ target: { value } }) =>
-                    setFilter(prev => ({ ...prev, title: value }))
-                  }
+                  value={title}
+                  onChange={e=>setTitle(e.target.value.trim())}
                   fullWidth
                   variant="outlined"
                   size="small"

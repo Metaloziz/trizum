@@ -15,6 +15,14 @@ export interface CourseViewModel {
   worksCount?: number;
   createdAt?: TimeZoneType;
 }
+
+export type RequestCoursesForFilter = {
+  page?: number | null,
+  title?: string | null;
+  level?: string | null;
+  createdSince?: string | null;
+}
+
 export type CourseViewModelAddEdit = Omit<CourseViewModel, 'works' | 'status'> & {
   works?: { index: number; workId: string }[];
   status?: string;

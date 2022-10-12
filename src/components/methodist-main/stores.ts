@@ -7,7 +7,7 @@ import { MethodistMainRepository } from './repositories';
 
 import { StoreBase } from 'app/stores/StoreBase';
 import { Nullable } from 'app/types/Nullable';
-import { CourseViewModel } from 'app/viewModels/CourseViewModel';
+import { CourseViewModel, RequestCoursesForFilter } from 'app/viewModels/CourseViewModel';
 import { StatusTypes } from 'app/enums/StatusTypes';
 import { getCorrectDate } from 'assets/helperFunctions/helperFunctions';
 
@@ -21,6 +21,15 @@ export class MethodistMainStore extends StoreBase {
     type: null,
     status: null,
   });
+
+  private searchDefaultCoursesParams: RequestCoursesForFilter = {
+    page:0,
+    title:'',
+    level:'',
+    createdSince:''
+  };
+
+  searchCoursesParams: RequestCoursesForFilter = { ...this.searchDefaultCoursesParams };
 
   pagination: {
     page: number;
@@ -65,6 +74,7 @@ export class MethodistMainStore extends StoreBase {
   list = async () =>
     this.execute(async () => {
       const paginationResponse = await this._repository.list(this.pagination.page);
+      // const paginationResponse = await this._repository.list(this.searchCoursesParams);
       this.entities = paginationResponse.items;
       // this.entities = paginationResponse.items.filter(item=>item.status!=="archive");
       this.pagination = {
@@ -180,6 +190,10 @@ export class MethodistMainStore extends StoreBase {
     }
 
     return this.filtered;
+  }
+
+  setSearchCoursesParams(params:RequestCoursesForFilter){
+    this.searchCoursesParams = { ...this.searchCoursesParams, ...params };
   }
 }
 
