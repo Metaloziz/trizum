@@ -1,7 +1,8 @@
 import { Checkbox, TableCell, TableRow } from '@mui/material';
 import homeworkStore from 'app/stores/homeworkStore';
 import { useState, FC } from 'react';
-import coursesStore, { NewWorkType } from '../../../app/stores/coursesStore';
+import coursesStore from '../../../app/stores/coursesStore';
+import {NewWorkType} from "../../../app/types/NewWorkType";
 import { HomeworkViewModel } from '../../../app/viewModels/HomeworkViewModel';
 import { getEnumName } from '../../../utils/getEnumName';
 

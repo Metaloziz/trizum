@@ -11,7 +11,7 @@ import { removeEmptyFields } from '../../utils/removeEmptyFields';
 import { StatusTypes } from '../enums/StatusTypes';
 import homeWorksService from '../services/homeWorksService';
 import { PaginationResponse } from '../types/PaginationResponse';
-import { SearchCoursesParamsType } from './coursesStore';
+import {SearchCoursesParamsType} from "../types/SearchCoursesParamsType";
 
 export type SearchHomeWorksParamsType = {
   page: number;

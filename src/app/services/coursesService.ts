@@ -7,7 +7,8 @@ import {
   CourseType,
 } from 'app/types/CourseTypes';
 import { WithPagination } from 'app/types/WithPagination';
-import { SearchCoursesParamsType, NewCourseType } from '../stores/coursesStore';
+import {NewCourseType} from "../types/NewCourseType";
+import {SearchCoursesParamsType} from "../types/SearchCoursesParamsType";
 
 export type CreateCoursePayloadType = Pick<CourseType, 'level' | 'status' | 'title' | 'type'> & {
   works?: { index: number; workId: string }[];
