@@ -71,7 +71,7 @@ export default class extends Component<any, any> implements Game {
         value : 0
       },
       {
-        name : 'colors',
+        name : 'groupsCount',
         type : 'select',
         title : 'Кол-во цветов',
         option : [
@@ -94,7 +94,7 @@ export default class extends Component<any, any> implements Game {
 
     return {
       ...size.option,
-      colors : result.colors
+      groupsCount : result.groupsCount
     };
   }
 

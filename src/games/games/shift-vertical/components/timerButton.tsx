@@ -7,7 +7,7 @@ export default class extends PureComponent<any, any> {
 
   render() {
     const {
-      delay = 2,
+      cycleTime = 2,
       onPress
     } = this.props;
 
@@ -18,10 +18,10 @@ export default class extends PureComponent<any, any> {
     >
       <View style={styles.wrapProgress}>
         <Timer
-          time={delay}
+          time={cycleTime}
           onEnd={onPress}
           renderTime={(t : any) => {
-            let progress = ((delay - t) / delay) * 100;
+            let progress = ((cycleTime - t) / cycleTime) * 100;
 
             if(progress > 100) {
               progress = 100;

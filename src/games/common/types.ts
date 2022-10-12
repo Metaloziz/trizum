@@ -8,7 +8,7 @@ export interface GameProps {
 
 export interface GameResult {
   result : 'win' | 'lose' | 'end';
-  time : number;
+  time? : number;
   timeDiff? : number;
   score?: number;
   failed?: number;

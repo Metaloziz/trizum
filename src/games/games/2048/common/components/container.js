@@ -67,7 +67,7 @@ class Container extends Component {
 
     getRandomTiles() {
         var ret = [];
-        for (var i = 0; i < this.props.startTiles; i++) {
+        for (var i = 0; i < this.props.elementsTotal; i++) {
             ret.push(this.getRandomTile())
         }
         return ret;

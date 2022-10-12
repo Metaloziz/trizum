@@ -12,10 +12,10 @@ export default class extends Component<any, any> {
     super(props);
 
     const {
-      colors = 2,
+      blinksCount = 2,
     } = props;
 
-    this.activeColors = arrayShuffle(GameColors.slice()).slice(0, colors);
+    this.activeColors = arrayShuffle(GameColors.slice()).slice(0, blinksCount);
 
     const colorRight = {
       title : this.getRandValue(this.activeColors).title,
