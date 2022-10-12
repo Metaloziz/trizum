@@ -163,9 +163,7 @@ class AppStore {
     });
   };
 
-  logout = () => {
-    usersStore.resetUsersFilter();
-  };
+  logout = () => usersStore.resetUsersFilter();
 
   setRole = (role: Roles): void => {
     this.role = role;

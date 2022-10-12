@@ -50,7 +50,7 @@ export const GameModal: FC<PropsT> = observer(props => {
   const [colorModal, setColorModal] = useState<boolean>(false);
   const [template, setTemplate] = useState<string>(gamePresetName || '');
   const [timeComplete, setTimeComplete] = useState<string>(
-    settings?.timeComplete?.toString() || '1',
+    settings?.timeComplete?.toString() || '10',
   );
   const [delay, setDelay] = useState<string>(settings?.delay?.toString() || '1');
   const [level, setLevel] = useState<string>(gamePreset?.gamePreset?.level);
@@ -77,7 +77,7 @@ export const GameModal: FC<PropsT> = observer(props => {
   const [colors, setColors] = useState<ColorObj[]>(colorsObj);
   const [size, setSize] = useState(settings?.size?.toString() || '1');
   const [startTiles, setStartTiles] = useState(settings?.startTiles?.toString() || '1');
-  const [time, setTime] = useState(settings?.time?.toString() || '1');
+  const [time, setTime] = useState(settings?.time?.toString() || '10');
   const [levels, setLevels] = useState(settings?.levels?.toString() || '1');
   const [colores, setColores] = useState(settings?.colores?.toString() || '1');
 
@@ -121,7 +121,7 @@ export const GameModal: FC<PropsT> = observer(props => {
     setSpeed(settings?.speed?.toString() || '');
     setBlinksCount(settings?.blinksCount?.toString() || '');
     setDescription(settings?.description || '');
-    setTime(settings?.time?.toString() || '');
+    setTime(settings?.time?.toString() || settings?.timeComplete?.toString() || '');
     setLevels(settings?.levels?.toString() || '');
     setColores(settings?.colores?.toString() || '');
     setSize(settings?.size?.toString() || '');
@@ -154,7 +154,7 @@ export const GameModal: FC<PropsT> = observer(props => {
           groupsCount: Number(groupsCount),
           size: Number(size),
           startTiles: Number(startTiles),
-          time: Number(time),
+          time: Number(time || timeComplete),
           levels: Number(levels),
           colores: Number(colores),
           description,
@@ -187,7 +187,7 @@ export const GameModal: FC<PropsT> = observer(props => {
           groupsCount: Number(groupsCount),
           size: Number(size),
           startTiles: Number(startTiles),
-          time: Number(time),
+          time: Number((time > '0' && time) || timeComplete),
           levels: Number(levels),
           colores: Number(colores),
           description,
@@ -232,15 +232,7 @@ export const GameModal: FC<PropsT> = observer(props => {
         <Stack spacing={1}>
           <div className={styles.gameModalWrapper}>
             <div className={styles.gameModalWrapper_settings}>
-              {/* <section> */}
-              <Grid
-                xs={12}
-                // maxWidth="100%"
-                direction="row"
-                container
-                spacing={2}
-                marginBottom={2}
-              >
+              <Grid xs={12} direction="row" container spacing={2} marginBottom={2}>
                 <Grid item xs={12} sm={6}>
                   <TextField
                     label=" Наименование шаблона"
@@ -397,16 +389,6 @@ export const GameModal: FC<PropsT> = observer(props => {
 
               {game.code === 'battleColors' && (
                 <Grid container spacing={2}>
-                  {/* <Grid item xs={12} sm={6}> */}
-                  {/*  <TextField */}
-                  {/*    label="Время на прохождение" */}
-                  {/*    value={time} */}
-                  {/*    onChange={({ currentTarget: { value } }) => setTime(value)} */}
-                  {/*    fullWidth */}
-                  {/*    inputProps={{ type: 'number' }} */}
-                  {/*    variant="outlined" */}
-                  {/*    size="small" */}
-                  {/*  /> */}
                   {/* </Grid> */}
                   <Grid item xs={12} sm={6}>
                     <TextField
@@ -598,20 +580,35 @@ export const GameModal: FC<PropsT> = observer(props => {
             </div>
           </div>
         </Stack>
-        <div className={styles.btn}>
-          <Button
-            onClick={deletedPreset}
-            variant="reset"
-            disabled={gamePreset?.gamePreset?.status !== 'draft'}
-          >
-            Удалить настройки
-          </Button>
-          <Button
-            disabled={gamePreset?.gamePreset?.status === 'active' || template.length < 1}
-            onClick={savePreset}
-          >
-            Сохранить
-          </Button>
+        <div className={styles.btnBlock}>
+          <div className={styles.btnBlock_btn}>
+            {gamePreset?.gamePreset?.status === 'archive' && (
+              <span>Не возможно удалить архивные настройки</span>
+            )}
+            {!!gamePreset?.usedInWorks?.length && (
+              <span>Настройки используются в домашнем задании</span>
+            )}
+            <Button
+              onClick={deletedPreset}
+              variant="reset"
+              disabled={
+                gamePreset?.gamePreset?.status === 'archive' || !!gamePreset?.usedInWorks?.length
+              }
+            >
+              Удалить настройки
+            </Button>
+          </div>
+          <div className={styles.btnBlock_btn}>
+            {gamePreset?.gamePreset?.status === 'active' && (
+              <span>Нельзя изменять активные настройки</span>
+            )}
+            <Button
+              disabled={gamePreset?.gamePreset?.status === 'active' || template.length < 1}
+              onClick={savePreset}
+            >
+              Сохранить
+            </Button>
+          </div>
         </div>
       </DialogContent>
     </Dialog>

@@ -63,6 +63,7 @@ const Mental: FC<Props> = props => {
   };
 
   const setPreset = (data: Option) => {
+    setStarted(false);
     getPreset(data.value);
   };
 
