@@ -116,8 +116,6 @@ class MethodistMainStore extends StoreBase {
     const newStatus =
       this.currentCourse.status === StatusTypes.active ? StatusTypes.removal : StatusTypes.archive;
 
-    console.log('newStatus', [newStatus]);
-
     const currentEntity = toJS(this.coursesArray).find(ent => ent.id === id);
     const status = currentEntity?.status;
     try {
@@ -130,7 +128,6 @@ class MethodistMainStore extends StoreBase {
         await this.addOrEdit();
       } else {
         const res = await coursesService.deleteCourse(id);
-        console.log(res);
         await this.pull();
       }
     } catch (error) {
@@ -140,10 +137,6 @@ class MethodistMainStore extends StoreBase {
 
   pull = async () => {
     await this.execute(async () => this.list());
-  };
-
-  onChangeFilter = (filter: Nullable<MethodistMainFilterViewModel>) => {
-    this.filter = filter;
   };
 
   changePage = async (page: number) => {

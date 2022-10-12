@@ -15,14 +15,13 @@ import Pagination from '@mui/material/Pagination';
 
 import { LoadingIndicator } from 'components/franchising-page/ui/LoadingIndicator';
 import { observer } from 'mobx-react-lite';
-import React, { useEffect, ChangeEvent, useState } from 'react';
+import React, { useEffect, ChangeEvent, useState, useCallback } from 'react';
 import { StatusTypes } from '../../app/enums/StatusTypes';
 import coursesStore from '../../app/stores/coursesStore';
 import styles from '../users-page/UsersPage.module.scss';
 
 import { AddOrEditDialog } from './AddOrEditDialog';
 import { CourseItem } from './CourseItem/CourseItem';
-import { Filter } from './Filter';
 
 const MethodistMain = observer(() => {
   const {
@@ -33,7 +32,6 @@ const MethodistMain = observer(() => {
     editCourse,
     isLoading,
     setIsDialogOpen,
-    onChangeFilter,
     setCurrentCourse,
   } = coursesStore;
 
@@ -58,6 +56,11 @@ const MethodistMain = observer(() => {
       editCourse();
     }
   };
+
+  const setFilter: typeof setSearchCoursesParams = useCallback(params => {
+    setSearchCoursesParams(params);
+    getCourses();
+  }, []);
 
   if (isLoading) {
     return <LoadingIndicator isLoading={isLoading} />;
@@ -87,7 +90,8 @@ const MethodistMain = observer(() => {
             >
               Добавить курс
             </Button>
-            <Filter onChange={onChangeFilter} />
+            {/* <Filter setSearchCoursesParams={setFilter}
+             filterData={filterData} /> */}
           </Stack>
         </Box>
         <TableContainer component={Paper}>

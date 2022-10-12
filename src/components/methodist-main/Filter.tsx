@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import ClearIcon from '@mui/icons-material/Clear';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SearchIcon from '@mui/icons-material/Search';
@@ -14,46 +12,45 @@ import {
   Grid,
   InputLabel,
   MenuItem,
-  Paper,
   Select,
   Stack,
   TextField,
   Typography,
 } from '@mui/material';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import ru from 'dayjs/locale/ru';
-import { observer } from 'mobx-react';
-import { SearchCoursesParamsType } from '../../app/stores/coursesStore';
-
-import { MethodistMainFilterViewModel } from './models/MethodistMainFilterViewModel';
 
 import { GroupLevels } from 'app/enums/GroupLevels';
-import { Nullable } from 'app/types/Nullable';
+import ru from 'dayjs/locale/ru';
+import { observer } from 'mobx-react';
+import { useState, FC } from 'react';
+import { FilterData } from '../../app/types/FilterData';
+import { SearchCoursesParamsType } from '../../app/types/SearchCoursesParamsType';
 
-interface FilterProps {
-  onChange: (filter: Partial<SearchCoursesParamsType>) => void;
-}
+type FilterProps = {
+  setSearchCoursesParams: (filter: Partial<SearchCoursesParamsType>) => void;
+  filterData: FilterData;
+};
 
-export const Filter = observer((props: FilterProps) => {
-  const _defaultFilter = (): MethodistMainFilterViewModel => ({
+export const Filter: FC<FilterProps> = observer(({ filterData, setSearchCoursesParams }) => {
+  const defaultFilter: FilterData = {
     title: '',
     level: '',
-    createdAt: null,
-  });
+    created_since: '',
+  };
 
-  const [filter, setFilter] = useState(_defaultFilter());
+  const [filter, setFilter] = useState<FilterData>(defaultFilter);
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   const applyFilter = () => {
-    props.onChange(filter);
+    setSearchCoursesParams(filter);
   };
 
   const clearFilter = () => {
     // setOpen(false);
-    setFilter(_defaultFilter());
-    props.onChange({});
+    setFilter(defaultFilter);
+    setSearchCoursesParams({});
   };
 
   return (
@@ -73,9 +70,7 @@ export const Filter = observer((props: FilterProps) => {
                 <TextField
                   label="Наименование"
                   value={filter.title}
-                  onChange={({ target: { value } }) =>
-                    setFilter(prev => ({ ...prev, title: value }))
-                  }
+                  onChange={({ target: { value } }) => setFilter({ ...filter, title: value })}
                   fullWidth
                   variant="outlined"
                   size="small"
@@ -87,9 +82,7 @@ export const Filter = observer((props: FilterProps) => {
                   <Select
                     value={filter.level}
                     label="Уровень"
-                    onChange={({ target: { value } }) =>
-                      setFilter(prev => ({ ...prev, level: value }))
-                    }
+                    onChange={({ target: { value } }) => setFilter({ ...filter, level: value })}
                   >
                     <MenuItem value="">Не выбрано</MenuItem>
                     <MenuItem value={GroupLevels.easy}>{GroupLevels.easy}</MenuItem>
@@ -99,16 +92,16 @@ export const Filter = observer((props: FilterProps) => {
                 </FormControl>
               </Grid>
               <Grid item xs={12} sm={4}>
-                <DatePicker
-                  label="Дата создания"
-                  inputFormat="DD.MM.YYYY"
-                  mask="ДД.ММ.ГГГГ"
-                  value={filter.createdAt}
-                  onChange={date => setFilter(prev => ({ ...prev, createdAt: date }))}
-                  renderInput={params => (
-                    <TextField {...params} variant="outlined" size="small" fullWidth />
-                  )}
-                />
+                {/* <DatePicker */}
+                {/*  label="Дата создания" */}
+                {/*  inputFormat="DD.MM.YYYY" */}
+                {/*  mask="ДД.ММ.ГГГГ" */}
+                {/*  value={filter.createdAt} */}
+                {/*  onChange={date => setFilter(prev => ({ ...prev, createdAt: date }))} */}
+                {/*  renderInput={params => ( */}
+                {/*    <TextField {...params} variant="outlined" size="small" fullWidth /> */}
+                {/*  )} */}
+                {/* /> */}
               </Grid>
             </Grid>
           </AccordionDetails>
