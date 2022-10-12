@@ -154,13 +154,15 @@ export const AddOrEditDialog = observer(() => {
               </FormControl>
             </Grid>
           </Grid>
-          <TableWorks
-            worksArray={worksArray}
-            setCurrentCourse={setCurrentCourse}
-            setSearchParams={setSearchParams}
-            getHomeWorks={getHomeWorks}
-            pagination={pagination}
-          />
+          {currentCourse.type && (
+            <TableWorks
+              worksArray={worksArray}
+              setCurrentCourse={setCurrentCourse}
+              setSearchParams={setSearchParams}
+              getHomeWorks={getHomeWorks}
+              pagination={pagination}
+            />
+          )}
         </Stack>
       </DialogContent>
       <DialogActions>
