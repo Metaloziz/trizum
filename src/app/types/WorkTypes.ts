@@ -5,7 +5,7 @@ import { PaginationResponse } from 'app/types/PaginationResponse';
 export type PresetT = { gameId: string; id: string; name: string };
 
 export type RequestCreateWork = {
-  type: WorkTypes.HW;
+  type: WorkTypes;
   title: string;
   text: string;
   tests?: string[];

@@ -36,13 +36,15 @@ export const HomeworkPage = observer(() => {
     openDialog,
     worksArray,
     remove,
-    pagination,
     setSuccess,
     setError,
+    pagination,
+    clearSearchParams,
   } = homeworkStore;
   const { getGames, getPresets } = gamesStore;
 
   useEffect(() => {
+    clearSearchParams();
     getHomeWorks();
     getGames();
     getPresets();
@@ -146,7 +148,7 @@ export const HomeworkPage = observer(() => {
         </TableContainer>
         <div className={styles.pagination}>
           <Pagination
-            count={Math.ceil(pagination.total / pagination.perPage)}
+            count={pagination.total}
             color="primary"
             size="large"
             page={currentPage}

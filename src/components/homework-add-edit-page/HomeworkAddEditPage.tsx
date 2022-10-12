@@ -36,6 +36,7 @@ const defaultValues: DefaultValues = {
 const DEFAULT_GAME_PRESET_AMOUNT = 3;
 
 const HomeworkAddEditPage = observer(() => {
+  const { setCurrentCourse, currentCourse } = coursesStore;
   const { currentHomework, createHomework, editHomework, setCurrentWork } = worksStore;
   const { presets, games, getGames, getPresets, newPresets } = gamesStore;
 

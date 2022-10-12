@@ -1,13 +1,13 @@
-import { TimeZoneType } from 'app/types/TimeZoneType';
 import { GroupTypes } from 'app/enums/GroupTypes';
-import { HomeworkViewModel } from 'app/viewModels/HomeworkViewModel';
+import { TimeZoneType } from 'app/types/TimeZoneType';
 import { StatusTypes } from '../enums/StatusTypes';
+import { WorkTypes } from '../enums/WorkTypes';
 
 export type ResponseWork = {
   id: string;
   title: string;
   text: string;
-  type: string;
+  type: WorkTypes;
   gamePresetCount: number;
 };
 

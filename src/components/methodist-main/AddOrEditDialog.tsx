@@ -36,7 +36,6 @@ const levelOptions = Object.values(GroupLevels).map((el, index) =>
 );
 
 export const AddOrEditDialog = observer(() => {
-  const store = methodistStore;
   const { getHomeWorks } = homeworkStore;
 
   const {
@@ -53,25 +52,23 @@ export const AddOrEditDialog = observer(() => {
     (el, index) => getOptionMui(statusTypesKeys[index], el),
   );
 
-  useEffect(() => {
-    if (currentCourse?.type) {
-      let type: string;
-      switch (currentCourse?.type) {
-        case 'blocks':
-          type = 'block';
-          break;
-        case 'class':
-        case 'olympiad':
-          type = 'hw';
-          break;
-        default:
-          type = '';
-      }
-      getHomeWorks('active', 5, type);
-    }
-  }, [currentCourse?.type]);
-
-  const addCourse = () => {};
+  // useEffect(() => {
+  //   if (currentCourse?.type) {
+  //     let type: string;
+  //     switch (currentCourse?.type) {
+  //       case 'blocks':
+  //         type = 'block';
+  //         break;
+  //       case 'class':
+  //       case 'olympiad':
+  //         type = 'hw';
+  //         break;
+  //       default:
+  //         type = '';
+  //     }
+  //     getHomeWorks('active', 5, type);
+  //   }
+  // }, [currentCourse?.type]);
 
   return (
     <Dialog
@@ -117,7 +114,7 @@ export const AddOrEditDialog = observer(() => {
                       level: event.target.value,
                     })
                   }
-                  error={isError('level')}
+                  // error={isError('level')}
                 >
                   {levelOptions}
                 </Select>
@@ -134,7 +131,7 @@ export const AddOrEditDialog = observer(() => {
                       type: event.target.value,
                     })
                   }
-                  error={isError('type')}
+                  // error={isError('type')}
                 >
                   {groupTypesOptions}
                 </Select>
@@ -151,7 +148,7 @@ export const AddOrEditDialog = observer(() => {
                       status: event.target.value as StatusTypes,
                     })
                   }
-                  error={isError('status')}
+                  // error={isError('status')}
                 >
                   {statusTypesOptions}
                 </Select>

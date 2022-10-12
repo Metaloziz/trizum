@@ -24,12 +24,6 @@ import { AddOrEditDialog } from './AddOrEditDialog';
 import { CourseItem } from './CourseItem/CourseItem';
 import { Filter } from './Filter';
 
-export enum LevelHomeWork {
-  easy = 'Младшая группа',
-  medium = 'Средняя группа',
-  hard = 'Старшая группа',
-}
-
 const MethodistMain = observer(() => {
   const {
     getCourses,

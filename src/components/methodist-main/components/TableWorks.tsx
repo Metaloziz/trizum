@@ -5,28 +5,50 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TablePagination,
   TableRow,
-  Typography,
 } from '@mui/material';
-import { StatusTypes } from 'app/enums/StatusTypes';
+import Pagination from '@mui/material/Pagination';
 import homeworkStore from 'app/stores/homeworkStore';
 import { TableWorksRows } from 'components/methodist-main/components/TableWorksRows';
-import methodistStore from 'app/stores/methodistStore';
 import { observer } from 'mobx-react-lite';
-import { FC, useEffect } from 'react';
+import React, { useEffect, useState, ChangeEvent } from 'react';
 import coursesStore from '../../../app/stores/coursesStore';
-import { LoadingIndicator } from '../../franchising-page/ui/LoadingIndicator';
+import styles from '../../users-page/UsersPage.module.scss';
 
-export const TableWorks: FC = observer(() => {
+export const TableWorks = observer(() => {
   const { currentCourse } = coursesStore;
-  const { pagination, changePage, getHomeWorks } = homeworkStore;
+  const { getHomeWorks, setSearchParams, pagination } = homeworkStore;
+
+  useEffect(() => {
+    // if (currentCourse?.type) {
+    //   let type: string;
+    //   switch (currentCourse?.type) {
+    //     case 'blocks':
+    //       type = 'block';
+    //       break;
+    //     case 'class':
+    //     case 'olympiad':
+    //       type = 'hw';
+    //       break;
+    //     default:
+    //       type = '';
+    //   }
+    //
+    // }
+    setSearchParams({ status: 'active', type: '', page: 0, per_page: 5 });
+    // setSearchParams({ status: 'active' });
+    getHomeWorks();
+  }, []);
 
   console.log('currentCourse', [currentCourse]);
 
-  useEffect(() => {
-    getHomeWorks('', 5);
-  }, []);
+  const [currentPage, setCurrentPage] = useState(pagination.page + 1);
+
+  const onPageChange = (event: ChangeEvent<unknown>, newCurrentPage: number) => {
+    setSearchParams({ page: newCurrentPage - 1 });
+    setCurrentPage(newCurrentPage);
+    getHomeWorks();
+  };
 
   return (
     <>
@@ -42,10 +64,11 @@ export const TableWorks: FC = observer(() => {
                 },
               }}
             >
-              <TableCell role="checkbox" />
+              <TableCell role="checkbox">Добавить</TableCell>
               <TableCell>Наименование</TableCell>
               <TableCell width="auto">Описание</TableCell>
               <TableCell>Количество игр</TableCell>
+              <TableCell>Статус</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -53,18 +76,16 @@ export const TableWorks: FC = observer(() => {
           </TableBody>
         </Table>
       </TableContainer>
-
-      <TablePagination
-        rowsPerPageOptions={[pagination.perPage]}
-        component="div"
-        count={pagination.total}
-        rowsPerPage={pagination.perPage}
-        page={pagination.page}
-        onPageChange={(__, page) => changePage(page)}
-        labelDisplayedRows={({ from, to, count }) =>
-          `${from}–${to} из ${count !== -1 ? count : `больше чем ${to}`}`
-        }
-      />
+      <div className={styles.pagination}>
+        <Pagination
+          count={pagination.total}
+          color="primary"
+          size="large"
+          page={currentPage}
+          boundaryCount={1}
+          onChange={onPageChange}
+        />
+      </div>
     </>
   );
 });

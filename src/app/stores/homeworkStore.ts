@@ -7,21 +7,31 @@ import { HomeworkViewModel } from 'app/viewModels/HomeworkViewModel';
 import { makeObservable, observable, runInAction } from 'mobx';
 import * as yup from 'yup';
 import { MIN_NAMES_LENGTH } from '../../constants/constants';
+import { removeEmptyFields } from '../../utils/removeEmptyFields';
 import { StatusTypes } from '../enums/StatusTypes';
 import homeWorksService from '../services/homeWorksService';
 import { PaginationResponse } from '../types/PaginationResponse';
+import { SearchCoursesParamsType } from './coursesStore';
 
-type PaginationType = Omit<PaginationResponse<any>, 'items'>;
+export type SearchHomeWorksParamsType = {
+  page: number;
+  per_page: number;
+  total: number;
+  status: string;
+  type: string;
+};
 
 class HomeworkStore extends StoreBase {
   isDialogOpen: boolean = false;
 
   worksArray: HomeworkViewModel[] = [];
 
-  pagination: PaginationType = {
+  private searchHomeWorksParams: SearchHomeWorksParamsType = {
     page: 0,
-    perPage: 10,
+    per_page: 10,
     total: 0,
+    status: '',
+    type: '',
   };
 
   private _defaultOneWork: OneWorkResponseT = {
@@ -52,7 +62,6 @@ class HomeworkStore extends StoreBase {
       isDialogOpen: observable,
       oneWork: observable,
       presetsThisWork: observable,
-      pagination: observable,
     });
   }
 
@@ -76,20 +85,18 @@ class HomeworkStore extends StoreBase {
     this.isDialogOpen = false;
   };
 
-  getHomeWorks = async (status?: string, perPage?: number, type?: string) =>
+  getHomeWorks = async () =>
     this.execute(async () => {
-      const paginationResponse = await homeWorksService.getHomeWorks(
-        this.pagination.page,
-        status,
-        this.pagination.perPage,
-        type,
-      );
+      const params = removeEmptyFields(this.searchHomeWorksParams);
+
+      const paginationResponse = await homeWorksService.getHomeWorks(params);
 
       runInAction(() => {
         this.worksArray = paginationResponse.items;
-        this.pagination = {
+        this.searchHomeWorksParams = {
+          ...this.searchHomeWorksParams,
           page: paginationResponse.page,
-          perPage: paginationResponse.perPage,
+          per_page: paginationResponse.perPage,
           total: paginationResponse.total,
         };
       });
@@ -126,17 +133,12 @@ class HomeworkStore extends StoreBase {
     }
   };
 
-  changePage = async (page: number) => {
-    this.pagination.page = page;
-    this.execute(async () => this.getHomeWorks());
-  };
-
-  setSearchParams = (params: Partial<PaginationType>) => {
-    this.pagination = { ...this.pagination, ...params };
+  setSearchParams = (params: Partial<SearchHomeWorksParamsType>) => {
+    this.searchHomeWorksParams = { ...this.searchHomeWorksParams, ...params };
   };
 
   clearSearchParams = () => {
-    this.pagination = { page: 0, perPage: 5, total: 1 };
+    this.searchHomeWorksParams = { page: 0, per_page: 10, total: 1, type: '', status: '' };
   };
 
   setSuccess = (value: boolean | null) => {
@@ -159,6 +161,14 @@ class HomeworkStore extends StoreBase {
         .min(MIN_NAMES_LENGTH, `Минимальная длинна ${MIN_NAMES_LENGTH} символа`),
       status: yup.string().required('*'),
     });
+  }
+
+  get pagination(): Pick<SearchCoursesParamsType, 'total' | 'per_page' | 'page'> {
+    return {
+      page: this.searchHomeWorksParams.page,
+      per_page: this.searchHomeWorksParams.per_page,
+      total: Math.ceil(this.searchHomeWorksParams.total / this.searchHomeWorksParams.per_page),
+    };
   }
 }
 
