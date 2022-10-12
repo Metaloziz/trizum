@@ -20,6 +20,7 @@ import { InputRadio } from 'components/inputRadio/InputRadio';
 import { isError } from 'components/methodist-main/utils/IsError';
 import { Dialog } from 'components/rate/ui/Dialog';
 import TextEditor from 'components/text-editor/TextEditor';
+import { GameIdentifiers } from 'games';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { getOptionMui } from 'utils/getOption';
@@ -255,24 +256,26 @@ export const GameModal: FC<PropsT> = observer(props => {
                     </Select>
                   </FormControl>
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="Время выполнения"
-                    value={timeComplete}
-                    onChange={({ currentTarget: { value } }) => setTimeComplete(value)}
-                    fullWidth
-                    inputProps={{ type: 'number' }}
-                    variant="outlined"
-                    size="small"
-                  />
-                </Grid>
+                {game.code !== GameIdentifiers.shulte && (
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label={`Время выполнения ${timeComplete} сек.`}
+                      value={timeComplete}
+                      onChange={({ currentTarget: { value } }) => setTimeComplete(value)}
+                      fullWidth
+                      inputProps={{ type: 'number' }}
+                      variant="outlined"
+                      size="small"
+                    />
+                  </Grid>
+                )}
               </Grid>
               {game.code === 'shiftVertical' ? (
                 <>
                   <Grid container spacing={2}>
                     <Grid item xs={12} sm={6}>
                       <TextField
-                        label="Задержка"
+                        label={`Задержка ${delay} сек.`}
                         value={delay}
                         onChange={({ currentTarget: { value } }) => setDelay(value)}
                         fullWidth
