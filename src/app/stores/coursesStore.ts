@@ -1,18 +1,13 @@
 import coursesService, { CreateCoursePayloadType } from 'app/services/coursesService';
-import {
-  RequestEditCourse,
-  ShortCourseType,
-  ResponseWork,
-  CourseType,
-} from 'app/types/CourseTypes';
+import { ShortCourseType, CourseType } from 'app/types/CourseTypes';
 import { Nullable } from 'app/types/Nullable';
-import { makeAutoObservable, runInAction, observable, makeObservable } from 'mobx';
+import { runInAction, observable, makeObservable } from 'mobx';
 import * as yup from 'yup';
 import { execute } from '../../utils/execute';
 import { removeEmptyFields } from '../../utils/removeEmptyFields';
 import { GroupLevels } from '../enums/GroupLevels';
 import { StatusTypes } from '../enums/StatusTypes';
-import { CourseViewModel, CourseViewModelAddEdit } from '../viewModels/CourseViewModel';
+import { CourseViewModel } from '../viewModels/CourseViewModel';
 import { StoreBase } from './StoreBase';
 
 export type SearchCoursesParamsType = Pick<ShortCourseType, 'title' | 'level'> & {
@@ -31,8 +26,6 @@ class CoursesStore extends StoreBase {
 
   currentCourse: NewCourseType = null;
 
-  // homeworks: ResponseWork[] = [];
-
   isDialogOpen: boolean = false;
 
   private searchCoursesParams: SearchCoursesParamsType = {
@@ -49,7 +42,6 @@ class CoursesStore extends StoreBase {
     makeObservable(this, {
       getCourses: observable,
       createCourse: observable,
-      // homeworks: observable,
       isDialogOpen: observable,
       courses: observable,
     });
@@ -81,14 +73,11 @@ class CoursesStore extends StoreBase {
         };
 
         if (this.currentCourse.works) {
-          console.log('currentCourse', [this.currentCourse]);
           data.works = this.currentCourse.works?.map(el => ({
             index: Number(el.index),
             workId: el.workId,
           }));
         }
-
-        console.log('data', [data]);
 
         const res = await coursesService.createCourse(data);
         await this.getCourses();
@@ -144,32 +133,5 @@ class CoursesStore extends StoreBase {
       total: Math.ceil(this.searchCoursesParams.total / this.searchCoursesParams.per_page),
     };
   }
-
-  /// ////////////////////
-
-  // getOneCourse = async (id: string) => {
-  //   try {
-  //     const res = await coursesService.getOneCourse(id);
-  //     this.setCurrentCourse(res);
-  //   } catch (e) {
-  //     console.warn(e);
-  //   }
-  // };
-
-  // createCourse = async (data: RequestCreateCourse) => {
-  //   try {
-  //     await coursesService.createCourse(data);
-  //     await this.getCourses();
-  //   } catch (e) {
-  //     console.warn(e);
-  //   }
-  // };
-
-  // getHomeworks = async () => {
-  //   const res = await coursesService.getAllWorks();
-  //   runInAction(() => {
-  //     this.homeworks = res.reverse();
-  //   });
-  // };
 }
 export default new CoursesStore();
