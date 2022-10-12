@@ -111,10 +111,14 @@ class CoursesStore extends StoreBase {
 
   editCourse = async () => {
     await this.execute(async () => {
-      if (this.currentCourse) {
-        // await coursesService.editCourse(this.currentCourse);
-        await this.getCourses();
+      const newCourse = removeEmptyFields(this.currentCourse);
+
+      if (!newCourse.works.length) {
+        delete newCourse.works;
       }
+
+      await coursesService.editCourse(newCourse);
+      await this.getCourses();
     });
   };
 
