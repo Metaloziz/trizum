@@ -118,7 +118,9 @@ const MethodistMain = observer(() => {
                     course={course}
                     // onClick={() => store.openDialog(course)}
                     openDialogCallBack={() => {}}
-                    removeCallBack={() => deleteCurrentCourse(course.id, course.status)}
+                    removeCallBack={() =>
+                      deleteCurrentCourse(course.id, course.status as StatusTypes)
+                    }
                   />
                 ))
               ) : (

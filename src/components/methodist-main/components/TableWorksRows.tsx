@@ -1,16 +1,16 @@
 import { Checkbox, TableCell, TableRow } from '@mui/material';
 import homeworkStore from 'app/stores/homeworkStore';
-import { observer } from 'mobx-react-lite';
-import { useState } from 'react';
+import { useState, FC } from 'react';
 import coursesStore, { NewWorkType } from '../../../app/stores/coursesStore';
 import { HomeworkViewModel } from '../../../app/viewModels/HomeworkViewModel';
 import { getEnumName } from '../../../utils/getEnumName';
 
-export const TableWorksRows = observer(() => {
-  const { worksArray } = homeworkStore;
+type Props = {
+  worksArray: typeof homeworkStore.worksArray;
+  setCurrentCourse: typeof coursesStore.setCurrentCourse;
+};
 
-  const { setCurrentCourse } = coursesStore;
-
+export const TableWorksRows: FC<Props> = ({ worksArray, setCurrentCourse }) => {
   const [works, setWorks] = useState<NewWorkType[]>([]);
 
   const addWork = (work: HomeworkViewModel) => {
@@ -50,4 +50,4 @@ export const TableWorksRows = observer(() => {
       ))}
     </>
   );
-});
+};
