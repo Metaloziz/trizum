@@ -7,40 +7,11 @@ import { execute } from '../../utils/execute';
 import { removeEmptyFields } from '../../utils/removeEmptyFields';
 import { GroupLevels } from '../enums/GroupLevels';
 import { StatusTypes } from '../enums/StatusTypes';
-import { TimeZoneType } from '../types/TimeZoneType';
+import { FilterData } from '../types/FilterData';
+import { NewCourseType } from '../types/NewCourseType';
+import { SearchCoursesParamsType } from '../types/SearchCoursesParamsType';
 import { CourseViewModel } from '../viewModels/CourseViewModel';
 import { StoreBase } from './StoreBase';
-
-export type SearchCoursesParamsType = Pick<ShortCourseType, 'title' | 'level'> & {
-  per_page: number;
-  page: number;
-  total: number;
-  created_since: string;
-};
-
-export class NewWorkType {
-  index: number = 0;
-
-  workId: string = '';
-}
-
-export class NewCourseType {
-  id?: string = '';
-
-  type?: string = '';
-
-  title?: string = '';
-
-  level?: string = '';
-
-  status?: string = '';
-
-  worksCount?: number = 0;
-
-  works?: NewWorkType[] = [];
-
-  createdAt?: TimeZoneType = new TimeZoneType();
-}
 
 class CoursesStore extends StoreBase {
   courses: Nullable<ShortCourseType[]> = null;
@@ -49,14 +20,7 @@ class CoursesStore extends StoreBase {
 
   isDialogOpen: boolean = false;
 
-  private searchCoursesParams: SearchCoursesParamsType = {
-    per_page: 10,
-    page: 0,
-    total: 1,
-    title: '',
-    level: '',
-    created_since: '',
-  };
+  private searchCoursesParams = new SearchCoursesParamsType();
 
   constructor() {
     super();
@@ -127,10 +91,6 @@ class CoursesStore extends StoreBase {
     this.setCurrentCourse(new NewCourseType());
   };
 
-  onChangeFilter = (filter: Partial<SearchCoursesParamsType>) => {
-    this.searchCoursesParams = { ...this.searchCoursesParams, ...filter };
-  };
-
   setCurrentCourse = (course: NewCourseType) => {
     if (course === null) {
       this.currentCourse = new NewCourseType();
@@ -157,6 +117,14 @@ class CoursesStore extends StoreBase {
       page: this.searchCoursesParams.page,
       per_page: this.searchCoursesParams.per_page,
       total: Math.ceil(this.searchCoursesParams.total / this.searchCoursesParams.per_page),
+    };
+  }
+
+  get filterData(): FilterData {
+    return {
+      title: this.searchCoursesParams.title,
+      level: this.searchCoursesParams.level,
+      created_since: this.searchCoursesParams.created_since,
     };
   }
 }
