@@ -15,7 +15,7 @@ export type ResponseWork = {
 export type ShortCourseType = {
   id: string;
   type: string;
-  status: StatusTypes;
+  status: StatusTypes | '';
   title: string;
   level: string;
   worksCount: number;

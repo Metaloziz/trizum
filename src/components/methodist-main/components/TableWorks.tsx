@@ -10,38 +10,25 @@ import {
 import Pagination from '@mui/material/Pagination';
 import homeworkStore from 'app/stores/homeworkStore';
 import { TableWorksRows } from 'components/methodist-main/components/TableWorksRows';
-import { observer } from 'mobx-react-lite';
-import React, { useEffect, useState, ChangeEvent } from 'react';
+import React, { useState, ChangeEvent, FC } from 'react';
 import coursesStore from '../../../app/stores/coursesStore';
 import styles from '../../users-page/UsersPage.module.scss';
 
-export const TableWorks = observer(() => {
-  const { currentCourse } = coursesStore;
-  const { getHomeWorks, setSearchParams, pagination } = homeworkStore;
+type Props = {
+  worksArray: typeof homeworkStore.worksArray;
+  getHomeWorks: typeof homeworkStore.getHomeWorks;
+  setCurrentCourse: typeof coursesStore.setCurrentCourse;
+  setSearchParams: typeof homeworkStore.setSearchParams;
+  pagination: typeof homeworkStore.pagination;
+};
 
-  useEffect(() => {
-    // if (currentCourse?.type) {
-    //   let type: string;
-    //   switch (currentCourse?.type) {
-    //     case 'blocks':
-    //       type = 'block';
-    //       break;
-    //     case 'class':
-    //     case 'olympiad':
-    //       type = 'hw';
-    //       break;
-    //     default:
-    //       type = '';
-    //   }
-    //
-    // }
-    setSearchParams({ status: 'active', type: '', page: 0, per_page: 5 });
-    // setSearchParams({ status: 'active' });
-    getHomeWorks();
-  }, []);
-
-  console.log('currentCourse', [currentCourse]);
-
+export const TableWorks: FC<Props> = ({
+  worksArray,
+  getHomeWorks,
+  setCurrentCourse,
+  setSearchParams,
+  pagination,
+}) => {
   const [currentPage, setCurrentPage] = useState(pagination.page + 1);
 
   const onPageChange = (event: ChangeEvent<unknown>, newCurrentPage: number) => {
@@ -72,7 +59,7 @@ export const TableWorks = observer(() => {
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableWorksRows />
+            <TableWorksRows worksArray={worksArray} setCurrentCourse={setCurrentCourse} />
           </TableBody>
         </Table>
       </TableContainer>
@@ -88,4 +75,4 @@ export const TableWorks = observer(() => {
       </div>
     </>
   );
-});
+};

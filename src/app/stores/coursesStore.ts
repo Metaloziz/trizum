@@ -1,5 +1,5 @@
 import coursesService, { CreateCoursePayloadType } from 'app/services/coursesService';
-import { ShortCourseType, CourseType } from 'app/types/CourseTypes';
+import { ShortCourseType } from 'app/types/CourseTypes';
 import { Nullable } from 'app/types/Nullable';
 import { runInAction, observable, makeObservable } from 'mobx';
 import * as yup from 'yup';
@@ -7,6 +7,7 @@ import { execute } from '../../utils/execute';
 import { removeEmptyFields } from '../../utils/removeEmptyFields';
 import { GroupLevels } from '../enums/GroupLevels';
 import { StatusTypes } from '../enums/StatusTypes';
+import { TimeZoneType } from '../types/TimeZoneType';
 import { CourseViewModel } from '../viewModels/CourseViewModel';
 import { StoreBase } from './StoreBase';
 
@@ -17,14 +18,34 @@ export type SearchCoursesParamsType = Pick<ShortCourseType, 'title' | 'level'> &
   created_since: string;
 };
 
-export type NewWorkType = { index: number; workId: string };
+export class NewWorkType {
+  index: number = 0;
 
-export type NewCourseType = Nullable<Partial<Omit<CourseType, 'works'> & { works: NewWorkType[] }>>;
+  workId: string = '';
+}
+
+export class NewCourseType {
+  id?: string = '';
+
+  type?: string = '';
+
+  title?: string = '';
+
+  level?: string = '';
+
+  status?: string = '';
+
+  worksCount?: number = 0;
+
+  works?: NewWorkType[] = [];
+
+  createdAt?: TimeZoneType = new TimeZoneType();
+}
 
 class CoursesStore extends StoreBase {
   courses: Nullable<ShortCourseType[]> = null;
 
-  currentCourse: NewCourseType = null;
+  currentCourse = new NewCourseType();
 
   isDialogOpen: boolean = false;
 
@@ -44,6 +65,7 @@ class CoursesStore extends StoreBase {
       createCourse: observable,
       isDialogOpen: observable,
       courses: observable,
+      currentCourse: observable,
     });
   }
 
@@ -79,7 +101,7 @@ class CoursesStore extends StoreBase {
           }));
         }
 
-        const res = await coursesService.createCourse(data);
+        await coursesService.createCourse(data);
         await this.getCourses();
       }
 
@@ -98,7 +120,7 @@ class CoursesStore extends StoreBase {
 
   setIsDialogOpen = (isOpen: boolean) => {
     this.isDialogOpen = isOpen;
-    this.setCurrentCourse(null);
+    this.setCurrentCourse(new NewCourseType());
   };
 
   onChangeFilter = (filter: Partial<SearchCoursesParamsType>) => {
@@ -107,7 +129,7 @@ class CoursesStore extends StoreBase {
 
   setCurrentCourse = (course: NewCourseType) => {
     if (course === null) {
-      this.currentCourse = null;
+      this.currentCourse = new NewCourseType();
     } else {
       this.currentCourse = { ...this.currentCourse, ...course };
     }
