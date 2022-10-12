@@ -62,6 +62,7 @@ export class MethodistMainStore extends StoreBase {
     });
   }
 
+  
   openDialog = (editingEntity?: CourseViewModel) => {
     this.editingEntity = editingEntity ? { ...editingEntity } : this._defaultValue();
     this.isDialogOpen = true;
@@ -73,10 +74,10 @@ export class MethodistMainStore extends StoreBase {
 
   list = async () =>
     this.execute(async () => {
-      const paginationResponse = await this._repository.list(this.pagination.page);
-      // const paginationResponse = await this._repository.list(this.searchCoursesParams);
+      // const paginationResponse = await this._repository.list(this.pagination.page);
+
+      const paginationResponse = await this._repository.list(this.searchCoursesParams);
       this.entities = paginationResponse.items;
-      // this.entities = paginationResponse.items.filter(item=>item.status!=="archive");
       this.pagination = {
         page: paginationResponse.page,
         rowsPerPage: paginationResponse.perPage,
@@ -142,7 +143,7 @@ export class MethodistMainStore extends StoreBase {
   };
 
   changePage = async (page: number) => {
-    this.pagination.page = page;
+    this.searchCoursesParams.page = page;
     this.execute(async () => this.list());
   };
 
@@ -192,9 +193,12 @@ export class MethodistMainStore extends StoreBase {
     return this.filtered;
   }
 
-  setSearchCoursesParams(params:RequestCoursesForFilter){
+  setSearchCoursesParams = (params:RequestCoursesForFilter) =>{
     this.searchCoursesParams = { ...this.searchCoursesParams, ...params };
   }
+  
 }
+
+
 
 

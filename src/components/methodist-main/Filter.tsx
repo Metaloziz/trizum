@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import ClearIcon from '@mui/icons-material/Clear';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -31,6 +31,8 @@ import { MethodistMainFilterViewModel } from './models/MethodistMainFilterViewMo
 import { GroupLevels } from 'app/enums/GroupLevels';
 import { Nullable } from 'app/types/Nullable';
 import { Moment } from 'moment';
+import { RequestCoursesForFilter } from 'app/viewModels/CourseViewModel';
+import { MethodistMainStore } from './stores';
 
 interface FilterProps {
   onChange: (filter: Nullable<MethodistMainFilterViewModel>) => void;
@@ -42,7 +44,8 @@ export const Filter = observer((props: FilterProps) => {
     level: '',
     createdAt: null,
   });
-
+  const store = useMemo(() => new MethodistMainStore(), []);
+  const {setSearchCoursesParams} =  store
   const [filter, setFilter] = useState(_defaultFilter());
     
   const [open, setOpen] = useState(false);
@@ -57,12 +60,40 @@ export const Filter = observer((props: FilterProps) => {
     props.onChange(null);
   };
 
-const [title,setTitle]=('');
-const [level,setLevel]=('');
-const [createdDataSince, setCreatedDataSince] = useState<Moment | null>(null);
+const [title,setTitle]=useState('');
+const [level,setLevel]=useState('');
+const [createdData, setCreatedData] = useState<Moment | null>(null);
+
+ const levelHomeWork:{[key:string]:string} = {
+  'Младшая группа':'easy',
+  'Средняя группа':'medium',
+  'Старшая группа':'hard',
+}
+
+const handleSetLevel = ({ target: { value } }: SelectChangeEvent) => {
+  setLevel(value);
+};
+
+const handleSetCreatedData = (newValue: Moment | null) => {
+  setCreatedData(newValue);
+};
 
   const onSearchClick = () => {
+    
+    let createdDataSince;
+    if (createdData) {
+      createdDataSince = createdData.format('DD.MM.YYYY');
+    }
+   
+    const params:RequestCoursesForFilter={
+      createdSince: createdDataSince,
+      title,
+      level,
+      page:0
+    }
 
+    if(params.level){params.level=levelHomeWork[params.level]}
+    setSearchCoursesParams(params)
   }
  
 
@@ -93,11 +124,9 @@ const [createdDataSince, setCreatedDataSince] = useState<Moment | null>(null);
                 <FormControl fullWidth size="small">
                   <InputLabel>Уровень</InputLabel>
                   <Select
-                    value={filter.level}
+                    value={level}
                     label="Уровень"
-                    onChange={({ target: { value } }) =>
-                      setFilter(prev => ({ ...prev, level: value }))
-                    }
+                    onChange={handleSetLevel}
                   >
                     <MenuItem value="">Не выбрано</MenuItem>
                     <MenuItem value={GroupLevels.easy}>{GroupLevels.easy}</MenuItem>
@@ -111,11 +140,9 @@ const [createdDataSince, setCreatedDataSince] = useState<Moment | null>(null);
                   label="Дата создания"
                   inputFormat="DD.MM.YYYY"
                   mask="ДД.ММ.ГГГГ"
-                  value={filter.createdAt}
-                  onChange={date => setFilter(prev => ({ ...prev, createdAt: date }))}
-                  renderInput={params => (
-                    <TextField {...params} variant="outlined" size="small" fullWidth />
-                  )}
+                  value={createdData}
+                  onChange={handleSetCreatedData}
+                  renderInput={params => <TextField {...params} variant="outlined" size="small" fullWidth />}
                 />
               </Grid>
             </Grid>
@@ -134,7 +161,8 @@ const [createdDataSince, setCreatedDataSince] = useState<Moment | null>(null);
                 variant="contained"
                 size="small"
                 startIcon={<SearchIcon fontSize="small" />}
-                onClick={applyFilter}
+                // onClick={applyFilter}
+                onClick={onSearchClick}
                 sx={{
                   alignSelf: 'flex-end',
                   backgroundColor: '#2e8dfd',
