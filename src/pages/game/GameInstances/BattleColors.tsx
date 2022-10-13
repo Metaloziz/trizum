@@ -143,7 +143,6 @@ const BattleColors: FC<Props> = props => {
                     onEnd={onEnd}
                     onRef={onRef}
                     {...settings}
-                    colors={settings?.colorsMap?.length || 1}
                   />
                   {!started && <PlayButton onStart={startGame} />}
                 </div>

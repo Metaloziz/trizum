@@ -75,7 +75,7 @@ export default class extends Component<any, any> implements Game {
 
     return [
       {
-        name : 'time',
+        name : 'timeComplete',
         title : 'Время игры',
         type : 'select',
         option : [
@@ -100,7 +100,7 @@ export default class extends Component<any, any> implements Game {
         required : true
       },
       {
-        name : 'delay',
+        name : 'cycleTime',
         title : 'Время на запоминание',
         type : 'select',
         option : [
@@ -125,7 +125,7 @@ export default class extends Component<any, any> implements Game {
         required : true
       },
       {
-        name : 'levels',
+        name : 'elementsTotal',
         title : 'Кол-во уровней',
         type : 'select',
         option : counterSelect(1, 5),
@@ -133,7 +133,7 @@ export default class extends Component<any, any> implements Game {
         required : true
       },
       {
-        name : 'colors',
+        name : 'groupsCount',
         title : 'Кол-во цветов',
         type : 'select',
         option : counterSelect(3, 5),
@@ -141,7 +141,7 @@ export default class extends Component<any, any> implements Game {
         required : true
       },
       {
-        name : 'forms',
+        name : 'blinksCount',
         title : 'Кол-во форм',
         type : 'select',
         option : counterSelect(3, 5),
@@ -153,11 +153,11 @@ export default class extends Component<any, any> implements Game {
 
   public prepareConfig = (result : any) => {
     return {
-      time : parseInt(result.time),
-      delay : parseInt(result.delay),
-      levels : parseInt(result.levels),
-      colors : parseInt(result.colors),
-      forms : parseInt(result.forms),
+      timeComplete : parseInt(result.timeComplete),
+      cycleTime : parseInt(result.cycleTime),
+      elementsTotal : parseInt(result.elementsTotal),
+      groupsCount : parseInt(result.groupsCount),
+      blinksCount : parseInt(result.blinksCount),
     };
   }
 
@@ -167,8 +167,8 @@ export default class extends Component<any, any> implements Game {
     } = this.state;
 
     const {
-      time = 10,
-      levels,
+      timeComplete = 10,
+      elementsTotal,
       width
     } = this.props;
 

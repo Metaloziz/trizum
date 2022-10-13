@@ -21,13 +21,28 @@ import {
     PropsDefault as BattleColorsPropsDefault,
     Component as BattleColorsComponent
 } from './games/battle-colors';
+import {
+    PropsDefault as SteamPropsDefault,
+    Component as SteamComponent
+} from './games/steam';
+import {
+    PropsDefault as PaintPropsDefault,
+    Component as PaintComponent
+} from './games/paint';
+import {
+    PropsDefault as BlinksPropsDefault,
+    Component as BlinksComponent
+} from './games/blinks';
 
 export const GameIdentifiers = {
     shulte: 'shulte',
     game2048: 'game2048',
     mental: 'mental',
     shiftVertical: 'shiftVertical',
-    battleColors: 'battleColors'
+    battleColors: 'battleColors',
+    steam: 'steam',
+    paint: 'paint',
+    blinks: 'blinks',
 };
 
 export const GameList = {
@@ -55,6 +70,21 @@ export const GameList = {
         name: 'Битва полушарий',
         component: BattleColorsComponent,
         props: BattleColorsPropsDefault
+    },
+    [GameIdentifiers.steam]: {
+        name: 'Паровик',
+        component: SteamComponent,
+        props: SteamPropsDefault
+    },
+    [GameIdentifiers.paint]: {
+        name: 'Бирюльки',
+        component: PaintComponent,
+        props: PaintPropsDefault
+    },
+    [GameIdentifiers.blinks]: {
+        name: 'Память и ритм',
+        component: BlinksComponent,
+        props: BlinksPropsDefault
     },
 };
 

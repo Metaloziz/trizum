@@ -147,6 +147,7 @@ const Game2048: FC<Props> = props => {
                     onRef={onRef}
                     {...settings}
                     colors={settings?.colorsMap?.length || 1}
+                    size={6}
                   />
 
                   {!started && <PlayButton onStart={startGame} />}
