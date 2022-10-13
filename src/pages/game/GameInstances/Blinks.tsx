@@ -41,10 +41,10 @@ const Blinks: FC<Props> = props => {
 
   console.log(_.cloneDeep(gamePreset), 'gamePreset::Blinks');
   console.log(_.cloneDeep(actualPresets), 'actualPresets::Blinks');
-  console.log('-------------------------------------------------')
+  console.log('-------------------------------------------------');
   const widthScreen = window.innerWidth;
   const gameViewSize = changedViewScreen(widthScreen, 700);
-  const gameTitle = 'Таблица Шульте';
+  const gameTitle = 'Память и ритм';
   const presetArr: Option[] = presetArray(actualPresets);
 
   const onRef = (refGame: any) => {
@@ -150,7 +150,7 @@ const Blinks: FC<Props> = props => {
             </div>
           </div>
         </section>
-        <GameDesc started={started} gameTitle={gameTitle} />
+        <GameDesc presetDesc={settings?.description} started={started} gameTitle={gameTitle} />
       </div>
     </>
   );

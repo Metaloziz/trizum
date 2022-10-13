@@ -41,7 +41,7 @@ const gamesService = {
     return data;
   },
   deletePreset: async (id: string) => {
-    const { data } = await instance.post(`${Paths.Presets}/${id}`, { status: 'archive' });
+    const { data } = await instance.post(`${Paths.Presets}/${id}`, { status: 'removal' });
     return data;
   },
   getPlayResults: async (): Promise<PlayResultsResponseT> => {

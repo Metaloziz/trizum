@@ -41,10 +41,10 @@ const Steam: FC<Props> = props => {
 
   console.log(_.cloneDeep(gamePreset), 'gamePreset::Steam');
   console.log(_.cloneDeep(actualPresets), 'actualPresets::Steam');
-  console.log('-------------------------------------------------')
+  console.log('-------------------------------------------------');
   const widthScreen = window.innerWidth;
   const gameViewSize = changedViewScreen(widthScreen, 700);
-  const gameTitle = 'Таблица Шульте';
+  const gameTitle = 'Паро-Вик';
   const presetArr: Option[] = presetArray(actualPresets);
 
   const onRef = (refGame: any) => {
@@ -150,7 +150,7 @@ const Steam: FC<Props> = props => {
             </div>
           </div>
         </section>
-        <GameDesc started={started} gameTitle={gameTitle} />
+        <GameDesc presetDesc={settings?.description} started={started} gameTitle={gameTitle} />
       </div>
     </>
   );

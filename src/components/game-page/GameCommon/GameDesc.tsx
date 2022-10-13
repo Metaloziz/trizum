@@ -1,4 +1,3 @@
-import { GamePresetT } from 'app/types/CourseTypes';
 import styles from 'pages/game/Game.module.scss';
 import React, { FC } from 'react';
 

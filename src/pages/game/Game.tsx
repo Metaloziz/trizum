@@ -15,6 +15,9 @@ import Play from '../../assets/images/game/play.svg';
 import Schulte from '../../assets/images/game/shulte.png';
 import VerticalShift from '../../assets/images/game/vertical-shift.jpg';
 import BattleColors from '../../assets/images/game/battle-colors.png';
+import Paint from '../../assets/images/game/paint.png';
+import Blink from '../../assets/images/game/blink.png';
+import Steam from '../../assets/images/game/steam.png';
 
 import { Factory } from '../../games';
 
@@ -45,6 +48,21 @@ const Games = [
     title: 'Битва полушарий',
     name: 'battleColors',
     prevImg: BattleColors,
+  },
+  {
+    title: 'Память и ритм',
+    name: 'blinks',
+    prevImg: Blink,
+  },
+  {
+    title: 'Бирюльки',
+    name: 'paint',
+    prevImg: Paint,
+  },
+  {
+    title: 'Паро-вик',
+    name: 'steam',
+    prevImg: Steam,
   },
 ];
 

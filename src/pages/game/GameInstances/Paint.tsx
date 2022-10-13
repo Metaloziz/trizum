@@ -41,10 +41,10 @@ const Paint: FC<Props> = props => {
 
   console.log(_.cloneDeep(gamePreset), 'gamePreset::Paint');
   console.log(_.cloneDeep(actualPresets), 'actualPresets::Paint');
-  console.log('-------------------------------------------------')
+  console.log('-------------------------------------------------');
   const widthScreen = window.innerWidth;
   const gameViewSize = changedViewScreen(widthScreen, 700);
-  const gameTitle = 'Таблица Шульте';
+  const gameTitle = 'Бирюльки';
   const presetArr: Option[] = presetArray(actualPresets);
 
   const onRef = (refGame: any) => {
@@ -150,7 +150,7 @@ const Paint: FC<Props> = props => {
             </div>
           </div>
         </section>
-        <GameDesc started={started} gameTitle={gameTitle} />
+        <GameDesc presetDesc={settings?.description} started={started} gameTitle={gameTitle} />
       </div>
     </>
   );
