@@ -38,10 +38,10 @@ const GameItems = observer(() => {
         return (
           <Game2048 gamePreset={gamesStore.gamePreset} actualPresets={gamesStore.actualPresets} />
         );
-      case GameIdentifiers.mental:
-        return (
-          <Mental gamePreset={gamesStore.gamePreset} actualPresets={gamesStore.actualPresets} />
-        );
+      // case GameIdentifiers.mental:
+      //   return (
+      //     <Mental gamePreset={gamesStore.gamePreset} actualPresets={gamesStore.actualPresets} />
+      //   );
       case GameIdentifiers.shiftVertical:
         return (
           <ShiftVertical

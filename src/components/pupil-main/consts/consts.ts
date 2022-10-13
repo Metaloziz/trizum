@@ -110,13 +110,13 @@ export const games = [
     colorTheme: 'gradient-blue-darker',
     id: +new Date().toDateString(),
   },
-  {
-    title: 'Ментальный счет',
-    code: GameIdentifiers.mental,
-    minutesLeft: 31,
-    colorTheme: 'aquamarine',
-    id: +new Date().toDateString(),
-  },
+  // {
+  //   title: 'Ментальный счет',
+  //   code: GameIdentifiers.mental,
+  //   minutesLeft: 31,
+  //   colorTheme: 'aquamarine',
+  //   id: +new Date().toDateString(),
+  // },
   {
     title: 'Паровик',
     code: GameIdentifiers.steamEngine,
@@ -128,14 +128,14 @@ export const games = [
     title: 'Бирюльки',
     code: GameIdentifiers.silhouettes,
     minutesLeft: 31,
-    colorTheme: 'aquamarine',
+    colorTheme: 'blue',
     id: +new Date().toDateString(),
   },
   {
     title: 'Память и ритм',
     code: GameIdentifiers.memoryRhythm,
     minutesLeft: 31,
-    colorTheme: 'aquamarine',
+    colorTheme: 'gradient-blue-darker',
     id: +new Date().toDateString(),
   },
   // {

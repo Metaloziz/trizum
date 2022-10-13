@@ -29,11 +29,11 @@ const Games = [
     name: 'shiftVertical',
     prevImg: VerticalShift,
   },
-  {
-    title: 'Ментальный счет',
-    name: 'mental',
-    // prevImg: Schulte,
-  },
+  // {
+  //   title: 'Ментальный счет',
+  //   name: 'mental',
+  //   // prevImg: Schulte,
+  // },
   {
     title: 'Таблица Шульте',
     name: 'shulte',
