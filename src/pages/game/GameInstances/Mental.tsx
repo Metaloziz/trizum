@@ -45,7 +45,7 @@ const Mental: FC<Props> = props => {
   const widthScreen = window.innerWidth;
   const gameViewSize = changedViewScreen(widthScreen, 700);
   const gameTitle = 'Ментальный счет';
-  const presetArr: Option[] = presetArray(actualPresets);
+  const presetArrs: Option[] = presetArray(actualPresets);
   console.log(_.cloneDeep(gamePreset), 'gamePreset::Mental');
   const onRef = (refGame: any) => {
     setRef(refGame);
@@ -114,7 +114,7 @@ const Mental: FC<Props> = props => {
                     variant="select"
                     size="normal"
                     placeholder="Шаблон"
-                    option={presetArr}
+                    option={presetArrs}
                     onChangeSelect={data => setPreset(data)}
                   />
                 </div>

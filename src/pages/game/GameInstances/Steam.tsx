@@ -17,7 +17,7 @@ import InformationItem from 'components/information-item/InformationItem';
 import { Option } from 'components/select-mui/CustomSelect';
 import _ from 'lodash';
 
-const gameName = GameIdentifiers.steam;
+const gameName = GameIdentifiers.steamEngine;
 const GameInstance = Factory(gameName);
 
 type Props = {
@@ -27,7 +27,7 @@ type Props = {
 
 const Steam: FC<Props> = props => {
   const { actualPresets, gamePreset } = props;
-  const { deletePreset, getPreset } = gamesStore;
+  const { deletePreset, getPreset, getGame, getPresets } = gamesStore;
   const { role } = appStore;
 
   const [started, setStarted] = useState(false);
@@ -37,6 +37,11 @@ const Steam: FC<Props> = props => {
   const [settings, setSettings] = useState<PresetsGameSettings>();
   const [refs, setRef] = useState<any>(null);
 
+  useEffect(() => {
+    getPresets();
+    getGame(gameName);
+  }, []);
+
   const navigate = useNavigate();
 
   console.log(_.cloneDeep(gamePreset), 'gamePreset::Steam');
@@ -45,7 +50,7 @@ const Steam: FC<Props> = props => {
   const widthScreen = window.innerWidth;
   const gameViewSize = changedViewScreen(widthScreen, 700);
   const gameTitle = 'Паро-Вик';
-  const presetArr: Option[] = presetArray(actualPresets);
+  const presetArrs: Option[] = presetArray(actualPresets);
 
   const onRef = (refGame: any) => {
     setRef(refGame);
@@ -112,7 +117,7 @@ const Steam: FC<Props> = props => {
                     variant="select"
                     size="normal"
                     placeholder="Шаблон"
-                    option={presetArr}
+                    option={presetArrs}
                     onChangeSelect={data => setPreset(data)}
                   />
                 </div>

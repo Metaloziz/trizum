@@ -39,7 +39,7 @@ const BattleColors: FC<Props> = props => {
 
   useEffect(() => {
     getPresets();
-    getGame('battleColors');
+    getGame(gameName);
   }, []);
   const widthScreen = window.innerWidth;
   const gameViewSize = changedViewScreen(widthScreen, 700);
@@ -138,12 +138,7 @@ const BattleColors: FC<Props> = props => {
             <div className={styles.wrapInner}>
               <div className={styles.wrapGame}>
                 <div className={styles.wrapGame_overlay}>
-                  <GameInstance
-                    width={gameViewSize}
-                    onEnd={onEnd}
-                    onRef={onRef}
-                    {...settings}
-                  />
+                  <GameInstance width={gameViewSize} onEnd={onEnd} onRef={onRef} {...settings} />
                   {!started && <PlayButton onStart={startGame} />}
                 </div>
               </div>

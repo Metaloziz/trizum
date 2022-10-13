@@ -83,7 +83,7 @@ const Game2048: FC<Props> = props => {
     setGameResult(defaultResult);
   };
 
-  const presetArr: Option[] = presetArray(actualPresets);
+  const presetArrs: Option[] = presetArray(actualPresets);
 
   useEffect(() => {
     if (gamePreset.gamePreset.settings.length) {
@@ -117,7 +117,7 @@ const Game2048: FC<Props> = props => {
                     variant="select"
                     size="normal"
                     placeholder="Шаблон"
-                    option={presetArr}
+                    option={presetArrs}
                     onChangeSelect={data => setPreset(data)}
                   />
                 </div>

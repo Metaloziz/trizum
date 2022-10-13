@@ -17,7 +17,7 @@ import InformationItem from 'components/information-item/InformationItem';
 import { Option } from 'components/select-mui/CustomSelect';
 import _ from 'lodash';
 
-const gameName = GameIdentifiers.blinks;
+const gameName = GameIdentifiers.memoryRhythm;
 const GameInstance = Factory(gameName);
 
 type Props = {
@@ -27,7 +27,7 @@ type Props = {
 
 const Blinks: FC<Props> = props => {
   const { actualPresets, gamePreset } = props;
-  const { deletePreset, getPreset } = gamesStore;
+  const { deletePreset, getPreset, getPresets, getGame } = gamesStore;
   const { role } = appStore;
 
   const [started, setStarted] = useState(false);
@@ -36,8 +36,12 @@ const Blinks: FC<Props> = props => {
   const [gameResult, setGameResult] = useState<ResultT>(defaultResult);
   const [settings, setSettings] = useState<PresetsGameSettings>();
   const [refs, setRef] = useState<any>(null);
-
   const navigate = useNavigate();
+
+  useEffect(() => {
+    getPresets();
+    getGame(gameName);
+  }, []);
 
   console.log(_.cloneDeep(gamePreset), 'gamePreset::Blinks');
   console.log(_.cloneDeep(actualPresets), 'actualPresets::Blinks');
@@ -45,7 +49,7 @@ const Blinks: FC<Props> = props => {
   const widthScreen = window.innerWidth;
   const gameViewSize = changedViewScreen(widthScreen, 700);
   const gameTitle = 'Память и ритм';
-  const presetArr: Option[] = presetArray(actualPresets);
+  const presetArrs: Option[] = presetArray(actualPresets);
 
   const onRef = (refGame: any) => {
     setRef(refGame);
@@ -112,7 +116,7 @@ const Blinks: FC<Props> = props => {
                     variant="select"
                     size="normal"
                     placeholder="Шаблон"
-                    option={presetArr}
+                    option={presetArrs}
                     onChangeSelect={data => setPreset(data)}
                   />
                 </div>

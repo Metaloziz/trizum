@@ -1,6 +1,9 @@
 import {
+  Checkbox,
   DialogContent,
   FormControl,
+  FormControlLabel,
+  FormGroup,
   Grid,
   InputLabel,
   Select,
@@ -8,6 +11,7 @@ import {
   TextField,
 } from '@mui/material';
 import { GroupLevels } from 'app/enums/GroupLevels';
+import { StatusEnum } from 'app/enums/StatusTypes';
 import gamesStore from 'app/stores/gamesStore';
 import Button from 'components/button/Button';
 import { DialogTitle } from 'components/franchising-page/ui/Dialog';
@@ -15,11 +19,7 @@ import {
   ColorObj,
   GameColorPicker,
 } from 'components/game-page/GameCommon/GameModal/GameColorPicker';
-import InformationItem from 'components/information-item/InformationItem';
-import { InputRadio } from 'components/inputRadio/InputRadio';
-import { isError } from 'components/methodist-main/utils/IsError';
 import { Dialog } from 'components/rate/ui/Dialog';
-import TextEditor from 'components/text-editor/TextEditor';
 import { GameIdentifiers } from 'games';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useCallback, useEffect, useState } from 'react';
@@ -55,12 +55,10 @@ export const GameModal: FC<PropsT> = observer(props => {
   );
   const [delay, setDelay] = useState<string>(settings?.delay?.toString() || '1');
   const [level, setLevel] = useState<string>(gamePreset?.gamePreset?.level);
-  const [colorCount, setColorCount] = useState<string>(settings?.colorCount?.toString() || '1');
-  const [forms, setForms] = useState<string>(settings?.forms?.toString() || '1');
-  const [colorsMap, setColorsMap] = useState<string[]>(settings?.colorsMap || ['black']);
   const [levelMaxCompleted, setLevelMaxCompleted] = useState<string>(
-    settings?.levelMaxCompleted?.toString() || '1',
+    settings?.levelMaxCompleted?.toString() || '0',
   );
+  const [colorsMap, setColorsMap] = useState<string[]>(settings?.colorsMap || ['black']);
   const [wordsCount, setWordsCount] = useState<string>(settings?.wordsCount?.toString() || '1');
   const [digitMax, setDigitMax] = useState<string>(settings?.digitMax?.toString() || '1');
   const [errorAcceptable, setErrorAcceptable] = useState<string>(
@@ -76,12 +74,7 @@ export const GameModal: FC<PropsT> = observer(props => {
   const [description, setDescription] = useState<string>(defaultInputTextReader);
   // const [currentRadio, setCurrentRadio] = useState<string>('eachLevel');
   const [colors, setColors] = useState<ColorObj[]>(colorsObj);
-  const [size, setSize] = useState(settings?.size?.toString() || '1');
-  const [startTiles, setStartTiles] = useState(settings?.startTiles?.toString() || '1');
-  const [time, setTime] = useState(settings?.time?.toString() || '10');
-  const [levels, setLevels] = useState(settings?.levels?.toString() || '1');
-  const [colores, setColores] = useState(settings?.colores?.toString() || '1');
-
+  const [sound, setSound] = useState(false);
   const levelKeys = Object.keys(GroupLevels);
   const levelOptions = Object.values(GroupLevels).map((el, index) =>
     getOptionMui(levelKeys[index], el),
@@ -111,8 +104,6 @@ export const GameModal: FC<PropsT> = observer(props => {
     setElementsTotal(settings?.elementsTotal?.toString() || '');
     setDelay(settings?.delay?.toString() || '');
     setLevel(gamePreset?.gamePreset?.level);
-    setColorCount(settings?.colorCount?.toString() || '');
-    setForms(settings?.forms?.toString() || '');
     setColorsMap(settings?.colorsMap || ['']);
     setGroupsCount(settings?.groupsCount?.toString() || '');
     setCycleTime(settings?.cycleTime?.toString() || '');
@@ -122,11 +113,7 @@ export const GameModal: FC<PropsT> = observer(props => {
     setSpeed(settings?.speed?.toString() || '');
     setBlinksCount(settings?.blinksCount?.toString() || '');
     setDescription(settings?.description || '');
-    setTime(settings?.time?.toString() || settings?.timeComplete?.toString() || '');
-    setLevels(settings?.levels?.toString() || '');
-    setColores(settings?.colores?.toString() || '');
-    setSize(settings?.size?.toString() || '');
-    setStartTiles(settings?.startTiles?.toString() || '');
+    setSound(settings?.sound || false);
   };
 
   useEffect(() => {
@@ -142,7 +129,6 @@ export const GameModal: FC<PropsT> = observer(props => {
         {
           timeComplete: Number(timeComplete),
           elementsTotal: Number(elementsTotal),
-          levelMaxCompleted: Number(levelMaxCompleted),
           wordsCount: Number(wordsCount),
           digitMax: Number(digitMax),
           errorAcceptable: Number(errorAcceptable),
@@ -150,14 +136,8 @@ export const GameModal: FC<PropsT> = observer(props => {
           blinksCount: Number(blinksCount),
           cycleTime: Number(cycleTime),
           delay: Number(delay),
-          colorCount: Number(colorCount),
-          forms: Number(forms),
           groupsCount: Number(groupsCount),
-          size: Number(size),
-          startTiles: Number(startTiles),
-          time: Number(time || timeComplete),
-          levels: Number(levels),
-          colores: Number(colores),
+          sound,
           description,
           colorsMap,
         },
@@ -175,7 +155,6 @@ export const GameModal: FC<PropsT> = observer(props => {
         {
           timeComplete: Number(timeComplete),
           elementsTotal: Number(elementsTotal),
-          levelMaxCompleted: Number(levelMaxCompleted),
           wordsCount: Number(wordsCount),
           digitMax: Number(digitMax),
           errorAcceptable: Number(errorAcceptable),
@@ -183,14 +162,8 @@ export const GameModal: FC<PropsT> = observer(props => {
           blinksCount: Number(blinksCount),
           cycleTime: Number(cycleTime),
           delay: Number(delay),
-          colorCount: Number(colorCount),
-          forms: Number(forms),
           groupsCount: Number(groupsCount),
-          size: Number(size),
-          startTiles: Number(startTiles),
-          time: Number((time > '0' && time) || timeComplete),
-          levels: Number(levels),
-          colores: Number(colores),
+          sound,
           description,
           colorsMap,
         },
@@ -230,6 +203,7 @@ export const GameModal: FC<PropsT> = observer(props => {
       )}
       <DialogTitle onClose={() => onClose(false)}>Настройка параметров</DialogTitle>
       <DialogContent dividers>
+        <DialogTitle onClose={() => {}}>{StatusEnum[gamePreset.gamePreset.status]}</DialogTitle>
         <Stack spacing={1}>
           <div className={styles.gameModalWrapper}>
             <div className={styles.gameModalWrapper_settings}>
@@ -270,36 +244,36 @@ export const GameModal: FC<PropsT> = observer(props => {
                   </Grid>
                 )}
               </Grid>
-              {game.code === 'shiftVertical' ? (
+              {game.code === GameIdentifiers.shiftVertical ? (
                 <>
                   <Grid container spacing={2}>
                     <Grid item xs={12} sm={6}>
                       <TextField
-                        label={`Задержка ${delay} сек.`}
-                        value={delay}
-                        onChange={({ currentTarget: { value } }) => setDelay(value)}
+                        label={`Задержка ${cycleTime} сек.`}
+                        value={cycleTime}
+                        onChange={({ currentTarget: { value } }) => setCycleTime(value)}
                         fullWidth
                         inputProps={{ type: 'number' }}
                         variant="outlined"
                         size="small"
                       />
                     </Grid>
-                    {/* <Grid item xs={12} sm={6}> */}
-                    {/*  <TextField */}
-                    {/*    label="Уровень" */}
-                    {/*    value={level} */}
-                    {/*    onChange={({ currentTarget: { value } }) => setLevel(value)} */}
-                    {/*    fullWidth */}
-                    {/*    inputProps={{ type: 'number' }} */}
-                    {/*    variant="outlined" */}
-                    {/*    size="small" */}
-                    {/*  /> */}
-                    {/* </Grid> */}
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        label="Количество уровней в игре"
+                        value={elementsTotal}
+                        onChange={({ currentTarget: { value } }) => setElementsTotal(value)}
+                        fullWidth
+                        inputProps={{ type: 'number' }}
+                        variant="outlined"
+                        size="small"
+                      />
+                    </Grid>
                     <Grid item xs={12} sm={6}>
                       <TextField
                         label="Кол-во цветов"
-                        value={colorCount}
-                        onChange={({ currentTarget: { value } }) => setColorCount(value)}
+                        value={groupsCount}
+                        onChange={({ currentTarget: { value } }) => setGroupsCount(value)}
                         fullWidth
                         inputProps={{ type: 'number' }}
                         variant="outlined"
@@ -309,8 +283,8 @@ export const GameModal: FC<PropsT> = observer(props => {
                     <Grid item xs={12} sm={6}>
                       <TextField
                         label="Формы"
-                        value={forms}
-                        onChange={({ currentTarget: { value } }) => setForms(value)}
+                        value={blinksCount}
+                        onChange={({ currentTarget: { value } }) => setBlinksCount(value)}
                         fullWidth
                         inputProps={{ type: 'number' }}
                         variant="outlined"
@@ -320,14 +294,14 @@ export const GameModal: FC<PropsT> = observer(props => {
                   </Grid>
                 </>
               ) : null}
-              {game.code === 'shulte' ? (
+              {game.code === GameIdentifiers.shulte ? (
                 <>
                   <Grid container spacing={2}>
                     <Grid item xs={12} sm={6}>
                       <TextField
                         label="Кол-во цветов"
-                        value={colorCount}
-                        onChange={({ currentTarget: { value } }) => setColorCount(value)}
+                        value={groupsCount}
+                        onChange={({ currentTarget: { value } }) => setGroupsCount(value)}
                         fullWidth
                         inputProps={{ type: 'number' }}
                         variant="outlined"
@@ -363,13 +337,13 @@ export const GameModal: FC<PropsT> = observer(props => {
                   </Grid>
                 </>
               ) : null}
-              {game.code === 'game2048' && (
+              {game.code === GameIdentifiers.game2048 && (
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
                     <TextField
                       label="Размер поля X на Х"
-                      value={size}
-                      onChange={({ currentTarget: { value } }) => setSize(value)}
+                      value={groupsCount}
+                      onChange={({ currentTarget: { value } }) => setGroupsCount(value)}
                       fullWidth
                       inputProps={{ type: 'number' }}
                       variant="outlined"
@@ -379,8 +353,8 @@ export const GameModal: FC<PropsT> = observer(props => {
                   <Grid item xs={12} sm={6}>
                     <TextField
                       label="Кол-во начальных блоков"
-                      value={startTiles}
-                      onChange={({ currentTarget: { value } }) => setStartTiles(value)}
+                      value={elementsTotal}
+                      onChange={({ currentTarget: { value } }) => setElementsTotal(value)}
                       fullWidth
                       inputProps={{ type: 'number' }}
                       variant="outlined"
@@ -389,15 +363,14 @@ export const GameModal: FC<PropsT> = observer(props => {
                   </Grid>
                 </Grid>
               )}
-
-              {game.code === 'battleColors' && (
+              {game.code === GameIdentifiers.battleColors && (
                 <Grid container spacing={2}>
                   {/* </Grid> */}
                   <Grid item xs={12} sm={6}>
                     <TextField
-                      label={`Кол-во уровней в игре ${levels}`}
-                      value={levels}
-                      onChange={({ currentTarget: { value } }) => setLevels(value)}
+                      label={`Кол-во уровней в игре ${elementsTotal}`}
+                      value={elementsTotal}
+                      onChange={({ currentTarget: { value } }) => setElementsTotal(value)}
                       fullWidth
                       inputProps={{ type: 'number' }}
                       variant="outlined"
@@ -407,8 +380,8 @@ export const GameModal: FC<PropsT> = observer(props => {
                   <Grid item xs={12} sm={6}>
                     <TextField
                       label="Кол-во цветов для игры"
-                      value={colores}
-                      onChange={({ currentTarget: { value } }) => setColores(value)}
+                      value={blinksCount}
+                      onChange={({ currentTarget: { value } }) => setBlinksCount(value)}
                       fullWidth
                       inputProps={{ type: 'number' }}
                       variant="outlined"
@@ -417,7 +390,7 @@ export const GameModal: FC<PropsT> = observer(props => {
                   </Grid>
                 </Grid>
               )}
-              {game.code === 'mental' && (
+              {game.code === GameIdentifiers.mental && (
                 <Grid container spacing={2}>
                   <Grid item xs={6} sm={6}>
                     <TextField
@@ -509,8 +482,101 @@ export const GameModal: FC<PropsT> = observer(props => {
                   </Grid>
                 </Grid>
               )}
-              {/* </section> */}
+              {game.code === GameIdentifiers.steamEngine && (
+                <Grid container spacing={2}>
+                  <Grid item xs={6} sm={6}>
+                    <TextField
+                      label="Кол-во успешных нажатий на манометр"
+                      value={elementsTotal}
+                      onChange={({ currentTarget: { value } }) => setElementsTotal(value)}
+                      fullWidth
+                      inputProps={{ type: 'number' }}
+                      variant="outlined"
+                      size="small"
+                    />
+                  </Grid>
+                  <Grid item xs={6} sm={6}>
+                    <TextField
+                      label="Кол-во снятых единиц за промах"
+                      value={errorAcceptable}
+                      onChange={({ currentTarget: { value } }) => setErrorAcceptable(value)}
+                      fullWidth
+                      inputProps={{ type: 'number' }}
+                      variant="outlined"
+                      size="small"
+                    />
+                  </Grid>
+                  <Grid item xs={6} sm={6}>
+                    <TextField
+                      label="Скорость кручения стрелки манометра в сек."
+                      value={speed}
+                      onChange={({ currentTarget: { value } }) => setSpeed(value)}
+                      fullWidth
+                      inputProps={{ type: 'number' }}
+                      variant="outlined"
+                      size="small"
+                    />
+                  </Grid>
+                  <Grid item xs={6} sm={6}>
+                    <TextField
+                      label="Кол-во манометров"
+                      value={groupsCount}
+                      onChange={({ currentTarget: { value } }) => setGroupsCount(value)}
+                      fullWidth
+                      inputProps={{ type: 'number' }}
+                      variant="outlined"
+                      size="small"
+                    />
+                  </Grid>
+                </Grid>
+              )}
 
+              {game.code === GameIdentifiers.silhouettes && (
+                <Grid container spacing={2}>
+                  <Grid item xs={6} sm={6}>
+                    <TextField
+                      label="Кол-во фигур для угадывания"
+                      value={elementsTotal}
+                      onChange={({ currentTarget: { value } }) => setElementsTotal(value)}
+                      fullWidth
+                      inputProps={{ type: 'number' }}
+                      variant="outlined"
+                      size="small"
+                    />
+                  </Grid>
+                </Grid>
+              )}
+
+              {game.code === GameIdentifiers.memoryRhythm && (
+                <Grid container spacing={2}>
+                  <Grid item xs={6} sm={6}>
+                    <TextField
+                      label="Кол-во миганий"
+                      value={elementsTotal}
+                      onChange={({ currentTarget: { value } }) => setElementsTotal(value)}
+                      fullWidth
+                      inputProps={{ type: 'number' }}
+                      variant="outlined"
+                      size="small"
+                    />
+                  </Grid>
+                  <Grid item xs={6} sm={6}>
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            title="Музыка вкл/откл"
+                            checked={sound}
+                            onChange={() => setSound(!sound)}
+                          />
+                        }
+                        label="Музыка вкл/откл"
+                      />
+                    </FormGroup>
+                  </Grid>
+                </Grid>
+              )}
+              {/* </section> */}
               {/* <section> */}
               {/*  <span className={styles.title}>Начисление баллов</span> */}
               {/*  <div className={styles.choiceInput}> */}
@@ -522,7 +588,6 @@ export const GameModal: FC<PropsT> = observer(props => {
               {/*      onChange={() => setCurrentRadio('eachLevel')} */}
               {/*      checked={currentRadio === 'eachLevel'} */}
               {/*    /> */}
-
               {/*    <InputRadio */}
               {/*      value="success" */}
               {/*      id="success" */}
@@ -531,7 +596,6 @@ export const GameModal: FC<PropsT> = observer(props => {
               {/*      checked={currentRadio === 'success'} */}
               {/*      label="Баллы за прыжок (начисляется если был прыжок и уровень пройден после прыжка)" */}
               {/*    /> */}
-
               {/*    <InputRadio */}
               {/*      value="error" */}
               {/*      id="error" */}
@@ -559,7 +623,7 @@ export const GameModal: FC<PropsT> = observer(props => {
             </div>
 
             <div className={styles.descriptionBlock}>
-              <span className={styles.descriptionBlock_header}>память и ритм</span>
+              <span className={styles.descriptionBlock_header}>{game.name}</span>
               <Grid item xs={12} sm={6}>
                 <TextField
                   label="Описание"

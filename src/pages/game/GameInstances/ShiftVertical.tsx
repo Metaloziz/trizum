@@ -45,7 +45,7 @@ const ShiftVertical: FC<Props> = props => {
   const widthScreen = window.innerWidth;
   const gameViewSize = changedViewScreen(widthScreen, 700);
   const gameTitle = 'Сдвиг по вертикали';
-  const presetArr: Option[] = presetArray(actualPresets);
+  const presetArrs: Option[] = presetArray(actualPresets);
   console.log(_.cloneDeep(gamePreset), 'gamePreset::ShiftVertical');
   const onRef = (refGame: any) => {
     setRef(refGame);
@@ -112,16 +112,16 @@ const ShiftVertical: FC<Props> = props => {
                     variant="select"
                     size="normal"
                     placeholder="Шаблон"
-                    option={presetArr}
+                    option={presetArrs}
                     onChangeSelect={data => setPreset(data)}
                   />
                 </div>
-                <div className={styles.wrapGameBlock_header_select}>
-                  <InformationItem variant="select" size="normal" placeholder="Год" />
-                </div>
-                <div className={styles.wrapGameBlock_header_select}>
-                  <InformationItem variant="select" size="normal" placeholder="Месяц" />
-                </div>
+                {/* <div className={styles.wrapGameBlock_header_select}> */}
+                {/*  <InformationItem variant="select" size="normal" placeholder="Год" /> */}
+                {/* </div> */}
+                {/* <div className={styles.wrapGameBlock_header_select}> */}
+                {/*  <InformationItem variant="select" size="normal" placeholder="Месяц" /> */}
+                {/* </div> */}
                 <div className={styles.wrapGameBlock_header_select}>
                   <InformationItem variant="select" size="normal" placeholder="Группа" />
                 </div>

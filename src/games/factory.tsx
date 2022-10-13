@@ -40,9 +40,9 @@ export const GameIdentifiers = {
     mental: 'mental',
     shiftVertical: 'shiftVertical',
     battleColors: 'battleColors',
-    steam: 'steam',
-    paint: 'paint',
-    blinks: 'blinks',
+    steamEngine: 'steamEngine',
+    silhouettes: 'silhouettes',
+    memoryRhythm: 'memoryRhythm',
 };
 
 export const GameList = {
@@ -71,17 +71,17 @@ export const GameList = {
         component: BattleColorsComponent,
         props: BattleColorsPropsDefault
     },
-    [GameIdentifiers.steam]: {
+    [GameIdentifiers.steamEngine]: {
         name: 'Паровик',
         component: SteamComponent,
         props: SteamPropsDefault
     },
-    [GameIdentifiers.paint]: {
+    [GameIdentifiers.silhouettes]: {
         name: 'Бирюльки',
         component: PaintComponent,
         props: PaintPropsDefault
     },
-    [GameIdentifiers.blinks]: {
+    [GameIdentifiers.memoryRhythm]: {
         name: 'Память и ритм',
         component: BlinksComponent,
         props: BlinksPropsDefault

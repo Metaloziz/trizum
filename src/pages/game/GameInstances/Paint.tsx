@@ -17,7 +17,7 @@ import InformationItem from 'components/information-item/InformationItem';
 import { Option } from 'components/select-mui/CustomSelect';
 import _ from 'lodash';
 
-const gameName = GameIdentifiers.paint;
+const gameName = GameIdentifiers.silhouettes;
 const GameInstance = Factory(gameName);
 
 type Props = {
@@ -27,7 +27,7 @@ type Props = {
 
 const Paint: FC<Props> = props => {
   const { actualPresets, gamePreset } = props;
-  const { deletePreset, getPreset } = gamesStore;
+  const { deletePreset, getPreset, getPresets, getGame } = gamesStore;
   const { role } = appStore;
 
   const [started, setStarted] = useState(false);
@@ -36,8 +36,12 @@ const Paint: FC<Props> = props => {
   const [gameResult, setGameResult] = useState<ResultT>(defaultResult);
   const [settings, setSettings] = useState<PresetsGameSettings>();
   const [refs, setRef] = useState<any>(null);
-
   const navigate = useNavigate();
+
+  useEffect(() => {
+    getPresets();
+    getGame(gameName);
+  }, []);
 
   console.log(_.cloneDeep(gamePreset), 'gamePreset::Paint');
   console.log(_.cloneDeep(actualPresets), 'actualPresets::Paint');
@@ -45,11 +49,12 @@ const Paint: FC<Props> = props => {
   const widthScreen = window.innerWidth;
   const gameViewSize = changedViewScreen(widthScreen, 700);
   const gameTitle = 'Бирюльки';
-  const presetArr: Option[] = presetArray(actualPresets);
+  const presetArrs: Option[] = presetArray(actualPresets);
 
   const onRef = (refGame: any) => {
     setRef(refGame);
   };
+
   const startGame = () => {
     setStarted(true);
     refs?.start();
@@ -62,6 +67,7 @@ const Paint: FC<Props> = props => {
   };
 
   const setPreset = (data: Option) => {
+    setStarted(false);
     getPreset(data.value);
   };
 
@@ -99,7 +105,7 @@ const Paint: FC<Props> = props => {
         onClose={closeResultModal}
         onStart={onRepeat}
       />
-      <div className={styles.wrapGameBlock}>
+      <div className={styles.wrapGameBlock} key={gameTitle}>
         <Button className={styles.goBack} onClick={() => navigate(-1)}>
           Назад
         </Button>
@@ -112,7 +118,7 @@ const Paint: FC<Props> = props => {
                     variant="select"
                     size="normal"
                     placeholder="Шаблон"
-                    option={presetArr}
+                    option={presetArrs}
                     onChangeSelect={data => setPreset(data)}
                   />
                 </div>
@@ -132,18 +138,11 @@ const Paint: FC<Props> = props => {
             )}
           </div>
 
-          <div className={styles.wrap}>
+          <div className={`${styles.wrap} ${role === Roles.Student && styles.isStudent}`}>
             <div className={styles.wrapInner}>
               <div className={styles.wrapGame}>
                 <div className={styles.wrapGame_overlay}>
-                  <GameInstance
-                    width={gameViewSize}
-                    onEnd={onEnd}
-                    onRef={onRef}
-                    {...settings}
-                    colors={settings?.colorsMap?.length || 1}
-                  />
-
+                  <GameInstance width={gameViewSize} onEnd={onEnd} onRef={onRef} {...settings} />
                   {!started && <PlayButton onStart={startGame} />}
                 </div>
               </div>
@@ -155,5 +154,4 @@ const Paint: FC<Props> = props => {
     </>
   );
 };
-
 export default Paint;

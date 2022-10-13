@@ -51,17 +51,17 @@ const Games = [
   },
   {
     title: 'Память и ритм',
-    name: 'blinks',
+    name: 'memoryRhythm',
     prevImg: Blink,
   },
   {
     title: 'Бирюльки',
-    name: 'paint',
+    name: 'silhouettes',
     prevImg: Paint,
   },
   {
     title: 'Паро-вик',
-    name: 'steam',
+    name: 'steamEngine',
     prevImg: Steam,
   },
 ];

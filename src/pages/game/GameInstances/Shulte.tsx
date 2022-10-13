@@ -40,8 +40,9 @@ const Shulte: FC<Props> = props => {
   const widthScreen = window.innerWidth;
   const gameViewSize = changedViewScreen(widthScreen, 700);
   const gameTitle = 'Таблица Шульте';
-  const presetArr: Option[] = presetArray(actualPresets);
+  const presetArrs: Option[] = presetArray(actualPresets);
 
+  console.log(presetArrs);
   // const { works } = user.groups[0].group.course;
   // console.log(works);
 
@@ -120,7 +121,7 @@ const Shulte: FC<Props> = props => {
                     variant="select"
                     size="normal"
                     placeholder="Шаблон"
-                    option={presetArr}
+                    option={presetArrs}
                     onChangeSelect={data => setPreset(data)}
                   />
                 </div>
