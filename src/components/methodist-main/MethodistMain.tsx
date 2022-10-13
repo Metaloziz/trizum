@@ -15,13 +15,15 @@ import Pagination from '@mui/material/Pagination';
 
 import { LoadingIndicator } from 'components/franchising-page/ui/LoadingIndicator';
 import { observer } from 'mobx-react-lite';
-import React, { useEffect, ChangeEvent, useState, useCallback } from 'react';
+import React, { useEffect, ChangeEvent, useState } from 'react';
 import { StatusTypes } from '../../app/enums/StatusTypes';
 import coursesStore from '../../app/stores/coursesStore';
+import { SearchCoursesParamsType } from '../../app/types/SearchCoursesParamsType';
 import styles from '../users-page/UsersPage.module.scss';
 
 import { AddOrEditDialog } from './AddOrEditDialog';
 import { CourseItem } from './CourseItem/CourseItem';
+import { Filter } from './Filter';
 
 const MethodistMain = observer(() => {
   const {
@@ -33,13 +35,18 @@ const MethodistMain = observer(() => {
     isLoading,
     setIsDialogOpen,
     setCurrentCourse,
+    filterData,
   } = coursesStore;
+
+  const [currentPage, setCurrentPage] = useState(pagination.page + 1);
 
   useEffect(() => {
     getCourses();
   }, []);
 
-  const [currentPage, setCurrentPage] = useState(pagination.page + 1);
+  useEffect(() => {
+    setCurrentPage(pagination.page + 1);
+  }, [pagination.page]);
 
   const onPageChange = (event: ChangeEvent<unknown>, newCurrentPage: number) => {
     setSearchCoursesParams({ page: newCurrentPage - 1 });
@@ -57,10 +64,15 @@ const MethodistMain = observer(() => {
     }
   };
 
-  const setFilter: typeof setSearchCoursesParams = useCallback(params => {
-    setSearchCoursesParams(params);
+  const setFilter = (params: Partial<SearchCoursesParamsType> | null) => {
+    if (params) {
+      setSearchCoursesParams(params);
+    } else {
+      setSearchCoursesParams(new SearchCoursesParamsType());
+    }
+
     getCourses();
-  }, []);
+  };
 
   if (isLoading) {
     return <LoadingIndicator isLoading={isLoading} />;
@@ -90,8 +102,7 @@ const MethodistMain = observer(() => {
             >
               Добавить курс
             </Button>
-            {/* <Filter setSearchCoursesParams={setFilter}
-             filterData={filterData} /> */}
+            <Filter setSearchCoursesParams={setFilter} filterData={filterData} />
           </Stack>
         </Box>
         <TableContainer component={Paper}>
@@ -115,7 +126,7 @@ const MethodistMain = observer(() => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {courses ? (
+              {courses?.length ? (
                 courses.map(course => (
                   <CourseItem
                     key={course.id}
@@ -129,22 +140,32 @@ const MethodistMain = observer(() => {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={5}>Данные отсутствуют...</TableCell>
+                  <TableCell
+                    colSpan={5}
+                    width="auto"
+                    align="center"
+                    style={{ fontSize: '16px', fontWeight: '900' }}
+                  >
+                    Данные отсутствуют...
+                  </TableCell>
                 </TableRow>
               )}
             </TableBody>
           </Table>
         </TableContainer>
-        <div className={styles.pagination}>
-          <Pagination
-            count={pagination.total}
-            color="primary"
-            size="large"
-            page={currentPage}
-            boundaryCount={1}
-            onChange={onPageChange}
-          />
-        </div>
+
+        {!!courses?.length && (
+          <div className={styles.pagination}>
+            <Pagination
+              count={pagination.total}
+              color="primary"
+              size="large"
+              page={currentPage}
+              boundaryCount={1}
+              onChange={onPageChange}
+            />
+          </div>
+        )}
       </Box>
     </Box>
   );

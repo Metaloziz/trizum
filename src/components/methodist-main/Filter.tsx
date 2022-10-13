@@ -20,45 +20,41 @@ import {
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
-import { GroupLevels } from 'app/enums/GroupLevels';
+import { GroupLevels, GroupsLevelsValue } from 'app/enums/GroupLevels';
 import ru from 'dayjs/locale/ru';
-import { observer } from 'mobx-react';
 import { useState, FC } from 'react';
 import { FilterData } from '../../app/types/FilterData';
 import { SearchCoursesParamsType } from '../../app/types/SearchCoursesParamsType';
 
 type FilterProps = {
-  setSearchCoursesParams: (filter: Partial<SearchCoursesParamsType>) => void;
+  setSearchCoursesParams: (filter: Partial<SearchCoursesParamsType> | null) => void;
   filterData: FilterData;
 };
 
-export const Filter: FC<FilterProps> = observer(({ filterData, setSearchCoursesParams }) => {
+export const Filter: FC<FilterProps> = ({ filterData, setSearchCoursesParams }) => {
   const defaultFilter: FilterData = {
-    title: '',
-    level: '',
+    title: filterData.title,
+    level: filterData.level,
     created_since: '',
   };
 
   const [filter, setFilter] = useState<FilterData>(defaultFilter);
-
-  const [open, setOpen] = useState(true);
 
   const applyFilter = () => {
     setSearchCoursesParams(filter);
   };
 
   const clearFilter = () => {
-    // setOpen(false);
-    setFilter(defaultFilter);
-    setSearchCoursesParams({});
+    setSearchCoursesParams(null);
   };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={ru}>
       <Box>
         <Accordion
-          expanded={open}
-          onChange={(_, expanded) => setOpen(expanded)}
+          // expanded={open}
+          expanded
+          // onChange={(_, expanded) => setOpen(expanded)}
           TransitionProps={{ unmountOnExit: true }}
         >
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -85,9 +81,9 @@ export const Filter: FC<FilterProps> = observer(({ filterData, setSearchCoursesP
                     onChange={({ target: { value } }) => setFilter({ ...filter, level: value })}
                   >
                     <MenuItem value="">Не выбрано</MenuItem>
-                    <MenuItem value={GroupLevels.easy}>{GroupLevels.easy}</MenuItem>
-                    <MenuItem value={GroupLevels.medium}>{GroupLevels.medium}</MenuItem>
-                    <MenuItem value={GroupLevels.hard}>{GroupLevels.hard}</MenuItem>
+                    <MenuItem value={GroupsLevelsValue.easy}>{GroupLevels.easy}</MenuItem>
+                    <MenuItem value={GroupsLevelsValue.medium}>{GroupLevels.medium}</MenuItem>
+                    <MenuItem value={GroupsLevelsValue.hard}>{GroupLevels.hard}</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
@@ -144,4 +140,4 @@ export const Filter: FC<FilterProps> = observer(({ filterData, setSearchCoursesP
       </Box>
     </LocalizationProvider>
   );
-});
+};
