@@ -1,19 +1,21 @@
 import { useState, useEffect } from 'react';
 
-import { TextField } from '@mui/material';
+import { Grid, TextField, Typography } from '@mui/material';
 import MuiPhoneNumber from 'material-ui-phone-number';
 import { observer } from 'mobx-react-lite';
 
 import styles from './UserPage.module.scss';
 
 import authService from 'app/services/authService';
-import appStore from 'app/stores/appStore';
+import appStore, { EmptyUser } from 'app/stores/appStore';
 import buttonClose from 'assets/svgs/button.svg';
 import gag from 'assets/svgs/user.svg';
 import Button from 'components/button/Button';
 import Image from 'components/image/Image';
 import Setting from 'components/setting/Setting';
 import { BASE_URL } from 'constants/constants';
+
+const { REACT_APP_MODE: mode } = process.env;
 
 const UserPage = observer(() => {
   const { user, setUser } = appStore;
@@ -97,7 +99,10 @@ const UserPage = observer(() => {
     }
     return five;
   }
-
+  const userKeys = Object.keys(user);
+  const userValues = Object.values(user);
+  console.log(userKeys);
+  console.log(userValues);
   return (
     <div className={styles.container}>
       <div>
@@ -133,6 +138,7 @@ const UserPage = observer(() => {
             fullWidth
             size="small"
             countryCodeEditable={false}
+            className={styles.input}
           />
         </div>
         <div className={styles.labelBlock}>
@@ -143,88 +149,122 @@ const UserPage = observer(() => {
             fullWidth
             variant="outlined"
             size="small"
+            className={styles.input}
           />
         </div>
         <div className={styles.buttonWrapper}>
           {/* <Button onClick={sendPassword}>Сохранить</Button> */}
           <Button onClick={sendEdit}>Сохранить</Button>
         </div>
+        {mode === 'development' && (
+          <Grid container width="100%">
+            {/*
+  id;
+  firstName;
+  middleName: null | string;
+  lastName;
+  email;
+  phone;
+  role;
+  franchise: FranchiseT = {} as FranchiseT;
+  city: null | string;
+  birthdate: TimeZoneType;
+  sex: null | string;
+  status;
+  avatar: AvatarT;
+  groups: GroupsDataT[];
+  canSwitchTo: canSwitchToT[];
+  active = false;
+  parent: ResponseLoadMeParentT = {} as ResponseLoadMeParentT;
+  password: string;
+  personalRecord: PersonalRecordT;
+            */}
+            {userKeys.map((el, index) => (
+              <Grid container justifyContent="space-between" key={el}>
+                <Grid item xs={2}>
+                  <Typography fontWeight={700}>{el}</Typography>
+                </Grid>
+                <Grid item>{JSON.stringify(userValues[index], null, 2)}</Grid>
+              </Grid>
+            ))}
+          </Grid>
+        )}
       </div>
-      {/* {showModal ? ( */}
-      {/*  <div className={styles.modal}> */}
-      {/*    <div className={styles.content}> */}
-      {/*      <div className={styles.btnClose} onClick={closeWindow}> */}
-      {/*        <Image src={buttonClose} width="14" height="14" alt="Х" /> */}
-      {/*      </div> */}
-      {/*      <div className={styles.wrapContent}> */}
-      {/*        <div> */}
-      {/*          <p>Ваш телефон</p> */}
-      {/*          <div className={styles.phoneContainer}> */}
-      {/*            <span>+{phone}</span> */}
-      {/*          </div> */}
-      {/*          <p>Временный код</p> */}
-      {/*        </div> */}
-      {/*        <div className={styles.inputContainer}> */}
-      {/*          <input type="tel" value={code} onChange={e => setCode(e.target.value)} /> */}
-      {/*        </div> */}
-      {/*        {erorr ? ( */}
-      {/*          <p className={styles.textErorrRed}> */}
-      {/*            Неверный код */}
-      {/*            <br /> */}
-      {/*            После трёх неверных попыток - блокировка. */}
-      {/*          </p> */}
-      {/*        ) : ( */}
-      {/*          <div className={styles.blockErorr} /> */}
-      {/*        )} */}
-      {/*        <div> */}
-      {/*          <Button onClick={sendEdit}>Отправить</Button> */}
-      {/*          <div> */}
-      {/*            {seconds !== 150 && seconds !== 0 ? ( */}
-      {/*              <p className={styles.textErorr}> */}
-      {/*                Сообщение отправлено. Повторно вы сможете запросить код через {`${sec} `} */}
-      {/*                {filterWords(sec, 'секунду', 'секунды', 'секунд')}. */}
-      {/*              </p> */}
-      {/*            ) : ( */}
-      {/*              <p onClick={repeatSMSCode} className={styles.underlined}> */}
-      {/*                Выслать код повторно */}
-      {/*              </p> */}
-      {/*            )} */}
-      {/*          </div> */}
-      {/*        </div> */}
-      {/*      </div> */}
-      {/*    </div> */}
-      {/*  </div> */}
-      {/* ) : null} */}
+      {/*  {showModal ? (
+        <div className={styles.modal}>
+          <div className={styles.content}>
+            <div className={styles.btnClose} onClick={closeWindow}>
+              <Image src={buttonClose} width="14" height="14" alt="Х" />
+            </div>
+            <div className={styles.wrapContent}>
+              <div>
+                <p>Ваш телефон</p>
+                <div className={styles.phoneContainer}>
+                  <span>+{phone}</span>
+                </div>
+                <p>Временный код</p>
+              </div>
+              <div className={styles.inputContainer}>
+                <input type="tel" value={code} onChange={e => setCode(e.target.value)} />
+              </div>
+              {erorr ? (
+                <p className={styles.textErorrRed}>
+                  Неверный код
+                  <br />
+                  После трёх неверных попыток - блокировка.
+                </p>
+              ) : (
+                <div className={styles.blockErorr} />
+              )}
+              <div>
+                <Button onClick={sendEdit}>Отправить</Button>
+                <div>
+                  {seconds !== 150 && seconds !== 0 ? (
+                    <p className={styles.textErorr}>
+                      Сообщение отправлено. Повторно вы сможете запросить код через {`${sec} `}
+                      {filterWords(sec, 'секунду', 'секунды', 'секунд')}.
+                    </p>
+                  ) : (
+                    <p onClick={repeatSMSCode} className={styles.underlined}>
+                      Выслать код повторно
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+       ) : null}
 
-      {/* {showModal ? ( */}
-      {/*  <div className={styles.modal}> */}
-      {/*    <div className={styles.content}> */}
-      {/*      <div className={styles.btnClose} onClick={closeWindow}> */}
-      {/*        <Image src={buttonClose} width="14" height="14" alt="Х" /> */}
-      {/*      </div> */}
-      {/*      <div className={styles.wrapContent}> */}
-      {/*        <div> */}
-      {/*          <p>Введите ваш пароль</p> */}
-      {/*        </div> */}
-      {/*        <div className={styles.inputContainer}> */}
-      {/*          <input type="password" value={code} onChange={e => setCode(e.target.value)} /> */}
-      {/*        </div> */}
-      {/*        {erorr ? ( */}
-      {/*          <p className={styles.textErrorRed}> */}
-      {/*            Неверный пароль */}
-      {/*            <br /> */}
-      {/*            После трёх неверных попыток - блокировка. */}
-      {/*          </p> */}
-      {/*        ) : ( */}
-      {/*          <div className={styles.blockError} /> */}
-      {/*        )} */}
-      {/*        <div> */}
-      {/*          <Button onClick={sendEdit}>Изменить</Button> */}
-      {/*        </div> */}
-      {/*      </div> */}
-      {/*    </div> */}
-      {/*  </div> */}
-      {/* ) : null} */}
+       {showModal ? (
+        <div className={styles.modal}>
+          <div className={styles.content}>
+            <div className={styles.btnClose} onClick={closeWindow}>
+              <Image src={buttonClose} width="14" height="14" alt="Х" />
+            </div>
+            <div className={styles.wrapContent}>
+              <div>
+                <p>Введите ваш пароль</p>
+              </div>
+              <div className={styles.inputContainer}>
+                <input type="password" value={code} onChange={e => setCode(e.target.value)} />
+              </div>
+              {erorr ? (
+                <p className={styles.textErrorRed}>
+                  Неверный пароль
+                  <br />
+                  После трёх неверных попыток - блокировка.
+                </p>
+              ) : (
+                <div className={styles.blockError} />
+              )}
+              <div>
+                <Button onClick={sendEdit}>Изменить</Button>
+              </div>
+            </div>
+          </div>
+        </div>
+       ) : null} */}
     </div>
   );
 });

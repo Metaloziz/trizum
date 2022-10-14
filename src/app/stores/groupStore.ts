@@ -7,7 +7,7 @@ import { DateTime } from 'app/enums/DateTime';
 import coursesService from 'app/services/coursesService';
 import franchiseService from 'app/services/franchiseService';
 import groupsService from 'app/services/groupsService';
-import { Roles } from 'app/stores/appStore';
+import appStore, { Roles } from 'app/stores/appStore';
 import { ShortCourseType } from 'app/types/CourseTypes';
 import { FranchiseT } from 'app/types/FranchiseTypes';
 import {
@@ -28,7 +28,6 @@ import {
   scheduleItemToUIMapper,
 } from 'utils/scheduleItemToServerMapper';
 import { findElement } from 'utils/findIndexElement';
-import { GroupTypes } from 'app/enums/GroupTypes';
 
 class GroupStore {
   groups: ResponseGroups[] = [];
@@ -124,11 +123,16 @@ class GroupStore {
 
   loadInitialModal = () => {
     this.execute(async () => {
-      const resFranchise = await franchiseService.getAll();
-      const res1 = await coursesService.getAllCourses({ per_page: 10000 });
+      const resFranchise =
+        appStore.role === Roles.Admin ? await franchiseService.getAll() : Promise.resolve();
+      const res1 = await coursesService.getAllCourses({
+        per_page: 10000,
+        type: this.modalFields.type,
+        status: 'active',
+      });
       runInAction(() => {
         // @ts-ignore
-        this.franchise = resFranchise;
+        appStore.role === Roles.Admin && (this.franchise = resFranchise);
         this.courses = res1.items;
       });
     });
@@ -291,12 +295,13 @@ class GroupStore {
           franchiseId: r.franchise.id || '',
           type: (r.type as GroupT) || '',
           courseId: r.course.id || '',
-          teacherId: r.teacherId,
+          teacherId: r.teacherId.id,
           name: r.name,
           dateSince: new Date(r.startedAt.date),
           dateUntil: new Date(r.endedAt.date),
           status: r.status || '',
         };
+        // this.schedule = r.schedule
       }
     }
     this.isModalOpen = true;
@@ -309,7 +314,9 @@ class GroupStore {
   };
 
   get filteredCourses() {
-    return this.courses ? this.courses.filter(el => el.level.includes(this.modalFields.level)) : [];
+    return this.courses.length
+      ? this.courses.filter(el => el.level.includes(this.modalFields.level))
+      : [];
   }
 
   get validateSchema() {

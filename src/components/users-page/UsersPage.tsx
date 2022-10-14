@@ -42,6 +42,7 @@ const UsersPage = observer(() => {
   };
 
   useEffect(() => {
+
     role === Roles.Franchisee || role === Roles.FranchiseeAdmin
       ? user.franchise.id && getOneFranchisee(user.franchise.id)
       : getFranchisee();

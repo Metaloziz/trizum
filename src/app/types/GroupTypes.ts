@@ -13,6 +13,9 @@ import { ResponseOneUserTypeForLoadMe } from 'app/types/ResponseLoadMeBaseT';
 import { ScheduleT } from 'app/types/ScheduleT';
 import { StatusT } from 'app/types/StatusT';
 
+export type TeacherIdWTF = { id: string; firstName: string; middleName: string; lastName: string };
+export type FranchiseWTF = { id: string; shortName: string };
+
 export type ResponseGroups = {
   id: string;
   name: string;
@@ -22,9 +25,9 @@ export type ResponseGroups = {
   startedAt: TimeZoneType;
   endedAt: TimeZoneType;
   createdAt: TimeZoneType;
-  franchise: string;
+  franchise: FranchiseWTF;
   course: string;
-  teacherId: string;
+  teacherId: TeacherIdWTF;
   schedule: Schedule[];
 };
 
@@ -101,7 +104,12 @@ export class ResponseOneGroup {
 
   schedule: ScheduleT[] = [];
 
-  teacherId: string = '';
+  teacherId = {
+    id: '',
+    firstName: '',
+    middleName: '',
+    lastName: '',
+  };
 }
 
 export class LessonT {

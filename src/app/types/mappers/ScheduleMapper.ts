@@ -1,11 +1,11 @@
-import { Schedule, ScheduleForUI } from 'app/types/GroupTypes';
+import {FranchiseWTF, Schedule, ScheduleForUI, TeacherIdWTF} from 'app/types/GroupTypes';
 
 export const scheduleMapper = (
   schedule: Schedule[],
   groupName: string,
   groupId: string,
-  teacherId: string,
-  franchise: string,
+  teacherId: TeacherIdWTF,
+  franchise: FranchiseWTF,
 ): ScheduleForUI[] =>
   schedule.length
     ? schedule.map((el, idx) => {
@@ -18,12 +18,12 @@ export const scheduleMapper = (
         return {
           id: idx,
           groupName,
-          teacherId,
+          teacherId: teacherId.id,
           groupId,
           lesson: el.name,
           start,
           end,
-          franchise,
+          franchise: franchise.id,
         };
       })
     : [];

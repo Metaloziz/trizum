@@ -1,6 +1,4 @@
-import React, { FC, SyntheticEvent, useState, useEffect } from 'react';
-
-import cn from 'classnames';
+import React, { FC, SyntheticEvent, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import moment from 'moment';
 import { Calendar, momentLocalizer, stringOrDate } from 'react-big-calendar';
@@ -10,15 +8,10 @@ import styles from './Schedule.module.scss';
 
 import appStore, { Roles } from 'app/stores/appStore';
 import teacherMainStore from 'app/stores/scheduleStore';
-import BasicModal from 'components/basic-modal/BasicModal';
 import AddEditGroup from 'components/classes-page/AddEditGroup';
-import InformationItem from 'components/information-item/InformationItem';
 import { CustomEvent, ScheduleHeader, Toolbar } from 'components/schedule/ScheduleComponents';
-import ScheduleModal from 'components/schedule/ScheduleModal';
-import CustomSelect from 'components/select/CustomSelect';
-import { getOption, getOptionMui } from 'utils/getOption';
+import { getOptionMui } from 'utils/getOption';
 import { FormControl, Grid, InputLabel, Select } from '@mui/material';
-import _ from 'lodash';
 import groupStore from 'app/stores/groupStore';
 import Button from 'components/button/Button';
 import { checkRoleForClasses } from 'utils/checkRoleForClasses';
@@ -95,20 +88,22 @@ const ChildrenToolbar: FC = observer(() => {
             </FormControl>
           </Grid>
 
-          <Grid item xs={12} sm={6} md>
-            <FormControl fullWidth>
-              <InputLabel id="franchise">Франшиза</InputLabel>
-              <Select
-                labelId="franchise"
-                label="Франшиза"
-                value={filters.franchise || '*'}
-                fullWidth
-                onChange={({ target: { value } }) => setFilters('franchise', value)}
-              >
-                {franchiseOption}
-              </Select>
-            </FormControl>
-          </Grid>
+          {role === Roles.Admin && (
+            <Grid item xs={12} sm={6} md>
+              <FormControl fullWidth>
+                <InputLabel id="franchise">Франшиза</InputLabel>
+                <Select
+                  labelId="franchise"
+                  label="Франшиза"
+                  value={filters.franchise || '*'}
+                  fullWidth
+                  onChange={({ target: { value } }) => setFilters('franchise', value)}
+                >
+                  {franchiseOption}
+                </Select>
+              </FormControl>
+            </Grid>
+          )}
 
           <Grid item xs={12} sm={6} md>
             <FormControl fullWidth>
@@ -189,6 +184,8 @@ const ScheduleDnD: FC = observer(() => {
     getGroups();
     if (role === Roles.Franchisee || role === Roles.FranchiseeAdmin || role === Roles.Admin) {
       getTeachers();
+    }
+    if (role === Roles.Admin) {
       getFranchise();
     }
   }, []);
