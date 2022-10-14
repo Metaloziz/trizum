@@ -143,6 +143,7 @@ class AppStore {
   };
 
   loadme = async () => {
+    console.log('load me inside appStore')
     await execute(async () => {
       const res = await authService.loadme();
       if (res.status >= 400 || res.data === undefined) {
@@ -156,7 +157,7 @@ class AppStore {
           this.isLoggedIn = true;
           this.role = res.data.role as Roles;
           this.user = res.data;
-          console.log(this.user);
+          // console.log(this.user);
           this.isInitialized = true;
         });
       }
@@ -173,6 +174,7 @@ class AppStore {
   };
 
   setUser = async () => {
+    console.log('insede setUser')
     try {
       const res = await authService.loadme();
       runInAction(() => {

@@ -11,13 +11,14 @@ import Homeworks from 'containers/homeworks/Homeworks';
 import KeepPlaying from 'containers/keep-playing/KeepPlaying';
 import styles from 'pages/home/Home.module.scss';
 import { personalRecordsArr } from 'utils/personalRecordsArr';
+import { toJS } from 'mobx';
 
 export const StudentMain: FC = observer(() => {
   const { user } = appStore;
-  console.log(user);
-  const { works } = appStore.user.groups[0].group.course;
+  console.log(toJS(user));
+  const { works } = appStore.user?.groups[0].group ? appStore.user.groups[0].group.course : {works:[]};
   console.log(_.cloneDeep(works), 'works::work');
-  const presets = works[0].work.gamePresets;
+  const presets = works?.length ? works[0].work.gamePresets : '';
   console.log(_.cloneDeep(presets), 'preset::preset');
   const recordsArr = personalRecordsArr(user.personalRecord);
 
