@@ -15,7 +15,7 @@ import Pagination from '@mui/material/Pagination';
 
 import { LoadingIndicator } from 'components/franchising-page/ui/LoadingIndicator';
 import { observer } from 'mobx-react-lite';
-import React, { useEffect, ChangeEvent, useState } from 'react';
+import React, { useEffect, ChangeEvent, useState, useCallback } from 'react';
 import { StatusTypes } from '../../app/enums/StatusTypes';
 import coursesStore from '../../app/stores/coursesStore';
 import { SearchCoursesParamsType } from '../../app/types/SearchCoursesParamsType';
@@ -64,7 +64,7 @@ const MethodistMain = observer(() => {
     }
   };
 
-  const setFilter = (params: Partial<SearchCoursesParamsType> | null) => {
+  const setFilter = useCallback((params: Partial<SearchCoursesParamsType> | null) => {
     if (params) {
       setSearchCoursesParams(params);
     } else {
@@ -72,7 +72,9 @@ const MethodistMain = observer(() => {
     }
 
     getCourses();
-  };
+  }, []);
+
+  const [isOpenFilter, setIsOpenFilter] = useState(false);
 
   if (isLoading) {
     return <LoadingIndicator isLoading={isLoading} />;
@@ -102,7 +104,12 @@ const MethodistMain = observer(() => {
             >
               Добавить курс
             </Button>
-            <Filter setSearchCoursesParams={setFilter} filterData={filterData} />
+            <Filter
+              setSearchCoursesParams={setFilter}
+              filterData={filterData}
+              isOpenFilter={isOpenFilter}
+              setIsOpenFilter={setIsOpenFilter}
+            />
           </Stack>
         </Box>
         <TableContainer component={Paper}>
