@@ -1,3 +1,4 @@
+import groupStore from 'app/stores/groupStore';
 import { GamePresetT, OneGamePresent, PresetsGameSettings, ResultT } from 'app/types/GameTypes';
 import { GameModal } from 'components/game-page/GameCommon/GameModal/GameModal';
 import { GameResultModal } from 'components/game-page/GameCommon/GameModal/GameResultModal/GameResultModal';
@@ -5,6 +6,7 @@ import { presetArray } from 'constants/presetArr';
 import React, { FC, useEffect, useState } from 'react';
 import { Factory, GameIdentifiers } from 'games';
 import { PlayButton } from 'components/game-page/GameCommon/PlayButton';
+import { convertGroupOptions } from 'utils/convertGroupOptions';
 import { defaultResult } from 'utils/gameUtils/defaultResultValue';
 import styles from '../Game.module.scss';
 import { changedViewScreen } from 'utils/gameUtils/changeViewScreen';
@@ -28,6 +30,7 @@ type Props = {
 const Steam: FC<Props> = props => {
   const { actualPresets, gamePreset } = props;
   const { deletePreset, getPreset, getGame, getPresets } = gamesStore;
+  const { groups, getGroups } = groupStore;
   const { role } = appStore;
 
   const [started, setStarted] = useState(false);
@@ -36,9 +39,13 @@ const Steam: FC<Props> = props => {
   const [gameResult, setGameResult] = useState<ResultT>(defaultResult);
   const [settings, setSettings] = useState<PresetsGameSettings>();
   const [refs, setRef] = useState<any>(null);
+  const groupOptions = convertGroupOptions(groups);
 
   useEffect(() => {
-    getPresets();
+    if (role !== Roles.Student) {
+      getPresets();
+      getGroups();
+    }
     getGame(gameName);
   }, []);
 
@@ -128,7 +135,12 @@ const Steam: FC<Props> = props => {
                 {/*  <InformationItem variant="select" size="normal" placeholder="Месяц" /> */}
                 {/* </div> */}
                 <div className={styles.wrapGameBlock_header_select}>
-                  <InformationItem variant="select" size="normal" placeholder="Группа" />
+                  <InformationItem
+                    variant="select"
+                    size="normal"
+                    placeholder="Группа"
+                    option={groupOptions}
+                  />
                 </div>
                 <Button onClick={() => toggleModal(true)}>
                   {gamePreset?.gamePreset?.id ? 'Изменить настройки' : 'Создать настройки'}

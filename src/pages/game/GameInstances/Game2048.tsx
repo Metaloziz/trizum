@@ -41,8 +41,10 @@ const Game2048: FC<Props> = props => {
   const [settings, setSettings] = useState<PresetsGameSettings>();
 
   useEffect(() => {
-    getPresets();
-    role !== Roles.Student && getGroups();
+    if (role !== Roles.Student) {
+      getPresets();
+      getGroups();
+    }
     getGame('game2048');
   }, []);
   const navigate = useNavigate();

@@ -1,3 +1,4 @@
+import groupStore from 'app/stores/groupStore';
 import { GamePresetT, OneGamePresent, PresetsGameSettings, ResultT } from 'app/types/GameTypes';
 import { GameModal } from 'components/game-page/GameCommon/GameModal/GameModal';
 import { GameResultModal } from 'components/game-page/GameCommon/GameModal/GameResultModal/GameResultModal';
@@ -5,6 +6,7 @@ import { presetArray } from 'constants/presetArr';
 import React, { FC, useEffect, useState } from 'react';
 import { Factory, GameIdentifiers } from 'games';
 import { PlayButton } from 'components/game-page/GameCommon/PlayButton';
+import { convertGroupOptions } from 'utils/convertGroupOptions';
 import { defaultResult } from 'utils/gameUtils/defaultResultValue';
 import styles from '../Game.module.scss';
 import { changedViewScreen } from 'utils/gameUtils/changeViewScreen';
@@ -28,6 +30,7 @@ type Props = {
 const Shulte: FC<Props> = props => {
   const { actualPresets, gamePreset } = props;
   const { deletePreset, getPreset, getPresets, getGame } = gamesStore;
+  const { groups, getGroups } = groupStore;
   const { role, user } = appStore;
   const [started, setStarted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,13 +44,17 @@ const Shulte: FC<Props> = props => {
   const gameViewSize = changedViewScreen(widthScreen, 700);
   const gameTitle = 'Таблица Шульте';
   const presetArrs: Option[] = presetArray(actualPresets);
+  const groupOptions = convertGroupOptions(groups);
 
   console.log(presetArrs);
   // const { works } = user.groups[0].group.course;
   // console.log(works);
 
   useEffect(() => {
-    role !== Roles.Student && getPresets();
+    if (role !== Roles.Student) {
+      getPresets();
+      getGroups();
+    }
     getGame('shulte');
   }, []);
 
@@ -122,14 +129,19 @@ const Shulte: FC<Props> = props => {
                     onChangeSelect={data => setPreset(data)}
                   />
                 </div>
+                {/* <div className={styles.wrapGameBlock_header_select}> */}
+                {/*  <InformationItem variant="select" size="normal" placeholder="Год" /> */}
+                {/* </div> */}
+                {/* <div className={styles.wrapGameBlock_header_select}> */}
+                {/*  <InformationItem variant="select" size="normal" placeholder="Месяц" /> */}
+                {/* </div> */}
                 <div className={styles.wrapGameBlock_header_select}>
-                  <InformationItem variant="select" size="normal" placeholder="Год" />
-                </div>
-                <div className={styles.wrapGameBlock_header_select}>
-                  <InformationItem variant="select" size="normal" placeholder="Месяц" />
-                </div>
-                <div className={styles.wrapGameBlock_header_select}>
-                  <InformationItem variant="select" size="normal" placeholder="Группа" />
+                  <InformationItem
+                    variant="select"
+                    size="normal"
+                    placeholder="Группа"
+                    option={groupOptions}
+                  />
                 </div>
                 <Button onClick={() => toggleModal(true)}>
                   {gamePreset?.gamePreset?.id ? 'Изменить настройки' : 'Создать настройки'}
