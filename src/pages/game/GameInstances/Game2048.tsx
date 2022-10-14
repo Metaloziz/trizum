@@ -1,3 +1,4 @@
+import groupStore from 'app/stores/groupStore';
 import { GamePresetT, OneGamePresent, PresetsGameSettings, ResultT } from 'app/types/GameTypes';
 import { GameModal } from 'components/game-page/GameCommon/GameModal/GameModal';
 import { GameResultModal } from 'components/game-page/GameCommon/GameModal/GameResultModal/GameResultModal';
@@ -5,6 +6,7 @@ import { presetArray } from 'constants/presetArr';
 import React, { FC, useEffect, useState } from 'react';
 import { Factory, GameIdentifiers } from 'games';
 import { PlayButton } from 'components/game-page/GameCommon/PlayButton';
+import { convertGroupOptions } from 'utils/convertGroupOptions';
 import { defaultResult } from 'utils/gameUtils/defaultResultValue';
 import styles from '../Game.module.scss';
 import { changedViewScreen } from 'utils/gameUtils/changeViewScreen';
@@ -27,8 +29,9 @@ type Props = {
 
 const Game2048: FC<Props> = props => {
   const { actualPresets, gamePreset } = props;
-  const { deletePreset, getPreset, getPresets, getGame } = gamesStore;
+  const { deletePreset, getPreset, getPresets, getGame, game } = gamesStore;
   const { role } = appStore;
+  const { groups, getGroups } = groupStore;
 
   const [started, setStarted] = useState(false);
   const [resultModal, setResultModal] = useState(false);
@@ -39,13 +42,16 @@ const Game2048: FC<Props> = props => {
 
   useEffect(() => {
     getPresets();
+    role !== Roles.Student && getGroups();
     getGame('game2048');
   }, []);
   const navigate = useNavigate();
 
   const widthScreen = window.innerWidth;
   const gameViewSize = changedViewScreen(widthScreen, 700);
-  const gameTitle = '2048';
+  const gameTitle = game.name;
+
+  const groupOptions = convertGroupOptions(groups);
   console.log(_.cloneDeep(gamePreset), 'gamePreset::Game2048');
   const onRef = (refGame: any) => {
     setRef(refGame);
@@ -86,11 +92,11 @@ const Game2048: FC<Props> = props => {
   const presetArrs: Option[] = presetArray(actualPresets);
 
   useEffect(() => {
-    if (gamePreset.gamePreset.settings.length) {
+    if (gamePreset?.gamePreset.settings.length) {
       setSettings(gamePreset.gamePreset.settings[0]);
     }
   }, [gamePreset]);
-
+  console.log(groupOptions);
   return (
     <>
       {(role === Roles.Methodist || role === Roles.Admin) && (
@@ -121,14 +127,19 @@ const Game2048: FC<Props> = props => {
                     onChangeSelect={data => setPreset(data)}
                   />
                 </div>
+                {/* <div className={styles.wrapGameBlock_header_select}> */}
+                {/*  <InformationItem variant="select" size="normal" placeholder="Год" /> */}
+                {/* </div> */}
+                {/* <div className={styles.wrapGameBlock_header_select}> */}
+                {/*  <InformationItem variant="select" size="normal" placeholder="Месяц" /> */}
+                {/* </div> */}
                 <div className={styles.wrapGameBlock_header_select}>
-                  <InformationItem variant="select" size="normal" placeholder="Год" />
-                </div>
-                <div className={styles.wrapGameBlock_header_select}>
-                  <InformationItem variant="select" size="normal" placeholder="Месяц" />
-                </div>
-                <div className={styles.wrapGameBlock_header_select}>
-                  <InformationItem variant="select" size="normal" placeholder="Группа" />
+                  <InformationItem
+                    variant="select"
+                    size="normal"
+                    placeholder="Группа"
+                    option={groupOptions}
+                  />
                 </div>
                 <Button onClick={() => toggleModal(true)}>
                   {gamePreset?.gamePreset?.id ? 'Изменить настройки' : 'Создать настройки'}

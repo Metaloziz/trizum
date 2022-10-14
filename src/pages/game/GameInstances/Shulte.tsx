@@ -49,9 +49,6 @@ const Shulte: FC<Props> = props => {
   useEffect(() => {
     role !== Roles.Student && getPresets();
     getGame('shulte');
-    if (role === Roles.Student) {
-      // getPreset();
-    }
   }, []);
 
   console.log(_.cloneDeep(gamePreset), 'gamePreset::Shulte');

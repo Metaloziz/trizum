@@ -184,6 +184,26 @@ export const GameModal: FC<PropsT> = observer(props => {
     onClose(false);
   };
 
+  const closeModal = () => {
+    setTemplate('');
+    setTimeComplete('');
+    setElementsTotal('');
+    setDelay('');
+    // setLevel(gamePreset?.gamePreset?.level);
+    setLevel('');
+    setColorsMap(['black']);
+    setGroupsCount('');
+    setCycleTime('');
+    setWordsCount('');
+    setDigitMax('');
+    setErrorAcceptable('');
+    setSpeed('');
+    setBlinksCount('');
+    setDescription('');
+    setSound(false);
+    onClose(false);
+  };
+
   const deletedPreset = () => {
     if (gamePreset.gamePreset.id) {
       deletePreset(gamePreset.gamePreset.id);
@@ -192,7 +212,7 @@ export const GameModal: FC<PropsT> = observer(props => {
   };
 
   return (
-    <Dialog maxWidth="xl" fullWidth onClose={() => onClose(false)} open={open}>
+    <Dialog maxWidth="xl" fullWidth onClose={closeModal} open={open}>
       {colorModal && (
         <GameColorPicker
           colors={colors}
@@ -201,9 +221,9 @@ export const GameModal: FC<PropsT> = observer(props => {
           onClose={() => setColorModal(false)}
         />
       )}
-      <DialogTitle onClose={() => onClose(false)}>Настройка параметров</DialogTitle>
+      <DialogTitle onClose={closeModal}>Настройка параметров</DialogTitle>
       <DialogContent dividers>
-        <DialogTitle onClose={() => {}}>{StatusEnum[gamePreset.gamePreset.status]}</DialogTitle>
+        <DialogTitle onClose={closeModal}>{StatusEnum[gamePreset?.gamePreset?.status]}</DialogTitle>
         <Stack spacing={1}>
           <div className={styles.gameModalWrapper}>
             <div className={styles.gameModalWrapper_settings}>
@@ -670,7 +690,7 @@ export const GameModal: FC<PropsT> = observer(props => {
               <span>Нельзя изменять активные настройки</span>
             )}
             <Button
-              disabled={gamePreset?.gamePreset?.status === 'active' || template.length < 1}
+              disabled={gamePreset?.gamePreset?.status === 'active' || template?.length < 1}
               onClick={savePreset}
             >
               Сохранить

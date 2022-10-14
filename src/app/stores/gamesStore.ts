@@ -1,4 +1,5 @@
 import { StatusTypes } from 'app/enums/StatusTypes';
+import { RequestUsersForFilter } from 'app/types/UserTypes';
 import { PresetT } from 'app/types/WorkTypes';
 import { makeAutoObservable, runInAction } from 'mobx';
 
@@ -118,7 +119,6 @@ class GamesStore {
   getGame = async (game: string) => {
     try {
       const res = await gamesService.getGame(game);
-      console.log(res);
       runInAction(() => {
         this.game = res;
         this.filterPresets(res.code);

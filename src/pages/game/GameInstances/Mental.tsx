@@ -118,12 +118,12 @@ const Mental: FC<Props> = props => {
                     onChangeSelect={data => setPreset(data)}
                   />
                 </div>
-                <div className={styles.wrapGameBlock_header_select}>
-                  <InformationItem variant="select" size="normal" placeholder="Год" />
-                </div>
-                <div className={styles.wrapGameBlock_header_select}>
-                  <InformationItem variant="select" size="normal" placeholder="Месяц" />
-                </div>
+                {/* <div className={styles.wrapGameBlock_header_select}> */}
+                {/*  <InformationItem variant="select" size="normal" placeholder="Год" /> */}
+                {/* </div> */}
+                {/* <div className={styles.wrapGameBlock_header_select}> */}
+                {/*  <InformationItem variant="select" size="normal" placeholder="Месяц" /> */}
+                {/* </div> */}
                 <div className={styles.wrapGameBlock_header_select}>
                   <InformationItem variant="select" size="normal" placeholder="Группа" />
                 </div>
