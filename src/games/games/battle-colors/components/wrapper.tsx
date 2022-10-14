@@ -35,7 +35,7 @@ export default class extends Component<any, any> {
 
     const result = {...this.result};
     const timer: any = this.refs?.timer;
-    const time = this.props.time - timer?.getValue();
+    const time = this.props.timeComplete - timer?.getValue();
 
     setTimeout(() => {
       onEnd({
@@ -60,10 +60,10 @@ export default class extends Component<any, any> {
       active = 0
     } = this.state;
     const {
-      levels = 2
+      elementsTotal = 2
     } = this.props;
 
-    if(active == (levels-1)) {
+    if(active == (elementsTotal-1)) {
       this.onEnd();
     } else {
       this.setState({
@@ -78,10 +78,10 @@ export default class extends Component<any, any> {
 
   render() {
     const {
-      time,
-      levels,
+      timeComplete,
+      elementsTotal,
       width,
-      colors = 2
+      blinksCount = 2
     } = this.props;
 
     const {
@@ -91,14 +91,14 @@ export default class extends Component<any, any> {
 
     return <View style={styles.wrap}>
       <LevelsView
-        count={levels}
+        count={elementsTotal}
         progress={progress}
         onLevel={1}
       />
       <View style={styles.inner}>
         <LevelView
           key={`level-${active}`}
-          colors={colors}
+          blinksCount={blinksCount}
           onProgress={this.onProgress}
           onEnd={this.onLevelEnd}
           onResult={this.onResult}
@@ -108,7 +108,7 @@ export default class extends Component<any, any> {
       <View style={styles.progressTime}>
         <Timer
           ref='timer'
-          time={time}
+          time={timeComplete}
           onEnd={this.onEnd}
           renderComponent={() => <View
             style={{
@@ -117,7 +117,7 @@ export default class extends Component<any, any> {
             }}
           />}
           renderTime={(t : any) => {
-            let progress = ((time - t) / time) * 100;
+            let progress = ((timeComplete - t) / timeComplete) * 100;
 
             if(progress > 100) {
               progress = 100;

@@ -1,3 +1,5 @@
+import { StatusTypes } from 'app/enums/StatusTypes';
+
 export type GameT = {
   code: string;
   name: string;
@@ -19,19 +21,10 @@ export type PresetsGameSettings = {
   blinksCount?: number;
   errorAcceptable?: number;
   speed?: number;
-  sizeX?: number;
-  sizeY?: number;
   colorsMap?: string[];
   delay?: number;
-  level?: number;
-  colorCount?: number;
-  forms?: number;
   description?: string;
-  size?: number;
-  startTiles?: number;
-  time?: number;
-  levels?: number;
-  colores?: number;
+  sound?: boolean;
 };
 
 export type EditOrCreatePresetParamsT = {
@@ -56,7 +49,7 @@ export type GamePresetT = {
   id: string;
   name: string;
   game: GameT;
-  status: string;
+  status: StatusTypes;
   level: string;
   settings: PresetsGameSettings[];
 };

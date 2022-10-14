@@ -71,8 +71,8 @@ export default class extends Component<any, any> implements Game {
 
   render() {
     const {
-      size,
-      startTiles,
+      groupsCount,
+      elementsTotal,
       width,
       onFeedbackSuccess = () => {},
       onFeedbackError = () => {},
@@ -91,8 +91,8 @@ export default class extends Component<any, any> implements Game {
       </Text>}
       <Container
         ref={ref => this.game = ref}
-        startTiles={startTiles}
-        size={size}
+        elementsTotal={elementsTotal}
+        size={groupsCount}
         width={width}
         onEnd={this.end('end')}
         onWin={this.end('win')}

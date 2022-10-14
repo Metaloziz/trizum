@@ -1,15 +1,15 @@
 import { GameProps, GameResult } from '../../common/types';
 
 export interface Props extends GameProps {
-  size?: number;
-  startTiles?: number;
+  groupsCount?: number; // Размер поля x на x
+  elementsTotal?: number; // Стартовое кол-во тайлов
   onEnd?(result?: GameResult): void;
 }
 
 const PropsDefault : Props = {
   width : 200,
-  size: 4,
-  startTiles: 2
+  groupsCount: 4,
+  elementsTotal: 2
 };
 
 export {

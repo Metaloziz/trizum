@@ -1,3 +1,4 @@
+import { StatusEnum, StatusTypes } from 'app/enums/StatusTypes';
 import { GamePresetT } from 'app/types/GameTypes';
 import { Option } from 'components/select-mui/CustomSelect';
 
@@ -11,7 +12,7 @@ export const presetArray = (actualPreset: Omit<GamePresetT, 'settings'>[]) => {
   actualPreset?.map(el =>
     presetArr.push({
       value: el.name,
-      label: el.name,
+      label: `${el.name} \n ${StatusEnum[el.status]}`,
     }),
   );
   return presetArr;

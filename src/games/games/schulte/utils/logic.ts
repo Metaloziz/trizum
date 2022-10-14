@@ -5,15 +5,15 @@ import { Props } from '../types';
 export function generateLayout(props : any) {
   const {
     elementsTotal= 3,
-    colors = 1,
+    groupsCount = 1,
     colorsMap = []
   } : Props = props;
 
   const size =  elementsTotal * elementsTotal;
-  const maxSizeColor = Math.ceil(size / colors);
+  const maxSizeColor = Math.ceil(size / groupsCount);
   const resultMap = [];
 
-  for(let i = 0;i<colors;i++) {
+  for(let i = 0;i<groupsCount;i++) {
     for(let c = 0;c<maxSizeColor;c++) {
       const number = c+1;
 

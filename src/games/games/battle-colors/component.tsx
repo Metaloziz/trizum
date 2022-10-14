@@ -75,7 +75,7 @@ export default class extends Component<any, any> implements Game {
 
     return [
       {
-        name : 'time',
+        name : 'timeComplete',
         title : 'Время игры',
         type : 'select',
         option : [
@@ -100,7 +100,7 @@ export default class extends Component<any, any> implements Game {
         required : true
       },
       {
-        name : 'levels',
+        name : 'elementsTotal',
         title : 'Кол-во уровней',
         type : 'select',
         option : counterSelect(1, 5),
@@ -108,7 +108,7 @@ export default class extends Component<any, any> implements Game {
         required : true
       },
       {
-        name : 'colores',
+        name : 'blinksCount',
         title : 'Кол-во цветов',
         type : 'select',
         option : counterSelect(3, 5),
@@ -120,9 +120,9 @@ export default class extends Component<any, any> implements Game {
 
   public prepareConfig = (result : any) => {
     return {
-      time : parseInt(result.time),
-      levels : parseInt(result.levels),
-      colores : parseInt(result.colores),
+      timeComplete : parseInt(result.timeComplete),
+      elementsTotal : parseInt(result.elementsTotal),
+      blinksCount : parseInt(result.blinksCount),
     };
   }
 
@@ -132,8 +132,8 @@ export default class extends Component<any, any> implements Game {
     } = this.state;
 
     const {
-      time = 10,
-      levels,
+      timeComplete = 10,
+      elementsTotal,
       width
     } = this.props;
 

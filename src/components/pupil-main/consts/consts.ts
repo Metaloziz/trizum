@@ -1,3 +1,5 @@
+import { GameIdentifiers } from 'games';
+
 const randomPercent = () => Math.floor(Math.random() * 100);
 
 export const weeklyGrowth = [
@@ -82,45 +84,60 @@ export const homeworks = [
 export const games = [
   {
     title: 'Битва полушарий',
-    code: 'battleColors',
+    code: GameIdentifiers.battleColors,
     minutesLeft: 18,
     colorTheme: 'blue',
     id: +new Date().toDateString(),
   },
   {
     title: '2048',
-    code: 'game2048',
+    code: GameIdentifiers.game2048,
     minutesLeft: 36,
     colorTheme: 'gradient-violet',
     id: +new Date().toDateString(),
   },
   {
     title: 'Таблица шульте',
-    code: 'shulte',
+    code: GameIdentifiers.shulte,
     minutesLeft: 20,
     colorTheme: 'blue',
     id: +new Date().toDateString(),
   },
   {
     title: 'Сдвиг по вертикали',
-    code: 'shiftVertical',
+    code: GameIdentifiers.shiftVertical,
     minutesLeft: 44,
     colorTheme: 'gradient-blue-darker',
     id: +new Date().toDateString(),
   },
+  // {
+  //   title: 'Ментальный счет',
+  //   code: GameIdentifiers.mental,
+  //   minutesLeft: 31,
+  //   colorTheme: 'aquamarine',
+  //   id: +new Date().toDateString(),
+  // },
   {
-    title: 'Ментальный счет',
-    code: 'mental',
+    title: 'Паровик',
+    code: GameIdentifiers.steamEngine,
     minutesLeft: 31,
     colorTheme: 'aquamarine',
     id: +new Date().toDateString(),
   },
-  // {
-  //   title: 'Память и ритм',
-  //   minutesLeft: 18,
-  //   colorTheme: 'blue',
-  //   id: +new Date().toDateString(),
-  // },
+  {
+    title: 'Бирюльки',
+    code: GameIdentifiers.silhouettes,
+    minutesLeft: 31,
+    colorTheme: 'blue',
+    id: +new Date().toDateString(),
+  },
+  {
+    title: 'Память и ритм',
+    code: GameIdentifiers.memoryRhythm,
+    minutesLeft: 31,
+    colorTheme: 'gradient-blue-darker',
+    id: +new Date().toDateString(),
+  },
   // {
   //   title: 'Найди слова/числа/фигуры',
   //   minutesLeft: 36,

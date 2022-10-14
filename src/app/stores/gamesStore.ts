@@ -1,3 +1,4 @@
+import { StatusTypes } from 'app/enums/StatusTypes';
 import { PresetT } from 'app/types/WorkTypes';
 import { makeAutoObservable, runInAction } from 'mobx';
 
@@ -89,7 +90,7 @@ class GamesStore {
         name: '',
         type: '',
       },
-      status: '',
+      status: '' as StatusTypes,
       level: 'easy',
       settings: [],
     },
@@ -177,7 +178,7 @@ class GamesStore {
               name: '',
               type: '',
             },
-            status: '',
+            status: '' as StatusTypes,
             level: '',
             settings: [],
           },

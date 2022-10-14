@@ -15,12 +15,12 @@ export default class extends Component<any, any> {
     super(props);
 
     const {
-      colors = 2,
-      forms = 2,
+      groupsCount = 2,
+      blinksCount = 2,
     } = props;
 
-    this.activeColors = GameColors.slice(0, colors);
-    this.activeForms = GameForms.slice(0, forms);
+    this.activeColors = GameColors.slice(0, groupsCount);
+    this.activeForms = GameForms.slice(0, blinksCount);
 
     const valiants : any = {
       color : {
@@ -139,7 +139,7 @@ export default class extends Component<any, any> {
 
   render() {
     const {
-      delay = 3
+      cycleTime = 3
     } = this.props;
 
     const {
@@ -173,7 +173,7 @@ export default class extends Component<any, any> {
         <View>
           <TimerButton
             onPress={this.onColor}
-            delay={delay}
+            cycleTime={cycleTime}
           />
         </View>
       </View>;
