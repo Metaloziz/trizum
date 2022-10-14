@@ -111,6 +111,7 @@ class UsersStore {
         return isError;
       }
       await this.getUsers();
+      await this.getOneUser(userId)
       return res;
     } catch (e) {
       console.warn(e);

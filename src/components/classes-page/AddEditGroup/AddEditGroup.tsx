@@ -14,6 +14,7 @@ import { getOptionMui } from 'utils/getOption';
 import { GroupTypes } from 'app/enums/GroupTypes';
 import { GroupLevels } from 'app/enums/GroupLevels';
 import { StatusTypes } from '../../../app/enums/StatusTypes';
+import _ from 'lodash';
 
 interface Props {}
 
@@ -44,16 +45,17 @@ const AddEditGroup: FC<Props> = observer(props => {
     modalFields,
     validateSchema,
     franchise,
-    loadInitialModal,
-    addGroup,
     filteredCourses,
-    cleanModalValues,
     selectedGroup,
     isModalOpen,
+    schedule,
+    loadInitialModal,
+    addGroup,
+    cleanModalValues,
     closeModal,
     editGroup,
   } = groupStore;
-
+  console.log(_.cloneDeep(schedule), 'schedule');
   const { role, user } = appStore;
   const [teacherOptions, setTeacherOptions] = useState<JSX.Element[]>([]);
   const [franchiseOptions, setFranchiseOptions] = useState<JSX.Element[]>([]);
@@ -79,6 +81,7 @@ const AddEditGroup: FC<Props> = observer(props => {
       setFranchiseOptions(franchise.map(t => getOptionMui(t.id || '', t.shortName)));
     }
   }, [groupStore.franchise]);
+
   useEffect(() => {
     if (appStore.user.role !== Roles.Admin && appStore.user?.franchise?.id) {
       modalFields.franchiseId = appStore.user.franchise.id;
@@ -91,16 +94,20 @@ const AddEditGroup: FC<Props> = observer(props => {
 
   useEffect(() => {
     const cOptions = filteredCourses.length
-      ? filteredCourses.map(t => getOptionMui(t.id || '', t.title))
+      ? filteredCourses.map(t =>
+          getOptionMui(t.id || '', `${t.title} - ${t.status} - ${t.worksCount}`),
+        )
       : [];
     setCourseOptions(cOptions);
-  }, [modalFields.level]);
+  }, [modalFields.level, filteredCourses]);
 
   const onClose = () => {
     closeModal();
     cleanModalValues();
   };
+
   const isFranchiseRole = role === Roles.Franchisee || role === Roles.FranchiseeAdmin;
+
   return (
     <BasicModal
       fullWidth
@@ -120,6 +127,7 @@ const AddEditGroup: FC<Props> = observer(props => {
             label="Название"
             value={modalFields.name}
             fullWidth
+            disabled={!!selectedGroup.id && modalFields.status !== 'active'}
             onChange={({ currentTarget: { value } }) => (modalFields.name = value)}
             error={!validateSchema.fields.name.isValidSync(modalFields.name)}
           />
@@ -176,7 +184,7 @@ const AddEditGroup: FC<Props> = observer(props => {
             <Select
               labelId="course"
               label="Курс"
-              disabled={!modalFields.level}
+              disabled={!modalFields.level || !!selectedGroup.id}
               fullWidth
               onChange={({ target: { value } }) => {
                 const course = groupStore.courses.find(el => el.id === value);

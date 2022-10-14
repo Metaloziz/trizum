@@ -12,4 +12,8 @@ export class SearchCoursesParamsType {
   created_since: string = '';
 
   created_until: string = '';
+
+  type = '';
+
+  status = '';
 }

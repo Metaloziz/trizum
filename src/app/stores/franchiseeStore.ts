@@ -54,6 +54,7 @@ class FranchiseeStore {
 
   getFranchisee = async () => {
     try {
+
       const res = await franchiseService.getAll();
       runInAction(() => {
         this.franchise = res;

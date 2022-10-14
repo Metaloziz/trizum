@@ -15,11 +15,9 @@ type Props = Record<string, any>;
 
 const DefaultLayout: FC<Props> = observer(({ children, ...rest }) => {
   const { isLoggedIn, isInitialized, role } = appStore;
-  const func = async () => {
-    await appStore.loadme();
-  };
+
   useEffect(() => {
-    func();
+      appStore.loadme();
   }, []);
   return !isInitialized ? (
     <>Initialising...</>

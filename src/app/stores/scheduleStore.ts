@@ -6,6 +6,7 @@ import { scheduleMapper } from 'app/types/mappers/ScheduleMapper';
 import usersService from 'app/services/usersService';
 import { Roles } from 'app/stores/appStore';
 import franchiseService from 'app/services/franchiseService';
+import _ from 'lodash';
 
 class GroupStore {
   defaultFilters = {
@@ -43,7 +44,7 @@ class GroupStore {
   };
 
   getGroups = async () => {
-    const res = await groupsService.getGroups({ perPage: 1000 });
+    const res = await groupsService.getGroups({ perPage: 1000, type: 'class' });
     runInAction(() => {
       if (!!res.items) {
         this.groups = res.items.map(el => ({ groupName: el.name, groupId: el.id }));
@@ -90,6 +91,7 @@ class GroupStore {
   };
 
   get actualSchedule() {
+    console.log(_.cloneDeep(this.schedule), 'this.schedule');
     const withFilter = this.schedule.filter(
       el =>
         el.teacherId.includes(this.filters.teacherId) &&
