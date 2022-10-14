@@ -142,7 +142,15 @@ const Paint: FC<Props> = props => {
             <div className={styles.wrapInner}>
               <div className={styles.wrapGame}>
                 <div className={styles.wrapGame_overlay}>
-                  <GameInstance width={gameViewSize} onEnd={onEnd} onRef={onRef} {...settings} />
+                  <GameInstance
+                    width={gameViewSize}
+                    onEnd={onEnd}
+                    onRef={onRef}
+                    {...settings}
+                    colors={settings?.colorsMap?.length || 1}
+                    size={6}
+                  />
+
                   {!started && <PlayButton onStart={startGame} />}
                 </div>
               </div>

@@ -104,7 +104,7 @@ const Steam: FC<Props> = props => {
         onClose={closeResultModal}
         onStart={onRepeat}
       />
-      <div className={styles.wrapGameBlock}>
+      <div className={styles.wrapGameBlock} key={gameTitle}>
         <Button className={styles.goBack} onClick={() => navigate(-1)}>
           Назад
         </Button>
@@ -137,7 +137,7 @@ const Steam: FC<Props> = props => {
             )}
           </div>
 
-          <div className={styles.wrap}>
+          <div className={`${styles.wrap} ${role === Roles.Student && styles.isStudent}`}>
             <div className={styles.wrapInner}>
               <div className={styles.wrapGame}>
                 <div className={styles.wrapGame_overlay}>
@@ -147,6 +147,7 @@ const Steam: FC<Props> = props => {
                     onRef={onRef}
                     {...settings}
                     colors={settings?.colorsMap?.length || 1}
+                    size={6}
                   />
 
                   {!started && <PlayButton onStart={startGame} />}
