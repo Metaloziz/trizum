@@ -1,7 +1,7 @@
 export interface HomeworkViewModel {
   id: string;
   title: string;
-  text: string; // TODO: тут объект, подумать как его выводить
+  text: string;
   gamePresets: string[];
   type: string;
   status: string;

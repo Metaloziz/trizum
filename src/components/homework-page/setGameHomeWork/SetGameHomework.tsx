@@ -5,27 +5,9 @@ import { Dialog } from 'components/franchising-page/ui/Dialog';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useState } from 'react';
 import { getOptionMui } from 'utils/getOption';
+import { GameList, GameIdentifiers } from '../../../games';
 import { ErrorMessage } from './ErrorMessage/ErrorMessage';
 import styles from './setGameHomework.module.scss';
-
-const Games = [
-  {
-    title: 'Сдвиг по вертикали',
-    name: 'shiftVertical',
-  },
-  {
-    title: 'Ментальный счет',
-    name: 'mental',
-  },
-  {
-    title: 'Таблица Шульте',
-    name: 'shulte',
-  },
-  {
-    title: '2048',
-    name: 'game2048',
-  },
-];
 
 type SetGameHomeworkPropsT = {
   open: boolean;
@@ -40,7 +22,9 @@ export const SetGameHomework: FC<SetGameHomeworkPropsT> = observer(
     const [gameName, setGameName] = useState('');
     const [presetName, setPresetName] = useState('');
 
-    const gamesOptions = Games.map(game => getOptionMui(game.name, game.title));
+    const gamesOptions = Object.keys(GameIdentifiers).map(key =>
+      getOptionMui(key, GameList[key].name),
+    );
     const presetOptions = actualPresets.map(pr => getOptionMui(pr.name, pr.name));
 
     const setGame = (value: string) => {
@@ -54,8 +38,19 @@ export const SetGameHomework: FC<SetGameHomeworkPropsT> = observer(
       getPreset(value);
     };
 
+    const closeDialog = () => {
+      setGameName('');
+      setPresetName('');
+      onClose();
+    };
+
+    const saveGame = () => {
+      getPresetGame(gamePreset.gamePreset.id);
+      closeDialog();
+    };
+
     return (
-      <Dialog open={open} onClose={onClose} fullWidth>
+      <Dialog open={open} onClose={closeDialog} fullWidth>
         <div className={styles.gameSetWrapper}>
           <h3>Выбор игры</h3>
           <Grid item xs={12} sm={6} marginBottom="20px">
@@ -84,7 +79,7 @@ export const SetGameHomework: FC<SetGameHomeworkPropsT> = observer(
             <ErrorMessage gamePreset={gamePreset} />
           </Grid>
 
-          <Button onClick={() => getPresetGame(gamePreset.gamePreset.id)} className={styles.btn}>
+          <Button onClick={saveGame} className={styles.btn}>
             Сохранить
           </Button>
         </div>

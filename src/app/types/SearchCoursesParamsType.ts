@@ -10,4 +10,6 @@ export class SearchCoursesParamsType {
   total: number = 0;
 
   created_since: string = '';
+
+  created_until: string = '';
 }

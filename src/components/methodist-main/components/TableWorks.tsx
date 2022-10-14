@@ -20,6 +20,7 @@ type Props = {
   setCurrentCourse: typeof coursesStore.setCurrentCourse;
   setSearchParams: typeof homeworkStore.setSearchParams;
   pagination: typeof homeworkStore.pagination;
+  selectedWorks: typeof coursesStore.currentCourse.works;
 };
 
 export const TableWorks: FC<Props> = ({
@@ -28,6 +29,7 @@ export const TableWorks: FC<Props> = ({
   setCurrentCourse,
   setSearchParams,
   pagination,
+  selectedWorks,
 }) => {
   const [currentPage, setCurrentPage] = useState(pagination.page + 1);
 
@@ -51,7 +53,7 @@ export const TableWorks: FC<Props> = ({
                 },
               }}
             >
-              <TableCell role="checkbox">Добавить</TableCell>
+              <TableCell role="checkbox">Очерёдность</TableCell>
               <TableCell>Наименование</TableCell>
               <TableCell width="auto">Описание</TableCell>
               <TableCell>Количество игр</TableCell>
@@ -59,7 +61,13 @@ export const TableWorks: FC<Props> = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableWorksRows worksArray={worksArray} setCurrentCourse={setCurrentCourse} />
+            {selectedWorks && (
+              <TableWorksRows
+                worksArray={worksArray}
+                setCurrentCourse={setCurrentCourse}
+                selectedWorks={selectedWorks}
+              />
+            )}
           </TableBody>
         </Table>
       </TableContainer>

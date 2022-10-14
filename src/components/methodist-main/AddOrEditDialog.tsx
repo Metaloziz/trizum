@@ -8,10 +8,7 @@ import {
   Stack,
   TextField,
 } from '@mui/material';
-
-import { GroupLevels } from 'app/enums/GroupLevels';
-import { GroupTypes } from 'app/enums/GroupTypes';
-import { StatusEnum, StatusTypes, EditStatusEnum, AddStatusEnum } from 'app/enums/StatusTypes';
+import { StatusTypes, EditStatusEnum, AddStatusEnum } from 'app/enums/StatusTypes';
 import Button from 'components/button/Button';
 import { TableWorks } from 'components/methodist-main/components/TableWorks';
 import { observer } from 'mobx-react';
@@ -22,17 +19,13 @@ import coursesStore from '../../app/stores/coursesStore';
 import homeworkStore from '../../app/stores/homeworkStore';
 
 import { Dialog, DialogTitle } from '../franchising-page/ui/Dialog';
-
-const groupTypesKeys = Object.keys(GroupTypes);
-const statusTypesKeys = Object.keys(StatusEnum);
-const levelKeys = Object.keys(GroupLevels);
-const groupTypesOptions = Object.values(GroupTypes).map((el, index) =>
-  getOptionMui(groupTypesKeys[index], el),
-);
-
-const levelOptions = Object.values(GroupLevels).map((el, index) =>
-  getOptionMui(levelKeys[index], el),
-);
+import { LoadingIndicator } from '../franchising-page/ui/LoadingIndicator';
+import {
+  defaultSearchHomeWorksParams,
+  levelOptions,
+  groupTypesOptions,
+  statusTypesKeys,
+} from './utils/utils';
 
 export const AddOrEditDialog = observer(() => {
   const { getHomeWorks, setSearchParams, pagination, worksArray } = homeworkStore;
@@ -44,6 +37,7 @@ export const AddOrEditDialog = observer(() => {
     setCurrentCourse,
     editCourse,
     createCourse,
+    isLoading,
   } = coursesStore;
 
   const statusTypesOptions = Object.values(currentCourse?.id ? EditStatusEnum : AddStatusEnum).map(
@@ -64,10 +58,24 @@ export const AddOrEditDialog = observer(() => {
         default:
           type = '';
       }
-      setSearchParams({ status: 'active', type, page: 0, per_page: 5 });
+      setSearchParams({ ...defaultSearchHomeWorksParams, type });
       getHomeWorks();
     }
   }, [currentCourse?.type]);
+
+  const setDialogClose = () => {
+    setIsDialogOpen(false);
+    setSearchParams(defaultSearchHomeWorksParams);
+  };
+
+  const editCourseCallBack = () => {
+    editCourse();
+    setDialogClose();
+  };
+
+  if (isLoading) {
+    return <LoadingIndicator isLoading={isLoading} />;
+  }
 
   return (
     <Dialog
@@ -78,10 +86,10 @@ export const AddOrEditDialog = observer(() => {
       }}
       maxWidth="md"
       fullWidth
-      onClose={() => setIsDialogOpen(false)}
+      onClose={setDialogClose}
       open={isDialogOpen}
     >
-      <DialogTitle onClose={() => setIsDialogOpen(false)}>
+      <DialogTitle onClose={setDialogClose}>
         {currentCourse?.id ? 'Редактирование курса' : 'Добавление нового курса'}
       </DialogTitle>
       <DialogContent dividers>
@@ -161,6 +169,7 @@ export const AddOrEditDialog = observer(() => {
               setSearchParams={setSearchParams}
               getHomeWorks={getHomeWorks}
               pagination={pagination}
+              selectedWorks={currentCourse.works}
             />
           )}
         </Stack>
@@ -168,7 +177,7 @@ export const AddOrEditDialog = observer(() => {
       <DialogActions>
         <Button
           variant="primary"
-          onClick={currentCourse?.id ? editCourse : createCourse}
+          onClick={currentCourse?.id ? editCourseCallBack : createCourse}
           // disabled={!validateSchema.isValidSync(currentCourse)}
         >
           {currentCourse?.id ? 'Изменить' : 'Сохранить'}

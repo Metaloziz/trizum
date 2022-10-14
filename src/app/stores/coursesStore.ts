@@ -1,4 +1,4 @@
-import coursesService, { CreateCoursePayloadType } from 'app/services/coursesService';
+import coursesService from 'app/services/coursesService';
 import { ShortCourseType } from 'app/types/CourseTypes';
 import { Nullable } from 'app/types/Nullable';
 import { runInAction, observable, makeObservable } from 'mobx';
@@ -7,8 +7,10 @@ import { execute } from '../../utils/execute';
 import { removeEmptyFields } from '../../utils/removeEmptyFields';
 import { GroupLevels } from '../enums/GroupLevels';
 import { StatusTypes } from '../enums/StatusTypes';
+import { CreateCoursePayloadType } from '../types/CreateCoursePayloadType';
 import { FilterData } from '../types/FilterData';
 import { NewCourseType } from '../types/NewCourseType';
+import { PaginationType } from '../types/PaginationType';
 import { SearchCoursesParamsType } from '../types/SearchCoursesParamsType';
 import { CourseViewModel } from '../viewModels/CourseViewModel';
 import { StoreBase } from './StoreBase';
@@ -48,6 +50,23 @@ class CoursesStore extends StoreBase {
     });
   };
 
+  getCurrentCourse = async (courseId: string) => {
+    await this.execute(async () => {
+      const { course } = await coursesService.getCurrentCourse(courseId);
+
+      const draft: NewCourseType = {
+        id: course.id,
+        title: course.title,
+        level: course.level,
+        type: course.type,
+        status: course.status,
+        works: course.works.map(work => ({ index: work.index, workId: work.work.id })),
+      };
+
+      this.setCurrentCourse(draft);
+    });
+  };
+
   createCourse = async () => {
     execute(async () => {
       if (this.currentCourse) {
@@ -83,6 +102,7 @@ class CoursesStore extends StoreBase {
 
       await coursesService.editCourse(newCourse);
       await this.getCourses();
+      this.setIsDialogOpen(false);
     });
   };
 
@@ -92,11 +112,13 @@ class CoursesStore extends StoreBase {
   };
 
   setCurrentCourse = (course: NewCourseType) => {
-    if (course === null) {
-      this.currentCourse = new NewCourseType();
-    } else {
-      this.currentCourse = { ...this.currentCourse, ...course };
-    }
+    runInAction(() => {
+      if (course === null) {
+        this.currentCourse = new NewCourseType();
+      } else {
+        this.currentCourse = { ...this.currentCourse, ...course };
+      }
+    });
   };
 
   setSearchCoursesParams = (params: Partial<SearchCoursesParamsType>) => {
@@ -112,7 +134,7 @@ class CoursesStore extends StoreBase {
     });
   }
 
-  get pagination(): Pick<SearchCoursesParamsType, 'total' | 'per_page' | 'page'> {
+  get pagination(): PaginationType {
     return {
       page: this.searchCoursesParams.page,
       per_page: this.searchCoursesParams.per_page,
