@@ -29,9 +29,9 @@ const SetPaidStatusButton: FC<Props> = ({ id, active }) => {
   };
 
   const iconButton = isActive ? (
-    <Image src={unpaid} alt="lock" width={16} height={20} />
+    <Image style={{marginTop: '7px'}} src={unpaid} alt="lock" width={35} height={35} />
   ) : (
-    <Image src={paid} alt="open" width={16} height={20} />
+    <Image style={{marginTop: '7px'}} src={paid} alt="open" width={35} height={35} />
   );
   console.log('icon',iconButton)
   return (
