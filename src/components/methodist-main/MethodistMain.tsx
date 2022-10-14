@@ -34,6 +34,7 @@ const MethodistMain = observer(() => {
     editCourse,
     isLoading,
     setIsDialogOpen,
+    getCurrentCourse,
     setCurrentCourse,
     filterData,
   } = coursesStore;
@@ -75,6 +76,11 @@ const MethodistMain = observer(() => {
   }, []);
 
   const [isOpenFilter, setIsOpenFilter] = useState(false);
+
+  const editCourseHandle = (courseId: string) => {
+    getCurrentCourse(courseId);
+    setIsDialogOpen(true);
+  };
 
   if (isLoading) {
     return <LoadingIndicator isLoading={isLoading} />;
@@ -138,8 +144,7 @@ const MethodistMain = observer(() => {
                   <CourseItem
                     key={course.id}
                     course={course}
-                    // onClick={() => store.openDialog(course)}
-                    openDialogCallBack={() => {}}
+                    openDialogCallBack={() => editCourseHandle(course.id)}
                     removeCallBack={() =>
                       deleteCurrentCourse(course.id, course.status as StatusTypes)
                     }

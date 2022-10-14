@@ -1,4 +1,3 @@
-import { GroupTypes } from 'app/enums/GroupTypes';
 import { TimeZoneType } from 'app/types/TimeZoneType';
 import { StatusTypes } from '../enums/StatusTypes';
 import { WorkTypes } from '../enums/WorkTypes';
@@ -29,41 +28,9 @@ export type CourseType = ShortCourseType & {
   // usedInGroups: string[]; // todo not sure
 };
 
-export type ResponseOneCourse = {
-  id: string;
-  code: string;
-  works: ResponseWork[];
-};
-
-export type GetCoursesParams = {
-  perPage?: number;
-  page?: number;
-  type?: keyof typeof GroupTypes;
-};
-
-export type RequestCreateCourse = {
-  title: string;
-  type: string;
-  level: string;
-  works: ResponseWork[];
-};
-
-export type RequestEditCourseWork = {
-  type: string;
-  index: number;
-  workId: string;
-};
-
-export type RequestEditCourse = {
-  id?: string;
-  title?: string;
-  level?: string;
-  status?: StatusTypes;
-  works?: RequestEditCourseWork[];
-};
-
-export type ResponseDeleteCourse = {
-  result: string;
+export type CurrentCourseResponse = {
+  course: CourseType;
+  usedInGroups: string[];
 };
 
 export type AnswerT = {
@@ -83,13 +50,4 @@ export type WorkWithCourseBonded = {
   id: string;
   index: number;
   work: Omit<ResponseWork, 'gamePresetCount'> & { gamePresets?: GamePresetT[] };
-};
-
-export type ResponseOneFullCourse = {
-  id: string;
-  title: string;
-  level: string;
-  worksCount: number;
-  createdAt: TimeZoneType;
-  works: WorkWithCourseBonded[];
 };

@@ -10,16 +10,8 @@ import { MIN_NAMES_LENGTH } from '../../constants/constants';
 import { removeEmptyFields } from '../../utils/removeEmptyFields';
 import { StatusTypes } from '../enums/StatusTypes';
 import homeWorksService from '../services/homeWorksService';
-import { PaginationResponse } from '../types/PaginationResponse';
-import {SearchCoursesParamsType} from "../types/SearchCoursesParamsType";
-
-export type SearchHomeWorksParamsType = {
-  page: number;
-  per_page: number;
-  total: number;
-  status: string;
-  type: string;
-};
+import { PaginationType } from '../types/PaginationType';
+import { SearchHomeWorksParamsType } from '../types/SearchHomeWorksParamsType';
 
 class HomeworkStore extends StoreBase {
   isDialogOpen: boolean = false;
@@ -163,7 +155,7 @@ class HomeworkStore extends StoreBase {
     });
   }
 
-  get pagination(): Pick<SearchCoursesParamsType, 'total' | 'per_page' | 'page'> {
+  get pagination(): PaginationType {
     return {
       page: this.searchHomeWorksParams.page,
       per_page: this.searchHomeWorksParams.per_page,

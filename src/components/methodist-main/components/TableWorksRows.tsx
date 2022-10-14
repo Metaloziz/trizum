@@ -13,22 +13,22 @@ type Props = {
 };
 
 export const TableWorksRows: FC<Props> = ({ worksArray, setCurrentCourse, selectedWorks }) => {
-  const addWork = (work: HomeworkViewModel) => {
-    const result = selectedWorks.find(el => el.workId === work.id);
+  const switchWorkInclude = (work: HomeworkViewModel) => {
+    const currentWork = selectedWorks.find(el => el.workId === work.id);
 
-    if (result) {
-      const res = selectedWorks.filter(el => el.workId !== result.workId);
-      setCurrentCourse({ works: res });
+    if (currentWork) {
+      setCurrentCourse({ works: selectedWorks.filter(el => el.workId !== currentWork.workId) });
     } else {
-      const res = [...selectedWorks, { index: selectedWorks.length, workId: work.id }];
-      setCurrentCourse({ works: res });
+      setCurrentCourse({
+        works: [...selectedWorks, { index: selectedWorks.length, workId: work.id }],
+      });
     }
   };
 
   const position = (work: HomeworkViewModel) => {
-    const res = selectedWorks.find(el => el.workId === work.id);
-    if (res) {
-      return selectedWorks.indexOf(res) + 1;
+    const currentWork = selectedWorks.find(el => el.workId === work.id);
+    if (currentWork) {
+      return selectedWorks.indexOf(currentWork) + 1;
     }
     return 0;
   };
@@ -49,7 +49,7 @@ export const TableWorksRows: FC<Props> = ({ worksArray, setCurrentCourse, select
             <Checkbox
               size="small"
               checked={!!position(work)}
-              onChange={() => addWork(work)}
+              onChange={() => switchWorkInclude(work)}
               checkedIcon={
                 <div style={{ fontWeight: '900', fontSize: '15px' }}>{position(work)}</div>
               }

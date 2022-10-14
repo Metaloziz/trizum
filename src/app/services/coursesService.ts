@@ -1,24 +1,21 @@
 import { Paths } from 'app/enums/Paths';
 import instance from 'app/services/config';
-import {
-  ShortCourseType,
-  ResponseDeleteCourse,
-  ResponseWork,
-  CourseType,
-} from 'app/types/CourseTypes';
+import { ShortCourseType, CourseType, CurrentCourseResponse } from 'app/types/CourseTypes';
 import { WithPagination } from 'app/types/WithPagination';
-import {NewCourseType} from "../types/NewCourseType";
-import {SearchCoursesParamsType} from "../types/SearchCoursesParamsType";
-
-export type CreateCoursePayloadType = Pick<CourseType, 'level' | 'status' | 'title' | 'type'> & {
-  works?: { index: number; workId: string }[];
-};
+import { CreateCoursePayloadType } from '../types/CreateCoursePayloadType';
+import { NewCourseType } from '../types/NewCourseType';
+import { SearchCoursesParamsType } from '../types/SearchCoursesParamsType';
 
 const coursesService = {
   getAllCourses: async (
     params?: Partial<SearchCoursesParamsType>,
   ): Promise<WithPagination<ShortCourseType[]>> => {
     const { data } = await instance.get(Paths.Courses, { params });
+    return data;
+  },
+
+  getCurrentCourse: async (courseId: string) => {
+    const { data } = await instance.get<CurrentCourseResponse>(Paths.Courses + '/' + courseId);
     return data;
   },
 
@@ -29,19 +26,6 @@ const coursesService = {
 
   createCourse: async (model: CreateCoursePayloadType): Promise<ShortCourseType> => {
     const { data } = await instance.post(Paths.Courses, model);
-    return data;
-  },
-
-  deleteCourse: async (id: string): Promise<ResponseDeleteCourse> => {
-    const { data } = await instance.delete(`${Paths.Courses}/${id}`);
-    return data;
-  },
-  getAllWorks: async (): Promise<ResponseWork[]> => {
-    const { data } = await instance.get(Paths.Works);
-    return data;
-  },
-  getOneWork: async (id: string): Promise<any> => {
-    const { data } = await instance.get(`${Paths.Works}/${id}`);
     return data;
   },
 };

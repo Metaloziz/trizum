@@ -19,6 +19,7 @@ import coursesStore from '../../app/stores/coursesStore';
 import homeworkStore from '../../app/stores/homeworkStore';
 
 import { Dialog, DialogTitle } from '../franchising-page/ui/Dialog';
+import { LoadingIndicator } from '../franchising-page/ui/LoadingIndicator';
 import {
   defaultSearchHomeWorksParams,
   levelOptions,
@@ -36,6 +37,7 @@ export const AddOrEditDialog = observer(() => {
     setCurrentCourse,
     editCourse,
     createCourse,
+    isLoading,
   } = coursesStore;
 
   const statusTypesOptions = Object.values(currentCourse?.id ? EditStatusEnum : AddStatusEnum).map(
@@ -56,7 +58,7 @@ export const AddOrEditDialog = observer(() => {
         default:
           type = '';
       }
-      setSearchParams(defaultSearchHomeWorksParams);
+      setSearchParams({ ...defaultSearchHomeWorksParams, type });
       getHomeWorks();
     }
   }, [currentCourse?.type]);
@@ -65,6 +67,15 @@ export const AddOrEditDialog = observer(() => {
     setIsDialogOpen(false);
     setSearchParams(defaultSearchHomeWorksParams);
   };
+
+  const editCourseCallBack = () => {
+    editCourse();
+    setDialogClose();
+  };
+
+  if (isLoading) {
+    return <LoadingIndicator isLoading={isLoading} />;
+  }
 
   return (
     <Dialog
@@ -166,7 +177,7 @@ export const AddOrEditDialog = observer(() => {
       <DialogActions>
         <Button
           variant="primary"
-          onClick={currentCourse?.id ? editCourse : createCourse}
+          onClick={currentCourse?.id ? editCourseCallBack : createCourse}
           // disabled={!validateSchema.isValidSync(currentCourse)}
         >
           {currentCourse?.id ? 'Изменить' : 'Сохранить'}

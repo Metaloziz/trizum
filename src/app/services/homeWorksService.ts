@@ -1,17 +1,10 @@
 import { Paths } from 'app/enums/Paths';
 import instance from 'app/services/config';
 import { CreatOrEditWorkRequestT } from 'app/types/WorkTypes';
-import { SearchHomeWorksParamsType } from '../stores/homeworkStore';
+import { SearchHomeWorksParamsType } from '../types/SearchHomeWorksParamsType';
 
 const homeWorksService = {
   getHomeWorks: async (params: SearchHomeWorksParamsType) => {
-    // const params: Record<string, string | number> = {
-    //   page,
-    // };
-    // status && (params.status = status);
-    // perPage && (params.per_page = perPage);
-    // type && (params.type = type);
-
     const { data } = await instance.get(Paths.Works, { params });
     return data;
   },
