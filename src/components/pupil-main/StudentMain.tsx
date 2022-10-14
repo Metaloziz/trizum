@@ -14,10 +14,11 @@ import { personalRecordsArr } from 'utils/personalRecordsArr';
 
 export const StudentMain: FC = observer(() => {
   const { user } = appStore;
-  console.log(user);
-  const { works } = appStore.user.groups[0].group.course;
+  // console.log(user);
+  // eslint-disable-next-line no-unsafe-optional-chaining
+  const { works } = appStore.user?.groups[0]?.group?.course || [];
   console.log(_.cloneDeep(works), 'works::work');
-  const presets = works[0].work.gamePresets;
+  const presets = (works && works[0]?.work?.gamePresets) || [];
   console.log(_.cloneDeep(presets), 'preset::preset');
   const recordsArr = personalRecordsArr(user.personalRecord);
 

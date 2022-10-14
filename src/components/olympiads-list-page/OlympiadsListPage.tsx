@@ -22,7 +22,7 @@ const OlympiadsListPage = observer(() => {
     setCurrentPage(value);
   };
 
-  const isShowResult = users[0] !== undefined;
+  const isShowResult = users[0] && users[0] !== undefined;
 
   return (
     <div className={styles.container}>

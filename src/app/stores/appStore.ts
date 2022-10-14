@@ -190,10 +190,14 @@ class AppStore {
   };
 
   switchUser = async (params: RequestSwitchUser) => {
-    await execute(async () => {
-      await authService.switchUser(params);
-      await this.loadme();
-    });
+    try {
+      await execute(async () => {
+        await authService.switchUser(params);
+        await this.loadme();
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   setError = (error: string) => {
