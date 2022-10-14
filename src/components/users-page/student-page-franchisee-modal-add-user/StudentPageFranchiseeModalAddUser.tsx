@@ -34,17 +34,20 @@ import { filterRoleOptions } from 'utils/filterRoleOptions';
 import { removeEmptyFields } from 'utils/removeEmptyFields';
 import * as yup from 'yup';
 import TextFieldPhoneCustom from '../../text-field-phone-mui/TextFieldPhoneCustom';
+import usersStore from 'app/stores/usersStore';
 
 import styles from './StudentPageFranchiseeModalAddUser.module.scss';
+import { toJS } from 'mobx';
+import SetPaidStatusButton from 'components/button-paid-unpaid/SetPaidStatusButton';
 
 type Props = {
   onCloseModal: () => void;
-  currentUser?: ResponseOneUser;
   visibility?: boolean;
 };
 
 export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
-  ({ currentUser, onCloseModal, visibility }) => {
+  ({ onCloseModal, visibility }) => {
+    const {currentUser} = usersStore
     const { franchise } = franchiseeStore;
     const { groups, loadCurrentGroups } = groupStore;
     const { tariffs } = tariffsStore;
@@ -466,20 +469,33 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
                       control={control}
                     />
                   </Grid>
+                  <Grid item xs={12} sm={6}>
+                        <div className={styles.isActive_helper}>Статус пользователя в системе:</div>
+                        <div className={styles.isActive_status}>{currentUser?.active ? 'Активный' : 'Заблокирован'}</div>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                        <div className={styles.isActive_helper}>Статус оплаты:</div>
+                        <div className={styles.isActive_status}>{currentUser?.payed ? 'Оплачено' : 'Не оплчено'}</div>
+                  </Grid>
                 </>
               )}
-              <Grid xs={12} sm={12} margin="10px 14px" display="flex">
-                <Grid item xs={12} sm={6.2}>
+              <div className={styles.buttonsBox}>
+                <div className={styles.button}>
                   {currentUser && (
                     <SetStatusButton active={currentUser?.active} id={currentUser.id} />
                   )}
-                </Grid>
-                <Grid item xs={12} sm={5}>
+                </div>
+                <div className={styles.button}>
+                  {currentUser && (
+                    <SetPaidStatusButton active={currentUser?.payed} id={currentUser.id} />
+                  )}
+                </div>
+                <div className={styles.button}>
                   <Button type="submit" disabled={isSubmitSuccessful}>
                     Сохранить
                   </Button>
-                </Grid>
-              </Grid>
+                </div>
+              </div>
             </Grid>
           </Box>
         </form>

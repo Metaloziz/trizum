@@ -82,7 +82,6 @@ const UsersPage = observer(() => {
         <StudentPageFranchiseeModalAddUser
           onCloseModal={() => modals.changeSetting()}
           visibility={modals.isSetting}
-          currentUser={currentUser}
         />
       </BasicModal>
     </div>
