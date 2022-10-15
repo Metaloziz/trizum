@@ -1,6 +1,7 @@
 // Containers
 
 import { WorksT } from 'app/types/GroupTypes';
+import { WorkFromLoadme } from 'app/types/LoadMeTypes';
 import { PersonalRecordT } from 'app/types/ResponseLoadMeBaseT';
 import { PersonalRecordsArrT } from 'utils/personalRecordsArr';
 
@@ -18,7 +19,11 @@ export interface HomeworksProps {
 export interface KeepPlayingProps {
   className?: string;
   games: KeepPlayingItemProps[];
-  works?: WorksT[];
+  works?: WorkFromLoadme[];
+  actualGames?: {
+    gameCode: string;
+    gameId: string;
+  }[];
 }
 
 // Components
@@ -27,7 +32,7 @@ export interface KeepPlayingItemProps {
   title: string;
   minutesLeft: number;
   colorTheme: string;
-  id: number;
+  id: string;
   onClick?: () => void;
   code?: string | undefined;
 }

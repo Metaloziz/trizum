@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import { Group } from 'app/types/LoadMeTypes';
 import { makeAutoObservable, runInAction } from 'mobx';
 
 import { RequestLogin, RequestSwitchUser } from '../types/AuthTypes';
@@ -64,7 +65,7 @@ export class EmptyUser {
 
   avatar: AvatarT;
 
-  groups: GroupsDataT[];
+  groups: Group[];
 
   canSwitchTo: canSwitchToT[];
 

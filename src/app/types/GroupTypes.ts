@@ -1,4 +1,5 @@
 import { GamePresetT } from 'app/types/GameTypes';
+import { GamePresetFromLoadme } from 'app/types/LoadMeTypes';
 import moment from 'moment';
 
 import { TimeZoneType } from 'app/types/TimeZoneType';
@@ -30,13 +31,15 @@ export type ResponseGroups = {
   teacherId: TeacherIdWTF;
   schedule: Schedule[];
 };
+type GamePresetType = Omit<GamePresetT, 'settings'>;
 
 export type WorkT = {
   id: string;
   title: string;
   text: null | string;
+  status: StatusT;
   type: string;
-  gamePresets: Omit<GamePresetT, 'settings'>[];
+  gamePresets: GamePresetFromLoadme[];
   createdAt: {
     date: string;
     timezone_type: number;
@@ -84,6 +87,8 @@ export type UsersDataT = {
 export class ResponseOneGroup {
   id: string = '';
 
+  stats: any[] = [];
+
   name: string = '';
 
   type: GroupT = 'blocks';
@@ -103,6 +108,8 @@ export class ResponseOneGroup {
   users: UsersDataT[] = [{ id: '', user: new EmptyUser(), stats: ['draft'] }];
 
   schedule: ScheduleT[] = [];
+
+  onlyGroup?: [] | null = null;
 
   teacherId = {
     id: '',

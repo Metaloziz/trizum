@@ -69,7 +69,7 @@ const Games = [
 class Game extends Component<any, any> {
   gameComponent: any;
 
-  game: any;
+  // game: any;
 
   constructor(props: any) {
     super(props);
@@ -100,12 +100,12 @@ class Game extends Component<any, any> {
     });
   };
 
-  closeResultModal = () => {
-    this.setState({
-      resultModal: false,
-      gameResult: [],
-    });
-  };
+  // closeResultModal = () => {
+  //   this.setState({
+  //     resultModal: false,
+  //     gameResult: [],
+  //   });
+  // };
 
   // eslint-disable-next-line react/no-unused-class-component-methods
   onEnd = (result: any) => {
@@ -148,28 +148,28 @@ class Game extends Component<any, any> {
     );
   };
 
-  onStart = () => {
-    this.setState(
-      {
-        started: true,
-      },
-      () => {
-        this.game?.start();
-      },
-    );
-  };
+  // onStart = () => {
+  //   this.setState(
+  //     {
+  //       started: true,
+  //     },
+  //     () => {
+  //       this.game?.start();
+  //     },
+  //   );
+  // };
 
-  onRepeat = () => {
-    this.setState({
-      resultModal: false,
-    });
-    this.onStart();
-  };
+  // onRepeat = () => {
+  //   this.setState({
+  //     resultModal: false,
+  //   });
+  //   this.onStart();
+  // };
 
   // eslint-disable-next-line react/no-unused-class-component-methods
-  onRefGame = (ref: any) => {
-    this.game = ref;
-  };
+  // onRefGame = (ref: any) => {
+  //   this.game = ref;
+  // };
 
   setGame = (game: string) => () => {
     this.gameComponent = Factory(game);
@@ -189,24 +189,20 @@ class Game extends Component<any, any> {
     const GameComponent = this.gameComponent;
     const { actualPresets, gamePreset, deletePreset } = gamesStore;
     const { role } = appStore;
-    const widthScreen = window.innerWidth;
-    const settings = gamePreset.gamePreset.settings[0];
 
-    const gameViewSize = changedViewScreen(widthScreen, 700);
-    console.log(this.game);
     return (
       <div className={styles.innerContent}>
-        {(role === Roles.Methodist || role === Roles.Admin) && (
-          <GameModal open={isOpenModal} onClose={this.toggleModal} deletePreset={deletePreset} />
-        )}
-        <GameResultModal
-          open={resultModal}
-          time={gameResult.time}
-          error={gameResult.failed}
-          success={gameResult.success}
-          onClose={this.closeResultModal}
-          onStart={this.onRepeat}
-        />
+        {/* {(role === Roles.Methodist || role === Roles.Admin) && ( */}
+        {/*  <GameModal open={isOpenModal} onClose={this.toggleModal} deletePreset={deletePreset} /> */}
+        {/* )} */}
+        {/* <GameResultModal */}
+        {/*  open={resultModal} */}
+        {/*  time={gameResult.time} */}
+        {/*  error={gameResult.failed} */}
+        {/*  success={gameResult.success} */}
+        {/*  onClose={this.closeResultModal} */}
+        {/*  onStart={this.onRepeat} */}
+        {/* /> */}
         <div className={styles.gameList}>
           {Games.map(gam => (
             <div key={`game-${gam.name}`} className={styles.gameItem}>

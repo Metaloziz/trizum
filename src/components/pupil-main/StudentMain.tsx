@@ -1,4 +1,7 @@
 import gamesStore from 'app/stores/gamesStore';
+import { ResponseOneGroup } from 'app/types/GroupTypes';
+import { Group } from 'app/types/LoadMeTypes';
+import { GroupsDataT } from 'app/types/ResponseLoadMeBaseT';
 import _ from 'lodash';
 import { FC, useEffect } from 'react';
 
@@ -11,26 +14,26 @@ import WeeklyGrowth from 'components/weekly-growth/WeeklyGrowth';
 import Homeworks from 'containers/homeworks/Homeworks';
 import KeepPlaying from 'containers/keep-playing/KeepPlaying';
 import styles from 'pages/home/Home.module.scss';
+import { getGameForStudent } from 'utils/getGameForStudent';
 import { personalRecordsArr } from 'utils/personalRecordsArr';
 
 export const StudentMain: FC = observer(() => {
   const { user } = appStore;
   const { works } = appStore.user?.groups[0]?.group?.course || [];
-  console.log(_.cloneDeep(works), 'works::works');
-  const presets = (works && works[0]?.work?.gamePresets) || [];
-  console.log(_.cloneDeep(presets), 'preset::preset');
   const recordsArr = personalRecordsArr(user.personalRecord);
-  const g = works.map(el => el?.work);
-  // .map(el => el?.gamePresets);
-  // .map(el => el.map(pr => pr?.game?.code));
-  console.log(g);
+  const actualGames = getGameForStudent(user.groups);
 
   return (
     <main className={styles.main}>
       <CardStudent user={user} />
       <WeeklyGrowth records={recordsArr} className={styles.weeklyGrowth} />
       <Homeworks className={styles.homeworks} homeworks={homeworks} />
-      <KeepPlaying className={styles.keepPlaying} works={works} games={games} />
+      <KeepPlaying
+        actualGames={actualGames}
+        className={styles.keepPlaying}
+        works={works}
+        games={games}
+      />
     </main>
   );
 });

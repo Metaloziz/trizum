@@ -1,25 +1,16 @@
 import groupStore from 'app/stores/groupStore';
 import { GamePresetT, OneGamePresent, PresetsGameSettings, ResultT } from 'app/types/GameTypes';
-import { GameModal } from 'components/game-page/GameCommon/GameModal/GameModal';
-import { GameResultModal } from 'components/game-page/GameCommon/GameModal/GameResultModal/GameResultModal';
-import { SelectBlock } from 'components/game-page/GameCommon/SelectBlock';
 import { presetArray } from 'constants/presetArr';
 import { GameReturn } from 'pages/game/GameInstances/index';
 import React, { FC, useEffect, useState } from 'react';
 import { Factory, GameIdentifiers } from 'games';
-import { PlayButton } from 'components/game-page/GameCommon/PlayButton';
 import { convertGroupOptions } from 'utils/convertGroupOptions';
 import { defaultResult } from 'utils/gameUtils/defaultResultValue';
-import styles from '../Game.module.scss';
 import { changedViewScreen } from 'utils/gameUtils/changeViewScreen';
 import gamesStore from 'app/stores/gamesStore';
-import { GameDesc } from 'components/game-page/GameCommon/GameDesc';
 import { useNavigate } from 'react-router-dom';
-import Button from 'components/button/Button';
 import appStore, { Roles } from 'app/stores/appStore';
-import InformationItem from 'components/information-item/InformationItem';
 import { Option } from 'components/select-mui/CustomSelect';
-import _ from 'lodash';
 
 const gameName = GameIdentifiers.shulte;
 const GameInstance = Factory(gameName);
@@ -59,11 +50,6 @@ const Shulte: FC<Props> = props => {
     }
     getGame('shulte');
   }, []);
-
-  console.log(_.cloneDeep(gamePreset), 'gamePreset::Shulte');
-  console.log(_.cloneDeep(actualPresets), 'actualPresets::Shulte');
-  console.log('-------------------------------------------------');
-
   const onRef = (refGame: any) => setRef(refGame);
 
   const startGame = () => {

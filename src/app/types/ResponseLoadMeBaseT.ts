@@ -2,6 +2,7 @@ import { AvatarT } from 'app/types/AvatarT';
 import { FranchiseT } from 'app/types/FranchiseTypes';
 import { ResponseOneGroup } from 'app/types/GroupTypes';
 import { Nullable } from 'app/types/Nullable';
+import { StatusT } from 'app/types/StatusT';
 import { TimeZoneType } from 'app/types/TimeZoneType';
 import { canSwitchToT, ParentT, ResponseOneUser } from 'app/types/UserTypes';
 
@@ -16,7 +17,9 @@ export type PersonalRecordT = {
 };
 
 export type GroupsDataT = {
-  userGroupId: string;
+  id: string;
+  stats: any[];
+  status: string;
   group: ResponseOneGroup;
 };
 

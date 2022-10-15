@@ -41,13 +41,11 @@ const Game2048: FC<Props> = props => {
     getGame('game2048');
   }, []);
   const navigate = useNavigate();
-
   const widthScreen = window.innerWidth;
   const gameViewSize = changedViewScreen(widthScreen, 700);
   const gameTitle = game.name;
 
   const groupOptions = convertGroupOptions(groups);
-  // console.log(_.cloneDeep(gamePreset), 'gamePreset::Game2048');
   const onRef = (refGame: any) => {
     setRef(refGame);
   };

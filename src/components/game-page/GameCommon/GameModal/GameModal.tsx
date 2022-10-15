@@ -11,8 +11,7 @@ import {
   TextField,
 } from '@mui/material';
 import { GroupLevels } from 'app/enums/GroupLevels';
-import { GroupStatus } from 'app/enums/GroupStatus';
-import { AddStatusEnum, EditStatusEnum, StatusEnum } from 'app/enums/StatusTypes';
+import { StatusEnum } from 'app/enums/StatusTypes';
 import gamesStore from 'app/stores/gamesStore';
 import Button from 'components/button/Button';
 import { DialogTitle } from 'components/franchising-page/ui/Dialog';
