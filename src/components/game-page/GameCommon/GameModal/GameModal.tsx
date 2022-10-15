@@ -11,7 +11,8 @@ import {
   TextField,
 } from '@mui/material';
 import { GroupLevels } from 'app/enums/GroupLevels';
-import { StatusEnum } from 'app/enums/StatusTypes';
+import { GroupStatus } from 'app/enums/GroupStatus';
+import { AddStatusEnum, EditStatusEnum, StatusEnum } from 'app/enums/StatusTypes';
 import gamesStore from 'app/stores/gamesStore';
 import Button from 'components/button/Button';
 import { DialogTitle } from 'components/franchising-page/ui/Dialog';
@@ -71,6 +72,7 @@ export const GameModal: FC<PropsT> = observer(props => {
   const [elementsTotal, setElementsTotal] = useState<string>(
     settings?.elementsTotal?.toString() || '1',
   );
+  const [status, setStatus] = useState<string>(gamePreset.gamePreset.status || 'draft');
   const [description, setDescription] = useState<string>(defaultInputTextReader);
   // const [currentRadio, setCurrentRadio] = useState<string>('eachLevel');
   const [colors, setColors] = useState<ColorObj[]>(colorsObj);
@@ -78,6 +80,10 @@ export const GameModal: FC<PropsT> = observer(props => {
   const levelKeys = Object.keys(GroupLevels);
   const levelOptions = Object.values(GroupLevels).map((el, index) =>
     getOptionMui(levelKeys[index], el),
+  );
+  const statusTypesKeys = Object.keys(StatusEnum);
+  const statusTypesOptions = Object.values(StatusEnum).map((el, index) =>
+    getOptionMui(statusTypesKeys[index], el),
   );
   const changeColor = (index: number) => {
     const copy: ColorObj[] = colors.map(el =>
@@ -120,11 +126,12 @@ export const GameModal: FC<PropsT> = observer(props => {
     rerenderPreset();
   }, [gamePreset]);
 
-  const onCreatePreset = () => {
-    createPresets({
+  const addOrEditPreset = () => {
+    const params = {
       gameCode: game.code,
       name: template,
       level,
+      status,
       settings: [
         {
           timeComplete: Number(timeComplete),
@@ -142,41 +149,12 @@ export const GameModal: FC<PropsT> = observer(props => {
           colorsMap,
         },
       ],
-    });
-  };
-
-  const onEditPreset = () => {
-    editPreset({
-      gameCode: game.code,
-      name: template,
-      level,
-      status: gamePreset.gamePreset.status,
-      settings: [
-        {
-          timeComplete: Number(timeComplete),
-          elementsTotal: Number(elementsTotal),
-          wordsCount: Number(wordsCount),
-          digitMax: Number(digitMax),
-          errorAcceptable: Number(errorAcceptable),
-          speed: Number(speed),
-          blinksCount: Number(blinksCount),
-          cycleTime: Number(cycleTime),
-          delay: Number(delay),
-          groupsCount: Number(groupsCount),
-          sound,
-          description,
-          colorsMap,
-        },
-      ],
-    });
+    };
+    gamePreset?.gamePreset?.id ? editPreset(params) : createPresets(params);
   };
 
   const savePreset = async () => {
-    if (gamePreset.gamePreset.id) {
-      onEditPreset();
-    } else {
-      onCreatePreset();
-    }
+    addOrEditPreset();
     await gamesStore.getPresets();
     if (gamesStore.gamePreset.gamePreset.name) {
       await gamesStore.getPreset(gamesStore.gamePreset.gamePreset.name);
@@ -189,7 +167,6 @@ export const GameModal: FC<PropsT> = observer(props => {
     setTimeComplete('');
     setElementsTotal('');
     setDelay('');
-    // setLevel(gamePreset?.gamePreset?.level);
     setLevel('');
     setColorsMap(['black']);
     setGroupsCount('');
@@ -223,7 +200,6 @@ export const GameModal: FC<PropsT> = observer(props => {
       )}
       <DialogTitle onClose={closeModal}>Настройка параметров</DialogTitle>
       <DialogContent dividers>
-        <DialogTitle onClose={closeModal}>{StatusEnum[gamePreset?.gamePreset?.status]}</DialogTitle>
         <Stack spacing={1}>
           <div className={styles.gameModalWrapper}>
             <div className={styles.gameModalWrapper_settings}>
@@ -250,19 +226,32 @@ export const GameModal: FC<PropsT> = observer(props => {
                     </Select>
                   </FormControl>
                 </Grid>
-                {game.code !== GameIdentifiers.shulte && (
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label={`Время выполнения ${timeComplete} сек.`}
-                      value={timeComplete}
-                      onChange={({ currentTarget: { value } }) => setTimeComplete(value)}
-                      fullWidth
-                      inputProps={{ type: 'number' }}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </Grid>
-                )}
+                <Grid item xs={12} sm={6}>
+                  <FormControl fullWidth size="small">
+                    <InputLabel>Статус</InputLabel>
+                    <Select
+                      value={status}
+                      label="Статус"
+                      onChange={({ target: { value } }) => setStatus(value)}
+                    >
+                      {statusTypesOptions}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                {game.code !== GameIdentifiers.shulte ||
+                  (game.code !== GameIdentifiers.game2048 && (
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        label={`Время выполнения ${timeComplete} сек.`}
+                        value={timeComplete}
+                        onChange={({ currentTarget: { value } }) => setTimeComplete(value)}
+                        fullWidth
+                        inputProps={{ type: 'number' }}
+                        variant="outlined"
+                        size="small"
+                      />
+                    </Grid>
+                  ))}
               </Grid>
               {game.code === GameIdentifiers.shiftVertical ? (
                 <>
@@ -412,7 +401,7 @@ export const GameModal: FC<PropsT> = observer(props => {
               )}
               {game.code === GameIdentifiers.mental && (
                 <Grid container spacing={2}>
-                  <Grid item xs={6} sm={6}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       label="Пауза при появлении цифр в мс"
                       value={delay}
@@ -423,7 +412,7 @@ export const GameModal: FC<PropsT> = observer(props => {
                       size="small"
                     />
                   </Grid>
-                  <Grid item xs={6} sm={6}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       label="Минимальное слагаемое"
                       // value={min}
@@ -434,7 +423,7 @@ export const GameModal: FC<PropsT> = observer(props => {
                       size="small"
                     />
                   </Grid>
-                  <Grid item xs={6} sm={6}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       label="Максимальное слагаемое"
                       value={digitMax}
@@ -445,7 +434,7 @@ export const GameModal: FC<PropsT> = observer(props => {
                       size="small"
                     />
                   </Grid>
-                  <Grid item xs={6} sm={6}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       label="Использовать вычитание"
                       // value={digitMax}
@@ -456,7 +445,7 @@ export const GameModal: FC<PropsT> = observer(props => {
                       size="small"
                     />
                   </Grid>
-                  <Grid item xs={6} sm={6}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       label="Результат не больше, чем по формуле"
                       // value={subtract}
@@ -467,7 +456,7 @@ export const GameModal: FC<PropsT> = observer(props => {
                       size="small"
                     />
                   </Grid>
-                  <Grid item xs={6} sm={6}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       label="Результат не больше, чем по формуле"
                       // value={restriction}
@@ -478,7 +467,7 @@ export const GameModal: FC<PropsT> = observer(props => {
                       size="small"
                     />
                   </Grid>
-                  <Grid item xs={6} sm={6}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       label="Кол-во слагаемых в 1 задаче"
                       // value={length}
@@ -489,7 +478,7 @@ export const GameModal: FC<PropsT> = observer(props => {
                       size="small"
                     />
                   </Grid>
-                  <Grid item xs={6} sm={6}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       label="Кол-во задач"
                       // value={count}
@@ -504,7 +493,7 @@ export const GameModal: FC<PropsT> = observer(props => {
               )}
               {game.code === GameIdentifiers.steamEngine && (
                 <Grid container spacing={2}>
-                  <Grid item xs={6} sm={6}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       label="Кол-во успешных нажатий на манометр"
                       value={elementsTotal}
@@ -515,7 +504,7 @@ export const GameModal: FC<PropsT> = observer(props => {
                       size="small"
                     />
                   </Grid>
-                  <Grid item xs={6} sm={6}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       label="Кол-во снятых единиц за промах"
                       value={errorAcceptable}
@@ -526,7 +515,7 @@ export const GameModal: FC<PropsT> = observer(props => {
                       size="small"
                     />
                   </Grid>
-                  <Grid item xs={6} sm={6}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       label="Скорость кручения стрелки манометра в сек."
                       value={speed}
@@ -537,7 +526,7 @@ export const GameModal: FC<PropsT> = observer(props => {
                       size="small"
                     />
                   </Grid>
-                  <Grid item xs={6} sm={6}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       label="Кол-во манометров"
                       value={groupsCount}
@@ -553,7 +542,7 @@ export const GameModal: FC<PropsT> = observer(props => {
 
               {game.code === GameIdentifiers.silhouettes && (
                 <Grid container spacing={2}>
-                  <Grid item xs={6} sm={6}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       label="Кол-во фигур для угадывания"
                       value={elementsTotal}
@@ -569,7 +558,7 @@ export const GameModal: FC<PropsT> = observer(props => {
 
               {game.code === GameIdentifiers.memoryRhythm && (
                 <Grid container spacing={2}>
-                  <Grid item xs={6} sm={6}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       label="Кол-во миганий"
                       value={elementsTotal}

@@ -1,5 +1,6 @@
+import gamesStore from 'app/stores/gamesStore';
 import _ from 'lodash';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
@@ -14,13 +15,15 @@ import { personalRecordsArr } from 'utils/personalRecordsArr';
 
 export const StudentMain: FC = observer(() => {
   const { user } = appStore;
-  // console.log(user);
-  // eslint-disable-next-line no-unsafe-optional-chaining
   const { works } = appStore.user?.groups[0]?.group?.course || [];
   console.log(_.cloneDeep(works), 'works::works');
   const presets = (works && works[0]?.work?.gamePresets) || [];
   console.log(_.cloneDeep(presets), 'preset::preset');
   const recordsArr = personalRecordsArr(user.personalRecord);
+  const g = works.map(el => el?.work);
+  // .map(el => el?.gamePresets);
+  // .map(el => el.map(pr => pr?.game?.code));
+  console.log(g);
 
   return (
     <main className={styles.main}>

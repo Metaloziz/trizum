@@ -54,7 +54,7 @@ const Game2048: FC<Props> = props => {
   const gameTitle = game.name;
 
   const groupOptions = convertGroupOptions(groups);
-  console.log(_.cloneDeep(gamePreset), 'gamePreset::Game2048');
+  // console.log(_.cloneDeep(gamePreset), 'gamePreset::Game2048');
   const onRef = (refGame: any) => {
     setRef(refGame);
   };
@@ -98,7 +98,6 @@ const Game2048: FC<Props> = props => {
       setSettings(gamePreset.gamePreset.settings[0]);
     }
   }, [gamePreset]);
-  console.log(groupOptions);
   return (
     <>
       {(role === Roles.Methodist || role === Roles.Admin) && (
@@ -119,7 +118,10 @@ const Game2048: FC<Props> = props => {
         <section>
           <div style={{ minWidth: `${gameViewSize + 100}px` }}>
             {(role === Roles.Methodist || role === Roles.Admin) && (
-              <div className={styles.wrapGameBlock_header}>
+              <div
+                style={{ width: `${gameViewSize + 100}px` }}
+                className={styles.wrapGameBlock_header}
+              >
                 <div className={styles.wrapGameBlock_header_select}>
                   <InformationItem
                     variant="select"
