@@ -188,6 +188,12 @@ export const GameModal: FC<PropsT> = observer(props => {
     }
   };
 
+  const isTimeComplete =
+    game.code !== GameIdentifiers.shulte &&
+    game.code !== GameIdentifiers.game2048 &&
+    game.code !== GameIdentifiers.mental &&
+    game.code !== GameIdentifiers.memoryRhythm;
+
   return (
     <Dialog maxWidth="xl" fullWidth onClose={closeModal} open={open}>
       {colorModal && (
@@ -238,20 +244,19 @@ export const GameModal: FC<PropsT> = observer(props => {
                     </Select>
                   </FormControl>
                 </Grid>
-                {game.code !== GameIdentifiers.shulte ||
-                  (game.code !== GameIdentifiers.game2048 && (
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        label={`Время выполнения ${timeComplete} сек.`}
-                        value={timeComplete}
-                        onChange={({ currentTarget: { value } }) => setTimeComplete(value)}
-                        fullWidth
-                        inputProps={{ type: 'number' }}
-                        variant="outlined"
-                        size="small"
-                      />
-                    </Grid>
-                  ))}
+                {isTimeComplete && (
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label={`Время выполнения ${timeComplete} сек.`}
+                      value={timeComplete}
+                      onChange={({ currentTarget: { value } }) => setTimeComplete(value)}
+                      fullWidth
+                      inputProps={{ type: 'number' }}
+                      variant="outlined"
+                      size="small"
+                    />
+                  </Grid>
+                )}
               </Grid>
               {game.code === GameIdentifiers.shiftVertical ? (
                 <>

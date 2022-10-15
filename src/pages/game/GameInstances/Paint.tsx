@@ -2,7 +2,9 @@ import groupStore from 'app/stores/groupStore';
 import { GamePresetT, OneGamePresent, PresetsGameSettings, ResultT } from 'app/types/GameTypes';
 import { GameModal } from 'components/game-page/GameCommon/GameModal/GameModal';
 import { GameResultModal } from 'components/game-page/GameCommon/GameModal/GameResultModal/GameResultModal';
+import { SelectBlock } from 'components/game-page/GameCommon/SelectBlock';
 import { presetArray } from 'constants/presetArr';
+import { GameReturn } from 'pages/game/GameInstances/index';
 import React, { FC, useEffect, useState } from 'react';
 import { Factory, GameIdentifiers } from 'games';
 import { PlayButton } from 'components/game-page/GameCommon/PlayButton';
@@ -100,78 +102,35 @@ const Paint: FC<Props> = props => {
   }, [gamePreset]);
 
   return (
-    <>
-      {(role === Roles.Methodist || role === Roles.Admin) && (
-        <GameModal open={isModalOpen} onClose={toggleModal} deletePreset={deletePreset} />
-      )}
-      <GameResultModal
-        open={resultModal}
-        time={gameResult?.time}
-        error={gameResult?.failed}
-        success={gameResult?.success}
-        onClose={closeResultModal}
-        onStart={onRepeat}
+    <GameReturn
+      gameTitle={gameTitle}
+      startGame={startGame}
+      gameResult={gameResult}
+      started={started}
+      gamePreset={gamePreset.gamePreset}
+      setPreset={setPreset}
+      presetArrs={presetArrs}
+      role={role}
+      isModalOpen={isModalOpen}
+      resultModal={resultModal}
+      closeResultModal={closeResultModal}
+      settings={settings}
+      deletePreset={deletePreset}
+      gameViewSize={gameViewSize}
+      groupOptions={groupOptions}
+      toggleModal={toggleModal}
+      onRepeat={onRepeat}
+      navigate={navigate}
+    >
+      <GameInstance
+        width={gameViewSize}
+        onEnd={onEnd}
+        onRef={onRef}
+        {...settings}
+        colors={settings?.colorsMap?.length || 1}
+        size={6}
       />
-      <div className={styles.wrapGameBlock} key={gameTitle}>
-        <Button className={styles.goBack} onClick={() => navigate(-1)}>
-          Назад
-        </Button>
-        <section>
-          <div style={{ minWidth: `${gameViewSize + 100}px` }}>
-            {(role === Roles.Methodist || role === Roles.Admin) && (
-              <div className={styles.wrapGameBlock_header}>
-                <div className={styles.wrapGameBlock_header_select}>
-                  <InformationItem
-                    variant="select"
-                    size="normal"
-                    placeholder="Шаблон"
-                    option={presetArrs}
-                    onChangeSelect={data => setPreset(data)}
-                  />
-                </div>
-                {/* <div className={styles.wrapGameBlock_header_select}> */}
-                {/*  <InformationItem variant="select" size="normal" placeholder="Год" /> */}
-                {/* </div> */}
-                {/* <div className={styles.wrapGameBlock_header_select}> */}
-                {/*  <InformationItem variant="select" size="normal" placeholder="Месяц" /> */}
-                {/* </div> */}
-                <div className={styles.wrapGameBlock_header_select}>
-                  <InformationItem
-                    variant="select"
-                    size="normal"
-                    placeholder="Группа"
-                    option={groupOptions}
-                  />
-                </div>
-                <Button onClick={() => toggleModal(true)}>
-                  {gamePreset?.gamePreset?.id ? 'Изменить настройки' : 'Создать настройки'}
-                </Button>
-              </div>
-            )}
-          </div>
-
-          <div className={`${styles.wrap} ${role === Roles.Student && styles.isStudent}`}>
-            <div className={styles.wrapInner}>
-              <div className={styles.wrapGame}>
-                <div className={styles.wrapGame_overlay}>
-                  <GameInstance
-                    width={gameViewSize}
-                    onEnd={onEnd}
-                    onRef={onRef}
-                    {...settings}
-                    colors={settings?.colorsMap?.length || 1}
-                    size={6}
-                  />
-
-                  {!started && <PlayButton onStart={startGame} />}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        <GameDesc presetDesc={settings?.description} started={started} gameTitle={gameTitle} />
-      </div>
-    </>
+    </GameReturn>
   );
 };
 export default Paint;
