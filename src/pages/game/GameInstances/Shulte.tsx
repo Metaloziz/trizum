@@ -24,7 +24,8 @@ const Shulte: FC<Props> = props => {
   const { actualPresets, gamePreset } = props;
   const { deletePreset, getPreset, getPresets, getGame } = gamesStore;
   const { groups, getGroups } = groupStore;
-  const { role, user } = appStore;
+  const { role } = appStore;
+  console.log(gamePreset);
   const [started, setStarted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [resultModal, setResultModal] = useState(false);
@@ -39,10 +40,6 @@ const Shulte: FC<Props> = props => {
   const presetArrs: Option[] = presetArray(actualPresets);
   const groupOptions = convertGroupOptions(groups);
 
-  console.log(presetArrs);
-  // const { works } = user.groups[0].group.course;
-  // console.log(works);
-
   useEffect(() => {
     if (role !== Roles.Student) {
       getPresets();
@@ -53,8 +50,12 @@ const Shulte: FC<Props> = props => {
   const onRef = (refGame: any) => setRef(refGame);
 
   const startGame = () => {
-    setStarted(true);
-    refs?.start();
+    if (gamePreset.gamePreset.status !== 'archive') {
+      setStarted(true);
+      refs?.start();
+    } else {
+      console.warn(`Error!!! Game haves status: ${gamePreset.gamePreset.status.toUpperCase()}`);
+    }
   };
 
   const onEnd = (result?: any) => {

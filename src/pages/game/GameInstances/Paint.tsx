@@ -53,8 +53,12 @@ const Paint: FC<Props> = props => {
   };
 
   const startGame = () => {
-    setStarted(true);
-    refs?.start();
+    if (gamePreset.gamePreset.status !== 'archive') {
+      setStarted(true);
+      refs?.start();
+    } else {
+      console.warn(`Error!!! Game haves status: ${gamePreset.gamePreset.status.toUpperCase()}`);
+    }
   };
 
   const onEnd = (result: any) => {

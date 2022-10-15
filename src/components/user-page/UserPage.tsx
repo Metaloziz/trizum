@@ -8,7 +8,6 @@ import styles from './UserPage.module.scss';
 
 import authService from 'app/services/authService';
 import appStore, { EmptyUser } from 'app/stores/appStore';
-import buttonClose from 'assets/svgs/button.svg';
 import gag from 'assets/svgs/user.svg';
 import Button from 'components/button/Button';
 import Image from 'components/image/Image';
