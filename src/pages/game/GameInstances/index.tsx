@@ -1,5 +1,5 @@
 import { Roles } from 'app/stores/appStore';
-import { GamePresetT, PresetsGameSettings } from 'app/types/GameTypes';
+import { GamePresetT, GameT, PresetsGameSettings, ResultsT } from 'app/types/GameTypes';
 import { OptionT } from 'app/types/OptionT';
 import Button from 'components/button/Button';
 import { GameDesc } from 'components/game-page/GameCommon/GameDesc';
@@ -17,11 +17,7 @@ type GameReturnPropsT = {
   toggleModal: (value: boolean) => void;
   deletePreset: (id: string) => void;
   resultModal: boolean;
-  gameResult: {
-    time: number;
-    failed: number;
-    success: number;
-  };
+  gameResult: ResultsT;
   gameTitle: string;
   gameViewSize: number;
   presetArrs: OptionT[];
@@ -35,6 +31,7 @@ type GameReturnPropsT = {
   onRepeat: () => void;
   navigate: NavigateFunction;
   children: React.ReactNode;
+  game?: GameT;
 };
 
 export const GameReturn: FC<GameReturnPropsT> = props => {
@@ -58,6 +55,7 @@ export const GameReturn: FC<GameReturnPropsT> = props => {
     onRepeat,
     navigate,
     children,
+    game,
   } = props;
   return (
     <>
@@ -65,10 +63,9 @@ export const GameReturn: FC<GameReturnPropsT> = props => {
         <GameModal open={isModalOpen} onClose={toggleModal} deletePreset={deletePreset} />
       )}
       <GameResultModal
+        gameResult={gameResult}
+        game={game}
         open={resultModal}
-        time={gameResult?.time}
-        error={gameResult?.failed}
-        success={gameResult?.success}
         onClose={closeResultModal}
         onStart={onRepeat}
       />
@@ -94,14 +91,6 @@ export const GameReturn: FC<GameReturnPropsT> = props => {
               <div className={styles.wrapGame}>
                 <div className={styles.wrapGame_overlay}>
                   {children}
-                  {/* <GameInstance */}
-                  {/*  width={gameViewSize} */}
-                  {/*  onEnd={onEnd} */}
-                  {/*  onRef={onRef} */}
-                  {/*  {...settings} */}
-                  {/*  colors={settings?.colorsMap?.length || 1} */}
-                  {/*  size={6} */}
-                  {/* /> */}
                   {!started && <PlayButton onStart={startGame} />}
                 </div>
               </div>

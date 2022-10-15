@@ -1,5 +1,11 @@
 import groupStore from 'app/stores/groupStore';
-import { GamePresetT, OneGamePresent, PresetsGameSettings, ResultT } from 'app/types/GameTypes';
+import {
+  GamePresetT,
+  OneGamePresent,
+  PresetsGameSettings,
+  ResultsT,
+  ResultT,
+} from 'app/types/GameTypes';
 import { presetArray } from 'constants/presetArr';
 import { GameReturn } from 'pages/game/GameInstances/index';
 import React, { FC, useEffect, useState } from 'react';
@@ -22,18 +28,16 @@ type Props = {
 
 const Paint: FC<Props> = props => {
   const { actualPresets, gamePreset } = props;
-  const { deletePreset, getPreset, getPresets, getGame } = gamesStore;
-  const { groups, getGroups } = groupStore;
+  const { deletePreset, getPreset, getPresets, getGame, game } = gamesStore;
   const { role } = appStore;
+  const { groups, getGroups } = groupStore;
 
   const [started, setStarted] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [resultModal, setResultModal] = useState(false);
-  const [gameResult, setGameResult] = useState<ResultT>(defaultResult);
-  const [settings, setSettings] = useState<PresetsGameSettings>();
+  const [gameResult, setGameResult] = useState<ResultsT>(defaultResult);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [refs, setRef] = useState<any>(null);
-  const navigate = useNavigate();
-  const groupOptions = convertGroupOptions(groups);
+  const [settings, setSettings] = useState<PresetsGameSettings>();
 
   useEffect(() => {
     if (role !== Roles.Student) {
@@ -42,12 +46,12 @@ const Paint: FC<Props> = props => {
     }
     getGame(gameName);
   }, []);
-
+  const navigate = useNavigate();
   const widthScreen = window.innerWidth;
   const gameViewSize = changedViewScreen(widthScreen, 700);
-  const gameTitle = 'Бирюльки';
-  const presetArrs: Option[] = presetArray(actualPresets);
+  const gameTitle = game.name;
 
+  const groupOptions = convertGroupOptions(groups);
   const onRef = (refGame: any) => {
     setRef(refGame);
   };
@@ -57,11 +61,14 @@ const Paint: FC<Props> = props => {
       setStarted(true);
       refs?.start();
     } else {
-      console.warn(`Error!!! Game haves status: ${gamePreset.gamePreset.status.toUpperCase()}`);
+      console.warn(
+        `Ошибка!!! Вы не можете запустить игру которая имеет статус: ${gamePreset.gamePreset.status.toUpperCase()}`,
+      );
     }
   };
 
   const onEnd = (result: any) => {
+    // Пример использования результатов игры
     setResultModal(true);
     setStarted(false);
     setGameResult(result);
@@ -87,14 +94,16 @@ const Paint: FC<Props> = props => {
     setGameResult(defaultResult);
   };
 
+  const presetArrs: Option[] = presetArray(actualPresets);
+
   useEffect(() => {
-    if (gamePreset.gamePreset.settings.length) {
+    if (gamePreset?.gamePreset.settings.length) {
       setSettings(gamePreset.gamePreset.settings[0]);
     }
   }, [gamePreset]);
-
   return (
     <GameReturn
+      game={game}
       gameTitle={gameTitle}
       startGame={startGame}
       gameResult={gameResult}
@@ -119,8 +128,8 @@ const Paint: FC<Props> = props => {
         onEnd={onEnd}
         onRef={onRef}
         {...settings}
-        colors={settings?.colorsMap?.length || 1}
-        size={6}
+        // groupsCount={6}
+        // colors={settings?.colorsMap?.length || 1}
       />
     </GameReturn>
   );

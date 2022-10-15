@@ -13,7 +13,7 @@
 }
 
 .resultWrapper {
-  margin-bottom: 38px;
+  margin-bottom: 28px;
   font-size: 18px;
 
 
@@ -25,6 +25,10 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       font-size: 24px;
+    }
+    &_text {
+      display: block;
+      margin-top: 16px;
     }
   }
 }

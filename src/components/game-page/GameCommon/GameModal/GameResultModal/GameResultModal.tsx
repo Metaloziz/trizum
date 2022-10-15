@@ -1,26 +1,56 @@
+import { RESULT, GameT, ResultsT } from 'app/types/GameTypes';
 import Button from 'components/button/Button';
 import { Dialog } from 'components/rate/ui/Dialog';
-import React from 'react';
+import { GameIdentifiers } from 'games';
+import React, { FC } from 'react';
 import styles from './gameResultModal.module.scss';
 
-export const GameResultModal = (props: any) => {
-  const { time, error, onClose, open, success, onStart } = props;
+type GameResultModalPropsT = {
+  gameResult: ResultsT;
+  onClose: () => void;
+  open: boolean;
+  onStart: () => void;
+  game?: GameT;
+};
+
+export const GameResultModal: FC<GameResultModalPropsT> = props => {
+  const { onClose, open, onStart, game, gameResult } = props;
+  const result = RESULT[gameResult?.result];
+
+  const onlyTextResult =
+    game?.code !== GameIdentifiers.memoryRhythm &&
+    game?.code !== GameIdentifiers.silhouettes &&
+    game?.code !== GameIdentifiers.steamEngine;
+
   return (
     <Dialog open={open} fullWidth onClose={onClose}>
       <div className={styles.wrapper}>
         <h3 className={styles.header}>Ваш результат</h3>
         <div className={styles.resultWrapper}>
-          <span className={styles.resultWrapper_result}>
-            Время: <span className={styles.resultWrapper_result_count}>{time}</span>
-          </span>
-          {success > 0 && (
+          {!onlyTextResult ? (
             <span className={styles.resultWrapper_result}>
-              Верных ответов: <span className={styles.resultWrapper_result_count}>{success}</span>
+              <span className={styles.resultWrapper_result_count}>{result}</span>
             </span>
+          ) : (
+            <>
+              <span className={styles.resultWrapper_result}>
+                Время: <span className={styles.resultWrapper_result_count}>{gameResult.time}</span>
+              </span>
+              {gameResult.success > 0 && (
+                <span className={styles.resultWrapper_result}>
+                  Верных ответов:
+                  <span className={styles.resultWrapper_result_count}>{gameResult.success}</span>
+                </span>
+              )}
+              <span className={styles.resultWrapper_result}>
+                Ошибок:
+                <span className={styles.resultWrapper_result_count}>{gameResult.failed}</span>
+              </span>
+              <span className={styles.resultWrapper_result_text}>
+                <span className={styles.resultWrapper_result_count}>{result}</span>
+              </span>
+            </>
           )}
-          <span className={styles.resultWrapper_result}>
-            Ошибок: <span className={styles.resultWrapper_result_count}>{error}</span>
-          </span>
         </div>
         <div className={styles.btnBlock}>
           <Button onClick={onClose}>Закончить</Button>

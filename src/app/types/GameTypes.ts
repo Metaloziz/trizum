@@ -113,10 +113,19 @@ export type PlaySendResultT = {
   blinksCount: number;
 };
 
-export type ResultT = {
+export type ResultT = 'end' | 'lose' | 'win';
+
+export type ResultsT = {
   time: number;
   timeDiff: number;
   score: number;
   success: number;
   failed: number;
+  result: ResultT;
+};
+
+export const RESULT = {
+  end: 'Конец игры',
+  lose: 'Проигрыш',
+  win: 'Победа',
 };

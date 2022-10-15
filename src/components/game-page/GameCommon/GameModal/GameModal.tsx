@@ -23,6 +23,7 @@ import { Dialog } from 'components/rate/ui/Dialog';
 import { GameIdentifiers } from 'games';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useCallback, useEffect, useState } from 'react';
+import { fieldSizeOptions } from 'utils/fieldSize';
 import { getOptionMui } from 'utils/getOption';
 import styles from './gameModal.module.scss';
 
@@ -73,7 +74,6 @@ export const GameModal: FC<PropsT> = observer(props => {
   );
   const [status, setStatus] = useState<string>(gamePreset.gamePreset.status || 'draft');
   const [description, setDescription] = useState<string>(defaultInputTextReader);
-  // const [currentRadio, setCurrentRadio] = useState<string>('eachLevel');
   const [colors, setColors] = useState<ColorObj[]>(colorsObj);
   const [sound, setSound] = useState(false);
   const levelKeys = Object.keys(GroupLevels);
@@ -84,6 +84,7 @@ export const GameModal: FC<PropsT> = observer(props => {
   const statusTypesOptions = Object.values(StatusEnum).map((el, index) =>
     getOptionMui(statusTypesKeys[index], el),
   );
+  const sizeOptions = fieldSizeOptions().map(el => getOptionMui(el.value, el.label));
   const changeColor = (index: number) => {
     const copy: ColorObj[] = colors.map(el =>
       el.id === index
@@ -120,10 +121,6 @@ export const GameModal: FC<PropsT> = observer(props => {
     setDescription(settings?.description || '');
     setSound(settings?.sound || false);
   };
-
-  useEffect(() => {
-    rerenderPreset();
-  }, [gamePreset]);
 
   const addOrEditPreset = () => {
     const params = {
@@ -186,6 +183,10 @@ export const GameModal: FC<PropsT> = observer(props => {
       onClose(false);
     }
   };
+
+  useEffect(() => {
+    rerenderPreset();
+  }, [gamePreset, onClose]);
 
   const isTimeComplete =
     game.code !== GameIdentifiers.shulte &&
@@ -322,15 +323,16 @@ export const GameModal: FC<PropsT> = observer(props => {
                       />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <TextField
-                        label="Размер поля X на Х"
-                        value={elementsTotal}
-                        onChange={({ currentTarget: { value } }) => setElementsTotal(value)}
-                        fullWidth
-                        inputProps={{ type: 'number' }}
-                        variant="outlined"
-                        size="small"
-                      />
+                      <FormControl fullWidth size="small">
+                        <InputLabel>Размер поля Х на Х</InputLabel>
+                        <Select
+                          value={elementsTotal}
+                          label="Размер поля Х на Х"
+                          onChange={({ target: { value } }) => setElementsTotal(value)}
+                        >
+                          {sizeOptions}
+                        </Select>
+                      </FormControl>
                     </Grid>
                     <div className={styles.inputBlock}>
                       <div className={styles.gameModalColorBtn}>
@@ -353,15 +355,16 @@ export const GameModal: FC<PropsT> = observer(props => {
               {game.code === GameIdentifiers.game2048 && (
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Размер поля X на Х"
-                      value={groupsCount}
-                      onChange={({ currentTarget: { value } }) => setGroupsCount(value)}
-                      fullWidth
-                      inputProps={{ type: 'number' }}
-                      variant="outlined"
-                      size="small"
-                    />
+                    <FormControl fullWidth size="small">
+                      <InputLabel>Размер поля Х на Х</InputLabel>
+                      <Select
+                        value={groupsCount}
+                        label="Размер поля Х на Х"
+                        onChange={({ target: { value } }) => setGroupsCount(value)}
+                      >
+                        {sizeOptions}
+                      </Select>
+                    </FormControl>
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField

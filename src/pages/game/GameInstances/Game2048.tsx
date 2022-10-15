@@ -1,5 +1,11 @@
 import groupStore from 'app/stores/groupStore';
-import { GamePresetT, OneGamePresent, PresetsGameSettings, ResultT } from 'app/types/GameTypes';
+import {
+  GamePresetT,
+  OneGamePresent,
+  PresetsGameSettings,
+  ResultsT,
+  ResultT,
+} from 'app/types/GameTypes';
 import { presetArray } from 'constants/presetArr';
 import { GameReturn } from 'pages/game/GameInstances/index';
 import React, { FC, useEffect, useState } from 'react';
@@ -28,7 +34,7 @@ const Game2048: FC<Props> = props => {
 
   const [started, setStarted] = useState(false);
   const [resultModal, setResultModal] = useState(false);
-  const [gameResult, setGameResult] = useState<ResultT>(defaultResult);
+  const [gameResult, setGameResult] = useState<ResultsT>(defaultResult);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [refs, setRef] = useState<any>(null);
   const [settings, setSettings] = useState<PresetsGameSettings>();
@@ -38,7 +44,7 @@ const Game2048: FC<Props> = props => {
       getPresets();
       getGroups();
     }
-    getGame('game2048');
+    getGame(gameName);
   }, []);
   const navigate = useNavigate();
   const widthScreen = window.innerWidth;
@@ -55,7 +61,9 @@ const Game2048: FC<Props> = props => {
       setStarted(true);
       refs?.start();
     } else {
-      console.warn(`Error!!! Game haves status: ${gamePreset.gamePreset.status.toUpperCase()}`);
+      console.warn(
+        `Ошибка!!! Вы не можете запустить игру которая имеет статус: ${gamePreset.gamePreset.status.toUpperCase()}`,
+      );
     }
   };
 
@@ -95,6 +103,7 @@ const Game2048: FC<Props> = props => {
   }, [gamePreset]);
   return (
     <GameReturn
+      game={game}
       gameTitle={gameTitle}
       startGame={startGame}
       gameResult={gameResult}
@@ -119,8 +128,8 @@ const Game2048: FC<Props> = props => {
         onEnd={onEnd}
         onRef={onRef}
         {...settings}
-        colors={settings?.colorsMap?.length || 1}
-        size={6}
+        // groupsCount={6}
+        // colors={settings?.colorsMap?.length || 1}
       />
     </GameReturn>
   );

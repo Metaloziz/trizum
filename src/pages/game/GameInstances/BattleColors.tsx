@@ -1,5 +1,11 @@
 import groupStore from 'app/stores/groupStore';
-import { GamePresetT, OneGamePresent, PresetsGameSettings, ResultT } from 'app/types/GameTypes';
+import {
+  GamePresetT,
+  OneGamePresent,
+  PresetsGameSettings,
+  ResultsT,
+  ResultT,
+} from 'app/types/GameTypes';
 import { GameModal } from 'components/game-page/GameCommon/GameModal/GameModal';
 import { GameResultModal } from 'components/game-page/GameCommon/GameModal/GameResultModal/GameResultModal';
 import { SelectBlock } from 'components/game-page/GameCommon/SelectBlock';
@@ -31,17 +37,16 @@ type Props = {
 
 const BattleColors: FC<Props> = props => {
   const { actualPresets, gamePreset } = props;
-  const { deletePreset, getPreset, getGame, getPresets } = gamesStore;
-  const { groups, getGroups } = groupStore;
+  const { deletePreset, getPreset, getPresets, getGame, game } = gamesStore;
   const { role } = appStore;
+  const { groups, getGroups } = groupStore;
+
   const [started, setStarted] = useState(false);
   const [resultModal, setResultModal] = useState(false);
-  const [gameResult, setGameResult] = useState<ResultT>(defaultResult);
+  const [gameResult, setGameResult] = useState<ResultsT>(defaultResult);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [refs, setRef] = useState<any>(null);
   const [settings, setSettings] = useState<PresetsGameSettings>();
-  const navigate = useNavigate();
-  const groupOptions = convertGroupOptions(groups);
 
   useEffect(() => {
     if (role !== Roles.Student) {
@@ -50,12 +55,12 @@ const BattleColors: FC<Props> = props => {
     }
     getGame(gameName);
   }, []);
+  const navigate = useNavigate();
   const widthScreen = window.innerWidth;
   const gameViewSize = changedViewScreen(widthScreen, 700);
-  const gameTitle = 'Битва полушарий';
-  const presetArrs: Option[] = presetArray(actualPresets);
-  console.log(_.cloneDeep(gamePreset), 'gamePreset::BattleColors');
+  const gameTitle = game.name;
 
+  const groupOptions = convertGroupOptions(groups);
   const onRef = (refGame: any) => {
     setRef(refGame);
   };
@@ -65,11 +70,14 @@ const BattleColors: FC<Props> = props => {
       setStarted(true);
       refs?.start();
     } else {
-      console.warn(`Error!!! Game haves status: ${gamePreset.gamePreset.status.toUpperCase()}`);
+      console.warn(
+        `Ошибка!!! Вы не можете запустить игру которая имеет статус: ${gamePreset.gamePreset.status.toUpperCase()}`,
+      );
     }
   };
 
   const onEnd = (result: any) => {
+    // Пример использования результатов игры
     setResultModal(true);
     setStarted(false);
     setGameResult(result);
@@ -95,13 +103,16 @@ const BattleColors: FC<Props> = props => {
     setGameResult(defaultResult);
   };
 
+  const presetArrs: Option[] = presetArray(actualPresets);
+
   useEffect(() => {
-    if (gamePreset.gamePreset.settings.length) {
+    if (gamePreset?.gamePreset.settings.length) {
       setSettings(gamePreset.gamePreset.settings[0]);
     }
   }, [gamePreset]);
   return (
     <GameReturn
+      game={game}
       gameTitle={gameTitle}
       startGame={startGame}
       gameResult={gameResult}
@@ -126,8 +137,8 @@ const BattleColors: FC<Props> = props => {
         onEnd={onEnd}
         onRef={onRef}
         {...settings}
-        colors={settings?.colorsMap?.length || 1}
-        size={6}
+        // groupsCount={6}
+        // colors={settings?.colorsMap?.length || 1}
       />
     </GameReturn>
   );

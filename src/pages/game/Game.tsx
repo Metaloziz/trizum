@@ -1,15 +1,11 @@
 import { AppRoutes } from 'app/enums/AppRoutes';
 import appStore, { Roles } from 'app/stores/appStore';
 import gamesStore from 'app/stores/gamesStore';
-import { GameModal } from 'components/game-page/GameCommon/GameModal/GameModal';
-import { GameResultModal } from 'components/game-page/GameCommon/GameModal/GameResultModal/GameResultModal';
 import Image from 'components/image/Image';
 import { observer } from 'mobx-react';
 import React, { Component } from 'react';
 
 import { Navigate, NavLink } from 'react-router-dom';
-import { changedViewScreen } from 'utils/gameUtils/changeViewScreen';
-
 import Two048 from '../../assets/images/game/2048.png';
 import Play from '../../assets/images/game/play.svg';
 import Schulte from '../../assets/images/game/shulte.png';
