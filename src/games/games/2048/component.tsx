@@ -86,6 +86,7 @@ export default class extends Component<any, any> implements Game {
             started = false,
             score = 0
         } = this.state;
+        console.log(groupsCount, 'component')
 
         return <View style={styles.wrap}>
             {started && <Text

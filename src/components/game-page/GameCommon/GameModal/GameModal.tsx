@@ -13,6 +13,7 @@ import {
 import { GroupLevels } from 'app/enums/GroupLevels';
 import { StatusEnum } from 'app/enums/StatusTypes';
 import gamesStore from 'app/stores/gamesStore';
+import { SoundT } from 'app/types/GameTypes';
 import Button from 'components/button/Button';
 import { DialogTitle } from 'components/franchising-page/ui/Dialog';
 import {
@@ -75,7 +76,7 @@ export const GameModal: FC<PropsT> = observer(props => {
   const [status, setStatus] = useState<string>(gamePreset.gamePreset.status || 'draft');
   const [description, setDescription] = useState<string>(defaultInputTextReader);
   const [colors, setColors] = useState<ColorObj[]>(colorsObj);
-  const [sound, setSound] = useState(false);
+  const [sound, setSound] = useState<boolean>(settings?.sound === 1);
   const levelKeys = Object.keys(GroupLevels);
   const levelOptions = Object.values(GroupLevels).map((el, index) =>
     getOptionMui(levelKeys[index], el),
@@ -119,7 +120,7 @@ export const GameModal: FC<PropsT> = observer(props => {
     setSpeed(settings?.speed?.toString() || '');
     setBlinksCount(settings?.blinksCount?.toString() || '');
     setDescription(settings?.description || '');
-    setSound(settings?.sound || false);
+    setSound(settings?.sound === 1);
   };
 
   const addOrEditPreset = () => {
@@ -140,7 +141,7 @@ export const GameModal: FC<PropsT> = observer(props => {
           cycleTime: Number(cycleTime),
           delay: Number(delay),
           groupsCount: Number(groupsCount),
-          sound,
+          sound: ((sound && 1) || 0) as SoundT,
           description,
           colorsMap,
         },
@@ -550,15 +551,16 @@ export const GameModal: FC<PropsT> = observer(props => {
               {game.code === GameIdentifiers.silhouettes && (
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Кол-во фигур для угадывания"
-                      value={elementsTotal}
-                      onChange={({ currentTarget: { value } }) => setElementsTotal(value)}
-                      fullWidth
-                      inputProps={{ type: 'number' }}
-                      variant="outlined"
-                      size="small"
-                    />
+                    <FormControl fullWidth size="small">
+                      <InputLabel>Кол-во фигур для угадывания</InputLabel>
+                      <Select
+                        value={elementsTotal}
+                        label="Кол-во фигур для угадывания"
+                        onChange={({ target: { value } }) => setElementsTotal(value)}
+                      >
+                        {sizeOptions.slice(0, 4)}
+                      </Select>
+                    </FormControl>
                   </Grid>
                 </Grid>
               )}
@@ -568,8 +570,8 @@ export const GameModal: FC<PropsT> = observer(props => {
                   <Grid item xs={12} sm={6}>
                     <TextField
                       label="Кол-во миганий"
-                      value={elementsTotal}
-                      onChange={({ currentTarget: { value } }) => setElementsTotal(value)}
+                      value={blinksCount}
+                      onChange={({ currentTarget: { value } }) => setBlinksCount(value)}
                       fullWidth
                       inputProps={{ type: 'number' }}
                       variant="outlined"

@@ -35,7 +35,7 @@ const Shulte: FC<Props> = props => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [resultModal, setResultModal] = useState(false);
   const [gameResult, setGameResult] = useState<ResultsT>(defaultResult);
-  const [settings, setSettings] = useState<PresetsGameSettings>();
+  const [settings, setSettings] = useState<PresetsGameSettings>(gamePreset.gamePreset.settings[0]);
   const [refs, setRef] = useState<any>(null);
 
   const navigate = useNavigate();
@@ -50,7 +50,10 @@ const Shulte: FC<Props> = props => {
       getPresets();
       getGroups();
     }
-    getGame('shulte');
+    getGame(gameName);
+    return () => {
+      getPreset('');
+    };
   }, []);
   const onRef = (refGame: any) => setRef(refGame);
 
@@ -120,8 +123,8 @@ const Shulte: FC<Props> = props => {
         onEnd={onEnd}
         onRef={onRef}
         {...settings}
-        colors={settings?.colorsMap?.length || 1}
-        size={6}
+        // colors={settings[0]?.colorsMap?.length || 1}
+        // size={6}
       />
     </GameReturn>
   );

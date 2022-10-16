@@ -31,7 +31,7 @@ const Steam: FC<Props> = props => {
   const [gameResult, setGameResult] = useState<ResultsT>(defaultResult);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [refs, setRef] = useState<any>(null);
-  const [settings, setSettings] = useState<PresetsGameSettings>();
+  const [settings, setSettings] = useState<PresetsGameSettings>(gamePreset.gamePreset.settings[0]);
 
   useEffect(() => {
     if (role !== Roles.Student) {
@@ -39,6 +39,9 @@ const Steam: FC<Props> = props => {
       getGroups();
     }
     getGame(gameName);
+    return () => {
+      getPreset('');
+    };
   }, []);
   const navigate = useNavigate();
   const widthScreen = window.innerWidth;

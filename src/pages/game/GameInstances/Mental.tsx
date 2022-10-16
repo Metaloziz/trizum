@@ -36,7 +36,7 @@ const Mental: FC<Props> = props => {
   const [gameResult, setGameResult] = useState<ResultsT>(defaultResult);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [refs, setRef] = useState<any>(null);
-  const [settings, setSettings] = useState<PresetsGameSettings>();
+  const [settings, setSettings] = useState<PresetsGameSettings>(gamePreset.gamePreset.settings[0]);
   const navigate = useNavigate();
   const groupOptions = convertGroupOptions(groups);
 
@@ -45,7 +45,10 @@ const Mental: FC<Props> = props => {
       getPresets();
       getGroups();
     }
-    getGame('mental');
+    getGame(gameName);
+    return () => {
+      getPreset('');
+    };
   }, []);
 
   const widthScreen = window.innerWidth;
@@ -124,8 +127,8 @@ const Mental: FC<Props> = props => {
         onEnd={onEnd}
         onRef={onRef}
         {...settings}
-        colors={settings?.colorsMap?.length || 1}
-        size={6}
+        // colors={settings[0]?.colorsMap?.length || 1}
+        // size={6}
       />
     </GameReturn>
   );

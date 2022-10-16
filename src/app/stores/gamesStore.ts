@@ -37,7 +37,26 @@ class GamesStore {
       },
       status: '' as StatusTypes,
       level: 'easy',
-      settings: [] as PresetsGameSettings[],
+      settings: [
+        {
+          timeComplete: 10,
+          elementsTotal: 4,
+          levelMaxCompleted: 1,
+          gameCode: '',
+          cycleTime: 1,
+          wordsCount: 1,
+          digitMax: 1,
+          templateCode: 1,
+          groupsCount: 4,
+          blinksCount: 4,
+          errorAcceptable: 1,
+          speed: 1,
+          colorsMap: [],
+          delay: 1,
+          description: '',
+          sound: 0,
+        },
+      ] as PresetsGameSettings[],
     },
     usedInWorks: [],
   };
@@ -109,7 +128,10 @@ class GamesStore {
       const preset = this.newPresets.items.filter(el => el.name === presetName);
       if (preset.length) {
         const res = await gamesService.getPreset(preset[0].id);
-        this.gamePreset = await res;
+        runInAction(() => {
+          this.gamePreset = res;
+          this.gamePreset.gamePreset.settings = res.gamePreset.settings;
+        });
       } else {
         this.gamePreset = {
           gamePreset: {
@@ -122,7 +144,7 @@ class GamesStore {
             },
             status: '' as StatusTypes,
             level: '',
-            settings: [],
+            settings: [] as PresetsGameSettings[],
           },
           usedInWorks: [],
         };

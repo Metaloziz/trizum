@@ -7,7 +7,7 @@ export type GameT = {
 };
 
 export type GamesT = Omit<GameT, 'code'>[];
-
+export type SoundT = 0 | 1 | undefined;
 export type PresetsGameSettings = {
   timeComplete?: number;
   elementsTotal?: number;
@@ -24,7 +24,7 @@ export type PresetsGameSettings = {
   colorsMap?: string[];
   delay?: number;
   description?: string;
-  sound?: boolean;
+  sound?: SoundT;
 };
 
 export type EditOrCreatePresetParamsT = {

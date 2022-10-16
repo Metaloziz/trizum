@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
-import { Props } from './types';
+import { View,  StyleSheet, Text } from 'react-native';
 
 import Timer from '../../components/timer';
 import StartTimer from '../../components/startTimer';
@@ -49,7 +48,6 @@ export default class extends Component<any, any> implements Game {
     } = this.props;
 
     onRef(this);
-
     // this.reset();
     // this.start();
   }
@@ -239,7 +237,6 @@ export default class extends Component<any, any> implements Game {
       colorsMap,
       sound = 1
     } = this.props;
-
     const sizeBlink = Math.round((width - ((colorsMap.length - 1) * SPACE)) / colorsMap.length);
 
     return <>

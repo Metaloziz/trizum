@@ -1,11 +1,5 @@
 import groupStore from 'app/stores/groupStore';
-import {
-  GamePresetT,
-  OneGamePresent,
-  PresetsGameSettings,
-  ResultsT,
-  ResultT,
-} from 'app/types/GameTypes';
+import { GamePresetT, OneGamePresent, PresetsGameSettings, ResultsT } from 'app/types/GameTypes';
 import { presetArray } from 'constants/presetArr';
 import { GameReturn } from 'pages/game/GameInstances/index';
 import React, { FC, useEffect, useState } from 'react';
@@ -37,7 +31,7 @@ const Game2048: FC<Props> = props => {
   const [gameResult, setGameResult] = useState<ResultsT>(defaultResult);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [refs, setRef] = useState<any>(null);
-  const [settings, setSettings] = useState<PresetsGameSettings>();
+  const [settings, setSettings] = useState<PresetsGameSettings>(gamePreset.gamePreset.settings[0]);
 
   useEffect(() => {
     if (role !== Roles.Student) {
@@ -45,6 +39,9 @@ const Game2048: FC<Props> = props => {
       getGroups();
     }
     getGame(gameName);
+    return () => {
+      getPreset('');
+    };
   }, []);
   const navigate = useNavigate();
   const widthScreen = window.innerWidth;
@@ -55,6 +52,7 @@ const Game2048: FC<Props> = props => {
   const onRef = (refGame: any) => {
     setRef(refGame);
   };
+  console.log(settings, 'game2048');
 
   const startGame = () => {
     if (gamePreset.gamePreset.status !== 'archive') {
@@ -95,12 +93,13 @@ const Game2048: FC<Props> = props => {
   };
 
   const presetArrs: Option[] = presetArray(actualPresets);
-
   useEffect(() => {
     if (gamePreset?.gamePreset.settings.length) {
       setSettings(gamePreset.gamePreset.settings[0]);
     }
   }, [gamePreset]);
+  console.log(settings && settings.blinksCount);
+  console.log(settings && settings.elementsTotal);
   return (
     <GameReturn
       game={game}

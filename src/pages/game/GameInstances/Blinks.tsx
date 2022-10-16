@@ -37,7 +37,7 @@ const Blinks: FC<Props> = props => {
   const [gameResult, setGameResult] = useState<ResultsT>(defaultResult);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [refs, setRef] = useState<any>(null);
-  const [settings, setSettings] = useState<PresetsGameSettings>();
+  const [settings, setSettings] = useState<PresetsGameSettings>(gamePreset.gamePreset.settings[0]);
 
   useEffect(() => {
     if (role !== Roles.Student) {
@@ -45,6 +45,9 @@ const Blinks: FC<Props> = props => {
       getGroups();
     }
     getGame(gameName);
+    return () => {
+      getPreset('');
+    };
   }, []);
   const navigate = useNavigate();
   const widthScreen = window.innerWidth;
@@ -123,14 +126,7 @@ const Blinks: FC<Props> = props => {
       onRepeat={onRepeat}
       navigate={navigate}
     >
-      <GameInstance
-        width={gameViewSize}
-        onEnd={onEnd}
-        onRef={onRef}
-        {...settings}
-        // groupsCount={6}
-        // colors={settings?.colorsMap?.length || 1}
-      />
+      <GameInstance width={gameViewSize} onEnd={onEnd} onRef={onRef} {...settings} />
     </GameReturn>
   );
 };

@@ -105,9 +105,9 @@ export function factory(
             ...GameInstance.props,
             ...props
         };
-
         return <GameInstanceComponent
             {...propsFull}
+
         />;
     };
 }
