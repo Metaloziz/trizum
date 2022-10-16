@@ -18,6 +18,7 @@ import CustomImageWrapper from 'components/custom-image-wrapper/CustomImageWrapp
 import Image from 'components/image/Image';
 import Setting from 'components/setting/Setting';
 import { ButtonsGroup } from 'components/card-student/card-student-for-user/ButtonsGroup/ButtonsGroup';
+import { getClosestLessonDate, currentMomentOfTime } from 'utils/getClosestLessonDate';
 
 type Props = {
   user: EmptyUser;
@@ -27,7 +28,9 @@ type Props = {
 const CardStudentForStudent: FC<Props> = observer(({ user, isMainPage = true }) => {
   const { firstName, middleName, lastName, role, avatar, city, groups } = user;
   const { getFullUserName } = usersStore;
-
+  const {firstName:teacherFirstName, middleName:teacherMiddletName, lastName:teacherLastName} =user.groups[0].group.teacher;
+  const closestLessonDate = getClosestLessonDate(user.groups[0].group.schedule, currentMomentOfTime);
+  
   const nearestLessonDate = getNearestLessonDateHelper(groups);
 
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -72,7 +75,7 @@ const CardStudentForStudent: FC<Props> = observer(({ user, isMainPage = true }) 
                 </span>
                 Учитель:
               </li>
-              <li>{getFullUserName}</li>
+              <li>{`${teacherFirstName} ${teacherMiddletName} ${teacherLastName}`}</li>
             </ul>
             <ul className={styles.list}>
               <li>
@@ -81,7 +84,7 @@ const CardStudentForStudent: FC<Props> = observer(({ user, isMainPage = true }) 
                 </span>
                 Следующее занятие:
               </li>
-              <li>{nearestLessonDate}</li>
+              <li>{closestLessonDate}</li>
             </ul>
           </div>
         </div>
