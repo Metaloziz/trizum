@@ -29,11 +29,11 @@ const SetPaidStatusButton: FC<Props> = ({ id, active }) => {
   };
 
   const iconButton = isActive ? (
-    <Image style={{marginTop: '7px'}} src={unpaid} alt="lock" width={35} height={35} />
+    <Image style={{ marginTop: '7px' }} src={unpaid} alt="lock" width={35} height={35} />
   ) : (
-    <Image style={{marginTop: '7px'}} src={paid} alt="open" width={35} height={35} />
+    <Image style={{ marginTop: '7px' }} src={paid} alt="open" width={35} height={35} />
   );
-  console.log('icon',iconButton)
+  console.log('icon', iconButton);
   return (
     <button
       type="button"
@@ -44,7 +44,6 @@ const SetPaidStatusButton: FC<Props> = ({ id, active }) => {
       <span className={styles.icon}>{iconButton}</span>
       {isActive ? 'Аннулировать оплату' : 'Оплатить'}
     </button>
-    
   );
 };
 

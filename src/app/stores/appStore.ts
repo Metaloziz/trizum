@@ -14,6 +14,9 @@ import { AvatarT } from 'app/types/AvatarT';
 import { FranchiseT } from 'app/types/FranchiseTypes';
 import { LoginInfo } from 'pages/login/Login';
 import tokenService from 'app/services/tokenService';
+import { getGameForStudent } from 'utils/getGameForStudent';
+import { GameIdWithCode } from 'app/types/GameTypes';
+import { getNearestLessonDateHelper } from 'components/card-student/card-student-for-user/getNearestLessonDateHelper/getNearestLessonDateHelper';
 
 export enum Roles {
   /* Ученик */
@@ -125,6 +128,12 @@ class AppStore {
 
   error = '';
 
+  /* fields student only */
+  allGameIdsWithCodes: GameIdWithCode[][] = [];
+
+  currentGameIds: GameIdWithCode[] = [];
+  /* fields student only */
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -157,7 +166,9 @@ class AppStore {
           this.isLoggedIn = true;
           this.role = res.data.role as Roles;
           this.user = res.data;
-          console.log(this.user);
+          if (res.data.role === Roles.Student && !!res.data.groups && res.data.groups.length) {
+            this.setGameIdsWithCodes(res.data);
+          }
           this.isInitialized = true;
         });
       }
@@ -180,7 +191,7 @@ class AppStore {
         this.role = res.data.role as Roles;
         this.user = res.data;
 
-        if (res.data.role === Roles.Student && !!res.data.groups) {
+        if (res.data.role === Roles.Student && !!res.data.groups && res.data.groups.length) {
           const { teacherId } = res.data.groups[0].group;
           usersStore.getOneUser(teacherId);
         }
@@ -207,6 +218,17 @@ class AppStore {
       this.error = '';
     }, 5000);
   };
+
+  /* actions student only */
+  setGameIdsWithCodes = (user: EmptyUser) => {
+    this.allGameIdsWithCodes = getGameForStudent(user.groups);
+    const classType = user.groups.find(el => el.group.type === 'class');
+    if (classType && classType.group.schedule.length) {
+      // TODO: добавить нахождение нужного урока по дате
+      [this.currentGameIds] = this.allGameIdsWithCodes;
+    }
+  };
+  /* actions student only */
 }
 
 export default new AppStore();

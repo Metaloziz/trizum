@@ -129,3 +129,8 @@ export const RESULT = {
   lose: 'Проигрыш',
   win: 'Победа',
 };
+
+export type GameIdWithCode = {
+  gameId: string;
+  gameCode: string;
+};

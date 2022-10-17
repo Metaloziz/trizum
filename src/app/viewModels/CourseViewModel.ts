@@ -17,11 +17,11 @@ export interface CourseViewModel {
 }
 
 export type RequestCoursesForFilter = {
-  page?: number | null,
+  page?: number | null;
   title?: string | null;
   level?: string | null;
   createdSince?: string | null;
-}
+};
 
 export type CourseViewModelAddEdit = Omit<CourseViewModel, 'works' | 'status'> & {
   works?: { index: number; workId: string }[];

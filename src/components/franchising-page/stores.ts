@@ -63,7 +63,7 @@ export class FranchisingStore extends StoreBase {
   openDialog = (editingEntity?: FranchisingViewModel) => {
     this.editingEntity = editingEntity ? { ...editingEntity } : this._defaultValue();
     this.isDialogOpen = true;
-    this.editingEntityId = editingEntity && editingEntity?.id ? editingEntity?.id : ''
+    this.editingEntityId = editingEntity && editingEntity?.id ? editingEntity?.id : '';
   };
 
   closeDialog = () => {
@@ -116,23 +116,43 @@ export class FranchisingStore extends StoreBase {
     return yup.object<Record<keyof FranchisingViewModel, any>>().shape({
       // fullName: yup.string().required('*'),
       shortName: yup.string().min(3).max(30).required('*'),
-      inn: yup.number().test('innValid', 'Неверный ИНН', value => innValidation(value as number))
-      .test('isUniqueInn', 'Не уникальный ИНН', value => isUniqueInn(value as number))
-      .required(),
-      phone: yup.number().test('isUnique', 'Банковский счет', (value) => isUniquePhone(value as number)).required('*').required('*'),
+      inn: yup
+        .number()
+        .test('innValid', 'Неверный ИНН', value => innValidation(value as number))
+        .test('isUniqueInn', 'Не уникальный ИНН', value => isUniqueInn(value as number))
+        .required(),
+      phone: yup
+        .number()
+        .test('isUnique', 'Банковский счет', value => isUniquePhone(value as number))
+        .required('*')
+        .required('*'),
       email: yup.string().email().required('*'),
       legalAddress: yup.string().max(200).required('*'),
       actualAddress: yup.string().max(200).required('*'),
       kpp: yup.string(),
-      ogrn: yup.number().test('orgnValid','Неверный ИНН', value => orgnValidation(value as number)).required(),
+      ogrn: yup
+        .number()
+        .test('orgnValid', 'Неверный ИНН', value => orgnValidation(value as number))
+        .required(),
       city: yup.string().max(30).required('*'),
       schoolName: yup.string().max(120).required('*'),
       bankName: yup.string().max(30).required('*'),
       bankBik: yup.string().length(9).required('*'),
-      bankInn: yup.number().test('innValid', 'Неверный ИНН', value => innValidation(value as number)).required(),
-      bankKpp: yup.string().test('innValid', 'Неверный KПП', value => kppValidation(value as string)).required('*'),
+      bankInn: yup
+        .number()
+        .test('innValid', 'Неверный ИНН', value => innValidation(value as number))
+        .required(),
+      bankKpp: yup
+        .string()
+        .test('innValid', 'Неверный KПП', value => kppValidation(value as string))
+        .required('*'),
       bankBill: yup.string().length(20).required('*'),
-      checkingAccount: yup.string().max(20).test('isUnique', 'Банковский счет', (value) => isUniqueCheckingAccount(value as string)).required('*').required('*')
+      checkingAccount: yup
+        .string()
+        .max(20)
+        .test('isUnique', 'Банковский счет', value => isUniqueCheckingAccount(value as string))
+        .required('*')
+        .required('*'),
     });
   }
 

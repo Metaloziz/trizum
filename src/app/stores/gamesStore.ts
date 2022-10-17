@@ -16,6 +16,7 @@ import { PresetT } from 'app/types/WorkTypes';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { removeEmptyFields } from '../../utils/removeEmptyFields';
 import { SearchParamsType } from '../types/SearchParamsType';
+import appStore, { Roles } from 'app/stores/appStore';
 
 class GamesStore {
   presets: PresetT[] = [];
@@ -128,9 +129,21 @@ class GamesStore {
 
   getPreset = async (presetName: string) => {
     try {
-      const preset = this.newPresets.items.filter(el => el.name === presetName);
-      if (preset.length) {
-        const res = await gamesService.getPreset(preset[0].id);
+      let preset;
+      if (appStore.role !== Roles.Student) {
+        const zxc = this.newPresets.items.find(el => el.name === presetName);
+        if (zxc) {
+          preset = { gameCode: zxc.name, gameId: zxc.id };
+        }
+      }
+      if (appStore.role === Roles.Student) {
+        const zxc = appStore.currentGameIds.find(el => el.gameCode === presetName);
+        if (zxc) {
+          preset = zxc;
+        }
+      }
+      if (preset) {
+        const res = await gamesService.getPreset(preset.gameId);
         runInAction(() => {
           this.gamePreset = res;
           this.gamePreset.gamePreset.settings = res.gamePreset.settings;

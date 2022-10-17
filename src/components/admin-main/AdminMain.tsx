@@ -8,7 +8,7 @@ type Props = Record<string, unknown>;
 
 const AdminMain: FC<Props> = props => (
   // <div className={styles.container}>
-    <ReportPage />
+  <ReportPage />
   // </div>
 );
 

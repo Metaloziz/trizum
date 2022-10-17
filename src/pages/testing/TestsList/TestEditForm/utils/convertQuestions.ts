@@ -1,4 +1,1 @@
-export const convertQuestions = () => {
-
-}
-
+export const convertQuestions = () => {};

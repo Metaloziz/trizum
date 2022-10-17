@@ -18,10 +18,9 @@ import { getGameForStudent } from 'utils/getGameForStudent';
 import { personalRecordsArr } from 'utils/personalRecordsArr';
 
 export const StudentMain: FC = observer(() => {
-  const { user } = appStore;
+  const { user, currentGameIds } = appStore;
   const { works } = appStore.user?.groups[0]?.group?.course || [];
   const recordsArr = personalRecordsArr(user.personalRecord);
-  const actualGames = getGameForStudent(user.groups);
 
   return (
     <main className={styles.main}>
@@ -29,7 +28,7 @@ export const StudentMain: FC = observer(() => {
       <WeeklyGrowth records={recordsArr} className={styles.weeklyGrowth} />
       <Homeworks className={styles.homeworks} homeworks={homeworks} />
       <KeepPlaying
-        actualGames={actualGames}
+        actualGames={currentGameIds}
         className={styles.keepPlaying}
         works={works}
         games={games}

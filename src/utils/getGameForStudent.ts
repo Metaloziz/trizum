@@ -1,22 +1,18 @@
 import { Group } from 'app/types/LoadMeTypes';
+import { GameIdWithCode } from 'app/types/GameTypes';
 
 export const getGameForStudent = (groupAr: Group[]) => {
-  const gameIdsWithCode = groupAr?.map(el =>
-    el.group?.course?.works?.map(work => {
-      if (work && work.work && work.work.gamePresets && work.work.gamePresets.length) {
-        return work.work.gamePresets.map(preset => ({
-          gameId: preset.id,
-          gameCode: preset?.gamePreset?.game?.code || 'unknown',
-        }));
-      }
-      return [];
-    }),
-  );
-  const unpack = (arr: any[]): any => {
-    if (arr.length && Array.isArray(arr[0])) {
-      return unpack(arr[0]);
+  const classType = groupAr.find(el => el.group.type === 'class');
+  if (!classType) return [];
+  const gameIdsWithCode: GameIdWithCode[][] = classType.group.course.works.map(work => {
+    if (work && work.work && work.work.gamePresets && work.work.gamePresets.length) {
+      return work.work.gamePresets.map(preset => ({
+        gameId: preset.gamePreset.id,
+        gameCode: preset?.gamePreset?.game?.code || 'unknown',
+      }));
     }
-    return arr;
-  };
-  return unpack(gameIdsWithCode);
+    return [];
+  });
+
+  return gameIdsWithCode.filter(el => el.filter(item => item)) as GameIdWithCode[][];
 };

@@ -36,7 +36,6 @@ const ReportFilters: React.FC = observer(() => {
   const [tariffsOptions, setTariffsOptions] = useState<JSX.Element[]>([]);
 
   const getFranchises = async () => {
-
     const res = await franchiseService.getAll();
     const options = res.map(el => (el.id ? getOptionMui(el.id, el.shortName) : <></>));
     setFranchiseOptions(options);

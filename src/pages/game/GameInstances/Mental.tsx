@@ -6,7 +6,7 @@ import {
   ResultsT,
   ResultT,
 } from 'app/types/GameTypes';
-import { presetArray } from 'constants/presetArr';
+import { getPresetArrOptions } from 'constants/presetArr';
 import { GameReturn } from 'pages/game/GameInstances/index';
 import React, { FC, useEffect, useState } from 'react';
 import { Factory, GameIdentifiers } from 'games';
@@ -54,7 +54,7 @@ const Mental: FC<Props> = props => {
   const widthScreen = window.innerWidth;
   const gameViewSize = changedViewScreen(widthScreen, 700);
   const gameTitle = 'Ментальный счет';
-  const presetArrs: Option[] = presetArray(actualPresets);
+  const presetArrs: Option[] = getPresetArrOptions(actualPresets);
   const onRef = (refGame: any) => {
     setRef(refGame);
   };

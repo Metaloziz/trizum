@@ -52,7 +52,6 @@ const SearchBar = observer(() => {
   };
   useEffect(() => {
     if (appStore.role === Roles.Admin) {
-
       getFranchises();
     }
   }, []);
