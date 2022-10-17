@@ -11,6 +11,6 @@ export const getClassTypeGroups = (data: Group[]): ScheduleT[] => {
     newArr.push(...el.group.schedule);
   });
 
-  console.log('getClassTypeGroups', [newArr]);
+  // console.log('getClassTypeGroups', [newArr]);
   return newArr;
 };

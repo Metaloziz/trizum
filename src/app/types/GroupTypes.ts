@@ -13,6 +13,7 @@ import { Nullable } from 'app/types/Nullable';
 import { ResponseOneUserTypeForLoadMe } from 'app/types/ResponseLoadMeBaseT';
 import { ScheduleT } from 'app/types/ScheduleT';
 import { StatusT } from 'app/types/StatusT';
+import { GroupTeacherType } from './GroupTeacherType';
 
 export type TeacherIdWTF = { id: string; firstName: string; middleName: string; lastName: string };
 export type FranchiseWTF = { id: string; shortName: string };
@@ -96,6 +97,8 @@ export class ResponseOneGroup {
   status: StatusT = 'draft';
 
   level: LevelGroupT = 'easy';
+
+  teacher = new GroupTeacherType();
 
   startedAt = new TimeZoneType();
 
