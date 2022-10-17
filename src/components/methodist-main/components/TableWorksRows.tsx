@@ -57,7 +57,7 @@ export const TableWorksRows: FC<Props> = ({ worksArray, setCurrentCourse, select
           </TableCell>
           <TableCell>{work.title}</TableCell>
           <TableCell width="auto">{work.text}</TableCell>
-          <TableCell>{(work.gamePresets || []).length}</TableCell>
+          <TableCell>{work.gamePresetsCount}</TableCell>
           <TableCell width="auto">{getEnumName(work.status)}</TableCell>
         </TableRow>
       ))}
