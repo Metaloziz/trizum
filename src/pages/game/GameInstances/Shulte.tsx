@@ -6,7 +6,7 @@ import {
   ResultsT,
   ResultT,
 } from 'app/types/GameTypes';
-import { presetArray } from 'constants/presetArr';
+import { getPresetArrOptions } from 'constants/presetArr';
 import { GameReturn } from 'pages/game/GameInstances/index';
 import React, { FC, useEffect, useState } from 'react';
 import { Factory, GameIdentifiers } from 'games';
@@ -17,6 +17,7 @@ import gamesStore from 'app/stores/gamesStore';
 import { useNavigate } from 'react-router-dom';
 import appStore, { Roles } from 'app/stores/appStore';
 import { Option } from 'components/select-mui/CustomSelect';
+import _ from "lodash";
 
 const gameName = GameIdentifiers.shulte;
 const GameInstance = Factory(gameName);
@@ -42,7 +43,7 @@ const Shulte: FC<Props> = props => {
   const widthScreen = window.innerWidth;
   const gameViewSize = changedViewScreen(widthScreen, 700);
   const gameTitle = 'Таблица Шульте';
-  const presetArrs: Option[] = presetArray(actualPresets);
+  const presetArr: Option[] = getPresetArrOptions(actualPresets);
   const groupOptions = convertGroupOptions(groups);
 
   useEffect(() => {
@@ -105,7 +106,7 @@ const Shulte: FC<Props> = props => {
       started={started}
       gamePreset={gamePreset.gamePreset}
       setPreset={setPreset}
-      presetArrs={presetArrs}
+      presetArrs={presetArr}
       role={role}
       isModalOpen={isModalOpen}
       resultModal={resultModal}

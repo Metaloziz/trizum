@@ -9,7 +9,7 @@ import {
 import { GameModal } from 'components/game-page/GameCommon/GameModal/GameModal';
 import { GameResultModal } from 'components/game-page/GameCommon/GameModal/GameResultModal/GameResultModal';
 import { SelectBlock } from 'components/game-page/GameCommon/SelectBlock';
-import { presetArray } from 'constants/presetArr';
+import { getPresetArrOptions } from 'constants/presetArr';
 import { GameReturn } from 'pages/game/GameInstances/index';
 import React, { FC, useEffect, useState } from 'react';
 import { Factory, GameIdentifiers } from 'games';
@@ -106,7 +106,7 @@ const BattleColors: FC<Props> = props => {
     setGameResult(defaultResult);
   };
 
-  const presetArrs: Option[] = presetArray(actualPresets);
+  const presetArrs: Option[] = getPresetArrOptions(actualPresets);
 
   useEffect(() => {
     if (gamePreset?.gamePreset.settings.length) {
