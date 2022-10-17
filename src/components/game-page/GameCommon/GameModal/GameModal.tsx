@@ -594,6 +594,58 @@ export const GameModal: FC<PropsT> = observer(props => {
                   </Grid>
                 </Grid>
               )}
+              {game.code === GameIdentifiers.fireflies && (
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label="Кол-во светлячков"
+                      value={elementsTotal}
+                      onChange={({ currentTarget: { value } }) => setElementsTotal(value)}
+                      fullWidth
+                      inputProps={{ type: 'number' }}
+                      variant="outlined"
+                      size="small"
+                    />
+                  </Grid>
+                </Grid>
+              )}
+              {game.code === GameIdentifiers.argus && (
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label="Кол-во правильных ответов"
+                      value={elementsTotal}
+                      onChange={({ currentTarget: { value } }) => setElementsTotal(value)}
+                      fullWidth
+                      inputProps={{ type: 'number' }}
+                      variant="outlined"
+                      size="small"
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label="Кол-во возможных ошибок"
+                      value={errorAcceptable}
+                      onChange={({ currentTarget: { value } }) => setErrorAcceptable(value)}
+                      fullWidth
+                      inputProps={{ type: 'number' }}
+                      variant="outlined"
+                      size="small"
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label={`Скорость светлячков ${errorAcceptable} в мс.`}
+                      value={errorAcceptable}
+                      onChange={({ currentTarget: { value } }) => setErrorAcceptable(value)}
+                      fullWidth
+                      inputProps={{ type: 'number' }}
+                      variant="outlined"
+                      size="small"
+                    />
+                  </Grid>
+                </Grid>
+              )}
               {/* </section> */}
               {/* <section> */}
               {/*  <span className={styles.title}>Начисление баллов</span> */}

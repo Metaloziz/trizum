@@ -13,6 +13,8 @@ import ShiftVertical from 'pages/game/GameInstances/ShiftVertical';
 import Steam from 'pages/game/GameInstances/Steam';
 import Paint from 'pages/game/GameInstances/Paint';
 import Blinks from 'pages/game/GameInstances/Blinks';
+import Lights from 'pages/game/GameInstances/Lights';
+import Argus from 'pages/game/GameInstances/Argus';
 
 const GameItems = observer(() => {
   const { role } = appStore;
@@ -20,7 +22,6 @@ const GameItems = observer(() => {
   if (role === Roles.Unauthorized) {
     return <Navigate to={AppRoutes.Index} />;
   }
-
   if ('gameName' in params) {
     switch (params.gameName) {
       case GameIdentifiers.shulte:
@@ -60,6 +61,14 @@ const GameItems = observer(() => {
       case GameIdentifiers.memoryRhythm:
         return (
           <Blinks gamePreset={gamesStore.gamePreset} actualPresets={gamesStore.actualPresets} />
+        );
+      case GameIdentifiers.fireflies:
+        return (
+          <Lights gamePreset={gamesStore.gamePreset} actualPresets={gamesStore.actualPresets} />
+        );
+      case GameIdentifiers.argus:
+        return (
+          <Argus gamePreset={gamesStore.gamePreset} actualPresets={gamesStore.actualPresets} />
         );
       default:
         return <Navigate to={AppRoutes.Games} />;

@@ -33,6 +33,14 @@ import {
     PropsDefault as BlinksPropsDefault,
     Component as BlinksComponent
 } from './games/blinks';
+import {
+    PropsDefault as LightsPropsDefault,
+    Component as LightsComponent
+} from './games/lights';
+import {
+    PropsDefault as ArgusPropsDefault,
+    Component as ArgusComponent
+} from './games/argus';
 
 export const GameIdentifiers = {
     shulte: 'shulte',
@@ -43,6 +51,8 @@ export const GameIdentifiers = {
     steamEngine: 'steamEngine',
     silhouettes: 'silhouettes',
     memoryRhythm: 'memoryRhythm',
+    fireflies: 'fireflies',
+    argus: 'argus',
 };
 
 export const GameList = {
@@ -85,6 +95,16 @@ export const GameList = {
         name: 'Память и ритм',
         component: BlinksComponent,
         props: BlinksPropsDefault
+    },
+    [GameIdentifiers.fireflies]: {
+        name: 'Светлячки',
+        component: LightsComponent,
+        props: LightsPropsDefault
+    },
+    [GameIdentifiers.argus]: {
+        name: 'Аргус',
+        component: ArgusComponent,
+        props: ArgusPropsDefault
     },
 };
 

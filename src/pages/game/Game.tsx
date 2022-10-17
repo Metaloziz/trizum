@@ -14,6 +14,8 @@ import BattleColors from '../../assets/images/game/battle-colors.png';
 import Paint from '../../assets/images/game/paint.png';
 import Blink from '../../assets/images/game/blink.png';
 import Steam from '../../assets/images/game/steam.png';
+import Argus from '../../assets/images/game/argus.png';
+import Fireflies from '../../assets/images/game/firelines.png';
 
 import { Factory } from '../../games';
 
@@ -59,6 +61,16 @@ const Games = [
     title: 'Паро-вик',
     name: 'steamEngine',
     prevImg: Steam,
+  },
+  {
+    title: 'Светлячки',
+    name: 'fireflies',
+    prevImg: Fireflies,
+  },
+  {
+    title: 'Аргус',
+    name: 'argus',
+    prevImg: Argus,
   },
 ];
 
