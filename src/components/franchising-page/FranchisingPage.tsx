@@ -192,13 +192,15 @@ const FranchisingPage = observer(() => {
                         >
                           <EditIcon fontSize="small" />
                         </IconButton>
-                        {Roles.Tutor ? null : <IconButton
-                          size="small"
-                          onClick={() => store.remove(entity.id!)}
-                          color="error"
-                        >
-                          <DeleteIcon fontSize="small" />
-                        </IconButton>}
+                        {Roles.Tutor ? null : (
+                          <IconButton
+                            size="small"
+                            onClick={() => store.remove(entity.id!)}
+                            color="error"
+                          >
+                            <DeleteIcon fontSize="small" />
+                          </IconButton>
+                        )}
                       </Stack>
                     </TableCell>
                   </TableRow>

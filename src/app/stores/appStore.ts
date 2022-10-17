@@ -225,7 +225,7 @@ class AppStore {
     const classType = user.groups.find(el => el.group.type === 'class');
     if (classType && classType.group.schedule.length) {
       // TODO: добавить нахождение нужного урока по дате
-      [,this.currentGameIds] = this.allGameIdsWithCodes;
+      [this.currentGameIds] = this.allGameIdsWithCodes;
     }
   };
   /* actions student only */

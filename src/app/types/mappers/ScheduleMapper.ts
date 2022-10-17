@@ -1,4 +1,4 @@
-import {FranchiseWTF, Schedule, ScheduleForUI, TeacherIdWTF} from 'app/types/GroupTypes';
+import { FranchiseWTF, Schedule, ScheduleForUI, TeacherIdWTF } from 'app/types/GroupTypes';
 
 export const scheduleMapper = (
   schedule: Schedule[],

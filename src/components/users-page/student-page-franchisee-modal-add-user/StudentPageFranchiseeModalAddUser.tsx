@@ -47,7 +47,7 @@ type Props = {
 
 export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
   ({ onCloseModal, visibility }) => {
-    const {currentUser} = usersStore
+    const { currentUser } = usersStore;
     const { franchise } = franchiseeStore;
     const { groups, loadCurrentGroups } = groupStore;
     const { tariffs } = tariffsStore;
@@ -470,12 +470,16 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                        <div className={styles.isActive_helper}>Статус пользователя в системе:</div>
-                        <div className={styles.isActive_status}>{currentUser?.active ? 'Активный' : 'Заблокирован'}</div>
+                    <div className={styles.isActive_helper}>Статус пользователя в системе:</div>
+                    <div className={styles.isActive_status}>
+                      {currentUser?.active ? 'Активный' : 'Заблокирован'}
+                    </div>
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                        <div className={styles.isActive_helper}>Статус оплаты:</div>
-                        <div className={styles.isActive_status}>{currentUser?.payed ? 'Оплачено' : 'Не оплчено'}</div>
+                    <div className={styles.isActive_helper}>Статус оплаты:</div>
+                    <div className={styles.isActive_status}>
+                      {currentUser?.payed ? 'Оплачено' : 'Не оплчено'}
+                    </div>
                   </Grid>
                 </>
               )}

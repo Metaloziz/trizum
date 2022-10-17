@@ -261,7 +261,10 @@ export const AddOrEditDialog = observer((props: AddOrEditDialogProps) => {
               label="Расчётный счёт"
               value={store.editingEntity.checkingAccount}
               onChange={({ currentTarget: { value } }) =>
-                numberWithPossibleLeadingZero(value, () => (store.editingEntity.checkingAccount = value))
+                numberWithPossibleLeadingZero(
+                  value,
+                  () => (store.editingEntity.checkingAccount = value),
+                )
               }
               fullWidth
               variant="outlined"

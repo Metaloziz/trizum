@@ -1,10 +1,10 @@
 // Containers
 
 import { WorksT } from 'app/types/GroupTypes';
-import {Group, WorkFromLoadme} from 'app/types/LoadMeTypes';
+import { Group, WorkFromLoadme } from 'app/types/LoadMeTypes';
 import { PersonalRecordT } from 'app/types/ResponseLoadMeBaseT';
 import { PersonalRecordsArrT } from 'utils/personalRecordsArr';
-import {GameIdWithCode} from "app/types/GameTypes";
+import { GameIdWithCode } from 'app/types/GameTypes';
 
 export interface WeeklyGrowthProps {
   className?: string;

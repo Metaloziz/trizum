@@ -11,7 +11,7 @@ import gamesStore from 'app/stores/gamesStore';
 import { useNavigate } from 'react-router-dom';
 import appStore, { Roles } from 'app/stores/appStore';
 import { Option } from 'components/select-mui/CustomSelect';
-import _ from "lodash";
+import _ from 'lodash';
 
 const gameName = GameIdentifiers.game2048;
 const GameInstance = Factory(gameName);
