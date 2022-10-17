@@ -10,10 +10,11 @@ import {
   PlayResultsResponseT,
   PlaySendResultT,
 } from 'app/types/GameTypes';
+import { SearchParamsType } from '../types/SearchParamsType';
 
 const gamesService = {
-  getPresets: async (): Promise<GamePresetsResponseT> => {
-    const { data } = await instance.get(`${Paths.Presets}?per_page=1000`);
+  getPresets: async (params?: Partial<SearchParamsType>): Promise<GamePresetsResponseT> => {
+    const { data } = await instance.get(`${Paths.Presets}`, { params });
     return data;
   },
   getPreset: async (id: string): Promise<OneGamePresent> => {

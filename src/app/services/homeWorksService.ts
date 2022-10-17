@@ -1,10 +1,10 @@
 import { Paths } from 'app/enums/Paths';
 import instance from 'app/services/config';
 import { CreatOrEditWorkRequestT } from 'app/types/WorkTypes';
-import { SearchHomeWorksParamsType } from '../types/SearchHomeWorksParamsType';
+import { SearchParamsType } from '../types/SearchParamsType';
 
 const homeWorksService = {
-  getHomeWorks: async (params: SearchHomeWorksParamsType) => {
+  getHomeWorks: async (params: SearchParamsType) => {
     const { data } = await instance.get(Paths.Works, { params });
     return data;
   },

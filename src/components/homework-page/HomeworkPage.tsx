@@ -1,10 +1,8 @@
 import AddIcon from '@mui/icons-material/Add';
 import {
-  Alert,
   Box,
   Button,
   Paper,
-  Snackbar,
   Stack,
   Table,
   TableBody,
@@ -31,13 +29,9 @@ export const HomeworkPage = observer(() => {
     setSearchParams,
     getHomeWorks,
     isLoading,
-    success,
-    error,
     openDialog,
     worksArray,
     remove,
-    setSuccess,
-    setError,
     pagination,
     clearSearchParams,
   } = homeworkStore;
@@ -47,7 +41,7 @@ export const HomeworkPage = observer(() => {
     clearSearchParams();
     getHomeWorks();
     getGames();
-    getPresets();
+    getPresets({ status: StatusTypes.active });
   }, []);
 
   const [currentPage, setCurrentPage] = useState(pagination.page + 1);
@@ -78,16 +72,7 @@ export const HomeworkPage = observer(() => {
       }}
     >
       <AddOrEditDialog />
-      <Snackbar open={success !== null} autoHideDuration={6000} onClose={() => setSuccess(null)}>
-        <Alert onClose={() => setSuccess(null)} severity="success" sx={{ width: '100%' }}>
-          {success}
-        </Alert>
-      </Snackbar>
-      <Snackbar open={error !== null} autoHideDuration={6000} onClose={() => setError(null)}>
-        <Alert onClose={() => setError(null)} severity="error" sx={{ width: '100%' }}>
-          {error?.message || 'Произошла ошибка!'}
-        </Alert>
-      </Snackbar>
+
       <Box p={2}>
         <Box mb={1}>
           <Stack spacing={1}>

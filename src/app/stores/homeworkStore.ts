@@ -11,14 +11,14 @@ import { removeEmptyFields } from '../../utils/removeEmptyFields';
 import { StatusTypes } from '../enums/StatusTypes';
 import homeWorksService from '../services/homeWorksService';
 import { PaginationType } from '../types/PaginationType';
-import { SearchHomeWorksParamsType } from '../types/SearchHomeWorksParamsType';
+import { SearchParamsType } from '../types/SearchParamsType';
 
 class HomeworkStore extends StoreBase {
   isDialogOpen: boolean = false;
 
   worksArray: HomeworkViewModel[] = [];
 
-  private searchHomeWorksParams: SearchHomeWorksParamsType = {
+  private searchHomeWorksParams: SearchParamsType = {
     page: 0,
     per_page: 10,
     total: 0,
@@ -125,20 +125,12 @@ class HomeworkStore extends StoreBase {
     }
   };
 
-  setSearchParams = (params: Partial<SearchHomeWorksParamsType>) => {
+  setSearchParams = (params: Partial<SearchParamsType>) => {
     this.searchHomeWorksParams = { ...this.searchHomeWorksParams, ...params };
   };
 
   clearSearchParams = () => {
     this.searchHomeWorksParams = { page: 0, per_page: 10, total: 1, type: '', status: '' };
-  };
-
-  setSuccess = (value: boolean | null) => {
-    this.success = value;
-  };
-
-  setError = (value: Error | null) => {
-    this.error = value;
   };
 
   get validateSchema() {

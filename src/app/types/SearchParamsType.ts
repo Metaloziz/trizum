@@ -1,4 +1,4 @@
-export type SearchHomeWorksParamsType = {
+export type SearchParamsType = {
   page: number;
   per_page: number;
   total: number;

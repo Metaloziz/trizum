@@ -1,7 +1,4 @@
 import { StatusTypes } from 'app/enums/StatusTypes';
-import { RequestUsersForFilter } from 'app/types/UserTypes';
-import { PresetT } from 'app/types/WorkTypes';
-import { makeAutoObservable, runInAction } from 'mobx';
 
 import gamesService from 'app/services/gamesService';
 import {
@@ -15,6 +12,10 @@ import {
   PlaySendResultT,
   PresetsGameSettings,
 } from 'app/types/GameTypes';
+import { PresetT } from 'app/types/WorkTypes';
+import { makeAutoObservable, runInAction } from 'mobx';
+import { removeEmptyFields } from '../../utils/removeEmptyFields';
+import { SearchParamsType } from '../types/SearchParamsType';
 
 class GamesStore {
   presets: PresetT[] = [];
@@ -102,9 +103,11 @@ class GamesStore {
     }
   };
 
-  getPresets = async () => {
+  getPresets = async (searchPresetParams?: Partial<SearchParamsType>) => {
     try {
-      const res = await gamesService.getPresets();
+      const params = removeEmptyFields(searchPresetParams);
+      params.per_page = 1000; // todo hardcode
+      const res = await gamesService.getPresets(params);
       runInAction(() => {
         this.newPresets = res;
       });
