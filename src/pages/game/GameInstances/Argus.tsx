@@ -126,7 +126,7 @@ const Argus: FC<Props> = props => {
       onRepeat={onRepeat}
       navigate={navigate}
     >
-      <GameInstance width={gameViewSize} onEnd={onEnd} onRef={onRef} {...settings}  speed={2000}/>
+      <GameInstance width={gameViewSize} onEnd={onEnd} onRef={onRef} {...settings} />
     </GameReturn>
   );
 };

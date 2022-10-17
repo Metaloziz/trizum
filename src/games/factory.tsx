@@ -51,7 +51,7 @@ export const GameIdentifiers = {
     steamEngine: 'steamEngine',
     silhouettes: 'silhouettes',
     memoryRhythm: 'memoryRhythm',
-    lights: 'lights',
+    fireflies: 'fireflies',
     argus: 'argus',
 };
 
@@ -96,7 +96,7 @@ export const GameList = {
         component: BlinksComponent,
         props: BlinksPropsDefault
     },
-    [GameIdentifiers.lights]: {
+    [GameIdentifiers.fireflies]: {
         name: 'Светлячки',
         component: LightsComponent,
         props: LightsPropsDefault

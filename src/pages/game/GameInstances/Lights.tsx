@@ -18,7 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import appStore, { Roles } from 'app/stores/appStore';
 import { Option } from 'components/select-mui/CustomSelect';
 
-const gameName = GameIdentifiers.lights;
+const gameName = GameIdentifiers.fireflies;
 const GameInstance = Factory(gameName);
 
 type Props = {
@@ -31,7 +31,7 @@ const Lights: FC<Props> = props => {
   const { deletePreset, getPreset, getPresets, getGame, game } = gamesStore;
   const { role } = appStore;
   const { groups, getGroups } = groupStore;
-
+  console.log(game);
   const [started, setStarted] = useState(false);
   const [resultModal, setResultModal] = useState(false);
   const [gameResult, setGameResult] = useState<ResultsT>(defaultResult);

@@ -22,7 +22,6 @@ const GameItems = observer(() => {
   if (role === Roles.Unauthorized) {
     return <Navigate to={AppRoutes.Index} />;
   }
-
   if ('gameName' in params) {
     switch (params.gameName) {
       case GameIdentifiers.shulte:
@@ -63,7 +62,7 @@ const GameItems = observer(() => {
         return (
           <Blinks gamePreset={gamesStore.gamePreset} actualPresets={gamesStore.actualPresets} />
         );
-      case GameIdentifiers.lights:
+      case GameIdentifiers.fireflies:
         return (
           <Lights gamePreset={gamesStore.gamePreset} actualPresets={gamesStore.actualPresets} />
         );
