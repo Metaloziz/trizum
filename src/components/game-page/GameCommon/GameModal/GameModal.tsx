@@ -635,9 +635,9 @@ export const GameModal: FC<PropsT> = observer(props => {
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField
-                      label={`Скорость светлячков ${errorAcceptable} в мс.`}
-                      value={errorAcceptable}
-                      onChange={({ currentTarget: { value } }) => setErrorAcceptable(value)}
+                      label={`Время на запоминание ${speed} в мс.`}
+                      value={speed}
+                      onChange={({ currentTarget: { value } }) => setSpeed(value)}
                       fullWidth
                       inputProps={{ type: 'number' }}
                       variant="outlined"
@@ -736,11 +736,14 @@ export const GameModal: FC<PropsT> = observer(props => {
             </Button>
           </div>
           <div className={styles.btnBlock_btn}>
-            {gamePreset?.gamePreset?.status === 'active' && (
-              <span>Нельзя изменять активные настройки</span>
-            )}
+            {/* {gamePreset?.gamePreset?.status === 'active' && ( */}
+            {/*  <span>Нельзя изменять активные настройки</span> */}
+            {/* )} */}
             <Button
-              disabled={gamePreset?.gamePreset?.status === 'active' || template?.length < 1}
+              disabled={
+                // gamePreset?.gamePreset?.status === 'active' ||
+                template?.length < 1
+              }
               onClick={savePreset}
             >
               Сохранить

@@ -33,19 +33,25 @@ export const GameResultModal: FC<GameResultModalPropsT> = props => {
             </span>
           ) : (
             <>
-              <span className={styles.resultWrapper_result}>
-                Время: <span className={styles.resultWrapper_result_count}>{gameResult.time}</span>
-              </span>
+              {game?.code !== GameIdentifiers.argus && (
+                <span className={styles.resultWrapper_result}>
+                  Время:
+                  <span className={styles.resultWrapper_result_count}>{gameResult.time}</span>
+                </span>
+              )}
               {gameResult.success > 0 && (
                 <span className={styles.resultWrapper_result}>
                   Верных ответов:
                   <span className={styles.resultWrapper_result_count}>{gameResult.success}</span>
                 </span>
               )}
-              <span className={styles.resultWrapper_result}>
-                Ошибок:
-                <span className={styles.resultWrapper_result_count}>{gameResult.failed}</span>
-              </span>
+              {game?.code !== GameIdentifiers.fireflies && (
+                <span className={styles.resultWrapper_result}>
+                  Ошибок:
+                  <span className={styles.resultWrapper_result_count}>{gameResult.failed}</span>
+                </span>
+              )}
+
               <span className={styles.resultWrapper_result_text}>
                 <span className={styles.resultWrapper_result_count}>{result}</span>
               </span>

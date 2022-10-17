@@ -25,6 +25,7 @@ const Game2048: FC<Props> = props => {
   const { deletePreset, getPreset, getPresets, getGame, game } = gamesStore;
   const { role } = appStore;
   const { groups, getGroups } = groupStore;
+  console.log(actualPresets);
 
   const [started, setStarted] = useState(false);
   const [resultModal, setResultModal] = useState(false);
@@ -34,10 +35,12 @@ const Game2048: FC<Props> = props => {
   const [settings, setSettings] = useState<PresetsGameSettings>(gamePreset.gamePreset.settings[0]);
 
   useEffect(() => {
-    if (role !== Roles.Student) {
-      getPresets();
-      getGroups();
-    }
+    getPresets();
+    getGroups();
+    // if (role !== Roles.Student) {
+    //   getPresets();
+    //   getGroups();
+    // }
     getGame(gameName);
     return () => {
       getPreset('');
@@ -52,7 +55,6 @@ const Game2048: FC<Props> = props => {
   const onRef = (refGame: any) => {
     setRef(refGame);
   };
-  console.log(settings, 'game2048');
 
   const startGame = () => {
     if (gamePreset.gamePreset.status !== 'archive') {
@@ -98,8 +100,7 @@ const Game2048: FC<Props> = props => {
       setSettings(gamePreset.gamePreset.settings[0]);
     }
   }, [gamePreset]);
-  console.log(settings && settings.blinksCount);
-  console.log(settings && settings.elementsTotal);
+
   return (
     <GameReturn
       game={game}

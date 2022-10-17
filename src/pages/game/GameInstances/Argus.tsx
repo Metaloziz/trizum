@@ -40,10 +40,11 @@ const Argus: FC<Props> = props => {
   const [settings, setSettings] = useState<PresetsGameSettings>(gamePreset.gamePreset.settings[0]);
 
   useEffect(() => {
-    if (role !== Roles.Student) {
-      getPresets();
-      getGroups();
-    }
+    getPresets();
+    getGroups();
+    // if (role !== Roles.Student) {
+    //
+    // }
     getGame(gameName);
     return () => {
       getPreset('');

@@ -105,7 +105,7 @@ class GamesStore {
 
   getPresets = async (searchPresetParams?: Partial<SearchParamsType>) => {
     try {
-      const params = removeEmptyFields(searchPresetParams);
+      const params = removeEmptyFields(searchPresetParams || {});
       params.per_page = 1000; // todo hardcode
       const res = await gamesService.getPresets(params);
       runInAction(() => {
