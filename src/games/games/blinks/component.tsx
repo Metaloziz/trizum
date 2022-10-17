@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View,  StyleSheet, Text } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
+import { Props } from './types';
 
 import Timer from '../../components/timer';
 import StartTimer from '../../components/startTimer';
@@ -48,6 +49,7 @@ export default class extends Component<any, any> implements Game {
     } = this.props;
 
     onRef(this);
+
     // this.reset();
     // this.start();
   }
@@ -109,13 +111,13 @@ export default class extends Component<any, any> implements Game {
 
   startLogic = async () => {
     const {
-      blinks = 2,
+      blinksCount = 2,
       colorsMap
     } = this.props;
 
     const data = [];
 
-    for(let r = 0;r<blinks;r++) {
+    for(let r = 0;r<blinksCount;r++) {
       data.push(
         rand(0, colorsMap.length - 1)
       );
@@ -152,7 +154,7 @@ export default class extends Component<any, any> implements Game {
   public getConfig = () => {
     return [
       {
-        name : 'blinks',
+        name : 'blinksCount',
         type : 'select',
         title : 'Кол-во миганий',
         option : [2,3,4,5,6,7,8,9].map(a => ({
@@ -183,7 +185,7 @@ export default class extends Component<any, any> implements Game {
   public prepareConfig = (result : any) => {
     return {
       sound : parseInt(result.sound),
-      blinks : parseInt(result.blinks)
+      blinksCount : parseInt(result.blinksCount)
     };
   }
 
@@ -232,11 +234,12 @@ export default class extends Component<any, any> implements Game {
     } = this.state;
 
     const {
-      blinks = 2,
+      blinksCount = 2,
       width,
       colorsMap,
       sound = 1
     } = this.props;
+
     const sizeBlink = Math.round((width - ((colorsMap.length - 1) * SPACE)) / colorsMap.length);
 
     return <>
