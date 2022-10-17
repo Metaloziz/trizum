@@ -8,9 +8,10 @@ export const getClosestLessonDate = (schedule: ScheduleT[], value: string) => {
 
     const date = schedule.reduce((acc, el) => acc = el.from > value ? [...acc, el.from] : acc, [''])
     if (!date[1]) {
-        const prevDate = schedule.reduce((acc, el) => acc = el.from < value ? [...acc, el.from] : acc, [''])
-        const [lessonDate, lessonTime] = prevDate[prevDate.length - 1].split(' ');
-        return `${lessonDate} в ${lessonTime}`
+        // const prevDate = schedule.reduce((acc, el) => acc = el.from < value ? [...acc, el.from] : acc, [''])
+        // const [lessonDate, lessonTime] = prevDate[prevDate.length - 1].split(' ');
+        // return `${lessonDate} в ${lessonTime}`
+        return 'нет занятий'
     }
     
     const [lessonDate, lessonTime] = date[1].split(' ');
