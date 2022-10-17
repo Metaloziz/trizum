@@ -1,7 +1,7 @@
 import { GameProps, GameResult } from '../../common/types';
 
 export interface Props extends GameProps {
-  blinks?: number;
+  blinksCount?: number;
   colorsMap?: string[];
   sound?: number;
   onEnd?(result?: GameResult): void;
@@ -9,7 +9,7 @@ export interface Props extends GameProps {
 
 const PropsDefault : Props = {
   width : 200,
-  blinks : 2,
+  blinksCount : 2,
   sound : 1,
   colorsMap : [
     '#4b8bf5',
