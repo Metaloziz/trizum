@@ -1,5 +1,16 @@
-import React, { FC, useState } from 'react';
+import { EmptyUser, Roles } from 'app/stores/appStore';
+import iconFlag from 'assets/svgs/icon-flag.svg';
+import iconMonkey from 'assets/svgs/monkey.svg';
+import BasicModal from 'components/basic-modal/BasicModal';
+import { ButtonsGroup } from 'components/card-student/card-student-for-user/ButtonsGroup/ButtonsGroup';
+import { getAvatarImage } from 'components/card-student/card-student-for-user/helper/getAvatarImage';
+import { OlympiadPreviewText } from 'components/card-student/card-student-for-user/OlympiadPreviewText/OlympiadPreviewText';
+import CustomImageWrapper from 'components/custom-image-wrapper/CustomImageWrapper';
+import Image from 'components/image/Image';
+import Setting from 'components/setting/Setting';
 import { observer } from 'mobx-react-lite';
+import React, { FC, useState } from 'react';
+import { getClosestLessonDate, currentMomentOfTime } from 'utils/getClosestLessonDate';
 
 import iconTablet from '../../../assets/svgs/icon-tablet.svg';
 import iconParrot from '../../../assets/svgs/parrot.svg';
@@ -7,36 +18,27 @@ import iconParrot from '../../../assets/svgs/parrot.svg';
 import styles from './CardStudentForUser.module.scss';
 import { getNearestLessonDateHelper } from './getNearestLessonDateHelper/getNearestLessonDateHelper';
 
-import appStore, { EmptyUser, Roles } from 'app/stores/appStore';
-import usersStore from 'app/stores/usersStore';
-import iconFlag from 'assets/svgs/icon-flag.svg';
-import iconMonkey from 'assets/svgs/monkey.svg';
-import BasicModal from 'components/basic-modal/BasicModal';
-import { getAvatarImage } from 'components/card-student/card-student-for-user/helper/getAvatarImage';
-import { OlympiadPreviewText } from 'components/card-student/card-student-for-user/OlympiadPreviewText/OlympiadPreviewText';
-import CustomImageWrapper from 'components/custom-image-wrapper/CustomImageWrapper';
-import Image from 'components/image/Image';
-import Setting from 'components/setting/Setting';
-import { ButtonsGroup } from 'components/card-student/card-student-for-user/ButtonsGroup/ButtonsGroup';
-import { getClosestLessonDate, now } from 'utils/getClosestLessonDate';
-
 type Props = {
+  user: EmptyUser;
   isMainPage?: boolean;
 };
 
-const CardStudentForStudent: FC<Props> = observer(({ isMainPage = true }) => {
-  const { user } = appStore;
+const CardStudentForStudent: FC<Props> = observer(({ user, isMainPage = true }) => {
   const { firstName, middleName, lastName, role, avatar, city, groups } = user;
-  const { getFullUserName } = usersStore;
   const {
     firstName: teacherFirstName,
-    middleName: teacherMiddleName,
+    middleName: teacherMiddletName,
     lastName: teacherLastName,
   } = user.groups[0].group.teacher;
-  const lessonDate = getClosestLessonDate(user.groups[0].group.schedule, now);
-  const lessonTime = lessonDate ? `${lessonDate.date} в ${lessonDate.from}` : 'нет занятий';
+  const closestLessonDate = getClosestLessonDate(
+    user.groups[0].group.schedule,
+    currentMomentOfTime,
+  );
+
+  const nearestLessonDate = getNearestLessonDateHelper(groups);
 
   const [showModal, setShowModal] = useState<boolean>(false);
+
   const fullName = `${firstName} ${middleName} ${lastName}`;
 
   // eslint-disable-next-line no-alert
@@ -77,7 +79,7 @@ const CardStudentForStudent: FC<Props> = observer(({ isMainPage = true }) => {
                 </span>
                 Учитель:
               </li>
-              <li>{`${teacherFirstName} ${teacherMiddleName} ${teacherLastName}`}</li>
+              <li>{`${teacherFirstName} ${teacherMiddletName} ${teacherLastName}`}</li>
             </ul>
             <ul className={styles.list}>
               <li>
@@ -86,7 +88,7 @@ const CardStudentForStudent: FC<Props> = observer(({ isMainPage = true }) => {
                 </span>
                 Следующее занятие:
               </li>
-              <li>{lessonTime}</li>
+              <li>{nearestLessonDate}</li>
             </ul>
           </div>
         </div>
