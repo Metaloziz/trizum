@@ -1,5 +1,5 @@
 .wrapper {
-  padding: 30px 20px 20px 16px;
+  padding: 10px 20px 20px 16px;
   height: calc(100vh - 100px);
   overflow-y: auto;
 
@@ -48,10 +48,12 @@
         position: relative;
         left: 16px;
       }
+
       &_active {
-      background: #2E8DFD;
-      color: #FFFFFF;
-    }
+        background: #2E8DFD;
+        color: #FFFFFF;
+      }
+
       &:hover {
         background: #2E8DFD;
         color: #FFFFFF;

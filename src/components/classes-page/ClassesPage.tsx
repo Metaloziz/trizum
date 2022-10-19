@@ -1,5 +1,3 @@
-import React, { useEffect, useState } from 'react';
-
 import EditIcon from '@mui/icons-material/Edit';
 import {
   Box,
@@ -14,21 +12,21 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import cn from 'classnames';
-import { observer } from 'mobx-react-lite';
-import moment from 'moment';
-
-import styles from './ClassesPage.module.scss';
 
 import { DateTime } from 'app/enums/DateTime';
-import appStore, { Roles } from 'app/stores/appStore';
+import appStore from 'app/stores/appStore';
 import groupStore from 'app/stores/groupStore';
-import Button from 'components/button/Button';
+import cn from 'classnames';
 import CardStudent from 'components/card-student/CardStudent';
 import AddEditGroup from 'components/classes-page/AddEditGroup';
 import BlockGames from 'components/classes-page/block-games/BlockGames';
 import SearchBar from 'components/classes-page/search-bar/SearchBar';
+import { observer } from 'mobx-react-lite';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
 import { checkRoleForClasses } from 'utils/checkRoleForClasses';
+
+import styles from './ClassesPage.module.scss';
 
 const levelRu = {
   easy: 'Младшая группа',
@@ -48,6 +46,7 @@ const ClassesPage = observer(() => {
     selectedGroup,
     nullableSelectedGroup,
   } = groupStore;
+
   const [currentPage, setCurrentPage] = useState((queryFields.page || 0) + 1);
 
   useEffect(() => {
@@ -69,9 +68,6 @@ const ClassesPage = observer(() => {
     <>
       <div className={styles.wrapper}>
         <div className={styles.searchBar}>
-          {checkRoleForClasses(appStore.role) && (
-            <Button onClick={() => openModal()}>Добавить группу</Button>
-          )}
           <SearchBar />
         </div>
         {checkRoleForClasses(appStore.role) && (

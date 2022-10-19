@@ -1,41 +1,39 @@
-import { GameModal } from 'components/game-page/GameCommon/GameModal/GameModal';
-import Rate from 'pages/rate/Rate';
-import React from 'react';
-
-import './App.css';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { observer } from 'mobx-react-lite';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import { AppRoutes } from 'app/enums/AppRoutes';
+import { SecondaryRoutes } from 'app/enums/SecondaryRoutes';
+import AddNewsPage from 'components/add-news-page';
+import { ArticleFromEditor } from 'components/blog-page/ArticleFromEditor/ArticleFromEditor';
 import DefaultLayout from 'components/layout/default/DefaultLayout';
+import OlympiadsListPage from 'components/olympiads-list-page/OlympiadsListPage';
+import { observer } from 'mobx-react-lite';
 import Blog from 'pages/blog/Blog';
 import Classes from 'pages/classes/Classes';
 import Courses from 'pages/courses/Courses';
 import Franchising from 'pages/franchising/Franchising';
 import { GameWrapper } from 'pages/game/Game';
+import GameItems from 'pages/game/GameItems';
 import Home from 'pages/home/Home';
 import Homework from 'pages/homework/Homework';
-import HomeworkAddEdit from 'pages/homework/HomeworkAddEdit/HomeworkAddEdit';
 import LoginWithSMS from 'pages/login/LoginWithSMS/LoginWithSMS';
 import Olympiad from 'pages/olympiads/Olympiad/Olympiad';
 import Olympiads from 'pages/olympiads/Olympiads';
 import Pay from 'pages/pay/Pay';
+import Rate from 'pages/rate/Rate';
 import Report from 'pages/report/Report';
 import Schedule from 'pages/schedule/Schedule';
 import Statistic from 'pages/statistic/Statistic';
 import Result from 'pages/testing/result/Result';
 import Test from 'pages/testing/test/Test';
 import { Testing } from 'pages/testing/Testing';
+import { TestsList } from 'pages/testing/TestsList/TestsList';
 import UserInfo from 'pages/user-info/UserInfo';
 import Users from 'pages/users/Users';
-import OlympiadsListPage from 'components/olympiads-list-page/OlympiadsListPage';
-import { SecondaryRoutes } from 'app/enums/SecondaryRoutes';
-import { TestsList } from 'pages/testing/TestsList/TestsList';
-import AddNewsPage from 'components/add-news-page';
-import { ArticleFromEditor } from 'components/blog-page/ArticleFromEditor/ArticleFromEditor';
-import GameItems from 'pages/game/GameItems';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
+import './App.css';
 
 const App = observer(() => (
   <LocalizationProvider dateAdapter={AdapterMoment}>
@@ -54,14 +52,9 @@ const App = observer(() => (
           <Route path={AppRoutes.Courses} element={<Courses />} />
           <Route path={AppRoutes.Franchising} element={<Franchising />} />
           <Route path={`${AppRoutes.Games}`} element={<GameWrapper />} />
-          {/* <Route path=""  /> */}
 
-          {/* <Route path=":/game/:id" element={<GameModal open onClose={() => true} />} /> */}
-          {/* </Route> */}
           <Route path={`${AppRoutes.Games}/:gameName`} element={<GameItems />} />
-          {/* <Route path={AppRoutes.Games} element={<Game />} /> */}
           <Route path={AppRoutes.Homework} element={<Homework />} />
-          <Route path={`${AppRoutes.Homework}${AppRoutes.Add}`} element={<HomeworkAddEdit />} />
           <Route path={AppRoutes.Signin} element={<LoginWithSMS />} />
 
           <Route path={AppRoutes.Olympiads}>

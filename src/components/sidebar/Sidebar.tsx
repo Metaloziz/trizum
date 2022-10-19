@@ -84,7 +84,7 @@ const franchiseeAdminLinks = [
   Links.Index,
   Links.Classes,
   Links.Statistic,
-  Links.Homework,
+  // Links.Homework,
   Links.Users,
   Links.Games,
   Links.UserInfo,
