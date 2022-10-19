@@ -96,11 +96,15 @@ const Game2048: FC<Props> = props => {
   };
 
   const presetArrs: Option[] = getPresetArrOptions(actualPresets);
+
   useEffect(() => {
     if (gamePreset?.gamePreset.settings.length) {
       setSettings(gamePreset.gamePreset.settings[0]);
     }
   }, [gamePreset]);
+  useEffect(() => {
+    getPresets();
+  }, []);
 
   return (
     <GameReturn

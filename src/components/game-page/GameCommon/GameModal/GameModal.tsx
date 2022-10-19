@@ -77,6 +77,7 @@ export const GameModal: FC<PropsT> = observer(props => {
   const [description, setDescription] = useState<string>(defaultInputTextReader);
   const [colors, setColors] = useState<ColorObj[]>(colorsObj);
   const [sound, setSound] = useState<boolean>(settings?.sound === 1);
+
   const levelKeys = Object.keys(GroupLevels);
   const levelOptions = Object.values(GroupLevels).map((el, index) =>
     getOptionMui(levelKeys[index], el),
@@ -107,6 +108,7 @@ export const GameModal: FC<PropsT> = observer(props => {
 
   const rerenderPreset = () => {
     setTemplate(gamePresetName);
+    setStatus(gamePreset.gamePreset.status || 'draft');
     setTimeComplete(settings?.timeComplete?.toString() || '');
     setElementsTotal(settings?.elementsTotal?.toString() || '');
     setDelay(settings?.delay?.toString() || '');
@@ -241,7 +243,9 @@ export const GameModal: FC<PropsT> = observer(props => {
                       label="Статус"
                       onChange={({ target: { value } }) => setStatus(value)}
                     >
-                      {statusTypesOptions}
+                      {gamePreset.gamePreset.id
+                        ? statusTypesOptions
+                        : statusTypesOptions.filter(el => el.key === 'draft')}
                     </Select>
                   </FormControl>
                 </Grid>
@@ -285,26 +289,28 @@ export const GameModal: FC<PropsT> = observer(props => {
                       />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <TextField
-                        label="Кол-во цветов"
-                        value={groupsCount}
-                        onChange={({ currentTarget: { value } }) => setGroupsCount(value)}
-                        fullWidth
-                        inputProps={{ type: 'number' }}
-                        variant="outlined"
-                        size="small"
-                      />
+                      <FormControl fullWidth size="small">
+                        <InputLabel>Кол-во цветов</InputLabel>
+                        <Select
+                          value={groupsCount}
+                          label="Кол-во цветов"
+                          onChange={({ target: { value } }) => setGroupsCount(value)}
+                        >
+                          {sizeOptions.slice(0, 2)}
+                        </Select>
+                      </FormControl>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <TextField
-                        label="Формы"
-                        value={blinksCount}
-                        onChange={({ currentTarget: { value } }) => setBlinksCount(value)}
-                        fullWidth
-                        inputProps={{ type: 'number' }}
-                        variant="outlined"
-                        size="small"
-                      />
+                      <FormControl fullWidth size="small">
+                        <InputLabel>Формы</InputLabel>
+                        <Select
+                          value={blinksCount}
+                          label="Формы"
+                          onChange={({ target: { value } }) => setBlinksCount(value)}
+                        >
+                          {sizeOptions.slice(0, 2)}
+                        </Select>
+                      </FormControl>
                     </Grid>
                   </Grid>
                 </>
