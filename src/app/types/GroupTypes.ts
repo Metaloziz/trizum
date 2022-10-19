@@ -1,18 +1,16 @@
-import { GamePresetT } from 'app/types/GameTypes';
-import { GamePresetFromLoadme } from 'app/types/LoadMeTypes';
-import moment from 'moment';
-
-import { TimeZoneType } from 'app/types/TimeZoneType';
-
 import { DateTime } from 'app/enums/DateTime';
 import { GroupLevels } from 'app/enums/GroupLevels';
 import { GroupTypes } from 'app/enums/GroupTypes';
 import { EmptyUser } from 'app/stores/appStore';
-import { FranchiseShortT, FranchiseT } from 'app/types/FranchiseTypes';
+import { FranchiseT } from 'app/types/FranchiseTypes';
+import { GamePresetFromLoadme } from 'app/types/LoadMeTypes';
 import { Nullable } from 'app/types/Nullable';
-import { ResponseOneUserTypeForLoadMe } from 'app/types/ResponseLoadMeBaseT';
 import { ScheduleT } from 'app/types/ScheduleT';
 import { StatusT } from 'app/types/StatusT';
+
+import { TimeZoneType } from 'app/types/TimeZoneType';
+import moment from 'moment';
+import { getNextWeek } from '../../utils/getNextWeek';
 import { GroupTeacherType } from './GroupTeacherType';
 
 export type TeacherIdWTF = { id: string; firstName: string; middleName: string; lastName: string };
@@ -32,7 +30,6 @@ export type ResponseGroups = {
   teacherId: TeacherIdWTF;
   schedule: Schedule[];
 };
-type GamePresetType = Omit<GamePresetT, 'settings'>;
 
 export type WorkT = {
   id: string;
@@ -71,13 +68,6 @@ export class ResponseOneGroupCourse {
 
   works: WorksT[] = [];
 }
-
-type LocalUserT = ResponseOneUserTypeForLoadMe & {
-  // course: any[];
-  franchise: FranchiseShortT;
-  active: boolean;
-  payed: boolean;
-};
 
 export type UsersDataT = {
   id: string;
@@ -133,14 +123,16 @@ export class LessonT {
 
   to: Date;
 
-  constructor(id?: string) {
-    const today = moment(new Date())
+  constructor(addCount?: number) {
+    const day = addCount ? getNextWeek(addCount) : new Date();
+
+    const today = moment(day)
       .format(DateTime.DdMmYyyy)
       .split('.')
       .map(el => Number(el));
     this.name = '';
-    this.id = id || (Math.random() * 100).toString();
-    this.date = new Date();
+    this.id = (Math.random() * 100).toString();
+    this.date = day;
     this.from = new Date(today[2], today[1], today[0], 8, 0);
     this.to = new Date(today[2], today[1], today[0], 8, 45);
   }

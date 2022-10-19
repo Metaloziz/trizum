@@ -7,35 +7,25 @@ import groupStore from 'app/stores/groupStore';
 import BasicModal from 'components/basic-modal/BasicModal';
 import Button from 'components/button/Button';
 import Lessons from 'components/classes-page/AddEditGroup/Lessons';
-import _ from 'lodash';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useEffect, useState } from 'react';
 import { getOptionMui } from 'utils/getOption';
 import { StatusTypes, EditStatusEnum } from '../../../app/enums/StatusTypes';
 import { getMUIOptionsFromEnum } from '../../../utils/getMUIOptionsFromEnum';
 
-// todo как типизировать 23 строку
-const levelOptions = Object.keys(GroupLevels).map(el =>
-  // @ts-ignore
-  getOptionMui(el.toLowerCase(), GroupLevels[el]),
-);
-
-const AddEditGroup: FC = observer(props => {
+const AddEditGroup: FC = observer(() => {
   const {
     modalFields,
     franchise,
     filteredCourses,
     selectedGroup,
     isModalOpen,
-    schedule,
     loadInitialModal,
     addGroup,
     cleanModalValues,
     closeModal,
     editGroup,
   } = groupStore;
-
-  console.log('schedule', _.cloneDeep(schedule));
 
   const { role, user } = appStore;
 
@@ -204,11 +194,13 @@ const AddEditGroup: FC = observer(props => {
             onChange={e => e && (modalFields.dateSince = new Date(e))}
             value={modalFields.dateSince}
             renderInput={e => <TextField {...e} sx={{ width: '48%' }} />}
+            label="Период работы группы с"
           />
           <DatePicker
             onChange={e => e && (modalFields.dateUntil = new Date(e))}
             value={modalFields.dateUntil}
             renderInput={e => <TextField {...e} sx={{ width: '48%' }} />}
+            label="по"
           />
         </Grid>
 

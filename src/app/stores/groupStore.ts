@@ -1,8 +1,3 @@
-import { AxiosError } from 'axios';
-import { makeAutoObservable, runInAction } from 'mobx';
-import moment from 'moment';
-import * as yup from 'yup';
-
 import { DateTime } from 'app/enums/DateTime';
 import coursesService from 'app/services/coursesService';
 import franchiseService from 'app/services/franchiseService';
@@ -23,11 +18,16 @@ import {
 } from 'app/types/GroupTypes';
 import { ResponseUserT } from 'app/types/UserTypes';
 import { GroupsViewModel } from 'app/viewModels/GroupsViewModel';
+import { AxiosError } from 'axios';
+import { makeAutoObservable, runInAction } from 'mobx';
+import moment from 'moment';
+import { findElement } from 'utils/findIndexElement';
 import {
   scheduleItemToServerMapper,
   scheduleItemToUIMapper,
 } from 'utils/scheduleItemToServerMapper';
-import { findElement } from 'utils/findIndexElement';
+import * as yup from 'yup';
+import { getNextMonth } from '../../utils/getNextMonth';
 
 class GroupStore {
   groups: ResponseGroups[] = [];
@@ -44,7 +44,7 @@ class GroupStore {
     name: '',
     franchiseId: '',
     dateSince: new Date(),
-    dateUntil: new Date(),
+    dateUntil: getNextMonth(),
     type: 'class',
     teacherId: '',
     level: 'medium',
@@ -77,8 +77,6 @@ class GroupStore {
     type: 'olympiad',
     level: '',
   };
-
-  private defaultEditValues: Partial<CreateGroupFroUI> = {};
 
   modalFields = { ...this.defaultValues };
 
@@ -197,7 +195,7 @@ class GroupStore {
       ? []
       : Array(count)
           .fill(1)
-          .map(el => new LessonT((Math.random() * 100).toString()));
+          .map((el, index) => new LessonT(index));
 
   getOneGroup = async (id: string) =>
     this.execute(async () => {
