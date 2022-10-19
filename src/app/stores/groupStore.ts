@@ -15,6 +15,7 @@ import {
   ResponseGroups,
   ResponseOneGroup,
   Schedule,
+  CreateGroup,
 } from 'app/types/GroupTypes';
 import { ResponseUserT } from 'app/types/UserTypes';
 import { GroupsViewModel } from 'app/viewModels/GroupsViewModel';
@@ -28,6 +29,7 @@ import {
 } from 'utils/scheduleItemToServerMapper';
 import * as yup from 'yup';
 import { getNextMonth } from '../../utils/getNextMonth';
+import { StatusTypes } from '../enums/StatusTypes';
 
 class GroupStore {
   groups: ResponseGroups[] = [];
@@ -245,6 +247,12 @@ class GroupStore {
       }
       this.cleanModalValues();
       this.closeModal();
+    });
+  };
+
+  deleteGroup = async (status: StatusTypes, groupId: string) => {
+    await this.execute(async () => {
+      await groupsService.editGroup({ status }, groupId);
     });
   };
 

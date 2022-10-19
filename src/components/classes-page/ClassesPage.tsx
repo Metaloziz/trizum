@@ -20,6 +20,7 @@ import SearchBar from 'components/classes-page/search-bar/SearchBar';
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
 import { checkRoleForClasses } from 'utils/checkRoleForClasses';
+import { StatusTypes } from '../../app/enums/StatusTypes';
 
 import styles from './ClassesPage.module.scss';
 import { ClassesRows } from './ClassesRows/ClassesRows';
@@ -35,6 +36,7 @@ const ClassesPage = observer(() => {
     queryFields,
     selectedGroup,
     nullableSelectedGroup,
+    deleteGroup,
   } = groupStore;
 
   const [currentPage, setCurrentPage] = useState((queryFields.page || 0) + 1);
@@ -53,6 +55,16 @@ const ClassesPage = observer(() => {
       nullableSelectedGroup();
     };
   }, []);
+
+  const deleteCurrentCourse = (status: StatusTypes, groupId: string) => {
+    if (status === StatusTypes.draft || status === StatusTypes.active) {
+      deleteGroup(StatusTypes.removal, groupId);
+      getGroups();
+    } else {
+      deleteGroup(StatusTypes.removal, groupId);
+      getGroups();
+    }
+  };
 
   return (
     <>
@@ -81,11 +93,16 @@ const ClassesPage = observer(() => {
                     <TableCell>Название</TableCell>
                     <TableCell align="center">Уровень</TableCell>
                     <TableCell align="center">Время действия</TableCell>
+                    <TableCell align="center">Статус</TableCell>
                     <TableCell align="right">Действия</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  <ClassesRows groups={groups} openModal={openModal} />
+                  <ClassesRows
+                    groups={groups}
+                    openModal={openModal}
+                    deleteGroup={deleteCurrentCourse}
+                  />
                 </TableBody>
               </Table>
             </TableContainer>

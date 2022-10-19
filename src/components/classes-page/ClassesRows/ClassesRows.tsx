@@ -1,17 +1,21 @@
+import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { TableRow, TableCell, Typography, IconButton } from '@mui/material';
 import moment from 'moment';
 import React, { FC } from 'react';
 import { DateTime } from '../../../app/enums/DateTime';
 import { GroupLevels } from '../../../app/enums/GroupLevels';
+import { StatusEnum, StatusTypes } from '../../../app/enums/StatusTypes';
 import groupStore from '../../../app/stores/groupStore';
+import { getEnumNameStatus } from '../../../utils/getEnumNameStatus';
 
 export type ClassesRowsProps = {
   groups: typeof groupStore.groups;
   openModal: typeof groupStore.openModal;
+  deleteGroup: (status: StatusTypes, id: string) => void;
 };
 
-export const ClassesRows: FC<ClassesRowsProps> = ({ groups, openModal }) => {
+export const ClassesRows: FC<ClassesRowsProps> = ({ groups, openModal, deleteGroup }) => {
   if (groups.length) {
     return (
       <>
@@ -46,9 +50,27 @@ export const ClassesRows: FC<ClassesRowsProps> = ({ groups, openModal }) => {
                 </Typography>
               </>
             </TableCell>
+            <TableCell align="center">
+              {/* {entity.status ? getEnumNameStatus(entity.status) : entity.status} */}
+              {entity.status}
+            </TableCell>
             <TableCell align="right">
-              <IconButton size="small" onClick={() => openModal(entity.id)} color="primary">
+              <IconButton
+                size="small"
+                onClick={() => openModal(entity.id)}
+                color="primary"
+                disabled={entity.status !== StatusTypes.draft}
+              >
                 <EditIcon fontSize="small" />
+              </IconButton>
+              <IconButton
+                size="small"
+                onClick={() =>
+                  deleteGroup((entity.status as StatusTypes) || StatusTypes.removal, entity.id)
+                }
+                color="error"
+              >
+                <DeleteIcon fontSize="small" />
               </IconButton>
             </TableCell>
           </TableRow>
