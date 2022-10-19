@@ -1,7 +1,6 @@
-import EditIcon from '@mui/icons-material/Edit';
 import {
   Box,
-  IconButton,
+  Button,
   Pagination,
   Paper,
   Table,
@@ -10,10 +9,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
 } from '@mui/material';
-
-import { DateTime } from 'app/enums/DateTime';
 import appStore from 'app/stores/appStore';
 import groupStore from 'app/stores/groupStore';
 import cn from 'classnames';
@@ -22,17 +18,11 @@ import AddEditGroup from 'components/classes-page/AddEditGroup';
 import BlockGames from 'components/classes-page/block-games/BlockGames';
 import SearchBar from 'components/classes-page/search-bar/SearchBar';
 import { observer } from 'mobx-react-lite';
-import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { checkRoleForClasses } from 'utils/checkRoleForClasses';
 
 import styles from './ClassesPage.module.scss';
-
-const levelRu = {
-  easy: 'Младшая группа',
-  medium: 'Средняя группа',
-  hard: 'Старшая группа',
-};
+import { ClassesRows } from './ClassesRows/ClassesRows';
 
 const ClassesPage = observer(() => {
   const {
@@ -67,9 +57,13 @@ const ClassesPage = observer(() => {
   return (
     <>
       <div className={styles.wrapper}>
+        <Button onClick={() => openModal()} variant="contained">
+          Добавить класс
+        </Button>
         <div className={styles.searchBar}>
           <SearchBar />
         </div>
+
         {checkRoleForClasses(appStore.role) && (
           <>
             <TableContainer component={Paper}>
@@ -91,54 +85,7 @@ const ClassesPage = observer(() => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {groups.length ? (
-                    groups.map(entity => (
-                      <TableRow
-                        key={entity.id}
-                        hover
-                        sx={{
-                          '& > td': {
-                            verticalAlign: 'top',
-                          },
-                        }}
-                      >
-                        <TableCell>
-                          <Typography variant="caption">{entity.name || ''}</Typography>
-                        </TableCell>
-                        <TableCell align="center">
-                          <Typography variant="caption">{levelRu[entity.level] || '—'}</Typography>
-                        </TableCell>
-                        <TableCell align="center">
-                          <>
-                            <Typography variant="caption">
-                              {entity.startedAt.date
-                                ? moment(entity.startedAt.date).format(DateTime.DdMmYyyy)
-                                : '—'}
-                            </Typography>
-                            <br />
-                            <Typography variant="caption">
-                              {entity.endedAt.date
-                                ? moment(entity.endedAt.date).format(DateTime.DdMmYyyy)
-                                : '—'}
-                            </Typography>
-                          </>
-                        </TableCell>
-                        <TableCell align="right">
-                          <IconButton
-                            size="small"
-                            onClick={() => openModal(entity.id)}
-                            color="primary"
-                          >
-                            <EditIcon fontSize="small" />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={6}>Данные отсутствуют...</TableCell>
-                    </TableRow>
-                  )}
+                  <ClassesRows groups={groups} openModal={openModal} />
                 </TableBody>
               </Table>
             </TableContainer>

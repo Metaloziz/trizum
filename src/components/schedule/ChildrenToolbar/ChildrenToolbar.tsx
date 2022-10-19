@@ -2,16 +2,13 @@ import { Grid, FormControl, InputLabel, Select } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react';
 import appStore, { Roles } from '../../../app/stores/appStore';
-import groupStore from '../../../app/stores/groupStore';
 import teacherMainStore from '../../../app/stores/scheduleStore';
 import { checkRoleForClasses } from '../../../utils/checkRoleForClasses';
 import { getOptionMui } from '../../../utils/getOption';
-import Button from '../../button/Button';
 
 export const ChildrenToolbar: FC = observer(() => {
   const { role } = appStore;
   const { groups, setFilters, filters, teachers, franchisees } = teacherMainStore;
-  const { openModal, isModalOpen } = groupStore;
 
   const selectGroupOption = groups.length
     ? [{ groupId: '*', groupName: 'Все' }, ...groups].map(el =>
@@ -87,33 +84,6 @@ export const ChildrenToolbar: FC = observer(() => {
               </Select>
             </FormControl>
           </Grid>
-
-          <Grid item xs={12} sm={6} md>
-            <FormControl fullWidth>
-              <Button variant="none" size="middle" onClick={() => openModal()}>
-                Добавить группу
-              </Button>
-            </FormControl>
-          </Grid>
-
-          {/* {role === Roles.Admin && (
-          <>
-            <Grid item xs={12} sm={4}>
-            <FormControl fullWidth>
-              <InputLabel id="city">Город</InputLabel>
-              <Select
-                labelId="city"
-                label="Город"
-                value=""
-                fullWidth
-                onChange={({ target: { value } }) => console.log(value)}
-              >
-                {selectGroupOption}
-              </Select>
-            </FormControl>
-          </Grid>
-          </>
-          )} */}
         </Grid>
       ) : (
         <>
