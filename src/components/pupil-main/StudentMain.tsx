@@ -14,7 +14,6 @@ import WeeklyGrowth from 'components/weekly-growth/WeeklyGrowth';
 import Homeworks from 'containers/homeworks/Homeworks';
 import KeepPlaying from 'containers/keep-playing/KeepPlaying';
 import styles from 'pages/home/Home.module.scss';
-import { getGameForStudent } from 'utils/getGameForStudent';
 import { personalRecordsArr } from 'utils/personalRecordsArr';
 
 export const StudentMain: FC = observer(() => {
@@ -26,7 +25,7 @@ export const StudentMain: FC = observer(() => {
     <main className={styles.main}>
       <CardStudent user={user} />
       <WeeklyGrowth records={recordsArr} className={styles.weeklyGrowth} />
-      <Homeworks className={styles.homeworks} homeworks={homeworks} />
+      <Homeworks className={styles.homeworks} works={works} homeworks={homeworks} />
       <KeepPlaying
         actualGames={currentGameIds}
         className={styles.keepPlaying}

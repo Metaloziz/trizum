@@ -652,50 +652,6 @@ export const GameModal: FC<PropsT> = observer(props => {
                   </Grid>
                 </Grid>
               )}
-              {/* </section> */}
-              {/* <section> */}
-              {/*  <span className={styles.title}>Начисление баллов</span> */}
-              {/*  <div className={styles.choiceInput}> */}
-              {/*    <InputRadio */}
-              {/*      value="eachLevel" */}
-              {/*      id="eachLevel" */}
-              {/*      name="currentRadioValue" */}
-              {/*      label="За каждый пройденный уровень" */}
-              {/*      onChange={() => setCurrentRadio('eachLevel')} */}
-              {/*      checked={currentRadio === 'eachLevel'} */}
-              {/*    /> */}
-              {/*    <InputRadio */}
-              {/*      value="success" */}
-              {/*      id="success" */}
-              {/*      name="currentRadioValue" */}
-              {/*      onChange={() => setCurrentRadio('success')} */}
-              {/*      checked={currentRadio === 'success'} */}
-              {/*      label="Баллы за прыжок (начисляется если был прыжок и уровень пройден после прыжка)" */}
-              {/*    /> */}
-              {/*    <InputRadio */}
-              {/*      value="error" */}
-              {/*      id="error" */}
-              {/*      name="currentRadioValue" */}
-              {/*      onChange={() => setCurrentRadio('error')} */}
-              {/*      checked={currentRadio === 'error'} */}
-              {/*      label="Если ошибка, после прыжка, игру возвращаем на предыдущий уровень (штрафа нет)" */}
-              {/*    /> */}
-              {/*  </div> */}
-              {/*  <div className={styles.conditionBlock}> */}
-              {/*    <div> */}
-              {/*      Если выполняет <InformationItem variant="numberInput" /> уровня подряд за */}
-              {/*      <InformationItem variant="numberInput" /> */}
-              {/*    </div> */}
-              {/*    <div> */}
-              {/*      и <InformationItem variant="numberInput" />% ошибок, то система ПРЕДЛАГАЕТ */}
-              {/*      поднять на */}
-              {/*    </div> */}
-              {/*    <div> */}
-              {/*      <InformationItem variant="numberInput" /> */}
-              {/*      уровней один раз. */}
-              {/*    </div> */}
-              {/*  </div> */}
-              {/* </section> */}
             </div>
 
             <div className={styles.descriptionBlock}>

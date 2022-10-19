@@ -2,6 +2,7 @@ import groupStore from 'app/stores/groupStore';
 import {
   GamePresetT,
   OneGamePresent,
+  PlaySendResultT,
   PresetsGameSettings,
   ResultsT,
   ResultT,
@@ -28,8 +29,8 @@ type Props = {
 
 const Argus: FC<Props> = props => {
   const { actualPresets, gamePreset } = props;
-  const { deletePreset, getPreset, getPresets, getGame, game } = gamesStore;
-  const { role } = appStore;
+  const { deletePreset, getPreset, getPresets, getGame, game, sendResults } = gamesStore;
+  const { role, user } = appStore;
   const { groups, getGroups } = groupStore;
 
   const [started, setStarted] = useState(false);
@@ -94,6 +95,33 @@ const Argus: FC<Props> = props => {
   };
 
   const closeResultModal = () => {
+    if (role === Roles.Student) {
+      const params: PlaySendResultT = {
+        userGroupId: user.groups[0].id,
+        courseWorkId: user.groups[0].group.course.id,
+        workGamePresetId: user.groups[0].group.course.works[0].work.gamePresets[0].gamePreset.id,
+        finished: resultModal,
+        time: 1,
+        groupsCount: 1,
+        elementsTotal: 1,
+        levelMaxCompleted: 1,
+        actions: 1,
+        actionSpeed: 1,
+        actionsSuccessfulCount: 1,
+        cycleTime: 1,
+        blinksCount: 1,
+        wordsCount: 1,
+        speed: 1,
+        errorsPercentage: 1,
+        phraseSpeedAv: 1,
+        timeMax: 1,
+        cycleTimeAv: 1,
+        actionSpeedAv: 1,
+        workCompleted: false,
+        courseCompleted: false,
+      };
+      sendResults(params);
+    }
     setResultModal(false);
     setGameResult(defaultResult);
   };
@@ -114,7 +142,7 @@ const Argus: FC<Props> = props => {
       started={started}
       gamePreset={gamePreset.gamePreset}
       setPreset={setPreset}
-      presetArrs={presetArrs}
+      presetArr={presetArrs}
       role={role}
       isModalOpen={isModalOpen}
       resultModal={resultModal}

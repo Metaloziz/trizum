@@ -1,23 +1,22 @@
+import appStore, { Roles } from 'app/stores/appStore';
+import gamesStore from 'app/stores/gamesStore';
 import groupStore from 'app/stores/groupStore';
 import {
   GamePresetT,
   OneGamePresent,
+  PlaySendResultT,
   PresetsGameSettings,
   ResultsT,
-  ResultT,
 } from 'app/types/GameTypes';
+import { Option } from 'components/select-mui/CustomSelect';
 import { getPresetArrOptions } from 'constants/presetArr';
+import { Factory, GameIdentifiers } from 'games';
 import { GameReturn } from 'pages/game/GameInstances/index';
 import React, { FC, useEffect, useState } from 'react';
-import { Factory, GameIdentifiers } from 'games';
-import { convertGroupOptions } from 'utils/convertGroupOptions';
-import { defaultResult } from 'utils/gameUtils/defaultResultValue';
-import { changedViewScreen } from 'utils/gameUtils/changeViewScreen';
-import gamesStore from 'app/stores/gamesStore';
 import { useNavigate } from 'react-router-dom';
-import appStore, { Roles } from 'app/stores/appStore';
-import { Option } from 'components/select-mui/CustomSelect';
-import _ from 'lodash';
+import { convertGroupOptions } from 'utils/convertGroupOptions';
+import { changedViewScreen } from 'utils/gameUtils/changeViewScreen';
+import { defaultResult } from 'utils/gameUtils/defaultResultValue';
 
 const gameName = GameIdentifiers.shulte;
 const GameInstance = Factory(gameName);
@@ -29,9 +28,9 @@ type Props = {
 
 const Shulte: FC<Props> = props => {
   const { actualPresets, gamePreset } = props;
-  const { deletePreset, getPreset, getPresets, getGame, game } = gamesStore;
+  const { deletePreset, getPreset, getPresets, getGame, game, sendResults } = gamesStore;
   const { groups, getGroups } = groupStore;
-  const { role } = appStore;
+  const { role, user } = appStore;
   const [started, setStarted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [resultModal, setResultModal] = useState(false);
@@ -45,7 +44,6 @@ const Shulte: FC<Props> = props => {
   const gameTitle = 'Таблица Шульте';
   const presetArr: Option[] = getPresetArrOptions(actualPresets);
   const groupOptions = convertGroupOptions(groups);
-
   useEffect(() => {
     if (role !== Roles.Student) {
       getPresets();
@@ -56,6 +54,13 @@ const Shulte: FC<Props> = props => {
       getPreset('');
     };
   }, []);
+
+  useEffect(() => {
+    if (role === Roles.Student) {
+      // getPreset()
+    }
+  }, []);
+
   const onRef = (refGame: any) => setRef(refGame);
 
   const startGame = () => {
@@ -87,6 +92,33 @@ const Shulte: FC<Props> = props => {
   };
 
   const closeResultModal = () => {
+    if (role === Roles.Student) {
+      const params: PlaySendResultT = {
+        userGroupId: user.groups[0].id,
+        courseWorkId: user.groups[0].group.course.id,
+        workGamePresetId: user.groups[0].group.course.works[0].work.gamePresets[0].gamePreset.id,
+        finished: resultModal,
+        time: 1,
+        groupsCount: 1,
+        elementsTotal: 1,
+        levelMaxCompleted: 1,
+        actions: 1,
+        actionSpeed: 1,
+        actionsSuccessfulCount: 1,
+        cycleTime: 1,
+        blinksCount: 1,
+        wordsCount: 1,
+        speed: 1,
+        errorsPercentage: 1,
+        phraseSpeedAv: 1,
+        timeMax: 1,
+        cycleTimeAv: 1,
+        actionSpeedAv: 1,
+        workCompleted: false,
+        courseCompleted: false,
+      };
+      sendResults(params);
+    }
     setResultModal(false);
     setGameResult(defaultResult);
   };
@@ -106,7 +138,7 @@ const Shulte: FC<Props> = props => {
       started={started}
       gamePreset={gamePreset.gamePreset}
       setPreset={setPreset}
-      presetArrs={presetArr}
+      presetArr={presetArr}
       role={role}
       isModalOpen={isModalOpen}
       resultModal={resultModal}

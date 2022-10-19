@@ -15,6 +15,7 @@ export interface WeeklyGrowthProps {
 export interface HomeworksProps {
   className?: string;
   homeworks: HomeworkProps[];
+  works?: WorkFromLoadme[];
 }
 
 export interface KeepPlayingProps {

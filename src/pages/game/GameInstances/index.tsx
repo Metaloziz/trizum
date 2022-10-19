@@ -20,7 +20,7 @@ type GameReturnPropsT = {
   gameResult: ResultsT;
   gameTitle: string;
   gameViewSize: number;
-  presetArrs: OptionT[];
+  presetArr: OptionT[];
   gamePreset: GamePresetT;
   setPreset: (data: OptionT) => void;
   groupOptions: OptionT[];
@@ -44,7 +44,7 @@ export const GameReturn: FC<GameReturnPropsT> = props => {
     resultModal,
     gameTitle,
     gameViewSize,
-    presetArrs,
+    presetArr,
     gamePreset,
     setPreset,
     groupOptions,
@@ -79,7 +79,7 @@ export const GameReturn: FC<GameReturnPropsT> = props => {
               <SelectBlock
                 width={gameViewSize + 100}
                 openModal={() => toggleModal(true)}
-                presetArrs={presetArrs}
+                presetArrs={presetArr}
                 presetId={gamePreset.id}
                 setPreset={setPreset}
                 groupOptions={groupOptions}

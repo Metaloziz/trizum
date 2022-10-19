@@ -2,30 +2,22 @@ import groupStore from 'app/stores/groupStore';
 import {
   GamePresetT,
   OneGamePresent,
+  PlaySendResultT,
   PresetsGameSettings,
   ResultsT,
   ResultT,
 } from 'app/types/GameTypes';
-import { GameModal } from 'components/game-page/GameCommon/GameModal/GameModal';
-import { GameResultModal } from 'components/game-page/GameCommon/GameModal/GameResultModal/GameResultModal';
-import { SelectBlock } from 'components/game-page/GameCommon/SelectBlock';
 import { getPresetArrOptions } from 'constants/presetArr';
 import { GameReturn } from 'pages/game/GameInstances/index';
 import React, { FC, useEffect, useState } from 'react';
 import { Factory, GameIdentifiers } from 'games';
-import { PlayButton } from 'components/game-page/GameCommon/PlayButton';
 import { convertGroupOptions } from 'utils/convertGroupOptions';
 import { defaultResult } from 'utils/gameUtils/defaultResultValue';
-import styles from '../Game.module.scss';
 import { changedViewScreen } from 'utils/gameUtils/changeViewScreen';
 import gamesStore from 'app/stores/gamesStore';
-import { GameDesc } from 'components/game-page/GameCommon/GameDesc';
 import { useNavigate, useParams } from 'react-router-dom';
-import Button from 'components/button/Button';
 import appStore, { Roles } from 'app/stores/appStore';
-import InformationItem from 'components/information-item/InformationItem';
 import { Option } from 'components/select-mui/CustomSelect';
-import _ from 'lodash';
 
 const gameName = GameIdentifiers.battleColors;
 const GameInstance = Factory(gameName);
@@ -37,8 +29,8 @@ type Props = {
 
 const BattleColors: FC<Props> = props => {
   const { actualPresets, gamePreset } = props;
-  const { deletePreset, getPreset, getPresets, getGame, game } = gamesStore;
-  const { role } = appStore;
+  const { deletePreset, getPreset, getPresets, getGame, game, sendResults } = gamesStore;
+  const { role, user } = appStore;
   const { groups, getGroups } = groupStore;
 
   const [started, setStarted] = useState(false);
@@ -102,6 +94,33 @@ const BattleColors: FC<Props> = props => {
   };
 
   const closeResultModal = () => {
+    if (role === Roles.Student) {
+      const params: PlaySendResultT = {
+        userGroupId: user.groups[0].id,
+        courseWorkId: user.groups[0].group.course.id,
+        workGamePresetId: user.groups[0].group.course.works[0].work.gamePresets[0].gamePreset.id,
+        finished: resultModal,
+        time: 1,
+        groupsCount: 1,
+        elementsTotal: 1,
+        levelMaxCompleted: 1,
+        actions: 1,
+        actionSpeed: 1,
+        actionsSuccessfulCount: 1,
+        cycleTime: 1,
+        blinksCount: 1,
+        wordsCount: 1,
+        speed: 1,
+        errorsPercentage: 1,
+        phraseSpeedAv: 1,
+        timeMax: 1,
+        cycleTimeAv: 1,
+        actionSpeedAv: 1,
+        workCompleted: false,
+        courseCompleted: false,
+      };
+      sendResults(params);
+    }
     setResultModal(false);
     setGameResult(defaultResult);
   };
@@ -122,7 +141,7 @@ const BattleColors: FC<Props> = props => {
       started={started}
       gamePreset={gamePreset.gamePreset}
       setPreset={setPreset}
-      presetArrs={presetArrs}
+      presetArr={presetArrs}
       role={role}
       isModalOpen={isModalOpen}
       resultModal={resultModal}
