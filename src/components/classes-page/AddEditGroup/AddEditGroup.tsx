@@ -10,7 +10,8 @@ import Lessons from 'components/classes-page/AddEditGroup/Lessons';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useEffect, useState } from 'react';
 import { getOptionMui } from 'utils/getOption';
-import { StatusTypes, EditStatusEnum } from '../../../app/enums/StatusTypes';
+import { GroupStatus } from '../../../app/enums/GroupStatus';
+import { GroupStatusTypes } from '../../../app/types/GroupStatusTypes';
 import { getMUIOptionsFromEnum } from '../../../utils/getMUIOptionsFromEnum';
 
 const AddEditGroup: FC = observer(() => {
@@ -182,10 +183,12 @@ const AddEditGroup: FC = observer(() => {
               labelId="status"
               label="Статус"
               fullWidth
-              onChange={(event, child) => (modalFields.status = event.target.value as StatusTypes)}
+              onChange={(event, child) =>
+                (modalFields.status = event.target.value as GroupStatusTypes)
+              }
               value={modalFields.status}
             >
-              {getMUIOptionsFromEnum(EditStatusEnum)}
+              {getMUIOptionsFromEnum(GroupStatus)}
             </Select>
           </FormControl>
         </Grid>

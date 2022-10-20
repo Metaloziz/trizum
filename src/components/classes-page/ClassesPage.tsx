@@ -20,7 +20,6 @@ import SearchBar from 'components/classes-page/search-bar/SearchBar';
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
 import { checkRoleForClasses } from 'utils/checkRoleForClasses';
-import { StatusTypes } from '../../app/enums/StatusTypes';
 
 import styles from './ClassesPage.module.scss';
 import { ClassesRows } from './ClassesRows/ClassesRows';
@@ -56,14 +55,8 @@ const ClassesPage = observer(() => {
     };
   }, []);
 
-  const deleteCurrentCourse = (status: StatusTypes, groupId: string) => {
-    if (status === StatusTypes.draft || status === StatusTypes.active) {
-      deleteGroup(StatusTypes.removal, groupId);
-      getGroups();
-    } else {
-      deleteGroup(StatusTypes.removal, groupId);
-      getGroups();
-    }
+  const deleteCurrentCourse = (groupId: string) => {
+    deleteGroup(groupId);
   };
 
   return (

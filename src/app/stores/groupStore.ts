@@ -15,7 +15,6 @@ import {
   ResponseGroups,
   ResponseOneGroup,
   Schedule,
-  CreateGroup,
 } from 'app/types/GroupTypes';
 import { ResponseUserT } from 'app/types/UserTypes';
 import { GroupsViewModel } from 'app/viewModels/GroupsViewModel';
@@ -29,7 +28,9 @@ import {
 } from 'utils/scheduleItemToServerMapper';
 import * as yup from 'yup';
 import { getNextMonth } from '../../utils/getNextMonth';
-import { StatusTypes } from '../enums/StatusTypes';
+import { removeEmptyFields } from '../../utils/removeEmptyFields';
+import { GroupStatusValue } from '../enums/GroupStatus';
+import { GroupStatusTypes } from '../types/GroupStatusTypes';
 
 class GroupStore {
   groups: ResponseGroups[] = [];
@@ -42,7 +43,7 @@ class GroupStore {
 
   selectedGroup = new ResponseOneGroup();
 
-  private defaultValues: CreateGroupFroUI = {
+  private defaultValues: Omit<CreateGroupFroUI, 'status'> & { status: GroupStatusTypes } = {
     name: '',
     franchiseId: '',
     dateSince: new Date(),
@@ -216,8 +217,11 @@ class GroupStore {
     const schedule: Schedule[] = !this.schedule.length
       ? []
       : this.schedule.map(elem => scheduleItemToServerMapper(elem));
+
+    const params = removeEmptyFields(this.modalFields);
+
     await groupsService.addGroup({
-      ...this.modalFields,
+      ...params,
       franchiseId: franchiseId || this.modalFields.franchiseId,
       dateSince: moment(this.modalFields.dateSince).format(DateTime.DdMmYyyy),
       dateUntil: moment(this.modalFields.dateUntil).format(DateTime.DdMmYyyy),
@@ -250,9 +254,10 @@ class GroupStore {
     });
   };
 
-  deleteGroup = async (status: StatusTypes, groupId: string) => {
+  deleteGroup = async (groupId: string) => {
     await this.execute(async () => {
-      await groupsService.editGroup({ status }, groupId);
+      await groupsService.editGroup({ status: GroupStatusValue.archive }, groupId);
+      await this.getGroups();
     });
   };
 
@@ -305,7 +310,7 @@ class GroupStore {
           name: r.name,
           dateSince: new Date(r.startedAt.date),
           dateUntil: new Date(r.endedAt.date),
-          status: r.status || '',
+          status: (r.status as GroupStatusTypes) || '',
         };
         // this.schedule = r.schedule
       }

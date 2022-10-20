@@ -5,14 +5,13 @@ import moment from 'moment';
 import React, { FC } from 'react';
 import { DateTime } from '../../../app/enums/DateTime';
 import { GroupLevels } from '../../../app/enums/GroupLevels';
-import { StatusTypes } from '../../../app/enums/StatusTypes';
+import { GroupStatus, GroupStatusValue } from '../../../app/enums/GroupStatus';
 import groupStore from '../../../app/stores/groupStore';
-import { getEnumNameStatus } from '../../../utils/getEnumNameStatus';
 
 export type ClassesRowsProps = {
   groups: typeof groupStore.groups;
   openModal: typeof groupStore.openModal;
-  deleteGroup: (status: StatusTypes, id: string) => void;
+  deleteGroup: (id: string) => void;
 };
 
 export const ClassesRows: FC<ClassesRowsProps> = ({ groups, openModal, deleteGroup }) => {
@@ -51,23 +50,19 @@ export const ClassesRows: FC<ClassesRowsProps> = ({ groups, openModal, deleteGro
               </>
             </TableCell>
             <TableCell align="center">
-              {entity.status ? getEnumNameStatus(entity.status) : entity.status}
+              {entity.status
+                ? GroupStatus[entity.status as keyof typeof GroupStatus]
+                : entity.status}
             </TableCell>
             <TableCell align="right">
-              <IconButton
-                size="small"
-                onClick={() => openModal(entity.id)}
-                color="primary"
-                disabled={entity.status !== StatusTypes.draft}
-              >
+              <IconButton size="small" onClick={() => openModal(entity.id)} color="primary">
                 <EditIcon fontSize="small" />
               </IconButton>
               <IconButton
                 size="small"
-                onClick={() =>
-                  deleteGroup((entity.status as StatusTypes) || StatusTypes.removal, entity.id)
-                }
+                onClick={() => deleteGroup(entity.id)}
                 color="error"
+                disabled={entity.status === GroupStatusValue.archive}
               >
                 <DeleteIcon fontSize="small" />
               </IconButton>
