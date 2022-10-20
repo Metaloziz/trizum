@@ -7,7 +7,7 @@ import iconParrot from '../../../assets/svgs/parrot.svg';
 import styles from './CardStudentForUser.module.scss';
 import { getNearestLessonDateHelper } from './getNearestLessonDateHelper/getNearestLessonDateHelper';
 
-import { EmptyUser, Roles } from 'app/stores/appStore';
+import appStore, { EmptyUser, Roles } from 'app/stores/appStore';
 import usersStore from 'app/stores/usersStore';
 import iconFlag from 'assets/svgs/icon-flag.svg';
 import iconMonkey from 'assets/svgs/monkey.svg';
@@ -18,23 +18,25 @@ import CustomImageWrapper from 'components/custom-image-wrapper/CustomImageWrapp
 import Image from 'components/image/Image';
 import Setting from 'components/setting/Setting';
 import { ButtonsGroup } from 'components/card-student/card-student-for-user/ButtonsGroup/ButtonsGroup';
-import { getClosestLessonDate, currentMomentOfTime } from 'utils/getClosestLessonDate';
+import { getClosestLessonDate, now } from 'utils/getClosestLessonDate';
 
 type Props = {
-  user: EmptyUser;
   isMainPage?: boolean;
 };
 
-const CardStudentForStudent: FC<Props> = observer(({ user, isMainPage = true }) => {
+const CardStudentForStudent: FC<Props> = observer(({ isMainPage = true }) => {
+  const { user } = appStore;
   const { firstName, middleName, lastName, role, avatar, city, groups } = user;
   const { getFullUserName } = usersStore;
-  const {firstName:teacherFirstName, middleName:teacherMiddletName, lastName:teacherLastName} =user.groups[0].group.teacher;
-  const closestLessonDate = getClosestLessonDate(user.groups[0].group.schedule, currentMomentOfTime);
-  
-  const nearestLessonDate = getNearestLessonDateHelper(groups);
+  const {
+    firstName: teacherFirstName,
+    middleName: teacherMiddleName,
+    lastName: teacherLastName,
+  } = user.groups[0].group.teacher;
+  const lessonDate = getClosestLessonDate(user.groups[0].group.schedule, now);
+  const lessonTime = lessonDate ? `${lessonDate.date} в ${lessonDate.from}` : 'нет занятий';
 
   const [showModal, setShowModal] = useState<boolean>(false);
-
   const fullName = `${firstName} ${middleName} ${lastName}`;
 
   // eslint-disable-next-line no-alert
@@ -75,7 +77,7 @@ const CardStudentForStudent: FC<Props> = observer(({ user, isMainPage = true }) 
                 </span>
                 Учитель:
               </li>
-              <li>{`${teacherFirstName} ${teacherMiddletName} ${teacherLastName}`}</li>
+              <li>{`${teacherFirstName} ${teacherMiddleName} ${teacherLastName}`}</li>
             </ul>
             <ul className={styles.list}>
               <li>
@@ -84,7 +86,7 @@ const CardStudentForStudent: FC<Props> = observer(({ user, isMainPage = true }) 
                 </span>
                 Следующее занятие:
               </li>
-              <li>{closestLessonDate}</li>
+              <li>{lessonTime}</li>
             </ul>
           </div>
         </div>

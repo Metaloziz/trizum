@@ -62,7 +62,7 @@ const OlympiadPage = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <CardStudentForStudent user={user} isMainPage={false} />
+        <CardStudentForStudent isMainPage={false} />
         <Homework gameTitle="олимпиада по ментальной силе" description={desc} id={1} />
       </div>
       <StatisticsList statisticsList={mock} />

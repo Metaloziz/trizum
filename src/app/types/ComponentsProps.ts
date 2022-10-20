@@ -1,10 +1,11 @@
 // Containers
 
 import { WorksT } from 'app/types/GroupTypes';
-import { Group, WorkFromLoadme } from 'app/types/LoadMeTypes';
+import { Group, WorkWithIdFromLoadme } from 'app/types/LoadMeTypes';
 import { PersonalRecordT } from 'app/types/ResponseLoadMeBaseT';
 import { PersonalRecordsArrT } from 'utils/personalRecordsArr';
 import { GameIdWithCode } from 'app/types/GameTypes';
+import { ReactNode } from 'react';
 
 export interface WeeklyGrowthProps {
   className?: string;
@@ -15,13 +16,13 @@ export interface WeeklyGrowthProps {
 export interface HomeworksProps {
   className?: string;
   homeworks: HomeworkProps[];
-  works?: WorkFromLoadme[];
+  works?: WorkWithIdFromLoadme[];
 }
 
 export interface KeepPlayingProps {
   className?: string;
   games: KeepPlayingItemProps[];
-  works?: WorkFromLoadme[];
+  works?: WorkWithIdFromLoadme[];
   actualGames?: GameIdWithCode[];
 }
 
@@ -59,6 +60,6 @@ export interface SkillGrowProps {
 }
 
 export interface PanelProps {
-  children: string;
+  children?: ReactNode;
   className?: string;
 }

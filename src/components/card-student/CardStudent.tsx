@@ -12,7 +12,7 @@ const CardStudent: FC<Props> = props => {
   const { user } = props;
   switch (user.role) {
     case Roles.Student:
-      return <CardStudentForStudent user={user} />;
+      return <CardStudentForStudent />;
     default:
       return <CardStudentForTeacher user={user} />;
   }

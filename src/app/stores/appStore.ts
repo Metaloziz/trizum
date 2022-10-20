@@ -1,12 +1,12 @@
 /* eslint-disable max-classes-per-file */
-import { Group } from 'app/types/LoadMeTypes';
+import { Group, WorkFromLoadme } from 'app/types/LoadMeTypes';
 import { makeAutoObservable, runInAction } from 'mobx';
 
 import { RequestLogin, RequestSwitchUser } from '../types/AuthTypes';
 
 import authService from 'app/services/authService';
 import usersStore from 'app/stores/usersStore';
-import { GroupsDataT, PersonalRecordT, ResponseLoadMeParentT } from 'app/types/ResponseLoadMeBaseT';
+import { PersonalRecordT, ResponseLoadMeParentT } from 'app/types/ResponseLoadMeBaseT';
 import { TimeZoneType } from 'app/types/TimeZoneType';
 import { canSwitchToT } from 'app/types/UserTypes';
 import { execute } from 'utils/execute';
@@ -16,7 +16,7 @@ import { LoginInfo } from 'pages/login/Login';
 import tokenService from 'app/services/tokenService';
 import { getGameForStudent } from 'utils/getGameForStudent';
 import { GameIdWithCode } from 'app/types/GameTypes';
-import { getNearestLessonDateHelper } from 'components/card-student/card-student-for-user/getNearestLessonDateHelper/getNearestLessonDateHelper';
+import { getClosestLessonDate, now } from 'utils/getClosestLessonDate';
 
 export enum Roles {
   /* Ученик */
@@ -132,6 +132,10 @@ class AppStore {
   allGameIdsWithCodes: GameIdWithCode[][] = [];
 
   currentGameIds: GameIdWithCode[] = [];
+
+  currentWork?: WorkFromLoadme;
+
+  hwDate?: string;
   /* fields student only */
 
   constructor() {
@@ -223,9 +227,21 @@ class AppStore {
   setGameIdsWithCodes = (user: EmptyUser) => {
     this.allGameIdsWithCodes = getGameForStudent(user.groups);
     const classType = user.groups.find(el => el.group.type === 'class');
-    if (classType && classType.group.schedule.length) {
+    const schedule = classType?.group?.schedule;
+    if (classType && schedule && schedule.length) {
       // TODO: добавить нахождение нужного урока по дате
       [this.currentGameIds] = this.allGameIdsWithCodes;
+      const lesson = getClosestLessonDate(schedule, now);
+      if (lesson) {
+        this.hwDate = lesson.date;
+        const index = schedule.findIndex(el => el.date === lesson.date && lesson.from === el.from);
+        if (index !== -1) {
+          const currentWork = classType.group.course.works.find(el => el.index === index);
+          if (currentWork) {
+            this.currentWork = currentWork.work;
+          }
+        }
+      }
     }
   };
   /* actions student only */

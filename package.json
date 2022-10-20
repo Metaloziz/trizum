@@ -60,8 +60,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "lint": "eslint --ignore-path .gitignore \"src/**/*.+(ts|js|tsx)\"",
-    "lint:fix": "eslint --ignore-path .gitignore \"src/**/*.+(ts|js|tsx)\" --fix",
+    "lint": "eslint \"src/**/*.+(ts|js|tsx)\" --ignore-path .eslintignore",
+    "lint:fix": "eslint \"src/**/*.+(ts|js|tsx)\" --ignore-path .eslintignore --fix",
     "test": "react-scripts test"
   },
   "browserslist": {
@@ -74,6 +74,22 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "./.eslintrc"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.(ts|tsx)": [
+      "yarn lint:fix",
+      "git add"
     ]
   },
   "devDependencies": {

@@ -39,7 +39,7 @@ const authService = {
   },
 
   loadme: async () => {
-    console.log('inside authServises')
+    console.log('inside authServises');
     const res = await instance.get(Paths.LoadMe);
     return res;
   },

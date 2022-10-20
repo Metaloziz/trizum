@@ -16,10 +16,8 @@ const Statistic: FC<Props> = observer(() => {
     case Roles.Franchisee:
     case Roles.FranchiseeAdmin:
     case Roles.Methodist:
-    case Roles.Student:
+      // case Roles.Student:
       return <Results />;
-    case Roles.TeacherEducation:
-    case Roles.Tutor:
     default:
       return <Navigate to={AppRoutes.Index} />;
   }
