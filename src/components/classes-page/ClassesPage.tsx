@@ -62,9 +62,11 @@ const ClassesPage = observer(() => {
   return (
     <>
       <div className={styles.wrapper}>
-        <Button onClick={() => openModal()} variant="contained">
-          Добавить класс
-        </Button>
+        {checkRoleForClasses(appStore.role) && (
+          <Button onClick={() => openModal()} variant="contained">
+            Добавить класс
+          </Button>
+        )}
         <div className={styles.searchBar}>
           <SearchBar />
         </div>
