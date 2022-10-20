@@ -133,6 +133,7 @@ const ScheduleDnD: FC = observer(() => {
       <DnDCalendar
         localizer={localizer}
         events={actualSchedule}
+        draggableAccessor={() => false} // todo disable drag and drop
         step={15}
         min={new Date(2022, 0, 1, 8, 0)}
         max={new Date(2022, 0, 5, 20, 30)}
