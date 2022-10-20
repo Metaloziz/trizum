@@ -74,7 +74,7 @@ export const GameReturn: FC<GameReturnPropsT> = props => {
           Назад
         </Button>
         <section>
-          <div style={{ minWidth: `${gameViewSize + 100}px` }}>
+          <div style={{ minWidth: `${gameViewSize + 200}px` }}>
             {(role === Roles.Methodist || role === Roles.Admin) && (
               <SelectBlock
                 width={gameViewSize + 100}
@@ -86,7 +86,11 @@ export const GameReturn: FC<GameReturnPropsT> = props => {
               />
             )}
           </div>
-          <div className={`${styles.wrap} ${role === Roles.Student && styles.isStudent}`}>
+          <div
+            className={`${styles.wrap} ${
+              !(role === Roles.Methodist || role === Roles.Admin) && styles.isStudent
+            }`}
+          >
             <div className={styles.wrapInner}>
               <div className={styles.wrapGame}>
                 <div className={styles.wrapGame_overlay}>
