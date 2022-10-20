@@ -5,7 +5,7 @@ import moment from 'moment';
 import React, { FC } from 'react';
 import { DateTime } from '../../../app/enums/DateTime';
 import { GroupLevels } from '../../../app/enums/GroupLevels';
-import { StatusEnum, StatusTypes } from '../../../app/enums/StatusTypes';
+import { StatusTypes } from '../../../app/enums/StatusTypes';
 import groupStore from '../../../app/stores/groupStore';
 import { getEnumNameStatus } from '../../../utils/getEnumNameStatus';
 
@@ -51,8 +51,7 @@ export const ClassesRows: FC<ClassesRowsProps> = ({ groups, openModal, deleteGro
               </>
             </TableCell>
             <TableCell align="center">
-              {/* {entity.status ? getEnumNameStatus(entity.status) : entity.status} */}
-              {entity.status}
+              {entity.status ? getEnumNameStatus(entity.status) : entity.status}
             </TableCell>
             <TableCell align="right">
               <IconButton
