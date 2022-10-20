@@ -94,21 +94,25 @@ const Game2048: FC<Props> = props => {
   const closeResultModal = () => {
     if (role === Roles.Student) {
       const params: PlaySendResultT = {
+        /* нормальные настройки */
         userGroupId: user.groups[0].id,
         courseWorkId: user.groups[0].group.course.id,
+        /* конец нормальных настроек */
+        /* под вопросом - уточнить у аналитиков и Александра */
         workGamePresetId: user.groups[0].group.course.works[0].work.gamePresets[0].gamePreset.id,
         finished: resultModal,
-        time: 1,
-        groupsCount: 1,
-        elementsTotal: 1,
-        levelMaxCompleted: 1,
-        actions: 1,
-        actionSpeed: 1,
+        groupsCount: settings.groupsCount,
+        elementsTotal: settings.elementsTotal,
+        levelMaxCompleted: settings.levelMaxCompleted,
+        cycleTime: settings.cycleTime,
+        blinksCount: settings.blinksCount,
+        wordsCount: settings.wordsCount,
+        speed: settings.speed,
+        // ?????????
         actionsSuccessfulCount: 1,
-        cycleTime: 1,
-        blinksCount: 1,
-        wordsCount: 1,
-        speed: 1,
+        actionSpeed: 1,
+        actions: 1,
+        time: 1,
         errorsPercentage: 1,
         phraseSpeedAv: 1,
         timeMax: 1,
@@ -116,6 +120,7 @@ const Game2048: FC<Props> = props => {
         actionSpeedAv: 1,
         workCompleted: false,
         courseCompleted: false,
+        /* конец под вопросом */
       };
       sendResults(params);
     }
@@ -156,14 +161,7 @@ const Game2048: FC<Props> = props => {
       onRepeat={onRepeat}
       navigate={navigate}
     >
-      <GameInstance
-        width={gameViewSize}
-        onEnd={onEnd}
-        onRef={onRef}
-        {...settings}
-        // groupsCount={6}
-        // colors={settings?.colorsMap?.length || 1}
-      />
+      <GameInstance width={gameViewSize} onEnd={onEnd} onRef={onRef} {...settings} />
     </GameReturn>
   );
 };

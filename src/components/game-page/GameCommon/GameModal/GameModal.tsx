@@ -13,7 +13,7 @@ import {
 import { GroupLevels } from 'app/enums/GroupLevels';
 import { StatusEnum } from 'app/enums/StatusTypes';
 import gamesStore from 'app/stores/gamesStore';
-import { SoundT } from 'app/types/GameTypes';
+import { EditOrCreatePresetParamsT, SoundT } from 'app/types/GameTypes';
 import Button from 'components/button/Button';
 import { DialogTitle } from 'components/franchising-page/ui/Dialog';
 import {
@@ -148,7 +148,7 @@ export const GameModal: FC<PropsT> = observer(props => {
           colorsMap,
         },
       ],
-    };
+    } as EditOrCreatePresetParamsT;
     gamePreset?.gamePreset?.id ? editPreset(params) : createPresets(params);
   };
 
