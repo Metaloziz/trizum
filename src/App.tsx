@@ -17,7 +17,6 @@ import GameItems from 'pages/game/GameItems';
 import Home from 'pages/home/Home';
 import Homework from 'pages/homework/Homework';
 import LoginWithSMS from 'pages/login/LoginWithSMS/LoginWithSMS';
-import Olympiad from 'pages/olympiads/Olympiad/Olympiad';
 import Olympiads from 'pages/olympiads/Olympiads';
 import Pay from 'pages/pay/Pay';
 import Rate from 'pages/rate/Rate';
@@ -34,6 +33,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import './App.css';
+import HomeWorkStatistics from './components/HomeWorkStatistics/HomeWorkStatistics';
 
 const App = observer(() => (
   <LocalizationProvider dateAdapter={AdapterMoment}>
@@ -48,7 +48,11 @@ const App = observer(() => (
             <Route path=":articleName" element={<ArticleFromEditor />} />
           </Route>
 
-          <Route path={AppRoutes.Classes} element={<Classes />} />
+          <Route path={AppRoutes.Classes}>
+            <Route path="" element={<Classes />} />
+            <Route path=":id" element={<HomeWorkStatistics />} />
+          </Route>
+
           <Route path={AppRoutes.Courses} element={<Courses />} />
           <Route path={AppRoutes.Franchising} element={<Franchising />} />
           <Route path={`${AppRoutes.Games}`} element={<GameWrapper />} />
@@ -59,7 +63,7 @@ const App = observer(() => (
 
           <Route path={AppRoutes.Olympiads}>
             <Route path="" element={<Olympiads />} />
-            <Route path=":id" element={<Olympiad />} />
+            {/* <Route path=":id" element={<Olympiad />} /> */}
             <Route path={AppRoutes.OlympiadsListPage} element={<OlympiadsListPage />} />
           </Route>
 
