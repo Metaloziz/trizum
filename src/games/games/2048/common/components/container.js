@@ -28,6 +28,26 @@ class Container extends Component {
         };
     }
 
+    componentDidUpdate(prevProps,prevState,snapshot) {
+        const { size } = this.props;
+
+        if (prevProps.size !== size) {
+            this.setNew()
+        }
+    }
+
+    setNew() {
+        this.setState({
+            tiles: [],
+            score: 0,
+            over: false,
+            win: false,
+            keepPlaying: false,
+            grid: new Grid(this.props.size),
+            size: this.props.size
+        })
+    }
+
     start = () => {
         this.continueGame();
         this.setup();
