@@ -4,7 +4,6 @@ import { TableRow, TableCell, Stack, IconButton } from '@mui/material';
 import { FC } from 'react';
 import { StatusTypes } from '../../../app/enums/StatusTypes';
 import { ShortCourseType } from '../../../app/types/CourseTypes';
-import { getEnumNameStatus } from '../../../utils/getEnumNameStatus';
 import { transformDate } from '../../../utils/transformData';
 import { translateStatus } from '../helpers';
 
@@ -28,7 +27,7 @@ export const CourseItem: FC<Props> = ({ course, openDialogCallBack, removeCallBa
       <TableCell align="center">{translateStatus(course.level)}</TableCell>
       <TableCell align="center">{course.worksCount}</TableCell>
       <TableCell align="center">{transformDate(course.createdAt?.date || '')}</TableCell>
-      <TableCell align="center">{getEnumNameStatus(course.status)}</TableCell>
+      <TableCell align="center">{course.status}</TableCell>
       <TableCell>
         <Stack direction="row" justifyContent="flex-end">
           <IconButton

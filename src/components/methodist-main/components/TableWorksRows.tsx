@@ -4,7 +4,6 @@ import { FC } from 'react';
 import coursesStore from '../../../app/stores/coursesStore';
 import { NewWorkType } from '../../../app/types/NewWorkType';
 import { HomeworkViewModel } from '../../../app/viewModels/HomeworkViewModel';
-import { getEnumNameStatus } from '../../../utils/getEnumNameStatus';
 
 type Props = {
   worksArray: typeof homeworkStore.worksArray;
@@ -58,7 +57,7 @@ export const TableWorksRows: FC<Props> = ({ worksArray, setCurrentCourse, select
           <TableCell>{work.title}</TableCell>
           <TableCell width="auto">{work.text}</TableCell>
           <TableCell>{work.gamePresetsCount}</TableCell>
-          <TableCell width="auto">{getEnumNameStatus(work.status)}</TableCell>
+          <TableCell width="auto">{work.status}</TableCell>
         </TableRow>
       ))}
     </>
