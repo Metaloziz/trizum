@@ -1,18 +1,10 @@
-import React, { FC, useEffect, useState } from 'react';
-
-import { observer } from 'mobx-react-lite';
-import moment from 'moment';
-import { Navigate, ToolbarProps } from 'react-big-calendar';
-
-import appStore, { Roles } from 'app/stores/appStore';
-import iconSettings from 'assets/svgs/icon-settings.svg';
-import Button from 'components/button/Button';
-import Image from 'components/image/Image';
-import styles from 'components/schedule/Schedule.module.scss';
-import { EventProps } from 'components/schedule/ScheduleDnD';
-import CustomDatePicker from 'components/tariff-page/customDatePicker';
-import AddEditGroup from 'components/classes-page/AddEditGroup';
 import { FormControl, Grid } from '@mui/material';
+import Button from 'components/button/Button';
+import AddEditGroup from 'components/classes-page/AddEditGroup';
+import styles from 'components/schedule/Schedule.module.scss';
+import CustomDatePicker from 'components/tariff-page/customDatePicker';
+import React, { FC, useState } from 'react';
+import { Navigate, ToolbarProps } from 'react-big-calendar';
 
 export const Toolbar: FC<ToolbarProps> = props => {
   const { onNavigate, date, children } = props;
@@ -77,52 +69,4 @@ export const Toolbar: FC<ToolbarProps> = props => {
       <AddEditGroup />
     </div>
   );
-};
-
-export const CustomEvent: FC<EventProps> = observer(({ event }) => {
-  const [width, setWidth] = useState<number | undefined>(undefined);
-  const { role } = appStore;
-  useEffect(() => {
-    setWidth(window.innerWidth);
-  }, []);
-  return (
-    <div className={styles.eventFlexWrapper}>
-      <div className={styles.eventText}>
-        {width && width > 700 ? (
-          <div>
-            <span>Класс: </span>
-            {event.groupName}
-          </div>
-        ) : null}
-        <div>
-          <span>Урок: </span>
-          {event.lesson}
-        </div>
-        {width && width > 700 ? (
-          <div className={styles.eventTime}>
-            <span>Время:</span>
-            <span>
-              {` ${moment(event.start).format('h:mm')} - ${moment(event.end).format('h:mm')}`}
-            </span>
-          </div>
-        ) : null}
-      </div>
-      {role !== Roles.Teacher && (
-        <div className={styles.eventIcons}>
-          <span>
-            <Image src={iconSettings} width="16" height="16" alt="Settings" />
-          </span>
-        </div>
-      )}
-    </div>
-  );
-});
-
-export const ScheduleHeader: FC<any> = ({ date }: { date: Date }) => {
-  const [width, setWidth] = useState<number | undefined>(undefined);
-  useEffect(() => {
-    setWidth(window.innerWidth);
-  }, []);
-  const dateFormat = width && width > 700 ? 'DD.MM.YYYY' : 'DD.MM';
-  return <>{moment(date).format(dateFormat)}</>;
 };

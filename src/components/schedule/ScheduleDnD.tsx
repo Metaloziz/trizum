@@ -1,58 +1,28 @@
 import appStore, { Roles } from 'app/stores/appStore';
 import teacherMainStore from 'app/stores/scheduleStore';
 import AddEditGroup from 'components/classes-page/AddEditGroup';
-import { CustomEvent, ScheduleHeader, Toolbar } from 'components/schedule/ScheduleComponents';
+import { Toolbar } from 'components/schedule/ScheduleComponents/ScheduleComponents';
 import { observer } from 'mobx-react-lite';
 import moment from 'moment';
 import React, { FC, SyntheticEvent, useEffect, useState } from 'react';
-import { Calendar, momentLocalizer, stringOrDate } from 'react-big-calendar';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import { ChildrenToolbar } from './ChildrenToolbar/ChildrenToolbar';
+import { CustomEvent } from './CustomEvent/CustomEvent';
 
 import styles from './Schedule.module.scss';
+import { ScheduleHeader } from './ScheduleHeader/ScheduleHeader';
+import { MoveEvent } from './types/MoveEvent';
+import { ResizeEvent } from './types/ResizeEvent';
+import { ScheduleEvent } from './types/ScheduleEvent';
 
 require('moment/locale/ru');
 
 const localizer = momentLocalizer(moment);
 const DnDCalendar = withDragAndDrop(Calendar);
 
-export interface EventProps {
-  event: any;
-  title: string;
-}
-
-export type ScheduleEvent = {
-  id: number;
-  title: string;
-  start: Date;
-  end: Date;
-  allDay?: boolean;
-  lesson: string;
-  class: string;
-};
-
 const formats = {
   eventTimeRangeFormat: () => '',
-};
-
-type MoveEvent = {
-  event: object;
-  start: stringOrDate;
-  end: stringOrDate;
-};
-
-type ResizeEvent = {
-  event: {
-    id?: number;
-  };
-  start: stringOrDate;
-  end: stringOrDate;
-  isAllDay: boolean;
-};
-
-type OnSelectEvent = {
-  event: object | ScheduleEvent;
-  e: SyntheticEvent<HTMLElement, Event>;
 };
 
 const ScheduleDnD: FC = observer(() => {
