@@ -1,17 +1,15 @@
 import React from 'react';
-
+import appStore from '../../../app/stores/appStore';
+import CardStudentForStudent from '../../card-student/card-student-for-user/CardStudentForStudent';
+import Homework from '../../homework/Homework';
+import {
+  StatisticsItemProps,
+  colorThemeStatistic,
+} from '../../olympiad-page/components/statistics-list/statistics-list/statistics-item/StatisticsItem';
+import StatisticsList from '../../olympiad-page/components/statistics-list/statistics-list/StatisticsList';
 import styles from './OlympiadPage.module.scss';
 
-import appStore from 'app/stores/appStore';
-import Homework from 'components/homework/Homework';
-import CardStudentForStudent from 'components/card-student/card-student-for-user/CardStudentForStudent';
-import StatisticsList from 'components/olympiad-page/components/statistics-list/statistics-list/StatisticsList';
-import {
-  colorThemeStatistic,
-  StatisticsItemProps,
-} from 'components/olympiad-page/components/statistics-list/statistics-list/statistics-item/StatisticsItem';
-
-const mock: StatisticsItemProps[] = [
+export const mock: StatisticsItemProps[] = [
   {
     id: 1,
     itemTitle: 'Игра по математике',
@@ -38,7 +36,7 @@ const mock: StatisticsItemProps[] = [
   },
 ];
 
-const desc = {
+export const desc = {
   needToDo: 'нужно развить свои ментальные навыки',
   minutesLeft: 50,
   tips: [
@@ -57,17 +55,15 @@ const desc = {
   ],
 };
 
-const OlympiadPage = () => {
+export const CurrentHomeWork = () => {
   const { user } = appStore;
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <CardStudentForStudent user={user} isMainPage={false} />
+        <CardStudentForStudent isMainPage={false} />
         <Homework gameTitle="олимпиада по ментальной силе" description={desc} id={1} />
       </div>
       <StatisticsList statisticsList={mock} />
     </div>
   );
 };
-
-export default OlympiadPage;

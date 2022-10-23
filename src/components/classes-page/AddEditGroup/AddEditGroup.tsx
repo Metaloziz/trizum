@@ -1,65 +1,39 @@
-import coursesStore from 'app/stores/coursesStore';
-import franchiseeStore from 'app/stores/franchiseeStore';
-import React, { FC, useEffect, useState } from 'react';
 import { FormControl, Grid, InputLabel, Select, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { observer } from 'mobx-react-lite';
+import { GroupLevels } from 'app/enums/GroupLevels';
 import usersService from 'app/services/usersService';
 import appStore, { Roles } from 'app/stores/appStore';
 import groupStore from 'app/stores/groupStore';
 import BasicModal from 'components/basic-modal/BasicModal';
 import Button from 'components/button/Button';
 import Lessons from 'components/classes-page/AddEditGroup/Lessons';
+import { observer } from 'mobx-react-lite';
+import React, { FC, useEffect, useState } from 'react';
 import { getOptionMui } from 'utils/getOption';
-import { GroupTypes } from 'app/enums/GroupTypes';
-import { GroupLevels } from 'app/enums/GroupLevels';
-import { StatusTypes } from '../../../app/enums/StatusTypes';
-import _ from 'lodash';
+import { GroupStatus } from '../../../app/enums/GroupStatus';
+import { GroupStatusTypes } from '../../../app/types/GroupStatusTypes';
+import { getMUIOptionsFromEnum } from '../../../utils/getMUIOptionsFromEnum';
 
-interface Props {}
-
-const typeOptionsNames = Object.values(GroupTypes);
-const typeOptions = Object.keys(GroupTypes).map((el, idx) =>
-  getOptionMui(el.toLowerCase(), typeOptionsNames[idx]),
-);
-
-const groupStatuses = {
-  active: 'Активный',
-  complete: 'Завершенный',
-  archive: 'Архивный',
-};
-const statusOptions: JSX.Element[] = [];
-// eslint-disable-next-line guard-for-in
-for (const key in groupStatuses) {
-  // @ts-ignore
-  statusOptions.push(getOptionMui(key, groupStatuses[key]));
-}
-
-const levelOptionsNames = Object.values(GroupLevels);
-const levelOptions = Object.keys(GroupLevels).map((el, idx) =>
-  getOptionMui(el.toLowerCase(), levelOptionsNames[idx]),
-);
-
-const AddEditGroup: FC<Props> = observer(props => {
+const AddEditGroup: FC = observer(() => {
   const {
     modalFields,
-    validateSchema,
     franchise,
     filteredCourses,
     selectedGroup,
     isModalOpen,
-    schedule,
     loadInitialModal,
     addGroup,
     cleanModalValues,
     closeModal,
     editGroup,
   } = groupStore;
-  console.log(_.cloneDeep(schedule), 'schedule');
+
   const { role, user } = appStore;
+
   const [teacherOptions, setTeacherOptions] = useState<JSX.Element[]>([]);
   const [franchiseOptions, setFranchiseOptions] = useState<JSX.Element[]>([]);
   const [courseOptions, setCourseOptions] = useState<JSX.Element[]>([]);
+
   const getTeachers = async () => {
     const res = await usersService.getAllUsers({
       perPage: 10000,
@@ -108,6 +82,8 @@ const AddEditGroup: FC<Props> = observer(props => {
 
   const isFranchiseRole = role === Roles.Franchisee || role === Roles.FranchiseeAdmin;
 
+  const courseLabel = `Курс: ${GroupLevels[modalFields.level]}`;
+
   return (
     <BasicModal
       fullWidth
@@ -129,7 +105,7 @@ const AddEditGroup: FC<Props> = observer(props => {
             fullWidth
             disabled={!!selectedGroup.id && modalFields.status !== 'active'}
             onChange={({ currentTarget: { value } }) => (modalFields.name = value)}
-            error={!validateSchema.fields.name.isValidSync(modalFields.name)}
+            // error={!validateSchema.fields.name.isValidSync(modalFields.name)}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -148,15 +124,17 @@ const AddEditGroup: FC<Props> = observer(props => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth>
-            <InputLabel id="status">Статус</InputLabel>
+            <InputLabel id="level">Уровень</InputLabel>
             <Select
-              labelId="status"
-              label="Статус"
+              labelId="level"
+              label="Уровень"
+              placeholder="Уровень"
               fullWidth
-              onChange={(event, child) => (modalFields.status = event.target.value as StatusTypes)}
-              value={modalFields.status}
+              // @ts-ignore
+              onChange={(event, child) => (modalFields.level = event.target.value)}
+              value={modalFields.level}
             >
-              {statusOptions}
+              {getMUIOptionsFromEnum(GroupLevels)}
             </Select>
           </FormControl>
         </Grid>
@@ -180,10 +158,10 @@ const AddEditGroup: FC<Props> = observer(props => {
 
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth>
-            <InputLabel id="course">Курс</InputLabel>
+            <InputLabel id="course">{courseLabel}</InputLabel>
             <Select
               labelId="course"
-              label="Курс"
+              label={courseLabel}
               disabled={!modalFields.level || !!selectedGroup.id}
               fullWidth
               onChange={({ target: { value } }) => {
@@ -200,17 +178,17 @@ const AddEditGroup: FC<Props> = observer(props => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth>
-            <InputLabel id="level">Уровень</InputLabel>
+            <InputLabel id="status">Статус</InputLabel>
             <Select
-              labelId="level"
-              label="Уровень"
-              placeholder="Уровень"
+              labelId="status"
+              label="Статус"
               fullWidth
-              // @ts-ignore
-              onChange={(event, child) => (modalFields.level = event.target.value)}
-              value={modalFields.level}
+              onChange={(event, child) =>
+                (modalFields.status = event.target.value as GroupStatusTypes)
+              }
+              value={modalFields.status}
             >
-              {levelOptions}
+              {getMUIOptionsFromEnum(GroupStatus)}
             </Select>
           </FormControl>
         </Grid>
@@ -219,11 +197,13 @@ const AddEditGroup: FC<Props> = observer(props => {
             onChange={e => e && (modalFields.dateSince = new Date(e))}
             value={modalFields.dateSince}
             renderInput={e => <TextField {...e} sx={{ width: '48%' }} />}
+            label="Период работы группы с"
           />
           <DatePicker
             onChange={e => e && (modalFields.dateUntil = new Date(e))}
             value={modalFields.dateUntil}
             renderInput={e => <TextField {...e} sx={{ width: '48%' }} />}
+            label="по"
           />
         </Grid>
 

@@ -277,10 +277,6 @@
     box-shadow: 0 0 2px rgba(215, 215, 215, 0.8);
   }
 
-  & svg {
-    margin-bottom: 18px;
-  }
-
   @media (max-width: 600px) {
     width: 158px;
     height: 158px;
@@ -312,6 +308,7 @@
   -webkit-text-fill-color: transparent;
   color: #333;
   font-size: 18px;
+  text-transform: uppercase;
 
   @media (max-width: 600px) {
     font-size: 14px;

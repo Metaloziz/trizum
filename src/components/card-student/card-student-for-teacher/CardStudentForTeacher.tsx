@@ -1,5 +1,7 @@
 import React, { FC } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getRuBirthdayDate } from 'utils/getRuBirthdayDate';
+import { AppRoutes } from '../../../app/enums/AppRoutes';
 
 import styles from './CardStudentForTeacher.module.scss';
 
@@ -18,6 +20,12 @@ interface Props {
 
 const CardStudentForTeacher: FC<Props> = props => {
   const { user } = props;
+
+  const navigate = useNavigate();
+
+  const redirect = () => {
+    navigate(`${AppRoutes.Classes}/${user.id}`);
+  };
 
   const fullName = `${user.middleName} ${user.firstName} ${user.lastName}`.trim();
   return (
@@ -57,7 +65,7 @@ const CardStudentForTeacher: FC<Props> = props => {
           </div>
 
           <div className={styles.btnBlock}>
-            <Button>Посмотреть Д/З</Button>
+            <Button onClick={redirect}>Посмотреть Д/З</Button>
             <Button>Статистика</Button>
           </div>
         </div>

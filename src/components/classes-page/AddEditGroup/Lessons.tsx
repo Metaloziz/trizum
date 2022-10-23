@@ -1,16 +1,13 @@
-import React, { FC } from 'react';
-
 import { Grid, TextField, Typography } from '@mui/material';
 import { TimePicker } from '@mui/x-date-pickers';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { observer } from 'mobx-react-lite';
-import moment from 'moment';
-
-import { DateTime } from 'app/enums/DateTime';
 import groupStore from 'app/stores/groupStore';
+import { observer } from 'mobx-react-lite';
+import React, { FC } from 'react';
 
 const Lessons: FC = observer(() => {
   const { schedule, changeLesson } = groupStore;
+
   return (
     <>
       {!!schedule.length &&

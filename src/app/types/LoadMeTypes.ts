@@ -31,16 +31,18 @@ export type GamePresetFromLoadme = {
 
 export type WorkFromLoadme = {
   id: string;
+  status: string;
+  title: string;
+  text: string;
+  type: string;
+  createdAt: TimeZoneType;
+  gamePresets: GamePresetFromLoadme[];
+};
+
+export type WorkWithIdFromLoadme = {
+  id: string;
   index: number;
-  work: {
-    id: string;
-    status: string;
-    title: string;
-    text: string;
-    type: string;
-    createdAt: TimeZoneType;
-    gamePresets: GamePresetFromLoadme[];
-  };
+  work: WorkFromLoadme;
 };
 
 export type Group = {
@@ -64,7 +66,7 @@ export type Group = {
         timezone_type: number;
         timezone: string;
       };
-      works: WorkFromLoadme[];
+      works: WorkWithIdFromLoadme[];
     };
     schedule: ScheduleFromLoadme[];
     level: string;

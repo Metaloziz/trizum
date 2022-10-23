@@ -4,5 +4,5 @@
 *.json
 *.d.ts
 reportWebVitals.ts
-/node_modules
+node_modules
 /src/games

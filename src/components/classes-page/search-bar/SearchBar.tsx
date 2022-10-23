@@ -164,16 +164,16 @@ const SearchBar = observer(() => {
             <Grid item xs={12} sm={4} sx={{ display: 'flex', justifyContent: 'space-between' }}>
               <DatePicker
                 onChange={value => value && (queryFields.dateSince = new Date(value))}
-                value={queryFields.dateSince ? queryFields.dateSince : new Date()}
-                toolbarPlaceholder="Дата с"
+                value={queryFields.dateSince ? queryFields.dateSince : null}
+                label="Дата действия с"
                 renderInput={props => <TextField sx={{ width: '48%' }} {...props} />}
               />
               <DatePicker
                 onChange={(value, keyboardInputValue) => {
                   value && (queryFields.dateUntil = new Date(value));
                 }}
-                value={queryFields.dateUntil ? queryFields.dateUntil : new Date()}
-                toolbarPlaceholder="Дата по"
+                value={queryFields.dateUntil ? queryFields.dateUntil : null}
+                label="по"
                 renderInput={props => <TextField sx={{ width: '48%' }} {...props} />}
               />
             </Grid>

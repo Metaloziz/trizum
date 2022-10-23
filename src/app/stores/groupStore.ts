@@ -1,8 +1,3 @@
-import { AxiosError } from 'axios';
-import { makeAutoObservable, runInAction } from 'mobx';
-import moment from 'moment';
-import * as yup from 'yup';
-
 import { DateTime } from 'app/enums/DateTime';
 import coursesService from 'app/services/coursesService';
 import franchiseService from 'app/services/franchiseService';
@@ -23,11 +18,19 @@ import {
 } from 'app/types/GroupTypes';
 import { ResponseUserT } from 'app/types/UserTypes';
 import { GroupsViewModel } from 'app/viewModels/GroupsViewModel';
+import { AxiosError } from 'axios';
+import { makeAutoObservable, runInAction } from 'mobx';
+import moment from 'moment';
+import { findElement } from 'utils/findIndexElement';
 import {
   scheduleItemToServerMapper,
   scheduleItemToUIMapper,
 } from 'utils/scheduleItemToServerMapper';
-import { findElement } from 'utils/findIndexElement';
+import * as yup from 'yup';
+import { getNextMonth } from '../../utils/getNextMonth';
+import { removeEmptyFields } from '../../utils/removeEmptyFields';
+import { GroupStatusValue } from '../enums/GroupStatus';
+import { GroupStatusTypes } from '../types/GroupStatusTypes';
 
 class GroupStore {
   groups: ResponseGroups[] = [];
@@ -40,11 +43,11 @@ class GroupStore {
 
   selectedGroup = new ResponseOneGroup();
 
-  private defaultValues: CreateGroupFroUI = {
+  private defaultValues: Omit<CreateGroupFroUI, 'status'> & { status: GroupStatusTypes } = {
     name: '',
     franchiseId: '',
     dateSince: new Date(),
-    dateUntil: new Date(),
+    dateUntil: getNextMonth(),
     type: 'class',
     teacherId: '',
     level: 'medium',
@@ -77,8 +80,6 @@ class GroupStore {
     type: 'olympiad',
     level: '',
   };
-
-  private defaultEditValues: Partial<CreateGroupFroUI> = {};
 
   modalFields = { ...this.defaultValues };
 
@@ -197,7 +198,7 @@ class GroupStore {
       ? []
       : Array(count)
           .fill(1)
-          .map(el => new LessonT((Math.random() * 100).toString()));
+          .map((el, index) => new LessonT(index));
 
   getOneGroup = async (id: string) =>
     this.execute(async () => {
@@ -216,8 +217,11 @@ class GroupStore {
     const schedule: Schedule[] = !this.schedule.length
       ? []
       : this.schedule.map(elem => scheduleItemToServerMapper(elem));
+
+    const params = removeEmptyFields(this.modalFields);
+
     await groupsService.addGroup({
-      ...this.modalFields,
+      ...params,
       franchiseId: franchiseId || this.modalFields.franchiseId,
       dateSince: moment(this.modalFields.dateSince).format(DateTime.DdMmYyyy),
       dateUntil: moment(this.modalFields.dateUntil).format(DateTime.DdMmYyyy),
@@ -247,6 +251,13 @@ class GroupStore {
       }
       this.cleanModalValues();
       this.closeModal();
+    });
+  };
+
+  deleteGroup = async (groupId: string) => {
+    await this.execute(async () => {
+      await groupsService.editGroup({ status: GroupStatusValue.archive }, groupId);
+      await this.getGroups();
     });
   };
 
@@ -299,7 +310,7 @@ class GroupStore {
           name: r.name,
           dateSince: new Date(r.startedAt.date),
           dateUntil: new Date(r.endedAt.date),
-          status: r.status || '',
+          status: (r.status as GroupStatusTypes) || '',
         };
         // this.schedule = r.schedule
       }

@@ -67,8 +67,7 @@ const studentLinks = [
   Links.Index,
   // Links.Olympiads,
   // Links.Payment,
-  Links.Statistic,
-  // Links.Games,
+  // Links.Statistic,
   Links.Blog,
 ];
 const teacherLinks = [
@@ -85,7 +84,7 @@ const franchiseeAdminLinks = [
   Links.Index,
   Links.Classes,
   Links.Statistic,
-  Links.Homework,
+  // Links.Homework,
   Links.Users,
   Links.Games,
   Links.UserInfo,

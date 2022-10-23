@@ -1,5 +1,11 @@
 export enum GroupStatus {
   active = 'активная',
-  completed = 'завершённая',
+  complete = 'завершённая',
   archive = 'архивная',
+}
+
+export enum GroupStatusValue {
+  active = 'active',
+  complete = 'complete',
+  archive = 'archive',
 }

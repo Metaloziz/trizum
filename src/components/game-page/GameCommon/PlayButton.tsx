@@ -33,7 +33,6 @@ export const PlayButton: FC<PropsT> = ({ onStart }) => (
             </linearGradient>
           </defs>
         </svg>
-        <span className={styles.playButtonText}>ИГРАТЬ</span>
       </div>
     </div>
   </div>

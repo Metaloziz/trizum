@@ -25,7 +25,7 @@ export const Login: FC = () => {
     control,
   } = useForm<LoginInfo>({
     resolver: yupResolver(schema),
-    defaultValues: { phone: '79101001010', password: '123123' },
+    defaultValues: { phone: '76660003334', password: 'Base76660003334' },
   });
 
   const onSubmit = handleSubmit(loginData => {
