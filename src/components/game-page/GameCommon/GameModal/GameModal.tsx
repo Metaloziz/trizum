@@ -20,6 +20,16 @@ import {
   ColorObj,
   GameColorPicker,
 } from 'components/game-page/GameCommon/GameModal/GameColorPicker';
+import { ArgusSettings } from 'components/game-page/GameCommon/GameSettings/ArgusSettings';
+import { BattlerColorsSettings } from 'components/game-page/GameCommon/GameSettings/BattlerColorsSettings';
+import { FirefliesSettings } from 'components/game-page/GameCommon/GameSettings/FirefliesSettings';
+import { Game2048Settings } from 'components/game-page/GameCommon/GameSettings/Game2048Settings';
+import { MemoryRhythmSettings } from 'components/game-page/GameCommon/GameSettings/MemoryRhythmSettings';
+import { MentalSettings } from 'components/game-page/GameCommon/GameSettings/MentalSettings';
+import { ShiftVerticalSettings } from 'components/game-page/GameCommon/GameSettings/ShiftVerticalSettings';
+import { ShulteSettings } from 'components/game-page/GameCommon/GameSettings/ShulteSettings';
+import { SilhouettesSettings } from 'components/game-page/GameCommon/GameSettings/SilhouettesSettings';
+import { SteamEngine } from 'components/game-page/GameCommon/GameSettings/SteamEngine';
 import { Dialog } from 'components/rate/ui/Dialog';
 import { GameIdentifiers } from 'games';
 import { observer } from 'mobx-react-lite';
@@ -42,6 +52,10 @@ const colorsObj = [
   { label: 'Синий', value: false, hex: '#699deb', id: 3 },
   { label: 'Фиолетовый', value: false, hex: '#c3b8f9', id: 4 },
   { label: 'Оранжевый', value: false, hex: '#f88e36', id: 5 },
+  { label: 'Розовый', value: false, hex: '#e99aff', id: 6 },
+  { label: 'Коричневый', value: false, hex: '#441d00', id: 7 },
+  { label: 'Жёлтый', value: false, hex: '#fff900', id: 8 },
+  { label: 'Голубой', value: false, hex: '#00c1ee', id: 9 },
 ];
 
 export const GameModal: FC<PropsT> = observer(props => {
@@ -88,15 +102,16 @@ export const GameModal: FC<PropsT> = observer(props => {
   );
   const sizeOptions = fieldSizeOptions().map(el => getOptionMui(el.value, el.label));
   const changeColor = (index: number) => {
-    const copy: ColorObj[] = colors.map(el =>
-      el.id === index
-        ? {
-            ...el,
-            value: !el.value,
-          }
-        : el,
+    setColors(
+      colors.map(el =>
+        el.id === index
+          ? {
+              ...el,
+              value: !el.value,
+            }
+          : el,
+      ),
     );
-    setColors(copy);
   };
 
   const setColor = useCallback((data: ColorObj[]) => {
@@ -263,397 +278,101 @@ export const GameModal: FC<PropsT> = observer(props => {
                   </Grid>
                 )}
               </Grid>
-              {game.code === GameIdentifiers.shiftVertical ? (
-                <>
-                  <Grid container spacing={2}>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        label={`Задержка ${cycleTime} сек.`}
-                        value={cycleTime}
-                        onChange={({ currentTarget: { value } }) => setCycleTime(value)}
-                        fullWidth
-                        inputProps={{ type: 'number' }}
-                        variant="outlined"
-                        size="small"
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        label="Количество уровней в игре"
-                        value={elementsTotal}
-                        onChange={({ currentTarget: { value } }) => setElementsTotal(value)}
-                        fullWidth
-                        inputProps={{ type: 'number' }}
-                        variant="outlined"
-                        size="small"
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <FormControl fullWidth size="small">
-                        <InputLabel>Кол-во цветов</InputLabel>
-                        <Select
-                          value={groupsCount}
-                          label="Кол-во цветов"
-                          onChange={({ target: { value } }) => setGroupsCount(value)}
-                        >
-                          {sizeOptions.slice(0, 2)}
-                        </Select>
-                      </FormControl>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <FormControl fullWidth size="small">
-                        <InputLabel>Формы</InputLabel>
-                        <Select
-                          value={blinksCount}
-                          label="Формы"
-                          onChange={({ target: { value } }) => setBlinksCount(value)}
-                        >
-                          {sizeOptions.slice(0, 2)}
-                        </Select>
-                      </FormControl>
-                    </Grid>
-                  </Grid>
-                </>
-              ) : null}
-              {game.code === GameIdentifiers.shulte ? (
-                <>
-                  <Grid container spacing={2}>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        label="Кол-во цветов"
-                        value={groupsCount}
-                        onChange={({ currentTarget: { value } }) => setGroupsCount(value)}
-                        fullWidth
-                        inputProps={{ type: 'number' }}
-                        variant="outlined"
-                        size="small"
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <FormControl fullWidth size="small">
-                        <InputLabel>Размер поля Х на Х</InputLabel>
-                        <Select
-                          value={elementsTotal}
-                          label="Размер поля Х на Х"
-                          onChange={({ target: { value } }) => setElementsTotal(value)}
-                        >
-                          {sizeOptions}
-                        </Select>
-                      </FormControl>
-                    </Grid>
-                    <div className={styles.inputBlock}>
-                      <div className={styles.gameModalColorBtn}>
-                        <label>Необходимые цвета</label>
-                        <button onClick={() => setColorModal(true)}>Выбор цвета</button>
-                      </div>
-                      <div style={{ display: 'flex' }}>
-                        {colorsMap.map(color => (
-                          <div
-                            key={color}
-                            style={{ backgroundColor: `${color}` }}
-                            className={styles.colorTemplate}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  </Grid>
-                </>
-              ) : null}
+              {game.code === GameIdentifiers.shiftVertical && (
+                <ShiftVerticalSettings
+                  setGroupsCount={setGroupsCount}
+                  setBlinksCount={setBlinksCount}
+                  setElementsTotal={setElementsTotal}
+                  elementsTotal={elementsTotal}
+                  groupsCount={groupsCount}
+                  blinksCount={blinksCount}
+                  sizeOptions={sizeOptions.slice(0, 2)}
+                  cycleTime={cycleTime}
+                  setCycleTime={setCycleTime}
+                />
+              )}
+              {game.code === GameIdentifiers.shulte && (
+                <ShulteSettings
+                  sizeOptions={sizeOptions}
+                  groupsCount={groupsCount}
+                  elementsTotal={elementsTotal}
+                  colorsMap={colorsMap}
+                  setColorModal={setColorModal}
+                  setElementsTotal={setElementsTotal}
+                  setGroupsCount={setGroupsCount}
+                />
+              )}
               {game.code === GameIdentifiers.game2048 && (
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
-                    <FormControl fullWidth size="small">
-                      <InputLabel>Размер поля Х на Х</InputLabel>
-                      <Select
-                        value={groupsCount}
-                        label="Размер поля Х на Х"
-                        onChange={({ target: { value } }) => setGroupsCount(value)}
-                      >
-                        {sizeOptions}
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Кол-во начальных блоков"
-                      value={elementsTotal}
-                      onChange={({ currentTarget: { value } }) => setElementsTotal(value)}
-                      fullWidth
-                      inputProps={{ type: 'number' }}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </Grid>
-                </Grid>
+                <Game2048Settings
+                  sizeOptions={sizeOptions}
+                  groupsCount={groupsCount}
+                  elementsTotal={elementsTotal}
+                  setElementsTotal={setElementsTotal}
+                  setGroupsCount={setGroupsCount}
+                />
               )}
               {game.code === GameIdentifiers.battleColors && (
-                <Grid container spacing={2}>
-                  {/* </Grid> */}
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label={`Кол-во уровней в игре ${elementsTotal}`}
-                      value={elementsTotal}
-                      onChange={({ currentTarget: { value } }) => setElementsTotal(value)}
-                      fullWidth
-                      inputProps={{ type: 'number' }}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Кол-во цветов для игры"
-                      value={blinksCount}
-                      onChange={({ currentTarget: { value } }) => setBlinksCount(value)}
-                      fullWidth
-                      inputProps={{ type: 'number' }}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </Grid>
-                </Grid>
+                <BattlerColorsSettings
+                  setElementsTotal={setElementsTotal}
+                  elementsTotal={elementsTotal}
+                  setBlinksCount={setBlinksCount}
+                  blinksCount={blinksCount}
+                />
               )}
               {game.code === GameIdentifiers.mental && (
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Пауза при появлении цифр в мс"
-                      value={delay}
-                      onChange={({ currentTarget: { value } }) => setDelay(value)}
-                      fullWidth
-                      inputProps={{ type: 'number' }}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Минимальное слагаемое"
-                      // value={min}
-                      // onChange={({ currentTarget: { value } }) => setMin(value)}
-                      fullWidth
-                      inputProps={{ type: 'number' }}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Максимальное слагаемое"
-                      value={digitMax}
-                      onChange={({ currentTarget: { value } }) => setDigitMax(value)}
-                      fullWidth
-                      inputProps={{ type: 'number' }}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Использовать вычитание"
-                      // value={digitMax}
-                      // onChange={({ currentTarget: { value } }) => setDigitMax(value)}
-                      fullWidth
-                      // inputProps={{ type: 'number' }}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Результат не больше, чем по формуле"
-                      // value={subtract}
-                      // onChange={({ currentTarget: { value } }) => setDigitMax(value)}
-                      fullWidth
-                      // inputProps={{ type: 'number' }}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Результат не больше, чем по формуле"
-                      // value={restriction}
-                      // onChange={({ currentTarget: { value } }) => setDigitMax(value)}
-                      fullWidth
-                      // inputProps={{ type: 'number' }}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Кол-во слагаемых в 1 задаче"
-                      // value={length}
-                      // onChange={({ currentTarget: { value } }) => setDigitMax(value)}
-                      fullWidth
-                      inputProps={{ type: 'number' }}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Кол-во задач"
-                      // value={count}
-                      // onChange={({ currentTarget: { value } }) => setDigitMax(value)}
-                      fullWidth
-                      inputProps={{ type: 'number' }}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </Grid>
-                </Grid>
+                <MentalSettings
+                  delay={delay}
+                  setDelay={setDelay}
+                  setDigitMax={setDigitMax}
+                  digitMax={digitMax}
+                />
               )}
               {game.code === GameIdentifiers.steamEngine && (
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Кол-во успешных нажатий на манометр"
-                      value={elementsTotal}
-                      onChange={({ currentTarget: { value } }) => setElementsTotal(value)}
-                      fullWidth
-                      inputProps={{ type: 'number' }}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Кол-во снятых единиц за промах"
-                      value={errorAcceptable}
-                      onChange={({ currentTarget: { value } }) => setErrorAcceptable(value)}
-                      fullWidth
-                      inputProps={{ type: 'number' }}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Скорость кручения стрелки манометра в сек."
-                      value={speed}
-                      onChange={({ currentTarget: { value } }) => setSpeed(value)}
-                      fullWidth
-                      inputProps={{ type: 'number' }}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Кол-во манометров"
-                      value={groupsCount}
-                      onChange={({ currentTarget: { value } }) => setGroupsCount(value)}
-                      fullWidth
-                      inputProps={{ type: 'number' }}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </Grid>
-                </Grid>
+                <SteamEngine
+                  elementsTotal={elementsTotal}
+                  setElementsTotal={setElementsTotal}
+                  setGroupsCount={setGroupsCount}
+                  groupsCount={groupsCount}
+                  errorAcceptable={errorAcceptable}
+                  setErrorAcceptable={setErrorAcceptable}
+                  speed={speed}
+                  setSpeed={setSpeed}
+                />
               )}
 
               {game.code === GameIdentifiers.silhouettes && (
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
-                    <FormControl fullWidth size="small">
-                      <InputLabel>Кол-во фигур для угадывания</InputLabel>
-                      <Select
-                        value={elementsTotal}
-                        label="Кол-во фигур для угадывания"
-                        onChange={({ target: { value } }) => setElementsTotal(value)}
-                      >
-                        {sizeOptions.slice(0, 4)}
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                </Grid>
+                <SilhouettesSettings
+                  setElementsTotal={setElementsTotal}
+                  elementsTotal={elementsTotal}
+                  sizeOptions={sizeOptions.slice(0, 4)}
+                />
               )}
 
               {game.code === GameIdentifiers.memoryRhythm && (
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Кол-во миганий"
-                      value={blinksCount}
-                      onChange={({ currentTarget: { value } }) => setBlinksCount(value)}
-                      fullWidth
-                      inputProps={{ type: 'number' }}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </Grid>
-                  <Grid item xs={6} sm={6}>
-                    <FormGroup>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            title="Музыка вкл/откл"
-                            checked={sound}
-                            onChange={() => setSound(!sound)}
-                          />
-                        }
-                        label="Музыка вкл/откл"
-                      />
-                    </FormGroup>
-                  </Grid>
-                </Grid>
+                <MemoryRhythmSettings
+                  blinksCount={blinksCount}
+                  setBlinksCount={setBlinksCount}
+                  sound={sound}
+                  setSound={setSound}
+                />
               )}
               {game.code === GameIdentifiers.fireflies && (
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Кол-во светлячков"
-                      value={elementsTotal}
-                      onChange={({ currentTarget: { value } }) => setElementsTotal(value)}
-                      fullWidth
-                      inputProps={{ type: 'number' }}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </Grid>
-                </Grid>
+                <FirefliesSettings
+                  elementsTotal={elementsTotal}
+                  setElementsTotal={setElementsTotal}
+                />
               )}
               {game.code === GameIdentifiers.argus && (
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Кол-во правильных ответов"
-                      value={elementsTotal}
-                      onChange={({ currentTarget: { value } }) => setElementsTotal(value)}
-                      fullWidth
-                      inputProps={{ type: 'number' }}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Кол-во возможных ошибок"
-                      value={errorAcceptable}
-                      onChange={({ currentTarget: { value } }) => setErrorAcceptable(value)}
-                      fullWidth
-                      inputProps={{ type: 'number' }}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label={`Время на запоминание ${speed} в мс.`}
-                      value={speed}
-                      onChange={({ currentTarget: { value } }) => setSpeed(value)}
-                      fullWidth
-                      inputProps={{ type: 'number' }}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </Grid>
-                </Grid>
+                <ArgusSettings
+                  speed={speed}
+                  setSpeed={setSpeed}
+                  elementsTotal={elementsTotal}
+                  setElementsTotal={setElementsTotal}
+                  setErrorAcceptable={setErrorAcceptable}
+                  errorAcceptable={errorAcceptable}
+                />
               )}
             </div>
-
             <div className={styles.descriptionBlock}>
               <span className={styles.descriptionBlock_header}>{game.name}</span>
               <Grid item xs={12} sm={6}>
