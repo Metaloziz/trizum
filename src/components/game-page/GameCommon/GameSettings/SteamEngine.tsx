@@ -1,5 +1,5 @@
-import { Grid, TextField } from '@mui/material';
-import React, { FC } from 'react';
+import { FormControl, Grid, InputLabel, Select, TextField } from '@mui/material';
+import React, { FC, ReactNode } from 'react';
 
 type SteamEnginePropsT = {
   elementsTotal: string;
@@ -10,6 +10,7 @@ type SteamEnginePropsT = {
   setSpeed: (value: string) => void;
   groupsCount: string;
   setGroupsCount: (value: string) => void;
+  sizeOptions: ReactNode;
 };
 
 export const SteamEngine: FC<SteamEnginePropsT> = props => {
@@ -22,6 +23,7 @@ export const SteamEngine: FC<SteamEnginePropsT> = props => {
     speed,
     setErrorAcceptable,
     errorAcceptable,
+    sizeOptions,
   } = props;
   return (
     <Grid container spacing={2}>
@@ -37,15 +39,16 @@ export const SteamEngine: FC<SteamEnginePropsT> = props => {
         />
       </Grid>
       <Grid item xs={12} sm={6}>
-        <TextField
-          label="Кол-во снятых единиц за промах"
-          value={errorAcceptable}
-          onChange={({ currentTarget: { value } }) => setErrorAcceptable(value)}
-          fullWidth
-          inputProps={{ type: 'number' }}
-          variant="outlined"
-          size="small"
-        />
+        <FormControl fullWidth size="small">
+          <InputLabel>Кол-во снятых единиц за промах</InputLabel>
+          <Select
+            value={errorAcceptable}
+            label="Кол-во снятых единиц за промах"
+            onChange={({ target: { value } }) => setErrorAcceptable(value)}
+          >
+            {sizeOptions}
+          </Select>
+        </FormControl>
       </Grid>
       <Grid item xs={12} sm={6}>
         <TextField

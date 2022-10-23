@@ -11,6 +11,7 @@ type ShiftVerticalSettingsPropsT = {
   blinksCount: string;
   setBlinksCount: (value: string) => void;
   sizeOptions: ReactNode;
+  colorsOptions: ReactNode;
 };
 
 export const ShiftVerticalSettings: FC<ShiftVerticalSettingsPropsT> = props => {
@@ -24,32 +25,35 @@ export const ShiftVerticalSettings: FC<ShiftVerticalSettingsPropsT> = props => {
     setElementsTotal,
     elementsTotal,
     sizeOptions,
+    colorsOptions,
   } = props;
 
   return (
     <>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
-          <TextField
-            label={`Задержка ${cycleTime} сек.`}
-            value={cycleTime}
-            onChange={({ currentTarget: { value } }) => setCycleTime(value)}
-            fullWidth
-            inputProps={{ type: 'number' }}
-            variant="outlined"
-            size="small"
-          />
+          <FormControl fullWidth size="small">
+            <InputLabel>Задержка, {cycleTime} сек</InputLabel>
+            <Select
+              value={cycleTime}
+              label="Задержка, сек"
+              onChange={({ target: { value } }) => setCycleTime(value)}
+            >
+              {sizeOptions}
+            </Select>
+          </FormControl>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <TextField
-            label="Количество уровней в игре"
-            value={elementsTotal}
-            onChange={({ currentTarget: { value } }) => setElementsTotal(value)}
-            fullWidth
-            inputProps={{ type: 'number' }}
-            variant="outlined"
-            size="small"
-          />
+          <FormControl fullWidth size="small">
+            <InputLabel>Количество уровней в игре, {elementsTotal} </InputLabel>
+            <Select
+              value={cycleTime}
+              label="Количество уровней в игре"
+              onChange={({ target: { value } }) => setElementsTotal(value)}
+            >
+              {sizeOptions}
+            </Select>
+          </FormControl>
         </Grid>
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth size="small">
@@ -59,7 +63,7 @@ export const ShiftVerticalSettings: FC<ShiftVerticalSettingsPropsT> = props => {
               label="Кол-во цветов"
               onChange={({ target: { value } }) => setGroupsCount(value)}
             >
-              {sizeOptions}
+              {colorsOptions}
             </Select>
           </FormControl>
         </Grid>
@@ -71,7 +75,7 @@ export const ShiftVerticalSettings: FC<ShiftVerticalSettingsPropsT> = props => {
               label="Формы"
               onChange={({ target: { value } }) => setBlinksCount(value)}
             >
-              {sizeOptions}
+              {colorsOptions}
             </Select>
           </FormControl>
         </Grid>

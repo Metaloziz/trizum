@@ -1,5 +1,5 @@
-import { Grid, TextField } from '@mui/material';
-import React, { FC } from 'react';
+import { FormControl, Grid, InputLabel, Select, TextField } from '@mui/material';
+import React, { FC, ReactNode } from 'react';
 
 type ArgusSettingsPropsT = {
   setElementsTotal: (value: string) => void;
@@ -8,10 +8,18 @@ type ArgusSettingsPropsT = {
   setErrorAcceptable: (value: string) => void;
   setSpeed: (value: string) => void;
   speed: string;
+  delayOptions: ReactNode;
 };
 export const ArgusSettings: FC<ArgusSettingsPropsT> = props => {
-  const { errorAcceptable, setErrorAcceptable, speed, setSpeed, setElementsTotal, elementsTotal } =
-    props;
+  const {
+    errorAcceptable,
+    setErrorAcceptable,
+    speed,
+    setSpeed,
+    setElementsTotal,
+    elementsTotal,
+    delayOptions,
+  } = props;
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} sm={6}>
@@ -37,15 +45,16 @@ export const ArgusSettings: FC<ArgusSettingsPropsT> = props => {
         />
       </Grid>
       <Grid item xs={12} sm={6}>
-        <TextField
-          label={`Время на запоминание ${speed} в мс.`}
-          value={speed}
-          onChange={({ currentTarget: { value } }) => setSpeed(value)}
-          fullWidth
-          inputProps={{ type: 'number' }}
-          variant="outlined"
-          size="small"
-        />
+        <FormControl fullWidth size="small">
+          <InputLabel>Время на запоминание в мс.</InputLabel>
+          <Select
+            value={speed}
+            label="Время на запоминание в мс."
+            onChange={({ target: { value } }) => setSpeed(value)}
+          >
+            {delayOptions}
+          </Select>
+        </FormControl>
       </Grid>
     </Grid>
   );

@@ -286,7 +286,8 @@ export const GameModal: FC<PropsT> = observer(props => {
                   elementsTotal={elementsTotal}
                   groupsCount={groupsCount}
                   blinksCount={blinksCount}
-                  sizeOptions={sizeOptions.slice(0, 2)}
+                  colorsOptions={sizeOptions.slice(0, 2)}
+                  sizeOptions={sizeOptions}
                   cycleTime={cycleTime}
                   setCycleTime={setCycleTime}
                 />
@@ -337,6 +338,7 @@ export const GameModal: FC<PropsT> = observer(props => {
                   setErrorAcceptable={setErrorAcceptable}
                   speed={speed}
                   setSpeed={setSpeed}
+                  sizeOptions={sizeOptions.slice(0, 8)}
                 />
               )}
 
@@ -370,6 +372,9 @@ export const GameModal: FC<PropsT> = observer(props => {
                   setElementsTotal={setElementsTotal}
                   setErrorAcceptable={setErrorAcceptable}
                   errorAcceptable={errorAcceptable}
+                  delayOptions={fieldSizeOptions().map(el =>
+                    getOptionMui(el.value + '000', el.label + '000'),
+                  )}
                 />
               )}
             </div>
