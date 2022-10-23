@@ -1,9 +1,6 @@
 import {
-  Checkbox,
   DialogContent,
   FormControl,
-  FormControlLabel,
-  FormGroup,
   Grid,
   InputLabel,
   Select,
@@ -96,6 +93,7 @@ export const GameModal: FC<PropsT> = observer(props => {
   const levelOptions = Object.values(GroupLevels).map((el, index) =>
     getOptionMui(levelKeys[index], el),
   );
+
   const statusTypesKeys = Object.keys(StatusEnum);
   const statusTypesOptions = Object.values(StatusEnum).map((el, index) =>
     getOptionMui(statusTypesKeys[index], el),

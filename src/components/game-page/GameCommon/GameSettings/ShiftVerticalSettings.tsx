@@ -69,7 +69,7 @@ export const ShiftVerticalSettings: FC<ShiftVerticalSettingsPropsT> = props => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth size="small">
-            <InputLabel>Формы</InputLabel>
+            <InputLabel>Кол-во форм</InputLabel>
             <Select
               value={blinksCount}
               label="Формы"
