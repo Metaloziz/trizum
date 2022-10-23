@@ -1,7 +1,7 @@
 import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
 import Button from 'components/button/Button';
 import styles from 'components/game-page/GameCommon/GameModal/gameModal.module.scss';
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 
 type PropsT = {
   onClose: () => void;
@@ -70,6 +70,38 @@ export const GameColorPicker: FC<PropsT> = props => {
               label={colors[5].label}
             />
             <div style={{ backgroundColor: `${colors[5].hex}` }} className={styles.colorTemplate} />
+          </div>
+
+          <div className={styles.colorsFormControl_colorSettings}>
+            <FormControlLabel
+              control={<Checkbox onClick={() => changeColor(6)} checked={colors[6].value} />}
+              label={colors[6].label}
+            />
+            <div style={{ backgroundColor: `${colors[6].hex}` }} className={styles.colorTemplate} />
+          </div>
+
+          <div className={styles.colorsFormControl_colorSettings}>
+            <FormControlLabel
+              control={<Checkbox onClick={() => changeColor(7)} checked={colors[7].value} />}
+              label={colors[7].label}
+            />
+            <div style={{ backgroundColor: `${colors[7].hex}` }} className={styles.colorTemplate} />
+          </div>
+
+          <div className={styles.colorsFormControl_colorSettings}>
+            <FormControlLabel
+              control={<Checkbox onClick={() => changeColor(8)} checked={colors[8].value} />}
+              label={colors[8].label}
+            />
+            <div style={{ backgroundColor: `${colors[8].hex}` }} className={styles.colorTemplate} />
+          </div>
+
+          <div className={styles.colorsFormControl_colorSettings}>
+            <FormControlLabel
+              control={<Checkbox onClick={() => changeColor(9)} checked={colors[9].value} />}
+              label={colors[9].label}
+            />
+            <div style={{ backgroundColor: `${colors[9].hex}` }} className={styles.colorTemplate} />
           </div>
         </FormGroup>
         {/* Dodelat` knopky */}
