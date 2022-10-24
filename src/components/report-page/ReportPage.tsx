@@ -1,13 +1,13 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
-import styles from './ReportPage.module.scss';
-import AdminInfoList from 'components/admin-info-list/AdminInfoList';
-import Table from 'components/table/Table';
-import ReportFilters from 'components/report-page/ReportFilters';
-import { observer } from 'mobx-react-lite';
-import { Loader } from '../loader/Loader';
 import Pagination from '@mui/material/Pagination';
-import { shortenName, transformDate } from 'utils/transformData';
+import ReportFilters from 'components/report-page/ReportFilters';
+import Table from 'components/table/Table';
+import { observer } from 'mobx-react-lite';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import { transformDate } from 'utils/transformData';
 import reportStore from '../../app/stores/reportStore';
+import { shortenName } from '../../utils/shortenName';
+import { Loader } from '../loader/Loader';
+import styles from './ReportPage.module.scss';
 
 const columnNames = [
   'ФИО ученика',

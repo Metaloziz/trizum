@@ -4,10 +4,15 @@ import { TableRow, TableCell, Stack, IconButton } from '@mui/material';
 import { FC } from 'react';
 import { StatusTypes } from '../../../app/enums/StatusTypes';
 import { ShortCourseType } from '../../../app/types/CourseTypes';
+import { getNameFromEnum } from '../../../utils/getNameFromEnum';
 import { transformDate } from '../../../utils/transformData';
 import { translateStatus } from '../helpers';
 
-type Props = { course: ShortCourseType; openDialogCallBack: any; removeCallBack: any };
+type Props = {
+  course: ShortCourseType;
+  openDialogCallBack: () => void;
+  removeCallBack: () => void;
+};
 
 export const CourseItem: FC<Props> = ({ course, openDialogCallBack, removeCallBack }) => {
   const isDisableDelete = course.status === StatusTypes.archive;
@@ -26,8 +31,8 @@ export const CourseItem: FC<Props> = ({ course, openDialogCallBack, removeCallBa
       <TableCell>{course.title}</TableCell>
       <TableCell align="center">{translateStatus(course.level)}</TableCell>
       <TableCell align="center">{course.worksCount}</TableCell>
-      <TableCell align="center">{transformDate(course.createdAt?.date || '')}</TableCell>
-      <TableCell align="center">{course.status}</TableCell>
+      <TableCell align="center">{transformDate(course.createdAt?.date)}</TableCell>
+      <TableCell align="center">{getNameFromEnum(course.status)}</TableCell>
       <TableCell>
         <Stack direction="row" justifyContent="flex-end">
           <IconButton
