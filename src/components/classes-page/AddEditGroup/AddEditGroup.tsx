@@ -13,6 +13,7 @@ import { getOptionMui } from 'utils/getOption';
 import { GroupStatus } from '../../../app/enums/GroupStatus';
 import { GroupStatusTypes } from '../../../app/types/GroupStatusTypes';
 import { getMUIOptionsFromEnum } from '../../../utils/getMUIOptionsFromEnum';
+import { getNameFromEnum } from '../../../utils/getNameFromEnum';
 
 const AddEditGroup: FC = observer(() => {
   const {
@@ -69,7 +70,7 @@ const AddEditGroup: FC = observer(() => {
   useEffect(() => {
     const cOptions = filteredCourses.length
       ? filteredCourses.map(t =>
-          getOptionMui(t.id || '', `${t.title} - ${t.status} - ${t.worksCount}`),
+          getOptionMui(t.id || '', `${t.title} - ${getNameFromEnum(t.status)} - ${t.worksCount}`),
         )
       : [];
     setCourseOptions(cOptions);
@@ -115,7 +116,7 @@ const AddEditGroup: FC = observer(() => {
               labelId="teacher"
               label="Учитель"
               fullWidth
-              onChange={(event, child) => (modalFields.teacherId = event.target.value)}
+              onChange={event => (modalFields.teacherId = event.target.value)}
               value={modalFields.teacherId}
             >
               {teacherOptions}
@@ -131,7 +132,7 @@ const AddEditGroup: FC = observer(() => {
               placeholder="Уровень"
               fullWidth
               // @ts-ignore
-              onChange={(event, child) => (modalFields.level = event.target.value)}
+              onChange={event => (modalFields.level = event.target.value)}
               value={modalFields.level}
             >
               {getMUIOptionsFromEnum(GroupLevels)}
@@ -147,7 +148,7 @@ const AddEditGroup: FC = observer(() => {
                 labelId="franchise"
                 label="Франшиза"
                 fullWidth
-                onChange={(event, child) => (modalFields.franchiseId = event.target.value)}
+                onChange={event => (modalFields.franchiseId = event.target.value)}
                 value={modalFields.franchiseId}
               >
                 {franchiseOptions}
@@ -183,9 +184,7 @@ const AddEditGroup: FC = observer(() => {
               labelId="status"
               label="Статус"
               fullWidth
-              onChange={(event, child) =>
-                (modalFields.status = event.target.value as GroupStatusTypes)
-              }
+              onChange={event => (modalFields.status = event.target.value as GroupStatusTypes)}
               value={modalFields.status}
             >
               {getMUIOptionsFromEnum(GroupStatus)}

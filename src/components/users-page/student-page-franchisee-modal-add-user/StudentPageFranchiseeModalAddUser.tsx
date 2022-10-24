@@ -447,6 +447,8 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
                                 label="Дата рождения"
                                 error={!!errors.birthdate?.message}
                                 helperText={errors.birthdate?.message}
+                                onKeyDown={event => event.preventDefault()} // убирает
+                                // ввод с клавиатуры
                               />
                             )}
                           />

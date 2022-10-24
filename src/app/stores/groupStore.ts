@@ -17,7 +17,6 @@ import {
   Schedule,
 } from 'app/types/GroupTypes';
 import { ResponseUserT } from 'app/types/UserTypes';
-import { GroupsViewModel } from 'app/viewModels/GroupsViewModel';
 import { AxiosError } from 'axios';
 import { makeAutoObservable, runInAction } from 'mobx';
 import moment from 'moment';
@@ -26,7 +25,6 @@ import {
   scheduleItemToServerMapper,
   scheduleItemToUIMapper,
 } from 'utils/scheduleItemToServerMapper';
-import * as yup from 'yup';
 import { getNextMonth } from '../../utils/getNextMonth';
 import { removeEmptyFields } from '../../utils/removeEmptyFields';
 import { GroupStatusValue } from '../enums/GroupStatus';
@@ -328,19 +326,6 @@ class GroupStore {
     return this.courses && this.courses.length
       ? this.courses.filter(el => el.level.includes(this.modalFields.level))
       : [];
-  }
-
-  get validateSchema() {
-    return yup.object<Record<keyof GroupsViewModel, any>>().shape({
-      name: yup.string().required('*'),
-      franchiseId: yup.string().required('*'),
-      dateSince: yup.string().required('*'),
-      dateUntil: yup.string().required('*'),
-      type: yup.string().required('*'),
-      teacherId: yup.string().required('*'),
-      level: yup.string().required('*'),
-      courseId: yup.string().required('*'),
-    });
   }
 }
 
