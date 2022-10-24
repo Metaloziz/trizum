@@ -7,9 +7,10 @@ import appStore, { Roles } from 'app/stores/appStore';
 import franchiseeStore from 'app/stores/franchiseeStore';
 import groupStore from 'app/stores/groupStore';
 import tariffsStore from 'app/stores/tariffsStore';
+import usersStore from 'app/stores/usersStore';
 import { RequestRegister } from 'app/types/AuthTypes';
-import { ResponseOneUser } from 'app/types/UserTypes';
 import SetStatusButton from 'components/button-open-close/SetStatusButton';
+import SetPaidStatusButton from 'components/button-paid-unpaid/SetPaidStatusButton';
 import Button from 'components/button/Button';
 import CustomSelect from 'components/select-mui/CustomSelect';
 import TextFieldCustom from 'components/text-field-mui/TextFieldCustom';
@@ -34,11 +35,8 @@ import { filterRoleOptions } from 'utils/filterRoleOptions';
 import { removeEmptyFields } from 'utils/removeEmptyFields';
 import * as yup from 'yup';
 import TextFieldPhoneCustom from '../../text-field-phone-mui/TextFieldPhoneCustom';
-import usersStore from 'app/stores/usersStore';
 
 import styles from './StudentPageFranchiseeModalAddUser.module.scss';
-import { toJS } from 'mobx';
-import SetPaidStatusButton from 'components/button-paid-unpaid/SetPaidStatusButton';
 
 type Props = {
   onCloseModal: () => void;
@@ -51,7 +49,7 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
     const { franchise } = franchiseeStore;
     const { groups, loadCurrentGroups } = groupStore;
     const { tariffs } = tariffsStore;
-    const { role, user } = appStore;
+    const { role } = appStore;
 
     const franchiseOptions = convertFranchiseeOptions(franchise);
     const sexOptions = convertSexOptions();
@@ -61,12 +59,15 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
     const [studentId, setStudentId] = useState('');
     const [selectedRole, setSelectedRole] = useState<Roles>();
     const [currentFranchiseId, setCurrentFranchiseId] = useState<string>('');
+
     useEffect(() => {
       if (currentUser?.roleCode) {
         setSelectedRole(currentUser.roleCode as Roles);
       }
     }, []);
+
     const findSex = () => (currentUser?.sex ? sexOptions[0].value : sexOptions[1].value);
+
     const defaultValues = {
       firstName: currentUser?.firstName || '',
       middleName: currentUser?.middleName || '',
@@ -170,7 +171,6 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
       reset,
       formState: { errors, isSubmitSuccessful },
     } = useForm<typeof defaultValues>({
-      mode: 'onChange',
       resolver: yupResolver(schema),
       defaultValues,
     });

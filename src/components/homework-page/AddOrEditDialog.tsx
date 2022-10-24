@@ -33,7 +33,7 @@ import { PresetElement } from './PresetElement/PresetElement';
 
 export const AddOrEditDialog = observer(() => {
   const store = homeworkStore;
-  const { newPresets } = gamesStore;
+  const { actualPresets, newPresets, getGame, getPreset, gamePreset } = gamesStore;
 
   const [chooseGame, setChooseGame] = useState<boolean>(false);
 
@@ -77,6 +77,10 @@ export const AddOrEditDialog = observer(() => {
         getPresetGame={getPresetGame}
         open={chooseGame}
         onClose={() => setChooseGame(false)}
+        actualPresets={actualPresets}
+        getGame={getGame}
+        gamePreset={gamePreset}
+        getPreset={getPreset}
       />
       <DialogTitle onClose={store.closeDialog}>
         {store.oneWork?.work?.id
