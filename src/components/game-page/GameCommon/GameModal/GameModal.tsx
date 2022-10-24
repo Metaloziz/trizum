@@ -74,6 +74,7 @@ export const GameModal: FC<PropsT> = observer(props => {
   const [colorsMap, setColorsMap] = useState<string[]>(settings?.colorsMap || ['black']);
   const [wordsCount, setWordsCount] = useState<string>(settings?.wordsCount?.toString() || '1');
   const [digitMax, setDigitMax] = useState<string>(settings?.digitMax?.toString() || '1');
+  const [digitMin, setDigitMin] = useState<string>(settings?.digitMin?.toString() || '1');
   const [errorAcceptable, setErrorAcceptable] = useState<string>(
     settings?.errorAcceptable?.toString() || '1',
   );
@@ -122,7 +123,7 @@ export const GameModal: FC<PropsT> = observer(props => {
   const rerenderPreset = () => {
     setTemplate(gamePresetName);
     setStatus(gamePreset.gamePreset.status || 'draft');
-    setTimeComplete(settings?.timeComplete?.toString() || '');
+    setTimeComplete(settings?.timeComplete?.toString() || '60');
     setElementsTotal(settings?.elementsTotal?.toString() || '');
     setDelay(settings?.delay?.toString() || '');
     setLevel(gamePreset?.gamePreset?.level);
@@ -131,6 +132,7 @@ export const GameModal: FC<PropsT> = observer(props => {
     setCycleTime(settings?.cycleTime?.toString() || '');
     setWordsCount(settings?.wordsCount?.toString() || '');
     setDigitMax(settings?.digitMax?.toString() || '');
+    setDigitMin(settings?.digitMin?.toString() || '');
     setErrorAcceptable(settings?.errorAcceptable?.toString() || '');
     setSpeed(settings?.speed?.toString() || '');
     setBlinksCount(settings?.blinksCount?.toString() || '');
@@ -149,6 +151,7 @@ export const GameModal: FC<PropsT> = observer(props => {
           timeComplete: Number(timeComplete),
           elementsTotal: Number(elementsTotal),
           wordsCount: Number(wordsCount),
+          digitMin: Number(digitMin),
           digitMax: Number(digitMax),
           errorAcceptable: Number(errorAcceptable),
           speed: Number(speed),
@@ -204,12 +207,6 @@ export const GameModal: FC<PropsT> = observer(props => {
     rerenderPreset();
   }, [gamePreset, onClose]);
 
-  const isTimeComplete =
-    game.code !== GameIdentifiers.shulte &&
-    game.code !== GameIdentifiers.game2048 &&
-    game.code !== GameIdentifiers.mental &&
-    game.code !== GameIdentifiers.memoryRhythm;
-
   return (
     <Dialog maxWidth="xl" fullWidth onClose={closeModal} open={open}>
       {colorModal && (
@@ -262,19 +259,17 @@ export const GameModal: FC<PropsT> = observer(props => {
                     </Select>
                   </FormControl>
                 </Grid>
-                {isTimeComplete && (
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label={`Время выполнения ${timeComplete} сек.`}
-                      value={timeComplete}
-                      onChange={({ currentTarget: { value } }) => setTimeComplete(value)}
-                      fullWidth
-                      inputProps={{ type: 'number' }}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </Grid>
-                )}
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label={`Время выполнения ${timeComplete} сек.`}
+                    value={timeComplete}
+                    onChange={({ currentTarget: { value } }) => setTimeComplete(value)}
+                    fullWidth
+                    inputProps={{ type: 'number' }}
+                    variant="outlined"
+                    size="small"
+                  />
+                </Grid>
               </Grid>
               {game.code === GameIdentifiers.shiftVertical && (
                 <ShiftVerticalSettings
@@ -295,6 +290,10 @@ export const GameModal: FC<PropsT> = observer(props => {
                   sizeOptions={sizeOptions}
                   groupsCount={groupsCount}
                   elementsTotal={elementsTotal}
+                  digitMax={digitMax}
+                  digitMin={digitMax}
+                  setDigitMax={setDigitMax}
+                  setDigitMin={setDigitMin}
                   colorsMap={colorsMap}
                   setColorModal={setColorModal}
                   setElementsTotal={setElementsTotal}
@@ -304,10 +303,14 @@ export const GameModal: FC<PropsT> = observer(props => {
               {game.code === GameIdentifiers.game2048 && (
                 <Game2048Settings
                   sizeOptions={sizeOptions}
+                  digitMax={digitMax}
+                  setDigitMax={setDigitMax}
                   groupsCount={groupsCount}
                   elementsTotal={elementsTotal}
                   setElementsTotal={setElementsTotal}
                   setGroupsCount={setGroupsCount}
+                  templateCode={gamePreset.gamePreset.id}
+                  gameCode={game.code}
                 />
               )}
               {game.code === GameIdentifiers.battleColors && (
@@ -344,6 +347,8 @@ export const GameModal: FC<PropsT> = observer(props => {
                 <SilhouettesSettings
                   setElementsTotal={setElementsTotal}
                   elementsTotal={elementsTotal}
+                  digitMax={digitMax}
+                  setDigitMax={setDigitMax}
                   sizeOptions={sizeOptions.slice(0, 4)}
                 />
               )}
@@ -352,6 +357,10 @@ export const GameModal: FC<PropsT> = observer(props => {
                 <MemoryRhythmSettings
                   blinksCount={blinksCount}
                   setBlinksCount={setBlinksCount}
+                  levelMaxCompleted={levelMaxCompleted}
+                  setLevelMaxCompleted={setLevelMaxCompleted}
+                  digitMax={digitMax}
+                  setDigitMax={setDigitMax}
                   sound={sound}
                   setSound={setSound}
                 />
@@ -360,6 +369,12 @@ export const GameModal: FC<PropsT> = observer(props => {
                 <FirefliesSettings
                   elementsTotal={elementsTotal}
                   setElementsTotal={setElementsTotal}
+                  digitMax={digitMax}
+                  setDigitMax={setDigitMax}
+                  levelMaxCompleted={levelMaxCompleted}
+                  setLevelMaxCompleted={setLevelMaxCompleted}
+                  speed={speed}
+                  setSpeed={setSpeed}
                 />
               )}
               {game.code === GameIdentifiers.argus && (
@@ -370,6 +385,8 @@ export const GameModal: FC<PropsT> = observer(props => {
                   setElementsTotal={setElementsTotal}
                   setErrorAcceptable={setErrorAcceptable}
                   errorAcceptable={errorAcceptable}
+                  digitMax={digitMax}
+                  setDigitMax={setDigitMax}
                   delayOptions={fieldSizeOptions().map(el =>
                     getOptionMui(el.value + '000', el.label + '000'),
                   )}

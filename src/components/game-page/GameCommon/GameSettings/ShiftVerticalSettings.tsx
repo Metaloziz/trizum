@@ -45,7 +45,7 @@ export const ShiftVerticalSettings: FC<ShiftVerticalSettingsPropsT> = props => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth size="small">
-            <InputLabel>Количество уровней в игре, {elementsTotal} </InputLabel>
+            <InputLabel>Количество уровней в игре {elementsTotal} </InputLabel>
             <Select
               value={cycleTime}
               label="Количество уровней в игре"

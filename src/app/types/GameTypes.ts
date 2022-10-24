@@ -16,6 +16,7 @@ export type PresetsGameSettings = {
   cycleTime: number;
   wordsCount: number;
   digitMax: number;
+  digitMin: number;
   templateCode: number;
   groupsCount: number;
   blinksCount: number;
@@ -38,6 +39,7 @@ export type EditOrCreatePresetParamsT = {
     cycleTime: number;
     wordsCount: number;
     digitMax: number;
+    digitMin: number;
     templateCode: number;
     groupsCount: number;
     blinksCount: number;

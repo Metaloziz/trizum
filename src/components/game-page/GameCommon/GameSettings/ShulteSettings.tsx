@@ -10,6 +10,10 @@ type ShulteSettingsPropsT = {
   sizeOptions: ReactNode;
   setColorModal: (value: boolean) => void;
   colorsMap: string[];
+  digitMin: string;
+  setDigitMin: (value: string) => void;
+  digitMax: string;
+  setDigitMax: (value: string) => void;
 };
 
 export const ShulteSettings: FC<ShulteSettingsPropsT> = props => {
@@ -18,6 +22,10 @@ export const ShulteSettings: FC<ShulteSettingsPropsT> = props => {
     setGroupsCount,
     elementsTotal,
     setElementsTotal,
+    digitMin,
+    setDigitMin,
+    digitMax,
+    setDigitMax,
     sizeOptions,
     setColorModal,
     colorsMap,
@@ -25,6 +33,28 @@ export const ShulteSettings: FC<ShulteSettingsPropsT> = props => {
   return (
     <>
       <Grid container spacing={2}>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            label="Минимальное число на поле"
+            value={digitMin}
+            onChange={({ currentTarget: { value } }) => setDigitMin(value)}
+            fullWidth
+            inputProps={{ type: 'number' }}
+            variant="outlined"
+            size="small"
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            label="Максимальное число на поле"
+            value={digitMax}
+            onChange={({ currentTarget: { value } }) => setDigitMax(value)}
+            fullWidth
+            inputProps={{ type: 'number' }}
+            variant="outlined"
+            size="small"
+          />
+        </Grid>
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth size="small">
             <InputLabel>Кол-во цветов</InputLabel>

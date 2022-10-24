@@ -7,9 +7,23 @@ type Game2048SettingsPropsT = {
   sizeOptions: ReactNode;
   elementsTotal: string;
   setElementsTotal: (value: string) => void;
+  digitMax: string;
+  setDigitMax: (value: string) => void;
+  templateCode: string;
+  gameCode: string;
 };
 export const Game2048Settings: FC<Game2048SettingsPropsT> = props => {
-  const { sizeOptions, groupsCount, setGroupsCount, setElementsTotal, elementsTotal } = props;
+  const {
+    sizeOptions,
+    groupsCount,
+    setGroupsCount,
+    setElementsTotal,
+    elementsTotal,
+    digitMax,
+    setDigitMax,
+    gameCode,
+    templateCode,
+  } = props;
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} sm={6}>
@@ -29,6 +43,17 @@ export const Game2048Settings: FC<Game2048SettingsPropsT> = props => {
           label="Кол-во начальных блоков"
           value={elementsTotal}
           onChange={({ currentTarget: { value } }) => setElementsTotal(value)}
+          fullWidth
+          inputProps={{ type: 'number' }}
+          variant="outlined"
+          size="small"
+        />
+      </Grid>
+      <Grid item xs={12} sm={6}>
+        <TextField
+          label="Максимальное чисто для сложения"
+          value={digitMax}
+          onChange={({ currentTarget: { value } }) => setDigitMax(value)}
           fullWidth
           inputProps={{ type: 'number' }}
           variant="outlined"

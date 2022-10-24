@@ -57,6 +57,7 @@ class GamesStore {
           delay: 1,
           description: '',
           sound: 0,
+          digitMin: 1,
         },
       ] as PresetsGameSettings[],
     },

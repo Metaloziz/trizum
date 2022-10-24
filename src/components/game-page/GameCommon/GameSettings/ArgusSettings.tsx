@@ -9,6 +9,8 @@ type ArgusSettingsPropsT = {
   setSpeed: (value: string) => void;
   speed: string;
   delayOptions: ReactNode;
+  digitMax: string;
+  setDigitMax: (value: string) => void;
 };
 export const ArgusSettings: FC<ArgusSettingsPropsT> = props => {
   const {
@@ -19,6 +21,8 @@ export const ArgusSettings: FC<ArgusSettingsPropsT> = props => {
     setElementsTotal,
     elementsTotal,
     delayOptions,
+    digitMax,
+    setDigitMax,
   } = props;
   return (
     <Grid container spacing={2}>
@@ -38,6 +42,17 @@ export const ArgusSettings: FC<ArgusSettingsPropsT> = props => {
           label="Кол-во возможных ошибок"
           value={errorAcceptable}
           onChange={({ currentTarget: { value } }) => setErrorAcceptable(value)}
+          fullWidth
+          inputProps={{ type: 'number' }}
+          variant="outlined"
+          size="small"
+        />
+      </Grid>
+      <Grid item xs={12} sm={6}>
+        <TextField
+          label="Кол-во заданий"
+          value={digitMax}
+          onChange={({ currentTarget: { value } }) => setDigitMax(value)}
           fullWidth
           inputProps={{ type: 'number' }}
           variant="outlined"
