@@ -19,9 +19,13 @@ const Homeworks: FC<HomeworksProps> = ({ homeworks, className }) => {
           <Panel className={styles.panel}>Наименование олимпиады</Panel>
         )}
         {role === Roles.Tutor && <Panel className={styles.panel}>Наименование олимпиады</Panel>}
-        {homeworks.map(homework => (
+        {/* {homeworks.map(homework => (
           <Homework className={styles.homework} key={Math.random()} {...homework} />
-        ))}
+        ))} */}
+        <div>
+          <div className={styles.title}>{currentWork.title}</div>
+          <div className={styles.text}>{currentWork.text}</div>
+        </div>
       </div>
     );
   }

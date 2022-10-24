@@ -16,6 +16,7 @@ import iconTablet from '../../../assets/svgs/icon-tablet.svg';
 import iconParrot from '../../../assets/svgs/parrot.svg';
 
 import styles from './CardStudentForUser.module.scss';
+import {getClosestLessonDate} from "utils/getClosestLessonDate";
 
 type Props = {
   isMainPage?: boolean;
@@ -25,13 +26,13 @@ const CardStudentForStudent: FC<Props> = observer(({ isMainPage = true }) => {
   const { user } = appStore;
   const { firstName, middleName, lastName, role, avatar, city, groups } = user;
   const { getFullUserName } = usersStore;
-  // const {
-  //   firstName: teacherFirstName,
-  //   middleName: teacherMiddleName,
-  //   lastName: teacherLastName,
-  // } = user.groups[0].group.teacher;
-  // const lessonDate = getClosestLessonDate(user.groups[0].group.schedule, now);
-  // const lessonTime = lessonDate ? `${lessonDate.date} в ${lessonDate.from}` : 'нет занятий';
+  const {
+    firstName: teacherFirstName,
+    middleName: teacherMiddleName,
+    lastName: teacherLastName,
+  } = user.groups[0].group.teacher;
+  const lessonDate = getClosestLessonDate(user.groups[0].group.schedule, new Date().toLocaleDateString());
+  const lessonTime = lessonDate ? `${lessonDate.date} в ${lessonDate.from}` : 'нет занятий';
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const fullName = `${firstName} ${middleName} ${lastName}`;
@@ -74,7 +75,7 @@ const CardStudentForStudent: FC<Props> = observer(({ isMainPage = true }) => {
                 </span>
                 Учитель:
               </li>
-              {/* <li>{`${teacherFirstName} ${teacherMiddleName} ${teacherLastName}`}</li> */}
+               <li>{`${teacherFirstName} ${teacherMiddleName} ${teacherLastName}`}</li>
             </ul>
             <ul className={styles.list}>
               <li>
@@ -83,7 +84,7 @@ const CardStudentForStudent: FC<Props> = observer(({ isMainPage = true }) => {
                 </span>
                 Следующее занятие:
               </li>
-              {/* <li>{lessonTime}</li> */}
+               <li>{lessonTime}</li>
             </ul>
           </div>
         </div>
