@@ -30,7 +30,9 @@ export const StudentParentsFormContainer: FC<Props> = observer(
     const { updateParenting, currentUser, deleteParenting } = usersStore;
 
     const isShowAddParentFormButton =
-      currentUser?.roleCode === Roles.Student && parentState.length < MAX_PARENTS_COUNT;
+      currentUser?.roleCode === Roles.Student &&
+      parentState.length < MAX_PARENTS_COUNT &&
+      !isViewMode;
 
     const deleteParentingHandler = (parentingId: string) => {
       deleteParenting(parentingId);
@@ -79,15 +81,19 @@ export const StudentParentsFormContainer: FC<Props> = observer(
       );
     };
 
-    const title = parentState.length ? (
-      <h2 className={styles.parentTitle}>Родители ученика*</h2>
-    ) : (
+    const titleForIsViewMode = isViewMode ? (
       <h2 className={styles.parentTitle}>Родитель не добавлен</h2>
+    ) : (
+      ''
     );
 
     return (
       <div>
-        {isShowAddParentFormButton && title}
+        {parentState.length ? (
+          <h2 className={styles.parentTitle}>Родители ученика*</h2>
+        ) : (
+          titleForIsViewMode
+        )}
         <div className={style.wrapper}>
           <div className={style.forms}>
             {parentState.map(({ localParentFormId, isMain, parent, isSuccessSubmit }) => (

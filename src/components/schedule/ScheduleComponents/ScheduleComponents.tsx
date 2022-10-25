@@ -1,8 +1,8 @@
-import { FormControl, Grid } from '@mui/material';
+import { FormControl, Grid, TextField } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Button from 'components/button/Button';
 import AddEditGroup from 'components/classes-page/AddEditGroup';
 import styles from 'components/schedule/Schedule.module.scss';
-import CustomDatePicker from 'components/tariff-page/customDatePicker';
 import React, { FC, useState } from 'react';
 import { Navigate, ToolbarProps } from 'react-big-calendar';
 
@@ -29,7 +29,14 @@ export const Toolbar: FC<ToolbarProps> = props => {
         >
           <Grid item xs={12} sm={12} md>
             <FormControl fullWidth>
-              <CustomDatePicker value={datePickerValue} setValue={onNavigateDate} label="Дата" />
+              <DatePicker
+                onChange={e => onNavigateDate(e || undefined)}
+                value={datePickerValue}
+                label="Дата"
+                renderInput={prop => (
+                  <TextField {...prop} onKeyDown={event => event.preventDefault()} />
+                )}
+              />
             </FormControl>
           </Grid>
           <Grid item xs={4} sm={4} md>
