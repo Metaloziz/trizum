@@ -1,8 +1,8 @@
-import { makeAutoObservable, runInAction } from 'mobx';
-
 import authService from 'app/services/authService';
 import usersService from 'app/services/usersService';
 import { RequestRegister } from 'app/types/AuthTypes';
+import { SearchUserType } from 'app/types/SearchUserType';
+import { UpdateParentingPayloadType } from 'app/types/updateParentingPayloadType';
 import { UpdateUserPayloadT } from 'app/types/UpdateUserPayloadT';
 import {
   RequestParenting,
@@ -10,9 +10,8 @@ import {
   ResponseOneUser,
   ResponseUserT,
 } from 'app/types/UserTypes';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { checkErrorMessage, ErrorMessageType } from 'utils/checkErrorMessage';
-import { SearchUserType } from 'app/types/SearchUserType';
-import { UpdateParentingPayloadType } from 'app/types/updateParentingPayloadType';
 
 class UsersStore {
   users: ResponseUserT[] = [];
@@ -160,6 +159,7 @@ class UsersStore {
 
   resetCurrentUser = () => {
     runInAction(() => {
+      // простите меня грешника
       this.currentUser = undefined;
     });
   };

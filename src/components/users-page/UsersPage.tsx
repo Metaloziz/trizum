@@ -26,6 +26,7 @@ const UsersPage = observer(() => {
     perPage,
     getFilteredUsers,
     setSearchUsersParams,
+    resetCurrentUser,
   } = usersStore;
   const { getFranchisee, getOneFranchisee } = franchiseeStore;
   const { getGroups } = groupStore;
@@ -54,6 +55,16 @@ const UsersPage = observer(() => {
     setCurrentPage(page + 1);
   }, [page]);
 
+  const closeEditUserModal = () => {
+    resetCurrentUser();
+    modals.changeSetting();
+  };
+
+  const closeAddUserModal = () => {
+    resetCurrentUser();
+    setIsModalOpen(false);
+  };
+
   return (
     <div className={styles.wrapper}>
       <Filter setIsModalOpen={setIsModalOpen} />
@@ -72,15 +83,21 @@ const UsersPage = observer(() => {
           onChange={onPageChange}
         />
       </div>
+
+      {/* для просмотра родителей */}
       <BasicModal visibility={modals.isParents} changeVisibility={modals.changeParents}>
         <StudentPageFranchiseeModalParents user={currentUser} onCloseModal={modals.changeParents} />
       </BasicModal>
-      <BasicModal visibility={isModalOpen} changeVisibility={setIsModalOpen}>
-        <StudentPageFranchiseeModalAddUser onCloseModal={() => setIsModalOpen(false)} />
+
+      {/* для добавления пользователей */}
+      <BasicModal visibility={isModalOpen} changeVisibility={closeAddUserModal}>
+        <StudentPageFranchiseeModalAddUser onCloseModal={closeAddUserModal} />
       </BasicModal>
-      <BasicModal visibility={modals.isSetting} changeVisibility={() => modals.changeSetting()}>
+
+      {/* для редактирования пользователей */}
+      <BasicModal visibility={modals.isSetting} changeVisibility={closeEditUserModal}>
         <StudentPageFranchiseeModalAddUser
-          onCloseModal={() => modals.changeSetting()}
+          onCloseModal={closeEditUserModal}
           visibility={modals.isSetting}
         />
       </BasicModal>
