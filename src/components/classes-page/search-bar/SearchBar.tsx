@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   Accordion,
@@ -16,32 +15,29 @@ import {
   Typography,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { observer } from 'mobx-react-lite';
+import { GroupLevels } from 'app/enums/GroupLevels';
 import coursesService from 'app/services/coursesService';
 import franchiseService from 'app/services/franchiseService';
 import usersService from 'app/services/usersService';
 import appStore, { Roles } from 'app/stores/appStore';
 import groupStore from 'app/stores/groupStore';
 import Button from 'components/button/Button';
+import { observer } from 'mobx-react-lite';
+import React, { useEffect, useState } from 'react';
 import { getOptionMui } from 'utils/getOption';
-import { GroupTypes } from 'app/enums/GroupTypes';
-import { GroupLevels } from 'app/enums/GroupLevels';
-
-const typeOptionsNames = Object.values(GroupTypes);
-const typeOptions = Object.keys(GroupTypes).map((el, idx) =>
-  getOptionMui(el.toLowerCase(), typeOptionsNames[idx]),
-);
-
-const levelOptionsNames = Object.values(GroupLevels);
-const levelOptions = Object.keys(GroupLevels).map((el, idx) =>
-  getOptionMui(el.toLowerCase(), levelOptionsNames[idx]),
-);
+import { statusTypeOptions } from '../../statusTypeOptions';
 
 const SearchBar = observer(() => {
   const { queryFields, getGroups, clearQueryFields } = groupStore;
+
   const [franchiseOptions, setFranchiseOptions] = useState<JSX.Element[]>([]);
   const [courseOptions, setCourseOptions] = useState<JSX.Element[]>([]);
   const [teacherOptions, setTeacherOptions] = useState<JSX.Element[]>([]);
+
+  const levelOptionsNames = Object.values(GroupLevels);
+  const levelOptions = Object.keys(GroupLevels).map((el, idx) =>
+    getOptionMui(el.toLowerCase(), levelOptionsNames[idx]),
+  );
 
   const getFranchises = async () => {
     const res = await franchiseService.getAll();
@@ -50,6 +46,7 @@ const SearchBar = observer(() => {
     setFranchiseOptions(options);
     setCourseOptions(res1.items.map(el => (el.id ? getOptionMui(el.id, el.title) : <></>)));
   };
+
   useEffect(() => {
     if (appStore.role === Roles.Admin) {
       getFranchises();
@@ -128,16 +125,19 @@ const SearchBar = observer(() => {
               </FormControl>
             </Grid>
 
-            {appStore.role === Roles.Admin && (
-              <Grid item xs={12} sm={4}>
-                <FormControl fullWidth>
-                  <InputLabel id="course-search">Курс</InputLabel>
-                  <Select label="Курс" labelId="course-search">
-                    {courseOptions}
-                  </Select>
-                </FormControl>
-              </Grid>
-            )}
+            <Grid item xs={12} sm={4}>
+              <FormControl fullWidth>
+                <InputLabel id="course-search">Статус</InputLabel>
+                <Select
+                  label="Статус"
+                  labelId="course-search"
+                  value={queryFields.status}
+                  onChange={({ target: { value } }) => (queryFields.status = value)}
+                >
+                  {statusTypeOptions}
+                </Select>
+              </FormControl>
+            </Grid>
             {appStore.role === Roles.Admin && (
               <Grid item xs={12} sm={4}>
                 <FormControl fullWidth>

@@ -184,6 +184,7 @@ export type GroupParams = Partial<{
   name: string;
   level: string;
   schedule: Schedule[];
+  status?: string;
 }>;
 
 export type GroupParamsForUI = Partial<{

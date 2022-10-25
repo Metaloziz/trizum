@@ -29,6 +29,7 @@ const groupsService = {
     };
 
     const params = paramsCreator(paramsData);
+
     const actualParams = {
       per_page: params?.perPage || undefined,
       page: params?.page || undefined,
@@ -40,10 +41,13 @@ const groupsService = {
       name: params?.name || undefined,
       teacher_id: params?.teacherId || undefined,
       type: params?.type || undefined,
+      status: params?.status || undefined,
     };
+
     const res = await instance.get(Paths.Groups, {
       params: actualParams,
     });
+
     return res.data;
   },
 

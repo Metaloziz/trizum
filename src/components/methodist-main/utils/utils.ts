@@ -16,10 +16,3 @@ export const groupTypesOptions = Object.values(GroupTypes).map((el, index) =>
 export const levelOptions = Object.values(GroupLevels).map((el, index) =>
   getOptionMui(levelKeys[index], el),
 );
-
-export const defaultSearchHomeWorksParams = {
-  status: 'active',
-  type: '',
-  page: 0,
-  per_page: 5,
-};

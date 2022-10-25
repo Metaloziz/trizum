@@ -64,6 +64,7 @@ class GroupStore {
     dateUntil: '',
     type: 'class',
     level: '',
+    status: '',
   };
 
   private queryDefaultValuesOlympiads: GroupParamsForUI = {

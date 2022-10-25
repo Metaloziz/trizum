@@ -20,12 +20,8 @@ import homeworkStore from '../../app/stores/homeworkStore';
 
 import { Dialog, DialogTitle } from '../franchising-page/ui/Dialog';
 import { LoadingIndicator } from '../franchising-page/ui/LoadingIndicator';
-import {
-  defaultSearchHomeWorksParams,
-  levelOptions,
-  groupTypesOptions,
-  statusTypesKeys,
-} from './utils/utils';
+import { defaultSearchHomeWorksParams } from './utils/const';
+import { levelOptions, groupTypesOptions, statusTypesKeys } from './utils/utils';
 
 export const AddOrEditDialog = observer(() => {
   const { getHomeWorks, setSearchParams, pagination, worksArray } = homeworkStore;
