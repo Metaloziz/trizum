@@ -8,7 +8,7 @@ import { GameResultModal } from 'components/game-page/GameCommon/GameModal/GameR
 import { PlayButton } from 'components/game-page/GameCommon/PlayButton';
 import { SelectBlock } from 'components/game-page/GameCommon/SelectBlock';
 import styles from 'pages/game/Game.module.scss';
-import React, { FC } from 'react';
+import React, { FC, KeyboardEvent } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 
 type GameReturnPropsT = {
@@ -34,6 +34,8 @@ type GameReturnPropsT = {
   game?: GameT;
 };
 
+const KEY_GAME = ['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft'];
+
 export const GameReturn: FC<GameReturnPropsT> = props => {
   const {
     role,
@@ -57,6 +59,13 @@ export const GameReturn: FC<GameReturnPropsT> = props => {
     children,
     game,
   } = props;
+
+  const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (KEY_GAME.includes(e.key)) {
+      e.preventDefault();
+    }
+  };
+
   return (
     <>
       {(role === Roles.Methodist || role === Roles.Admin) && (
@@ -69,7 +78,7 @@ export const GameReturn: FC<GameReturnPropsT> = props => {
         onClose={closeResultModal}
         onStart={onRepeat}
       />
-      <div className={styles.wrapGameBlock} key={gameTitle}>
+      <div tabIndex={-1} onKeyDown={onKeyDown} className={styles.wrapGameBlock} key={gameTitle}>
         <Button className={styles.goBack} onClick={() => navigate(-1)}>
           Назад
         </Button>
