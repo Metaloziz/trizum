@@ -1,9 +1,6 @@
-import { observer } from 'mobx-react-lite';
-import React, { FC, useState } from 'react';
+import usersStore from 'app/stores/usersStore';
 
-import style from './StudentParentsFormContainer.module.scss';
-
-import { ParentT, ResponseParenting } from 'app/types/UserTypes';
+import { ParentT } from 'app/types/UserTypes';
 import ButtonAddParent from 'components/users-page/button-add-parent/ButtonAddParent';
 import styles from 'components/users-page/student-page-franchisee-modal-add-user/StudentPageFranchiseeModalAddUser.module.scss';
 import StudentParentsForm from 'components/users-page/student-parents-form/StudentParentsForm';
@@ -12,22 +9,28 @@ import {
   ParentsFormStateType,
   setInitialState,
 } from 'components/users-page/student-parrents-form-container/store/store';
-import usersStore from 'app/stores/usersStore';
+import { observer } from 'mobx-react-lite';
+import React, { FC, useState } from 'react';
+import { Roles } from '../../../app/stores/appStore';
+
+import style from './StudentParentsFormContainer.module.scss';
 
 type Props = {
   studentId: string;
   franchiseId: string;
   onCloseModal: () => void;
   parents?: ParentT[];
-  visibility?: boolean;
   isViewMode?: boolean;
 };
 
 export const StudentParentsFormContainer: FC<Props> = observer(
-  ({ onCloseModal, studentId, parents, franchiseId, visibility, isViewMode }) => {
+  ({ onCloseModal, studentId, parents, franchiseId, isViewMode }) => {
     const [parentState, setParentState] = useState(() => setInitialState(parents));
 
     const { updateParenting, currentUser, deleteParenting } = usersStore;
+
+    const isShowAddParentFormButton =
+      currentUser?.roleCode === Roles.Student && parentState.length < MAX_PARENTS_COUNT;
 
     const deleteParentingHandler = (parentingId: string) => {
       deleteParenting(parentingId);
@@ -46,11 +49,7 @@ export const StudentParentsFormContainer: FC<Props> = observer(
       setParentState(newState);
     };
 
-    const setSuccessForm = (
-      isSuccess: boolean,
-      localParentFormId: number,
-      parentingData?: ResponseParenting,
-    ) => {
+    const setSuccessForm = (isSuccess: boolean, localParentFormId: number) => {
       const newState = parentState.map(form =>
         form.localParentFormId === localParentFormId
           ? { ...form, isSuccessSubmit: isSuccess }
@@ -80,13 +79,15 @@ export const StudentParentsFormContainer: FC<Props> = observer(
       );
     };
 
+    const title = parentState.length ? (
+      <h2 className={styles.parentTitle}>Родители ученика*</h2>
+    ) : (
+      <h2 className={styles.parentTitle}>Родитель не добавлен</h2>
+    );
+
     return (
       <div>
-        {parentState.length ? (
-          <h2 className={styles.parentTitle}>Родители ученика*</h2>
-        ) : (
-          <h2 className={styles.parentTitle}>Родитель не добавлен</h2>
-        )}
+        {isShowAddParentFormButton && title}
         <div className={style.wrapper}>
           <div className={style.forms}>
             {parentState.map(({ localParentFormId, isMain, parent, isSuccessSubmit }) => (
@@ -106,7 +107,7 @@ export const StudentParentsFormContainer: FC<Props> = observer(
               />
             ))}
           </div>
-          {parentState.length < MAX_PARENTS_COUNT && visibility && (
+          {isShowAddParentFormButton && (
             <ButtonAddParent
               onClick={addForm}
               disabled={parentState.length === MAX_PARENTS_COUNT}

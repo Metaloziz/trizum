@@ -81,6 +81,8 @@ const StudentParentsForm: FC<Props> = observer(
 
     const userFranchiseId: string | undefined = currentUser?.franchise?.id as string | undefined;
 
+    const isMainFirstParent = localParentFormID === 1;
+
     const schema = yup.object().shape(
       {
         firstName: yup
@@ -110,7 +112,7 @@ const StudentParentsForm: FC<Props> = observer(
         phone: yup.string().required('Обязательное поле'),
         email: yup
           .string()
-          .email('Обязательное поле')
+          .email('Введите валидный email')
           .matches(REG_EMAIL, 'Введите валидный email')
           .required('Обязательное поле'),
         birthdate: yup
@@ -142,7 +144,7 @@ const StudentParentsForm: FC<Props> = observer(
       email: parent?.email || '',
       birthdate: parent?.birthdate?.date || '01.01.2000',
       sex: sexOptions[0]?.value,
-      isMain: parent?.main || false,
+      isMain: parent?.main || isMainFirstParent,
       franchiseId: userFranchiseId,
       password: parent?.password || '',
     };

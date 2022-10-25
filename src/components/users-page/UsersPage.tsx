@@ -96,10 +96,7 @@ const UsersPage = observer(() => {
 
       {/* для редактирования пользователей */}
       <BasicModal visibility={modals.isSetting} changeVisibility={closeEditUserModal}>
-        <StudentPageFranchiseeModalAddUser
-          onCloseModal={closeEditUserModal}
-          visibility={modals.isSetting}
-        />
+        <StudentPageFranchiseeModalAddUser onCloseModal={closeEditUserModal} />
       </BasicModal>
     </div>
   );
