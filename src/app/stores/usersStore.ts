@@ -12,6 +12,9 @@ import {
 } from 'app/types/UserTypes';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { checkErrorMessage, ErrorMessageType } from 'utils/checkErrorMessage';
+import { dateNow } from '../../utils/dateNow';
+import { getNearestLessonObject } from '../../utils/getNearestLessonObject/getNearestLessonObject';
+import groupsService from '../services/groupsService';
 
 class UsersStore {
   users: ResponseUserT[] = [];
@@ -33,6 +36,11 @@ class UsersStore {
   city: SearchUserType;
 
   birthdate: SearchUserType;
+
+  // только для студента
+  teacherName: string = '';
+
+  theNextLessonDate: string = 'нету занятий';
 
   private searchDefaultUsersParams: RequestUsersForFilter = {
     perPage: 10,
@@ -161,14 +169,43 @@ class UsersStore {
     runInAction(() => {
       // простите меня грешника
       this.currentUser = undefined;
+      this.teacherName = '';
+      this.theNextLessonDate = 'нету занятий';
     });
   };
 
+  getStudentGroup = async () => {
+    const groupId = this.currentUser?.groups[0].groupId;
+
+    if (groupId) {
+      return groupsService.getOneGroup(groupId);
+    }
+    return null;
+  };
+
+  getAllDataForHomeWorkStudentPage = async (studentId: string) => {
+    await this.getOneUser(studentId);
+    const currentGroup = await this.getStudentGroup();
+    if (currentGroup) {
+      const { lastName, middleName, firstName } = currentGroup.teacherId;
+      const { schedule } = currentGroup;
+
+      this.teacherName = `${lastName} ${firstName} ${middleName}`;
+
+      const lesson = getNearestLessonObject(schedule, dateNow());
+
+      if (lesson) {
+        this.theNextLessonDate = `${lesson.date} в ${lesson.from}. ${lesson.name}`;
+      }
+    }
+  };
+
   get getFullUserName() {
-    const result = `${this.currentUser?.middleName}" "${this.currentUser?.firstName}" "${this.currentUser?.lastName}`;
+    const result = ``;
 
-    if (result) return 'Иванов Иван Иванович - default';
-
+    if (this.currentUser?.firstName && this.currentUser?.lastName) {
+      return `${this.currentUser?.middleName} ${this.currentUser?.firstName} ${this.currentUser?.lastName}`;
+    }
     return result;
   }
 }

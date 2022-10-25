@@ -1,6 +1,6 @@
 import React from 'react';
 import appStore from '../../../app/stores/appStore';
-import CardStudentForStudent from '../../card-student/card-student-for-user/CardStudentForStudent';
+import CardStudentForCheckHomeWork from '../../card-student/card-student-for-user/CardStudentForCheckHomeWork';
 import Homework from '../../homework/Homework';
 import {
   StatisticsItemProps,
@@ -60,7 +60,7 @@ export const CurrentHomeWork = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <CardStudentForStudent isMainPage={false} />
+        <CardStudentForCheckHomeWork />
         <Homework gameTitle="олимпиада по ментальной силе" description={desc} id={1} />
       </div>
       <StatisticsList statisticsList={mock} />

@@ -3,4 +3,6 @@ export enum SecondaryRoutes {
   AddArticle = 'add-article',
   AddTest = 'add-test',
   CurrentElement = 'currentElement',
+  StudentId = 'studentId',
+  Result = 'result',
 }

@@ -1,18 +1,18 @@
-import React, { FC } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { getRuBirthdayDate } from 'utils/getRuBirthdayDate';
-import { AppRoutes } from '../../../app/enums/AppRoutes';
-
-import styles from './CardStudentForTeacher.module.scss';
+import { EmptyUser } from 'app/stores/appStore';
 
 import iconFlag from 'assets/svgs/flag.svg';
 import Button from 'components/button/Button';
 import CardStudentTitle from 'components/card-student/card-student-title/CardStudentTitle';
 import CustomImageWrapper from 'components/custom-image-wrapper/CustomImageWrapper';
 import Image from 'components/image/Image';
-import Avatar from 'public/img/avatarDefault.png';
-import { EmptyUser } from 'app/stores/appStore';
 import { BASE_URL } from 'constants/constants';
+import Avatar from 'public/img/avatarDefault.png';
+import React, { FC } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getRuBirthdayDate } from 'utils/getRuBirthdayDate';
+import { AppRoutes } from '../../../app/enums/AppRoutes';
+
+import styles from './CardStudentForTeacher.module.scss';
 
 interface Props {
   user: EmptyUser;
@@ -23,7 +23,7 @@ const CardStudentForTeacher: FC<Props> = props => {
 
   const navigate = useNavigate();
 
-  const redirect = () => {
+  const redirectToHomeWork = () => {
     navigate(`${AppRoutes.Classes}/${user.id}`);
   };
 
@@ -65,7 +65,7 @@ const CardStudentForTeacher: FC<Props> = props => {
           </div>
 
           <div className={styles.btnBlock}>
-            <Button onClick={redirect}>Посмотреть Д/З</Button>
+            <Button onClick={redirectToHomeWork}>Посмотреть Д/З</Button>
             <Button>Статистика</Button>
           </div>
         </div>
