@@ -42,7 +42,7 @@ const Links = {
   },
   Games: { label: 'Список игр', href: Games, imageSrc: listGames },
   Blog: { label: 'Статьи', href: Blog, imageSrc: paymentImage },
-  Classes: { label: 'Классы', href: Classes, imageSrc: paymentImage },
+  Classes: { label: 'Группы', href: Classes, imageSrc: paymentImage },
   UserInfo: {
     label: 'Персональная информация',
     href: UserInfo,

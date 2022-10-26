@@ -5,7 +5,6 @@ import {
   PlaySendResultT,
   PresetsGameSettings,
   ResultsT,
-  ResultT,
 } from 'app/types/GameTypes';
 import { getPresetArrOptions } from 'constants/presetArr';
 import { GameReturn } from 'pages/game/GameInstances/index';
@@ -29,7 +28,8 @@ type Props = {
 
 const Argus: FC<Props> = props => {
   const { actualPresets, gamePreset } = props;
-  const { deletePreset, getPreset, getPresets, getGame, game, sendResults } = gamesStore;
+  const { deletePreset, getPreset, getPresets, getGame, game, sendResults, stopFunc, setStopFunc } =
+    gamesStore;
   const { role, user } = appStore;
   const { groups, getGroups } = groupStore;
 
@@ -70,6 +70,11 @@ const Argus: FC<Props> = props => {
         `Ошибка!!! Вы не можете запустить игру которая имеет статус: ${gamePreset.gamePreset.status.toUpperCase()}`,
       );
     }
+  };
+
+  const stopGame = () => {
+    setStarted(false);
+    refs?.stop();
   };
 
   const onEnd = (result: any) => {
@@ -140,6 +145,7 @@ const Argus: FC<Props> = props => {
   }, [gamePreset]);
   return (
     <GameReturn
+      stopGame={stopGame}
       game={game}
       gameTitle={gameTitle}
       startGame={startGame}

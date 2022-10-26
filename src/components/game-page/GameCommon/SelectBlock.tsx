@@ -8,13 +8,19 @@ type SelectBlockPropsT = {
   width: number;
   presetId: string;
   openModal: () => void;
+  stopGame?: () => void;
   presetArrs: OptionT[];
   setPreset: (value: OptionT) => void;
   groupOptions: OptionT[];
 };
 
 export const SelectBlock: FC<SelectBlockPropsT> = props => {
-  const { width, presetId, openModal, presetArrs, setPreset, groupOptions } = props;
+  const { width, stopGame, presetId, openModal, presetArrs, setPreset, groupOptions } = props;
+  const onChangePreset = (data: OptionT) => {
+    stopGame && stopGame();
+    setPreset(data);
+  };
+
   return (
     <div style={{ width: `${width}px` }} className={styles.wrapGameBlock_header}>
       <div className={styles.wrapGameBlock_header_select}>
@@ -23,7 +29,7 @@ export const SelectBlock: FC<SelectBlockPropsT> = props => {
           size="normal"
           placeholder="Шаблон"
           option={presetArrs}
-          onChangeSelect={data => setPreset(data)}
+          onChangeSelect={data => onChangePreset(data)}
         />
       </div>
       {/* <div className={styles.wrapGameBlock_header_select}> */}

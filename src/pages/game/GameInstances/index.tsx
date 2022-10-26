@@ -29,6 +29,7 @@ type GameReturnPropsT = {
   settings?: PresetsGameSettings;
   closeResultModal: () => void;
   onRepeat: () => void;
+  stopGame?: () => void;
   navigate: NavigateFunction;
   children: React.ReactNode;
   game?: GameT;
@@ -55,6 +56,7 @@ export const GameReturn: FC<GameReturnPropsT> = props => {
     onRepeat,
     navigate,
     children,
+    stopGame,
     game,
   } = props;
   return (
@@ -77,6 +79,7 @@ export const GameReturn: FC<GameReturnPropsT> = props => {
           <div style={{ minWidth: `${gameViewSize + 200}px` }}>
             {(role === Roles.Methodist || role === Roles.Admin) && (
               <SelectBlock
+                stopGame={stopGame}
                 width={gameViewSize + 100}
                 openModal={() => toggleModal(true)}
                 presetArrs={presetArr}

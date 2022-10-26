@@ -5,7 +5,6 @@ import {
   PlaySendResultT,
   PresetsGameSettings,
   ResultsT,
-  ResultT,
 } from 'app/types/GameTypes';
 import { getPresetArrOptions } from 'constants/presetArr';
 import { GameReturn } from 'pages/game/GameInstances/index';
@@ -15,7 +14,7 @@ import { convertGroupOptions } from 'utils/convertGroupOptions';
 import { defaultResult } from 'utils/gameUtils/defaultResultValue';
 import { changedViewScreen } from 'utils/gameUtils/changeViewScreen';
 import gamesStore from 'app/stores/gamesStore';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import appStore, { Roles } from 'app/stores/appStore';
 import { Option } from 'components/select-mui/CustomSelect';
 
@@ -69,6 +68,11 @@ const BattleColors: FC<Props> = props => {
         `Ошибка!!! Вы не можете запустить игру которая имеет статус: ${gamePreset.gamePreset.status.toUpperCase()}`,
       );
     }
+  };
+
+  const stopGame = () => {
+    setStarted(false);
+    refs?.stop();
   };
 
   const onEnd = (result: any) => {
