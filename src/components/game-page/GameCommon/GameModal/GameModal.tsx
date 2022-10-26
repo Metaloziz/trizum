@@ -59,8 +59,8 @@ const colorsObj = [
 export const GameModal: FC<PropsT> = observer(props => {
   const { open, onClose, deletePreset } = props;
   const { createPresets, gamePreset, editPreset, game } = gamesStore;
-  const settings = gamePreset?.gamePreset?.settings[0];
   const gamePresetName = gamePreset?.gamePreset?.name;
+  const settings = gamePreset?.gamePreset?.settings[0];
 
   const [colorModal, setColorModal] = useState<boolean>(false);
   const [template, setTemplate] = useState<string>(gamePresetName || '');
@@ -227,7 +227,7 @@ export const GameModal: FC<PropsT> = observer(props => {
         <Stack spacing={1}>
           <div className={styles.gameModalWrapper}>
             <div className={styles.gameModalWrapper_settings}>
-              <Grid xs={12} direction="row" container spacing={2} marginBottom={2}>
+              <Grid direction="row" container spacing={2} marginBottom={2}>
                 <Grid item xs={12} sm={6}>
                   <TextField
                     label=" Наименование шаблона"

@@ -79,6 +79,8 @@ class GamesStore {
 
   isCurrentGameView: boolean = false;
 
+  stopFunc: any;
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -207,6 +209,10 @@ class GamesStore {
 
   setIsCurrentGameView = (value: boolean) => {
     this.isCurrentGameView = value;
+  };
+
+  setStopFunc = (func: () => any) => {
+    this.stopFunc = func;
   };
 }
 

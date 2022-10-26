@@ -1,5 +1,5 @@
 import { Roles } from 'app/stores/appStore';
-import { GamePresetT, GameT, PresetsGameSettings, ResultsT } from 'app/types/GameTypes';
+import { GamePresetT, GameT, PresetsGameSettings, ResultsNewT } from 'app/types/GameTypes';
 import { OptionT } from 'app/types/OptionT';
 import Button from 'components/button/Button';
 import { GameDesc } from 'components/game-page/GameCommon/GameDesc';
@@ -8,7 +8,7 @@ import { GameResultModal } from 'components/game-page/GameCommon/GameModal/GameR
 import { PlayButton } from 'components/game-page/GameCommon/PlayButton';
 import { SelectBlock } from 'components/game-page/GameCommon/SelectBlock';
 import styles from 'pages/game/Game.module.scss';
-import React, { FC } from 'react';
+import React, { FC, KeyboardEvent } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 
 type GameReturnPropsT = {
@@ -17,7 +17,7 @@ type GameReturnPropsT = {
   toggleModal: (value: boolean) => void;
   deletePreset: (id: string) => void;
   resultModal: boolean;
-  gameResult: ResultsT;
+  gameResult: ResultsNewT;
   gameTitle: string;
   gameViewSize: number;
   presetArr: OptionT[];
@@ -29,10 +29,13 @@ type GameReturnPropsT = {
   settings?: PresetsGameSettings;
   closeResultModal: () => void;
   onRepeat: () => void;
+  stopGame?: () => void;
   navigate: NavigateFunction;
   children: React.ReactNode;
   game?: GameT;
 };
+
+const KEY_GAME = ['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft'];
 
 export const GameReturn: FC<GameReturnPropsT> = props => {
   const {
@@ -55,13 +58,22 @@ export const GameReturn: FC<GameReturnPropsT> = props => {
     onRepeat,
     navigate,
     children,
+    stopGame,
     game,
   } = props;
+
+  const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (KEY_GAME.includes(e.key)) {
+      e.preventDefault();
+    }
+  };
+
   return (
     <>
       {(role === Roles.Methodist || role === Roles.Admin) && (
         <GameModal open={isModalOpen} onClose={toggleModal} deletePreset={deletePreset} />
       )}
+
       <GameResultModal
         gameResult={gameResult}
         game={game}
@@ -69,14 +81,17 @@ export const GameReturn: FC<GameReturnPropsT> = props => {
         onClose={closeResultModal}
         onStart={onRepeat}
       />
-      <div className={styles.wrapGameBlock} key={gameTitle}>
+
+      <div tabIndex={-1} onKeyDown={onKeyDown} className={styles.wrapGameBlock} key={gameTitle}>
         <Button className={styles.goBack} onClick={() => navigate(-1)}>
           Назад
         </Button>
+
         <section>
           <div style={{ minWidth: `${gameViewSize + 200}px` }}>
             {(role === Roles.Methodist || role === Roles.Admin) && (
               <SelectBlock
+                stopGame={stopGame}
                 width={gameViewSize + 100}
                 openModal={() => toggleModal(true)}
                 presetArrs={presetArr}
@@ -86,6 +101,7 @@ export const GameReturn: FC<GameReturnPropsT> = props => {
               />
             )}
           </div>
+
           <div
             className={`${styles.wrap} ${
               !(role === Roles.Methodist || role === Roles.Admin) && styles.isStudent
