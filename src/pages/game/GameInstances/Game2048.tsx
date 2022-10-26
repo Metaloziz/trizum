@@ -54,14 +54,7 @@ const Game2048: FC<GameProps> = props => {
       onRepeat={onRepeat}
       navigate={navigate}
     >
-      <GameInstance
-        width={gameViewSize}
-        onEnd={onEnd}
-        onRef={onRef}
-        {...settings}
-        // groupsCount={6}
-        // colors={settings?.colorsMap?.length || 1}
-      />
+      <GameInstance width={gameViewSize} onEnd={onEnd} onRef={onRef} {...settings} />
     </GameReturn>
   );
 };

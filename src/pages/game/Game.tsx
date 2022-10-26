@@ -200,17 +200,17 @@ class Game extends Component<any, any> {
 
     return (
       <div className={styles.innerContent}>
-        {/* {(role === Roles.Methodist || role === Roles.Admin) && ( */}
-        {/*  <GameModal open={isOpenModal} onClose={this.toggleModal} deletePreset={deletePreset} /> */}
-        {/* )} */}
-        {/* <GameResultModal */}
-        {/*  open={resultModal} */}
-        {/*  time={gameResult.time} */}
-        {/*  error={gameResult.failed} */}
-        {/*  success={gameResult.success} */}
-        {/*  onClose={this.closeResultModal} */}
-        {/*  onStart={this.onRepeat} */}
-        {/* /> */}
+        {/*     {(role === Roles.Methodist || role === Roles.Admin) && ( 
+          <GameModal open={isOpenModal} onClose={this.toggleModal} deletePreset={deletePreset} /> 
+         )} 
+         <GameResultModal 
+          open={resultModal} 
+          time={gameResult.time} 
+          error={gameResult.failed} 
+          success={gameResult.success} 
+          onClose={this.closeResultModal} 
+          onStart={this.onRepeat} 
+         /> */}
         <div className={styles.gameList}>
           {Games.map(gam => (
             <div key={`game-${gam.name}`} className={styles.gameItem}>

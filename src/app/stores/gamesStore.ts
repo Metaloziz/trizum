@@ -57,6 +57,7 @@ class GamesStore {
           delay: 1,
           description: '',
           sound: 0,
+          digitMin: 1,
         },
       ] as PresetsGameSettings[],
     },
@@ -76,6 +77,8 @@ class GamesStore {
   playResults: PlayResultsResponseT = {} as PlayResultsResponseT;
 
   isCurrentGameView: boolean = false;
+
+  stopFunc: any;
 
   constructor() {
     makeAutoObservable(this);
@@ -205,6 +208,10 @@ class GamesStore {
 
   setIsCurrentGameView = (value: boolean) => {
     this.isCurrentGameView = value;
+  };
+
+  setStopFunc = (func: () => any) => {
+    this.stopFunc = func;
   };
 }
 

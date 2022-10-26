@@ -178,7 +178,7 @@ export const AddOrEditDialog = observer(() => {
         <Button
           variant="primary"
           onClick={currentCourse?.id ? editCourseCallBack : createCourse}
-          // disabled={!validateSchema.isValidSync(currentCourse)}
+          disabled={!currentCourse?.title?.length}
         >
           {currentCourse?.id ? 'Изменить' : 'Сохранить'}
         </Button>

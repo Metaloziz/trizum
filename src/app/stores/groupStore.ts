@@ -325,7 +325,7 @@ class GroupStore {
   };
 
   get filteredCourses() {
-    return this.courses.length
+    return this.courses && this.courses.length
       ? this.courses.filter(el => el.level.includes(this.modalFields.level))
       : [];
   }

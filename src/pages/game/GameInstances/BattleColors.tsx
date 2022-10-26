@@ -32,6 +32,11 @@ const BattleColors: FC<GameProps> = props => {
     navigate,
   } = useGame({ ...props, gameName });
 
+  const stopGame = () => {
+    setStarted(false);
+    refs?.stop();
+  };
+
   return (
     <GameReturn
       game={game}

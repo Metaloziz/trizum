@@ -9,30 +9,49 @@ export type GameT = {
 export type GamesT = Omit<GameT, 'code'>[];
 export type SoundT = 0 | 1 | undefined;
 export type PresetsGameSettings = {
-  timeComplete?: number;
-  elementsTotal?: number;
-  levelMaxCompleted?: number;
-  gameCode?: string;
-  cycleTime?: number;
-  wordsCount?: number;
-  digitMax?: number;
-  templateCode?: number;
-  groupsCount?: number;
-  blinksCount?: number;
-  errorAcceptable?: number;
-  speed?: number;
-  colorsMap?: string[];
-  delay?: number;
-  description?: string;
-  sound?: SoundT;
+  timeComplete: number;
+  elementsTotal: number;
+  levelMaxCompleted: number;
+  gameCode: string;
+  cycleTime: number;
+  wordsCount: number;
+  digitMax: number;
+  digitMin: number;
+  templateCode: number;
+  groupsCount: number;
+  blinksCount: number;
+  errorAcceptable: number;
+  speed: number;
+  colorsMap: string[];
+  delay: number;
+  description: string;
+  sound: SoundT;
 };
 
 export type EditOrCreatePresetParamsT = {
   gameCode?: string;
   name: string;
-  settings: PresetsGameSettings[];
-  level?: string;
-  status?: string;
+  settings: {
+    timeComplete: number;
+    elementsTotal: number;
+    levelMaxCompleted: number;
+    gameCode: string;
+    cycleTime: number;
+    wordsCount: number;
+    digitMax: number;
+    digitMin: number;
+    templateCode: number;
+    groupsCount: number;
+    blinksCount: number;
+    errorAcceptable: number;
+    speed: number;
+    colorsMap: string[];
+    delay: number;
+    description: string;
+    sound: SoundT;
+  }[];
+  level: string;
+  status: string;
 };
 
 export type CreatePresetResponseT = {
