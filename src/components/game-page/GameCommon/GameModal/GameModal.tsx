@@ -10,7 +10,7 @@ import {
 import { GroupLevels } from 'app/enums/GroupLevels';
 import { StatusEnum } from 'app/enums/StatusTypes';
 import gamesStore from 'app/stores/gamesStore';
-import { EditOrCreatePresetParamsT, PresetsGameSettings, SoundT } from 'app/types/GameTypes';
+import { EditOrCreatePresetParamsT, SoundT } from 'app/types/GameTypes';
 import Button from 'components/button/Button';
 import { DialogTitle } from 'components/franchising-page/ui/Dialog';
 import {
@@ -59,9 +59,7 @@ export const GameModal: FC<PropsT> = observer(props => {
   const { open, onClose, deletePreset } = props;
   const { createPresets, gamePreset, editPreset, game } = gamesStore;
   const gamePresetName = gamePreset?.gamePreset?.name;
-  const settings: PresetsGameSettings = gamePreset?.gamePreset?.settings.length
-    ? gamePreset?.gamePreset?.settings[0]
-    : {};
+  const settings = gamePreset?.gamePreset?.settings[0];
 
   const [colorModal, setColorModal] = useState<boolean>(false);
   const [template, setTemplate] = useState<string>(gamePresetName || '');

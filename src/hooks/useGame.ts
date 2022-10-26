@@ -30,7 +30,7 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
   const [isModalOpen, toggleModal] = useState(false);
   const [resultModal, setResultModal] = useState(false);
   const [gameResult, setGameResult] = useState<ResultsNewT>(newDefaultResult);
-  const [settings, setSettings] = useState<PresetsGameSettings>({});
+  const [settings, setSettings] = useState<PresetsGameSettings>(gamePreset.gamePreset.settings[0]);
 
   const navigate = useNavigate();
   const gameTitle = game.name;
@@ -50,6 +50,11 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
     }
   };
 
+  const stopGame = () => {
+    setStarted(false);
+    refs?.stop();
+  };
+
   const onEnd = (result?: ResultsT) => {
     setResultModal(true);
     setStarted(false);
@@ -62,6 +67,7 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
         success: result.score,
         templateCode: 0,
         result: result.result,
+        timeMax: result.timeDiff,
       };
       setGameResult(newResult);
     }
@@ -80,33 +86,38 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
     startGame();
   };
 
-  const closeResultModal = async () => {
+  const closeResultModal = () => {
     if (role === Roles.Student) {
       const params: PlaySendResultT = {
+        /* нормальные настройки(но не факт) */
         userGroupId: user.groups[0].id,
-        courseWorkId: user.groups[0].group.course.id,
-        workGamePresetId: user.groups[0].group.course.works[0].work.gamePresets[0].gamePreset.id,
+        courseWorkId: user.groups[0].group.course.works[0].id,
+        /* конец нормальных настроек */
+        /* под вопросом - уточнить у аналитиков и Александра */
+        workGamePresetId: user.groups[0].group.course.works[0].work.gamePresets[0].id,
         finished: resultModal,
-        time: 1,
-        groupsCount: 1,
-        elementsTotal: 1,
-        levelMaxCompleted: 1,
-        actions: 1,
+        groupsCount: settings.groupsCount,
+        elementsTotal: settings.elementsTotal,
+        levelMaxCompleted: settings.levelMaxCompleted,
+        cycleTime: settings.cycleTime,
+        blinksCount: settings.blinksCount,
+        wordsCount: settings.wordsCount,
+        speed: settings.speed,
+        // ?????????
+        actionsSuccessfulCount: gameResult.success,
         actionSpeed: 1,
-        actionsSuccessfulCount: 1,
-        cycleTime: 1,
-        blinksCount: 1,
-        wordsCount: 1,
-        speed: 1,
+        actions: 1,
+        time: gameResult.time,
         errorsPercentage: 1,
         phraseSpeedAv: 1,
-        timeMax: 1,
+        timeMax: gameResult.timeMax!,
         cycleTimeAv: 1,
         actionSpeedAv: 1,
         workCompleted: false,
         courseCompleted: false,
+        /* конец под вопросом */
       };
-      await sendResults(params);
+      sendResults(params);
     }
     setResultModal(false);
     setGameResult(newDefaultResult);
@@ -155,5 +166,6 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
     navigate,
     onEnd,
     onRef,
+    stopGame,
   };
 };

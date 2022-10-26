@@ -30,49 +30,8 @@ const Argus: FC<GameProps> = props => {
     onRef,
     onEnd,
     navigate,
+    stopGame,
   } = useGame({ ...props, gameName });
-
-  const stopGame = () => {
-    setStarted(false);
-    refs?.stop();
-  };
-
-  const closeResultModal = () => {
-    if (role === Roles.Student) {
-      const params: PlaySendResultT = {
-        /* нормальные настройки(но не факт) */
-        userGroupId: user.groups[0].id,
-        courseWorkId: user.groups[0].group.course.works[0].id,
-        /* конец нормальных настроек */
-        /* под вопросом - уточнить у аналитиков и Александра */
-        workGamePresetId: user.groups[0].group.course.works[0].work.gamePresets[0].id,
-        finished: resultModal,
-        groupsCount: settings.groupsCount,
-        elementsTotal: settings.elementsTotal,
-        levelMaxCompleted: settings.levelMaxCompleted,
-        cycleTime: settings.cycleTime,
-        blinksCount: settings.blinksCount,
-        wordsCount: settings.wordsCount,
-        speed: settings.speed,
-        // ?????????
-        actionsSuccessfulCount: gameResult.success,
-        actionSpeed: 1,
-        actions: 1,
-        time: gameResult.time,
-        errorsPercentage: 1,
-        phraseSpeedAv: 1,
-        timeMax: gameResult.timeDiff,
-        cycleTimeAv: 1,
-        actionSpeedAv: 1,
-        workCompleted: false,
-        courseCompleted: false,
-        /* конец под вопросом */
-      };
-      sendResults(params);
-    }
-    setResultModal(false);
-    setGameResult(defaultResult);
-  };
 
   return (
     <GameReturn
