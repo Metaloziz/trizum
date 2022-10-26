@@ -124,6 +124,18 @@ export type ResultsT = {
   result: ResultT;
 };
 
+export type ResultsNewT = {
+  levelMinCompleted?: number;
+  levelMaxCompleted?: number;
+  gameCode: string;
+  templateCode: number;
+  success: number; //+
+  failed?: number; //+
+  timeMax?: number;
+  time: number; //+
+  result: ResultT; //+
+};
+
 export const RESULT = {
   end: 'Конец игры',
   lose: 'Проигрыш',
@@ -133,4 +145,9 @@ export const RESULT = {
 export type GameIdWithCode = {
   gameId: string;
   gameCode: string;
+};
+
+export type GameProps = {
+  actualPresets: Omit<GamePresetT, 'settings'>[];
+  gamePreset: OneGamePresent;
 };

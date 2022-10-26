@@ -1,79 +1,54 @@
-import { GameIdentifiers } from 'games';
-import React from 'react';
-import { Navigate, useParams } from 'react-router-dom';
 import { AppRoutes } from 'app/enums/AppRoutes';
 import appStore, { Roles } from 'app/stores/appStore';
 import gamesStore from 'app/stores/gamesStore';
+import { GamePresetT, OneGamePresent } from 'app/types/GameTypes';
 import { observer } from 'mobx-react';
-import BattleColors from 'pages/game/GameInstances/BattleColors';
-import Shulte from 'pages/game/GameInstances/Shulte';
-import Game2048 from 'pages/game/GameInstances/Game2048';
-import Mental from 'pages/game/GameInstances/Mental';
-import ShiftVertical from 'pages/game/GameInstances/ShiftVertical';
-import Steam from 'pages/game/GameInstances/Steam';
-import Paint from 'pages/game/GameInstances/Paint';
-import Blinks from 'pages/game/GameInstances/Blinks';
-import Lights from 'pages/game/GameInstances/Lights';
 import Argus from 'pages/game/GameInstances/Argus';
+import BattleColors from 'pages/game/GameInstances/BattleColors';
+import Blinks from 'pages/game/GameInstances/Blinks';
+import Game2048 from 'pages/game/GameInstances/Game2048';
+import Lights from 'pages/game/GameInstances/Lights';
+import Mental from 'pages/game/GameInstances/Mental';
+import Paint from 'pages/game/GameInstances/Paint';
+import ShiftVertical from 'pages/game/GameInstances/ShiftVertical';
+import Shulte from 'pages/game/GameInstances/Shulte';
+import Steam from 'pages/game/GameInstances/Steam';
+
+import React, { FunctionComponent } from 'react';
+import { Navigate, useParams } from 'react-router-dom';
+
+export type GameContainerProps = {
+  actualPresets: Omit<GamePresetT, 'settings'>[];
+  gamePreset: OneGamePresent;
+};
+
+const qwe: { [key: string]: FunctionComponent<GameContainerProps> } = {
+  shulte: Shulte,
+  battleColors: BattleColors,
+  game2048: Game2048,
+  shiftVertical: ShiftVertical,
+  steamEngine: Steam,
+  silhouettes: Paint,
+  memoryRhythm: Blinks,
+  fireflies: Lights,
+  argus: Argus,
+  mental: Mental,
+};
 
 const GameItems = observer(() => {
   const { role } = appStore;
-  const params = useParams();
+  const { gamePreset, actualPresets } = gamesStore;
+  const { gameName } = useParams<'gameName'>();
+
   if (role === Roles.Unauthorized) {
     return <Navigate to={AppRoutes.Index} />;
   }
-  if ('gameName' in params) {
-    switch (params.gameName) {
-      case GameIdentifiers.shulte:
-        return (
-          <Shulte gamePreset={gamesStore.gamePreset} actualPresets={gamesStore.actualPresets} />
-        );
-      case GameIdentifiers.battleColors:
-        return (
-          <BattleColors
-            gamePreset={gamesStore.gamePreset}
-            actualPresets={gamesStore.actualPresets}
-          />
-        );
-      case GameIdentifiers.game2048:
-        return (
-          <Game2048 gamePreset={gamesStore.gamePreset} actualPresets={gamesStore.actualPresets} />
-        );
-      // case GameIdentifiers.mental:
-      //   return (
-      //     <Mental gamePreset={gamesStore.gamePreset} actualPresets={gamesStore.actualPresets} />
-      //   );
-      case GameIdentifiers.shiftVertical:
-        return (
-          <ShiftVertical
-            gamePreset={gamesStore.gamePreset}
-            actualPresets={gamesStore.actualPresets}
-          />
-        );
-      case GameIdentifiers.steamEngine:
-        return (
-          <Steam gamePreset={gamesStore.gamePreset} actualPresets={gamesStore.actualPresets} />
-        );
-      case GameIdentifiers.silhouettes:
-        return (
-          <Paint gamePreset={gamesStore.gamePreset} actualPresets={gamesStore.actualPresets} />
-        );
-      case GameIdentifiers.memoryRhythm:
-        return (
-          <Blinks gamePreset={gamesStore.gamePreset} actualPresets={gamesStore.actualPresets} />
-        );
-      case GameIdentifiers.fireflies:
-        return (
-          <Lights gamePreset={gamesStore.gamePreset} actualPresets={gamesStore.actualPresets} />
-        );
-      case GameIdentifiers.argus:
-        return (
-          <Argus gamePreset={gamesStore.gamePreset} actualPresets={gamesStore.actualPresets} />
-        );
-      default:
-        return <Navigate to={AppRoutes.Games} />;
-    }
+
+  if (gameName) {
+    const GameComponent = qwe[gameName];
+    return <GameComponent gamePreset={gamePreset} actualPresets={actualPresets} />;
   }
+
   return <Navigate to={AppRoutes.Games} />;
 });
 

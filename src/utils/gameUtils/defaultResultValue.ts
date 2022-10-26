@@ -1,5 +1,4 @@
-import { RESULT, ResultT } from 'app/types/GameTypes';
-import Result from 'pages/testing/result/Result';
+import { ResultsNewT, ResultT } from 'app/types/GameTypes';
 
 export const defaultResult = {
   time: 0,
@@ -8,4 +7,12 @@ export const defaultResult = {
   success: 0,
   failed: 0,
   result: 'end' as ResultT,
+};
+
+export const newDefaultResult: ResultsNewT = {
+  gameCode: '',
+  time: 0,
+  result: 'end' as ResultT,
+  success: 0,
+  templateCode: 1,
 };

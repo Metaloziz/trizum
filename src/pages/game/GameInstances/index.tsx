@@ -1,5 +1,5 @@
 import { Roles } from 'app/stores/appStore';
-import { GamePresetT, GameT, PresetsGameSettings, ResultsT } from 'app/types/GameTypes';
+import { GamePresetT, GameT, PresetsGameSettings, ResultsNewT } from 'app/types/GameTypes';
 import { OptionT } from 'app/types/OptionT';
 import Button from 'components/button/Button';
 import { GameDesc } from 'components/game-page/GameCommon/GameDesc';
@@ -17,7 +17,7 @@ type GameReturnPropsT = {
   toggleModal: (value: boolean) => void;
   deletePreset: (id: string) => void;
   resultModal: boolean;
-  gameResult: ResultsT;
+  gameResult: ResultsNewT;
   gameTitle: string;
   gameViewSize: number;
   presetArr: OptionT[];
@@ -71,6 +71,7 @@ export const GameReturn: FC<GameReturnPropsT> = props => {
       {(role === Roles.Methodist || role === Roles.Admin) && (
         <GameModal open={isModalOpen} onClose={toggleModal} deletePreset={deletePreset} />
       )}
+
       <GameResultModal
         gameResult={gameResult}
         game={game}
@@ -78,10 +79,12 @@ export const GameReturn: FC<GameReturnPropsT> = props => {
         onClose={closeResultModal}
         onStart={onRepeat}
       />
+
       <div tabIndex={-1} onKeyDown={onKeyDown} className={styles.wrapGameBlock} key={gameTitle}>
         <Button className={styles.goBack} onClick={() => navigate(-1)}>
           Назад
         </Button>
+
         <section>
           <div style={{ minWidth: `${gameViewSize + 200}px` }}>
             {(role === Roles.Methodist || role === Roles.Admin) && (
@@ -95,6 +98,7 @@ export const GameReturn: FC<GameReturnPropsT> = props => {
               />
             )}
           </div>
+
           <div
             className={`${styles.wrap} ${
               !(role === Roles.Methodist || role === Roles.Admin) && styles.isStudent
