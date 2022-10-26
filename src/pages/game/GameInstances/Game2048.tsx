@@ -32,8 +32,14 @@ const Game2048: FC<GameProps> = props => {
     navigate,
   } = useGame({ ...props, gameName });
 
+  const stopGame = () => {
+    setStarted(false);
+    refs?.stop();
+  };
+
   return (
     <GameReturn
+      stopGame={stopGame}
       game={game}
       gameTitle={gameTitle}
       startGame={startGame}

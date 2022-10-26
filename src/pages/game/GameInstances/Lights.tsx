@@ -30,10 +30,12 @@ const Lights: FC<GameProps> = props => {
     onRef,
     onEnd,
     navigate,
+    stopGame,
   } = useGame({ ...props, gameName });
 
   return (
     <GameReturn
+      stopGame={stopGame}
       game={game}
       gameTitle={gameTitle}
       startGame={startGame}
