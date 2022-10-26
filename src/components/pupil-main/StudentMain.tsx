@@ -23,15 +23,19 @@ export const StudentMain: FC = observer(() => {
 
   return (
     <main className={styles.main}>
-      <CardStudent user={user} />
-      <WeeklyGrowth records={recordsArr} className={styles.weeklyGrowth} />
-      <Homeworks className={styles.homeworks} works={works} homeworks={homeworks} />
-      <KeepPlaying
-        actualGames={currentGameIds}
-        className={styles.keepPlaying}
-        works={works}
-        games={games}
-      />
+      <div className={styles.rowInfo}>
+        <CardStudent user={user} />
+        <WeeklyGrowth records={recordsArr} className={styles.weeklyGrowth} />
+      </div>
+      <div className={styles.rowHw}>
+        <Homeworks className={styles.homeworks} works={works} homeworks={homeworks} />
+        <KeepPlaying
+          actualGames={currentGameIds}
+          className={styles.keepPlaying}
+          works={works}
+          games={games}
+        />
+      </div>
     </main>
   );
 });
