@@ -227,7 +227,7 @@ export const GameModal: FC<PropsT> = observer(props => {
         <Stack spacing={1}>
           <div className={styles.gameModalWrapper}>
             <div className={styles.gameModalWrapper_settings}>
-              <Grid direction="row" container spacing={2} marginBottom={2}>
+              <Grid xs={12} direction="row" container spacing={2} marginBottom={2}>
                 <Grid item xs={12} sm={6}>
                   <TextField
                     label=" Наименование шаблона"

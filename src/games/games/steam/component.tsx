@@ -205,7 +205,8 @@ export default class extends Component<any, any> implements Game {
       speed,
       groupsCount,
       timeComplete,
-      elementsTotal
+      elementsTotal,
+      area
     } = this.props;
 
     const {
@@ -231,6 +232,7 @@ export default class extends Component<any, any> implements Game {
         <SteamItem
           speed={speed}
           onScore={this.onScore}
+          area={area}
         />
       </View>);
     }
