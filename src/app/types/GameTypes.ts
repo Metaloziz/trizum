@@ -26,6 +26,7 @@ export type PresetsGameSettings = {
   delay: number;
   description: string;
   sound: SoundT;
+  area: boolean;
 };
 
 export type EditOrCreatePresetParamsT = {
@@ -49,6 +50,7 @@ export type EditOrCreatePresetParamsT = {
     delay: number;
     description: string;
     sound: SoundT;
+    area: boolean;
   }[];
   level: string;
   status: string;

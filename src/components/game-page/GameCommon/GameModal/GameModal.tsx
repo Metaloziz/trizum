@@ -34,6 +34,7 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import { fieldSizeOptions } from 'utils/fieldSize';
 import { getOptionMui } from 'utils/getOption';
 import styles from './gameModal.module.scss';
+import { getSizeArea } from '../../../../utils/gameUtils/getSizeArea';
 
 type PropsT = {
   open: boolean;
@@ -89,16 +90,17 @@ export const GameModal: FC<PropsT> = observer(props => {
   const [description, setDescription] = useState<string>(defaultInputTextReader);
   const [colors, setColors] = useState<ColorObj[]>(colorsObj);
   const [sound, setSound] = useState<boolean>(settings?.sound === 1);
+  const [area, setArea] = useState<number | string>(settings?.area ? 1 : 0);
 
   const levelKeys = Object.keys(GroupLevels);
   const levelOptions = Object.values(GroupLevels).map((el, index) =>
     getOptionMui(levelKeys[index], el),
   );
-
   const statusTypesKeys = Object.keys(StatusEnum);
   const statusTypesOptions = Object.values(StatusEnum).map((el, index) =>
     getOptionMui(statusTypesKeys[index], el),
   );
+
   const sizeOptions = fieldSizeOptions().map(el => getOptionMui(el.value, el.label));
   const changeColor = (index: number) => {
     setColors(
@@ -138,6 +140,7 @@ export const GameModal: FC<PropsT> = observer(props => {
     setBlinksCount(settings?.blinksCount?.toString() || '');
     setDescription(settings?.description || '');
     setSound(settings?.sound === 1);
+    setArea(settings?.area ? 1 : 0);
   };
 
   const addOrEditPreset = () => {
@@ -162,6 +165,7 @@ export const GameModal: FC<PropsT> = observer(props => {
           sound: ((sound && 1) || 0) as SoundT,
           description,
           colorsMap,
+          area: area === 0,
         },
       ],
     } as EditOrCreatePresetParamsT;
@@ -194,6 +198,7 @@ export const GameModal: FC<PropsT> = observer(props => {
     setDescription('');
     setSound(false);
     onClose(false);
+    setArea(0);
   };
 
   const deletedPreset = () => {
@@ -340,6 +345,9 @@ export const GameModal: FC<PropsT> = observer(props => {
                   speed={speed}
                   setSpeed={setSpeed}
                   sizeOptions={sizeOptions.slice(0, 8)}
+                  area={area}
+                  setArea={setArea}
+                  sizeArea={getSizeArea}
                 />
               )}
 

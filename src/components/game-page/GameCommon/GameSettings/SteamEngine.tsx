@@ -11,6 +11,9 @@ type SteamEnginePropsT = {
   groupsCount: string;
   setGroupsCount: (value: string) => void;
   sizeOptions: ReactNode;
+  area: number | string;
+  setArea: (value: number | string) => void;
+  sizeArea: ReactNode;
 };
 
 export const SteamEngine: FC<SteamEnginePropsT> = props => {
@@ -24,6 +27,9 @@ export const SteamEngine: FC<SteamEnginePropsT> = props => {
     setErrorAcceptable,
     errorAcceptable,
     sizeOptions,
+    area,
+    setArea,
+    sizeArea,
   } = props;
   return (
     <Grid container spacing={2}>
@@ -71,6 +77,18 @@ export const SteamEngine: FC<SteamEnginePropsT> = props => {
           variant="outlined"
           size="small"
         />
+      </Grid>
+      <Grid item xs={12} sm={6}>
+        <FormControl fullWidth size="small">
+          <InputLabel>Область нажатия</InputLabel>
+          <Select
+            value={area}
+            label="Область нажатия"
+            onChange={({ target: { value } }) => setArea(value)}
+          >
+            {sizeArea}
+          </Select>
+        </FormControl>
       </Grid>
     </Grid>
   );
