@@ -30,12 +30,8 @@ const Mental: FC<GameProps> = props => {
     onRef,
     onEnd,
     navigate,
+    stopGame,
   } = useGame({ ...props, gameName });
-
-  const stopGame = () => {
-    setStarted(false);
-    refs?.stop();
-  };
 
   return (
     <GameReturn

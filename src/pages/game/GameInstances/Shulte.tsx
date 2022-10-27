@@ -1,8 +1,8 @@
 import { GameProps } from 'app/types/GameTypes';
 import { Factory, GameIdentifiers } from 'games';
-import { useGame } from 'hooks/useGame';
-import { GameReturn } from 'pages/game/GameInstances/index';
+import { GameReturn } from './index';
 import React, { FC } from 'react';
+import { useGame } from 'hooks/useGame';
 
 const gameName = GameIdentifiers.shulte;
 const GameInstance = Factory(gameName);
@@ -30,12 +30,8 @@ const Shulte: FC<GameProps> = props => {
     onRef,
     onEnd,
     navigate,
+    stopGame,
   } = useGame({ ...props, gameName });
-
-  const stopGame = () => {
-    setStarted(false);
-    refs?.stop();
-  };
 
   return (
     <GameReturn
