@@ -1,21 +1,28 @@
-import React, { useEffect } from 'react';
-
-import { observer } from 'mobx-react-lite';
-
-import styles from './BlockGames.module.scss';
-
-import groupStore from 'app/stores/groupStore';
+import { ResponseOneGroup } from 'app/types/GroupTypes';
+import { NewCourseType } from 'app/types/NewCourseType';
 import cardsGame from 'assets/svgs/cards.svg';
 import fossilGame from 'assets/svgs/fossil.svg';
 import starGame from 'assets/svgs/star.svg';
 import Image from 'components/image/Image';
 import Panel from 'components/panel/Panel';
+import { toJS } from 'mobx';
+import React, { FC } from 'react';
 
-const BlockGames = observer(() => {
-  const { selectedGroup } = groupStore;
+import style from './HomeWorkDescription.module.scss';
 
+type Props = {
+  selectedGroup: ResponseOneGroup;
+  currentCourse: NewCourseType;
+};
+
+export const HomeWorkDescription: FC<Props> = ({ selectedGroup, currentCourse }) => {
   const works = selectedGroup?.course.works;
+
+  console.log('selectedGroup', toJS(selectedGroup));
+  console.log('currentCourse', toJS(currentCourse));
+
   let result: string;
+
   const setImg = (id: number) => {
     if (id === 0 || id > 2) {
       result = fossilGame;
@@ -26,12 +33,13 @@ const BlockGames = observer(() => {
     }
     return result;
   };
+
   return (
-    <div className={styles.blockGames}>
-      <div className={styles.componentPanelWrapper}>
+    <div className={style.blockGames}>
+      <div className={style.componentPanelWrapper}>
         <Panel>Домашнее задание на 7 октября 2021</Panel>
       </div>
-      <div className={styles.games}>
+      <div className={style.games}>
         {works?.map((item: any, id: any) => (
           <ul key={item.id}>
             <li>
@@ -42,7 +50,7 @@ const BlockGames = observer(() => {
         ))}
       </div>
       {/* <Button onClick={() => openModal(selectedGroup?.id)}>Edit group</Button> */}
-      <p className={styles.content}>
+      <p className={style.content}>
         Высокий уровень вовлечения представителей целевой аудитории является четким доказательством
         простого факта: реализация намеченных плановых заданий создаёт необходимость включения в
         производственный план целого ряда внеочередных мероприятий с учётом комплекса
@@ -51,6 +59,4 @@ const BlockGames = observer(() => {
       </p>
     </div>
   );
-});
-
-export default BlockGames;
+};

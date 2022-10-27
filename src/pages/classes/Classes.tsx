@@ -4,8 +4,8 @@ import appStore, { Roles } from 'app/stores/appStore';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { ClassesMainPage } from '../../components/classes-page/ClassesMainPage';
-import { ClassesMethodistPage } from '../../components/classes-page/ClassesStudents/ClassesStudentsContainer/ClassesMethodistPage';
+import { ClassesMainPage } from 'components/classes-page/ClassesMainPage';
+import { ClassesMethodistPage } from 'components/classes-page/ClassesStudents/ClassesStudentsContainer/ClassesMethodistPage';
 
 const Classes = observer(() => {
   switch (appStore.role) {

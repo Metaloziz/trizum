@@ -25,8 +25,8 @@ import {
   scheduleItemToServerMapper,
   scheduleItemToUIMapper,
 } from 'utils/scheduleItemToServerMapper';
-import { getNextMonth } from '../../utils/getNextMonth';
-import { removeEmptyFields } from '../../utils/removeEmptyFields';
+import { getNextMonth } from 'utils/getNextMonth';
+import { removeEmptyFields } from 'utils/removeEmptyFields';
 import { GroupStatusValue } from '../enums/GroupStatus';
 import { GroupStatusTypes } from '../types/GroupStatusTypes';
 
@@ -268,6 +268,10 @@ class GroupStore {
 
   cleanModalValues = () => {
     this.modalFields = { ...this.defaultValues };
+  };
+
+  setQueryFields = (params: Partial<GroupParamsForUI>) => {
+    this.queryFields = { ...this.queryFields, ...params };
   };
 
   clearQueryFields = () => {

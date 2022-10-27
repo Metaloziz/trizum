@@ -1,16 +1,25 @@
-import cn from 'classnames';
+import coursesStore from 'app/stores/coursesStore';
+import groupStore from 'app/stores/groupStore';
+import CardStudent from 'components/card-student/CardStudent';
+import { GroupsButtons } from 'components/classes-page/ClassesStudents/ClassesStudentsContainer/GroupsButtons/GroupsButtons';
+import { HomeWorkDescription } from 'components/classes-page/homework-description/HomeWorkDescription';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useEffect } from 'react';
-import groupStore from '../../../../app/stores/groupStore';
-import CardStudent from '../../../card-student/CardStudent';
-import BlockGames from '../../block-games/BlockGames';
 import styles from '../../ClassesMainPage.module.scss';
 
 export const ClassesMethodistPage: FC = observer(() => {
-  const { getOneGroup, selectedGroup, groups, getGroups, nullableSelectedGroup } = groupStore;
+  const { getOneGroup, selectedGroup, groups, getGroups, nullableSelectedGroup, setQueryFields } =
+    groupStore;
+  const { getCurrentCourse, currentCourse } = coursesStore;
+
+  const loader = async () => {
+    setQueryFields({ perPage: 100 });
+    await getGroups();
+    await getCurrentCourse(selectedGroup.course.id);
+  };
 
   useEffect(() => {
-    getGroups();
+    loader();
     return () => {
       nullableSelectedGroup();
     };
@@ -20,25 +29,10 @@ export const ClassesMethodistPage: FC = observer(() => {
     <div className={styles.wrapper}>
       <div className={styles.row}>
         <div className={styles.tabs}>
-          <div className={styles.tabsWrapper}>
-            {!!groups.length &&
-              groups.map(group => (
-                <div
-                  className={cn(
-                    styles.button,
-                    selectedGroup?.id === group.id && styles.button_active,
-                  )}
-                  key={group.id}
-                  title={group.name}
-                  onClick={() => getOneGroup(group.id)}
-                >
-                  <span>{group.name}</span>
-                </div>
-              ))}
-          </div>
+          <GroupsButtons selectedGroup={selectedGroup} groups={groups} getOneGroup={getOneGroup} />
         </div>
         <div className={styles.blockGames}>
-          <BlockGames />
+          <HomeWorkDescription selectedGroup={selectedGroup} currentCourse={currentCourse} />
         </div>
         {!!selectedGroup?.users.length && (
           <div className={styles.blockCardStudents}>
