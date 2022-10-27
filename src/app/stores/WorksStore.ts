@@ -1,17 +1,29 @@
-import { makeAutoObservable, runInAction } from 'mobx';
-
 import worksService from 'app/services/worksService';
-import { ResponseWork } from 'app/types/CourseTypes';
-import { PresetT, RequestCreateWork } from 'app/types/WorkTypes';
+import { StoreBase } from 'app/stores/StoreBase';
+import { RequestCreateWork, OneWorkResponseT } from 'app/types/WorkTypes';
+import { runInAction, makeObservable, observable } from 'mobx';
 
-class WorksStore {
-  currentHomework?: ResponseWork;
+class WorksStore extends StoreBase {
+  currentHomework?: OneWorkResponseT;
 
   constructor() {
-    makeAutoObservable(this);
+    super();
+    makeObservable(this, {
+      currentHomework: observable,
+    });
   }
 
-  setCurrentWork = (work?: ResponseWork) => {
+  getCurrentWork = (workId: string) => {
+    this.execute(async () => {
+      const responce = await worksService.getOneWork(workId);
+
+      runInAction(() => {
+        this.currentHomework = responce;
+      });
+    });
+  };
+
+  setCurrentWork = (work?: OneWorkResponseT) => {
     this.currentHomework = work;
   };
 

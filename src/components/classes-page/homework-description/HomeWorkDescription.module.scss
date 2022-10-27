@@ -1,6 +1,6 @@
 .blockGames {
   box-sizing: border-box;
-  width: 563px;
+  min-width: 400px;
   max-width: 563px;
   min-height: 1038px;
   max-height: 1038px;
@@ -12,11 +12,11 @@
   border-radius: 30px;
 
   @media (max-width: 1800px) {
-    width: auto;
+    //width: auto;
   }
 
   @media (max-width: 900px) {
-    width: 100%;
+    //width: 100%;
     max-width: 100%;
     min-height: 100%;
     max-height: 100%;
