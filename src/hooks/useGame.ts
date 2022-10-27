@@ -123,16 +123,20 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
     setGameResult(newDefaultResult);
   };
 
-  useEffect(() => {
+  const requestPresets = async () => {
     if (role !== Roles.Student) {
-      getPresets();
-      getGroups();
+      await getGroups();
+      await getPresets();
     }
-    getGame(gameName);
+    await getGame(gameName);
 
     if (role === Roles.Student) {
       // getPreset()
     }
+  };
+
+  useEffect(() => {
+    requestPresets();
 
     return () => {
       getPreset('');

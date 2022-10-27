@@ -45,7 +45,7 @@ export default class extends Component<any, any> {
   getRandValue = (data : any, exclude = false) => {
     let arrayData = data.slice();
 
-    if(exclude !== false) {
+    if(exclude !== false && arrayData.length !== 1) {
       arrayData = arrayData.filter((a : any) => a != exclude);
     }
 
