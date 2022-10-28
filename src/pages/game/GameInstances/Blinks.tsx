@@ -7,6 +7,8 @@ import React, { FC } from 'react';
 const gameName = GameIdentifiers.memoryRhythm;
 const GameInstance = Factory(gameName);
 
+const COLORS = ['#4b8bf5', '#8a7ff3', '#ef8884', '#FF991F', '#BABEC6', '#8F806A', '#0B6383'];
+
 const Blinks: FC<GameProps> = props => {
   const { gamePreset } = props;
   const {
@@ -32,6 +34,11 @@ const Blinks: FC<GameProps> = props => {
     navigate,
     stopGame,
   } = useGame({ ...props, gameName });
+
+  // TODO: временно чтобы работала игра пока не сделают новые пропсы
+  if (settings) {
+    settings.colorsMap = COLORS.slice(0, settings.digitMax);
+  }
 
   return (
     <GameReturn
