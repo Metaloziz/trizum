@@ -41,8 +41,8 @@ export const ClassesMethodistPage: FC = observer(() => {
   }, []);
 
   useEffect(() => {
-    getCurrentHomeWork();
     setWorkIndex(1);
+    getCurrentHomeWork();
   }, [selectedGroup]);
 
   return (

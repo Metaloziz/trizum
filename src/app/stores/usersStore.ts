@@ -94,13 +94,18 @@ class UsersStore {
     data: RequestRegister,
   ): Promise<ResponseUserT | undefined | ErrorMessageType> => {
     try {
-      const res = await authService.register(data);
-      const isError = checkErrorMessage(res);
+      const response = await authService.register(data);
+      const isError = checkErrorMessage(response);
       if (isError) {
         return isError;
       }
+
+      runInAction(() => {
+        this.currentUser = response;
+      });
+
       await this.getUsers();
-      return res;
+      return response;
     } catch (e) {
       console.warn(e);
     }

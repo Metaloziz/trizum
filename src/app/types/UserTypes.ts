@@ -44,10 +44,10 @@ export type RequestCreateUser = {
 };
 
 export type ResponseOneUserGroupT = {
-  userGroupId: string;
   groupId: string;
-  groupCode: string;
+  groupName: string;
   groupType: null | string;
+  userGroupId: string;
 };
 
 type ResponseUserAvatarT = {
@@ -103,12 +103,6 @@ export type ParentT = {
   email: string;
   main: boolean;
   password: string;
-};
-
-export type ParentDataT = {
-  parentingId: string;
-  isMain: boolean;
-  parent: ParentT;
 };
 
 export type ResponseOneUser = {

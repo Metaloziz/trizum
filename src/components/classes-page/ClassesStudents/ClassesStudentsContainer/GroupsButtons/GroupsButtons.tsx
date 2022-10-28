@@ -5,7 +5,7 @@ import groupStore from 'app/stores/groupStore';
 import { ResponseGroups, ResponseOneGroup } from 'app/types/GroupTypes';
 import cn from 'classnames';
 import styles from 'components/classes-page/ClassesMainPage.module.scss';
-import { FC, SyntheticEvent, useState } from 'react';
+import { FC, SyntheticEvent, useState, useEffect } from 'react';
 
 type Props = {
   groups: ResponseGroups[];
@@ -21,6 +21,10 @@ export const GroupsButtons: FC<Props> = ({ selectedGroup, groups, getOneGroup })
     setValue(newValue);
   };
   //---------------------------------------------------------
+
+  useEffect(() => {
+    getOneGroup(groups[0].id);
+  }, []);
 
   return (
     <div className={styles.tabsWrapper}>
