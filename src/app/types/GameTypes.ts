@@ -72,7 +72,7 @@ export type GamePresetT = {
   game: GameT;
   status: StatusTypes;
   level: string;
-  settings: PresetsGameSettings[];
+  settings: Partial<PresetsGameSettings>[];
 };
 
 export type OneGamePresent = {

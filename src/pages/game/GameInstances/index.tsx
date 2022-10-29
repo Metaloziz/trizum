@@ -26,7 +26,7 @@ type GameReturnPropsT = {
   groupOptions: OptionT[];
   started: boolean;
   startGame: () => void;
-  settings?: PresetsGameSettings;
+  settings?: Partial<PresetsGameSettings>;
   closeResultModal: () => void;
   onRepeat: () => void;
   stopGame?: () => void;

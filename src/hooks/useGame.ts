@@ -9,6 +9,7 @@ import {
   ResultsT,
 } from 'app/types/GameTypes';
 import { Option } from 'components/select-mui/CustomSelect';
+import { DEFAULT_GAME_SETTINGS } from 'constants/games';
 import { getPresetArrOptions } from 'constants/presetArr';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -30,7 +31,7 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
   const [isModalOpen, toggleModal] = useState(false);
   const [resultModal, setResultModal] = useState(false);
   const [gameResult, setGameResult] = useState<ResultsNewT>(newDefaultResult);
-  const [settings, setSettings] = useState<PresetsGameSettings>(gamePreset.gamePreset.settings[0]);
+  const [settings, setSettings] = useState<Partial<PresetsGameSettings>>({});
 
   const navigate = useNavigate();
   const gameTitle = game.name;
@@ -96,13 +97,13 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
         /* под вопросом - уточнить у аналитиков и Александра */
         workGamePresetId: user.groups[0].group.course.works[0].work.gamePresets[0].id,
         finished: resultModal,
-        groupsCount: settings.groupsCount,
-        elementsTotal: settings.elementsTotal,
-        levelMaxCompleted: settings.levelMaxCompleted,
-        cycleTime: settings.cycleTime,
-        blinksCount: settings.blinksCount,
-        wordsCount: settings.wordsCount,
-        speed: settings.speed,
+        groupsCount: settings.groupsCount!,
+        elementsTotal: settings.elementsTotal!,
+        levelMaxCompleted: settings.levelMaxCompleted!,
+        cycleTime: settings.cycleTime!,
+        blinksCount: settings.blinksCount!,
+        wordsCount: settings.wordsCount!,
+        speed: settings.speed!,
         // ?????????
         actionsSuccessfulCount: gameResult.success,
         actionSpeed: 1,
@@ -144,7 +145,9 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
   }, []);
 
   useEffect(() => {
-    if (gamePreset.gamePreset.settings.length) {
+    if (gamePreset.gamePreset.id.length === 0) {
+      setSettings(DEFAULT_GAME_SETTINGS[gameName]);
+    } else {
       setSettings(gamePreset.gamePreset.settings[0]);
     }
   }, [gamePreset]);
