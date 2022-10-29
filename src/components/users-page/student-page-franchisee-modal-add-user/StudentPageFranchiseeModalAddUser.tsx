@@ -479,7 +479,7 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(({ onCloseM
                   <Grid item xs={12} sm={6}>
                     <div className={styles.isActive_helper}>Статус оплаты:</div>
                     <div className={styles.isActive_status}>
-                      {currentUser?.payed ? 'Оплачено' : 'Не оплчено'}
+                      {currentUser?.payed ? 'Оплачено' : 'Не оплачено'}
                     </div>
                   </Grid>
                 )}
@@ -492,7 +492,7 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(({ onCloseM
                 )}
               </div>
               <div className={styles.button}>
-                {currentUser && (
+                {currentUser?.roleCode === Roles.Student && (
                   <SetPaidStatusButton active={currentUser?.payed} id={currentUser.id} />
                 )}
               </div>

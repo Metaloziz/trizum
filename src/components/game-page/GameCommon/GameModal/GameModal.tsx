@@ -35,6 +35,7 @@ import { fieldSizeOptions } from 'utils/fieldSize';
 import { getOptionMui } from 'utils/getOption';
 import styles from './gameModal.module.scss';
 import { getSizeArea } from '../../../../utils/gameUtils/getSizeArea';
+import { filterGameStatus } from '../../../../utils/gameStatusFilter';
 
 type PropsT = {
   open: boolean;
@@ -211,6 +212,7 @@ export const GameModal: FC<PropsT> = observer(props => {
   useEffect(() => {
     rerenderPreset();
   }, [gamePreset, onClose]);
+  const gameStatusOption = filterGameStatus(gamePreset?.gamePreset?.id, status, statusTypesOptions);
 
   return (
     <Dialog maxWidth="xl" fullWidth onClose={closeModal} open={open}>
@@ -258,9 +260,7 @@ export const GameModal: FC<PropsT> = observer(props => {
                       label="Статус"
                       onChange={({ target: { value } }) => setStatus(value)}
                     >
-                      {gamePreset.gamePreset.id
-                        ? statusTypesOptions
-                        : statusTypesOptions.filter(el => el.key === 'draft')}
+                      {gameStatusOption}
                     </Select>
                   </FormControl>
                 </Grid>
@@ -296,7 +296,7 @@ export const GameModal: FC<PropsT> = observer(props => {
                   groupsCount={groupsCount}
                   elementsTotal={elementsTotal}
                   digitMax={digitMax}
-                  digitMin={digitMax}
+                  digitMin={digitMin}
                   setDigitMax={setDigitMax}
                   setDigitMin={setDigitMin}
                   colorsMap={colorsMap}
