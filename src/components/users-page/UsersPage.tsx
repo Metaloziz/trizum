@@ -1,4 +1,5 @@
 import appStore, { Roles } from 'app/stores/appStore';
+import { AddSecondChildForm } from 'components/users-page/student-page-franchisee-modal-add-user/ParentChildren/AddSecondChildeForm/AddSecondChildForm';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import Pagination from '@mui/material/Pagination';
 import { observer } from 'mobx-react-lite';
@@ -33,7 +34,8 @@ const UsersPage = observer(() => {
   const { getTariffs } = tariffsStore;
   const { user, role } = appStore;
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isOpenAddUserModal, setIsOpenAddUserModal] = useState(false);
+  const [isOpenAddChildModal, setIsOpenAddChildModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(page + 1);
 
   const onPageChange = (event: ChangeEvent<unknown>, newCurrentPage: number) => {
@@ -62,12 +64,20 @@ const UsersPage = observer(() => {
 
   const closeAddUserModal = () => {
     resetCurrentUser();
-    setIsModalOpen(false);
+    setIsOpenAddUserModal(false);
+  };
+
+  const closeAddChildModal = () => {
+    setIsOpenAddChildModal(false);
+  };
+
+  const setIsOpenAddChildModalCallBack = (value: boolean) => {
+    setIsOpenAddChildModal(value);
   };
 
   return (
     <div className={styles.wrapper}>
-      <Filter setIsModalOpen={setIsModalOpen} />
+      <Filter setIsModalOpen={setIsOpenAddUserModal} />
       <div className={styles.cardWrapper}>
         {users.map(u => (
           <CardStudentExtended getOneUser={getOneUser} key={u.id} user={u} />
@@ -90,13 +100,21 @@ const UsersPage = observer(() => {
       </BasicModal>
 
       {/* для добавления пользователей */}
-      <BasicModal visibility={isModalOpen} changeVisibility={closeAddUserModal}>
+      <BasicModal visibility={isOpenAddUserModal} changeVisibility={closeAddUserModal}>
         <StudentPageFranchiseeModalAddUser onCloseModal={closeAddUserModal} />
       </BasicModal>
 
       {/* для редактирования пользователей */}
       <BasicModal visibility={modals.isSetting} changeVisibility={closeEditUserModal}>
-        <StudentPageFranchiseeModalAddUser onCloseModal={closeEditUserModal} />
+        <StudentPageFranchiseeModalAddUser
+          onCloseModal={closeEditUserModal}
+          setIsOpenAddChildModal={setIsOpenAddChildModalCallBack}
+        />
+      </BasicModal>
+
+      {/* добавление второго ребёнка */}
+      <BasicModal visibility={isOpenAddChildModal} changeVisibility={closeAddChildModal}>
+        <AddSecondChildForm onCloseModal={closeAddChildModal} />
       </BasicModal>
     </div>
   );

@@ -1,4 +1,5 @@
 import { Roles } from 'app/stores/appStore';
+import { ChildrenResponse } from 'app/types/ChildrenResponse';
 import { FranchiseT } from 'app/types/FranchiseTypes';
 import { Nullable } from 'app/types/Nullable';
 import { TimeZoneType } from 'app/types/TimeZoneType';
@@ -28,19 +29,6 @@ export type RequestUsersForFilter = {
   tariff_id?: string | null;
   is_active?: boolean | null;
   active?: boolean;
-};
-
-export type RequestCreateUser = {
-  role: string;
-  franchiseId: string;
-  firstName: string;
-  middleName: string;
-  lastName: string;
-  city: string;
-  birthdate: string;
-  sex: boolean | null;
-  phone: string | null;
-  email: string | null;
 };
 
 export type ResponseOneUserGroupT = {
@@ -115,6 +103,7 @@ export type ResponseOneUser = {
   payedUntill: null | any;
   isSecondChild: null | boolean;
   password: string;
+  children?: ChildrenResponse[];
 } & ResponseUserT;
 
 export type RequestParenting = {
