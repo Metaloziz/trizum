@@ -168,7 +168,7 @@ const StudentParentsForm: FC<Props> = observer(
         city: values.city,
         lastName: values.lastName,
         firstName: values.firstName,
-        franchiseId: userFranchiseId,
+        // franchiseId: userFranchiseId,
         email: values.email,
         birthdate: values.birthdate,
         role: Roles.Parent,

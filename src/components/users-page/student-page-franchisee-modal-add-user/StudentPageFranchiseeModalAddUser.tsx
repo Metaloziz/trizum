@@ -116,7 +116,6 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(({ onCloseM
         selectedRole === Roles.Student
           ? yup.string().notRequired()
           : yup.string().required('Обязательное поле'),
-      /* .matches(REG_PHONE, 'необходим формат 7 ХХХ ХХХ ХХ ХХХ')                                                                                                                                                                                                                                                     .length(PHONE_LENGTH, `номер должен быть из ${PHONE_LENGTH} цифр`), */
       birthdate: yup
         .date()
         .required('Обязательное поле')
@@ -372,7 +371,6 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(({ onCloseM
                             field.onChange(e);
                           }}
                           title="Группа"
-                          // value=""
                           options={groupOptions}
                           error={errors.group?.message}
                         />
