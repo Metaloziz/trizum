@@ -4,6 +4,7 @@ import { Props } from './types';
 
 import Timer from '../../components/timer';
 import StartTimer from '../../components/startTimer';
+import TimerRevert from '../../components/timerRevert';
 import { preloadFile as SoundPreload } from '../../common/sound';
 import { rand } from '../../common/utils';
 
@@ -27,6 +28,9 @@ export default class extends Component<any, any> implements Game {
   blinks : any;
   blinksPress : any;
   blinksRef : any;
+  successPress : any;
+  failPress : any;
+  result : GameResult;
 
   constructor(props : any) {
     super(props);
@@ -35,8 +39,21 @@ export default class extends Component<any, any> implements Game {
     this.blinks = [];
     this.blinksPress = [];
     this.blinksRef = [];
+    this.successPress = 0;
+    this.failPress = 0;
+
+    this.result = {
+      result : 'win',
+      time : 0,
+      levelMaxCompleted : 0,
+      success : 0,
+      failed : 0,
+      finished : true
+    };
 
     this.state = {
+      level : 0,
+      levels : [],
       stage : 'listen',
       blink : false,
       started : false
@@ -63,6 +80,8 @@ export default class extends Component<any, any> implements Game {
   public start = () => {
     this.soundItems = [];
     this.blinksRef = [];
+    this.successPress = 0;
+    this.failPress = 0;
 
     Promise.all([
       SoundPreload(SOUND_DO),
@@ -83,8 +102,12 @@ export default class extends Component<any, any> implements Game {
     this.blinks = [];
     this.blinksPress = [];
     this.blinksRef = [];
+    this.successPress = 0;
+    this.failPress = 0;
 
     this.setState({
+      level : 0,
+      levels : [],
       stage : 'listen',
       blink : false,
       started : false
@@ -95,8 +118,12 @@ export default class extends Component<any, any> implements Game {
     this.blinks = [];
     this.blinksPress = [];
     this.blinksRef = [];
+    this.successPress = 0;
+    this.failPress = 0;
 
     this.setState({
+      level : 0,
+      levels : [],
       stage : 'listen',
       blink : false,
       started : false
@@ -107,6 +134,17 @@ export default class extends Component<any, any> implements Game {
     setTimeout(() => {
       this.startLogic();
     }, (START_TIMER + 1) * 1000);
+  }
+
+  onNextLevel = () => {
+    setTimeout(() => {
+      this.setState({
+        stage : 'listen',
+        blink : true
+      }, () => {
+        this.startLogic();
+      });
+    }, 1000);
   }
 
   startLogic = async () => {
@@ -154,6 +192,40 @@ export default class extends Component<any, any> implements Game {
   public getConfig = () => {
     return [
       {
+        name : 'timeComplete',
+        type : 'select',
+        title : 'Время на прохождение',
+        option : [
+          {
+            title : 'Бесконечно',
+            value : 0,
+          },
+          {
+            title : '10 секунд',
+            value : 10,
+          },
+          {
+            title : '20 секунд',
+            value : 20,
+          },
+          {
+            title : '30 секунд',
+            value : 30,
+          },
+        ],
+        value : 0
+      },
+      {
+        name : 'levelMaxCompleted',
+        type : 'select',
+        title : 'Кол-во уровней',
+        option : [1,2,3,4,5,6,7,8,9].map(a => ({
+          title : `${a}`,
+          value : a
+        })),
+        value : 1
+      },
+      {
         name : 'blinksCount',
         type : 'select',
         title : 'Кол-во миганий',
@@ -185,7 +257,9 @@ export default class extends Component<any, any> implements Game {
   public prepareConfig = (result : any) => {
     return {
       sound : parseInt(result.sound),
-      blinksCount : parseInt(result.blinksCount)
+      blinksCount : parseInt(result.blinksCount),
+      levelMaxCompleted : parseInt(result.levelMaxCompleted),
+      timeComplete : parseInt(result.timeComplete),
     };
   }
 
@@ -195,12 +269,15 @@ export default class extends Component<any, any> implements Game {
     if(index == needIndex) {
       this.blinksPress.push(index);
 
+      this.successPress++;
+
       if(
         this.blinksPress.length >= this.blinks.length
       ) {
         this.end('win');
       }
     } else {
+      this.failPress++;
       this.end('lose');
     }
   }
@@ -208,16 +285,70 @@ export default class extends Component<any, any> implements Game {
   private end = (status = 'win') => {
     const time = this.timerRef?.getValue();
 
+    this.result.time += time;
+    this.result.levelMaxCompleted = status == 'win' ? this.state.level+1 : this.result.levelMaxCompleted;
+    this.result.success = this.successPress;
+    this.result.failed = this.failPress;
+
+    if(this.state.level+1 < this.props.levelMaxCompleted) {
+      this.setState({
+        level : this.state.level+1
+      }, () => {
+        this.onNextLevel();
+      });
+      return;
+    }
+
     const {
       onEnd = () => {}
     } = this.props;
 
-    const result : GameResult = {
-      result : status == 'win' ? 'win' : 'lose',
-      time : time
-    };
+    // const result : GameResult = {
+    //   result : status == 'win' ? 'win' : 'lose',
+    //   finished : status === 'win',
+    //   time : time,
+    //   success : this.successPress,
+    //   failed : this.failPress,
+    // };
 
-    onEnd(result);
+    onEnd(this.result);
+
+    this.stop();
+
+    // this.onNextLevel();
+    // return;
+    // const time = this.timerRef?.getValue();
+    //
+    // const {
+    //   onEnd = () => {}
+    // } = this.props;
+    //
+    // const result : GameResult = {
+    //   result : status == 'win' ? 'win' : 'lose',
+    //   finished : status === 'win',
+    //   time : time,
+    //   success : this.successPress,
+    //   failed : this.failPress,
+    // };
+    //
+    // onEnd(result);
+    //
+    // this.stop();
+  }
+
+  onEndTime = () => {
+    const time = this.timerRef?.getValue();
+
+    this.result.time += time;
+    this.result.success = this.successPress;
+    this.result.failed = this.failPress;
+    this.result.finished = false;
+
+    const {
+      onEnd = () => {}
+    } = this.props;
+
+    onEnd(this.result);
 
     this.stop();
   }
@@ -230,19 +361,49 @@ export default class extends Component<any, any> implements Game {
     const {
       started,
       blink = false,
-      stage = 'listen'
+      stage = 'listen',
+      level = 0
     } = this.state;
 
     const {
       blinksCount = 2,
       width,
       colorsMap,
-      sound = 1
+      sound = 1,
+      levelMaxCompleted = 5,
+      timeComplete = 3
     } = this.props;
 
     const sizeBlink = Math.round((width - ((colorsMap.length - 1) * SPACE)) / colorsMap.length);
 
     return <>
+      {levelMaxCompleted > 1 && <Text style={styles.levels}>Уровень {level+1}/{levelMaxCompleted}</Text>}
+      {timeComplete > 0 && <View style={styles.progressTime}>
+        <TimerRevert
+          time={timeComplete}
+          onEnd={this.onEndTime}
+          renderComponent={() => <View
+            style={{
+              ...styles.progressTimeInner,
+              width : `100%`
+            }}
+          />}
+          renderTime={(t : any) => {
+            let progress = ((timeComplete - t) / timeComplete) * 100;
+
+            if(progress > 100) {
+              progress = 100;
+            }
+
+            return <View
+              style={{
+                ...styles.progressTimeInner,
+                width : `${progress}%`
+              }}
+            />
+          }}
+        />
+      </View>}
       <View style={styles.wrapTop}>
         <Text style={styles.title}>{stage == 'listen' ? 'Запоминай' : 'Повторяй'}</Text>
       </View>
@@ -325,5 +486,25 @@ const styles = StyleSheet.create({
     fontSize : 14,
     fontWeight : 'bold',
     marginBottom : 12
-  }
+  },
+  levels : {
+    textAlign : 'center',
+    fontSize : 14,
+    fontWeight : 'bold',
+    marginBottom : 12
+  },
+  progressTime : {
+    height : 6,
+    backgroundColor : '#E6EEF8',
+    borderRadius : 3,
+    overflow : 'hidden',
+    marginTop : 0,
+    marginHorizontal : 0,
+    marginBottom : 12
+  },
+  progressTimeInner : {
+    height : 6,
+    backgroundColor : '#7427CC',
+    borderRadius : 2,
+  },
 });

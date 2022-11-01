@@ -12,8 +12,8 @@ export interface Props extends GameProps {
 
 const PropsDefault : Props = {
   width : 200,
-  timeComplete : 10000,
-  cycleTime : 5,
+  timeComplete : 0,
+  cycleTime : 5000,
   elementsTotal: 2,
   groupsCount: 2,
   blinksCount: 2

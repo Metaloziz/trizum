@@ -6,6 +6,7 @@ import { Game, GameResult } from '../../common/types';
 
 import StartTimer from '../../components/startTimer';
 import Timer from '../../components/timerRevert';
+import TimerAll from '../../components/timer';
 import { arrayShuffle, isWeb } from '../../common/utils';
 
 const START_TIMER = 3;
@@ -41,6 +42,8 @@ const MapElements = [
 ];
 
 export default class extends Component<any, any> implements Game {
+
+  timerAll : any;
 
   constructor(props : any) {
     super(props);
@@ -119,11 +122,11 @@ export default class extends Component<any, any> implements Game {
         name : 'timeComplete',
         type : 'select',
         title : 'Время на прохождение уровня',
-        option : [10, 15, 30, 60, 120, 180].map(a => ({
-          title : `${a} сек`,
+        option : [0, 10, 15, 30, 60, 120, 180].map(a => ({
+          title : a === 0 ? 'Бесконечно' : `${a} сек`,
           value : a
         })),
-        value : 10
+        value : 0
       },
       {
         name : 'elementsTotal',
@@ -179,11 +182,19 @@ export default class extends Component<any, any> implements Game {
 
   onWin = () => {
     const {
+      elementsTotal,
       onEnd = () => {}
     } = this.props;
 
+    const timer: any = this.timerAll;
+    const time = timer?.getValue();
+
     const result : GameResult = {
-      result : 'win'
+      result : 'win',
+      success : elementsTotal - this.state.elements.length,
+      failed : 0,
+      finished : true,
+      time : time
     };
 
     onEnd(result);
@@ -193,11 +204,19 @@ export default class extends Component<any, any> implements Game {
 
   onEnd = () => {
     const {
+      elementsTotal,
       onEnd = () => {}
     } = this.props;
 
+    const timer: any = this.timerAll;
+    const time = timer?.getValue();
+
     const result : GameResult = {
-      result : 'lose'
+      result : 'lose',
+      finished : false,
+      success : elementsTotal - this.state.elements.length,
+      failed : 1,
+      time : time
     };
 
     onEnd(result);
@@ -230,7 +249,7 @@ export default class extends Component<any, any> implements Game {
         source={imageBackground}
         style={styles.background}
       />
-      <View style={styles.progressTime}>
+      {timeComplete > 0 && <View style={styles.progressTime}>
         <Timer
           ref='timer'
           time={timeComplete}
@@ -256,7 +275,7 @@ export default class extends Component<any, any> implements Game {
             />
           }}
         />
-      </View>
+      </View>}
       <View style={styles.wrapMain}>
         <View
           style={{
@@ -303,6 +322,10 @@ export default class extends Component<any, any> implements Game {
           </TouchableOpacity>)}
         </View>
       </View>
+      <TimerAll
+        ref={(ref : any) => this.timerAll = ref}
+        renderTime={(time : any) => <Text style={styles.timer}>{time} сек</Text>}
+      />
     </View>;
   }
 
@@ -331,6 +354,13 @@ export default class extends Component<any, any> implements Game {
 }
 
 const styles = StyleSheet.create({
+  timer : {
+    textAlign : 'center',
+    marginBottom : 6,
+    fontSize : 14,
+    lineHeight : 20,
+    color : '#fff'
+  },
   wrap : {
     marginTop : 12,
     marginBottom : 12,

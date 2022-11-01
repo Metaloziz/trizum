@@ -80,6 +80,10 @@ export default class extends Component<any, any> implements Game {
         type : 'select',
         option : [
           {
+            title : 'Бесконечно',
+            value : 0
+          },
+          {
             title : '30 секунд',
             value : 30
           },
@@ -96,7 +100,7 @@ export default class extends Component<any, any> implements Game {
             value : 300
           },
         ],
-        value : 30,
+        value : 0,
         required : true
       },
       {

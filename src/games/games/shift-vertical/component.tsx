@@ -80,6 +80,10 @@ export default class extends Component<any, any> implements Game {
         type : 'select',
         option : [
           {
+            title : 'Бесконечно',
+            value : 0
+          },
+          {
             title : '30 секунд',
             value : 30
           },
@@ -96,7 +100,7 @@ export default class extends Component<any, any> implements Game {
             value : 300
           },
         ],
-        value : 30,
+        value : 0,
         required : true
       },
       {
@@ -106,22 +110,22 @@ export default class extends Component<any, any> implements Game {
         option : [
           {
             title : '2 секунды',
-            value : 2
+            value : 2000
           },
           {
             title : '3 секунды',
-            value : 3
+            value : 3000
           },
           {
             title : '5 секунд',
-            value : 5
+            value : 5000
           },
           {
             title : '10 секунд',
-            value : 10
+            value : 10000
           },
         ],
-        value : 3,
+        value : 2000,
         required : true
       },
       {
@@ -167,7 +171,7 @@ export default class extends Component<any, any> implements Game {
     } = this.state;
 
     const {
-      timeComplete = 10,
+      timeComplete = 0,
       elementsTotal,
       width
     } = this.props;

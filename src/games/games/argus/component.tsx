@@ -3,6 +3,7 @@ import { View, TouchableOpacity, StyleSheet, Text, Image } from 'react-native';
 import { Props } from './types';
 
 import Timer from '../../components/timerRevert';
+import TimerAll from '../../components/timer';
 import StartTimer from '../../components/startTimer';
 
 import { Game, GameResult } from '../../common/types';
@@ -14,6 +15,8 @@ const START_TIMER = 3;
 const imageBackground = require('./assets/background.png');
 
 export default class extends Component<any, any> implements Game {
+
+  timerAll : any;
 
   constructor(props : any) {
     super(props);
@@ -86,11 +89,11 @@ export default class extends Component<any, any> implements Game {
         name : 'timeComplete',
         type : 'select',
         title : 'Время на прохождение',
-        option : [10, 15, 30, 60, 120, 180].map(a => ({
-          title : `${a} сек`,
+        option : [0, 10, 15, 30, 60, 120, 180].map(a => ({
+          title : a === 0 ? 'Бесконечно' : `${a} сек`,
           value : a
         })),
-        value : 10
+        value : 0
       },
       {
         name : 'elementsTotal',
@@ -143,10 +146,14 @@ export default class extends Component<any, any> implements Game {
       onEnd = () => {}
     } = this.props;
 
+    const timer: any = this.timerAll;
+    const time = timer?.getValue();
+
     const result : GameResult = {
       result : status == 'win' ? 'win' : 'lose',
       success : this.state.success,
       failed : this.state.errors,
+      time : time
     };
 
     onEnd(result);
@@ -222,7 +229,7 @@ export default class extends Component<any, any> implements Game {
         source={imageBackground}
         style={styles.background}
       />
-      <View style={styles.progressTime}>
+      {timeComplete > 0 && <View style={styles.progressTime}>
         <Timer
           ref='timer'
           time={timeComplete}
@@ -248,7 +255,7 @@ export default class extends Component<any, any> implements Game {
             />
           }}
         />
-      </View>
+      </View>}
       <View style={styles.wrapLevels}>
         {levels}
       </View>
@@ -256,6 +263,10 @@ export default class extends Component<any, any> implements Game {
         key={`level-${level}`}
         onResult={this.onResult}
         {...this.props}
+      />
+      <TimerAll
+        ref={(ref : any) => this.timerAll = ref}
+        renderTime={(time : any) => <Text style={styles.timer}>{time} сек</Text>}
       />
     </View>;
   }
@@ -285,6 +296,14 @@ export default class extends Component<any, any> implements Game {
 }
 
 const styles = StyleSheet.create({
+  timer : {
+    textAlign : 'center',
+    marginTop : 12,
+    marginBottom : 12,
+    fontSize : 14,
+    lineHeight : 20,
+    color : '#fff'
+  },
   wrap : {
     marginTop : 12,
     marginBottom : 12,

@@ -1,24 +1,14 @@
 import React, { Component } from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 
-import { Svg, Path } from 'react-native-svg';
+import { Svg, Circle, Path } from 'react-native-svg';
 
 import { rand, describeArc } from '../../../common/utils';
 
 import SteamArrow from './arrow';
 
 const BORDER_SIZE = 6;
-
-export const getAngelsSize = (area: string) => {
-
-  const arrayNumbers = area.split('/')
-
-  const number1 = Number(arrayNumbers[0])
-  const number2 =Number( arrayNumbers[1])
-
-  return  360 * number1 / number2
-
-}
+const SIZE_ANGLE = 55;
 
 export default class extends Component<any, any> {
 
@@ -27,7 +17,7 @@ export default class extends Component<any, any> {
   constructor(props : any) {
     super(props);
 
-    this.startAngle = rand(0, 360 - getAngelsSize(props.area));
+    this.startAngle = rand(0, 360 - SIZE_ANGLE);
   }
 
   onPress = () => {
@@ -57,7 +47,7 @@ export default class extends Component<any, any> {
 
     const innerSize = size - (BORDER_SIZE*4);
     const centerSize = Math.round(size * 0.4);
-    const range = [this.startAngle, this.startAngle + getAngelsSize(this.props.area)];
+    const range = [this.startAngle, this.startAngle + SIZE_ANGLE];
 
     return <TouchableOpacity
       style={{

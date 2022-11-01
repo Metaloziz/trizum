@@ -13,6 +13,8 @@ export interface GameResult {
   score?: number;
   failed?: number;
   success?: number;
+  finished?: boolean;
+  levelMaxCompleted?: number;
 }
 
 export interface Game {

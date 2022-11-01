@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
 
 import Timer from '../../../components/timerRevert';
+import TimerAll from '../../../components/timer';
 import LevelsView from './levels';
 import LevelView from './level';
 
@@ -34,8 +35,8 @@ export default class extends Component<any, any> {
     } = this.props;
 
     const result = {...this.result};
-    const timer: any = this.refs?.timer;
-    const time = this.props.timeComplete - timer?.getValue();
+    const timer: any = this.refs?.timerAll;
+    const time = timer?.getValue();
 
     onEnd({
       ...result,
@@ -76,7 +77,7 @@ export default class extends Component<any, any> {
 
   render() {
     const {
-      timeComplete,
+      timeComplete = 0,
       cycleTime,
       elementsTotal,
       groupsCount = 2,
@@ -104,7 +105,7 @@ export default class extends Component<any, any> {
           cycleTime={cycleTime}
         />
       </View>
-      <View style={styles.progressTime}>
+      {timeComplete > 0 && <View style={styles.progressTime}>
         <Timer
           ref='timer'
           time={timeComplete}
@@ -130,13 +131,23 @@ export default class extends Component<any, any> {
             />
           }}
         />
-      </View>
+      </View>}
+      <TimerAll
+        ref='timerAll'
+        renderTime={(time : any) => <Text style={styles.timer}>{time} сек</Text>}
+      />
     </View>;
   }
 
 }
 
 const styles = StyleSheet.create({
+  timer : {
+    textAlign : 'center',
+    marginTop : 12,
+    fontSize : 14,
+    lineHeight : 20,
+  },
   wrap : {
     flex : 1
   },

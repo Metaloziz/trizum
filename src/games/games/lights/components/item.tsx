@@ -27,6 +27,7 @@ export default class extends Component<any, any> {
     this.directionCount = 0;
 
     this.state = {
+      color : false,
       position : this.generateStart()
     };
   }
@@ -195,30 +196,81 @@ export default class extends Component<any, any> {
     }
   }
 
-  render() {
+  onPress = () => {
     const {
       onPress
     } = this.props;
+
+    this.activateColor(() => {
+      onPress();
+    });
+  }
+
+  activateColor = (cb : any) => {
     const {
+      flight = true
+    } = this.props;
+
+    if(flight) {
+      return;
+    }
+
+    this.setState({
+      color : this.getColor()
+    }, () => {
+      cb();
+    });
+  }
+
+  getColor = () => {
+    const {
+      type = 'win'
+    } = this.props;
+
+    return type == 'win' ? '#0f0' : '#f00';
+  }
+
+  render() {
+    const {
+      onPress,
+      ended = false
+    } = this.props;
+    const {
+      color = false,
       position = []
     } = this.state;
 
-    return <TouchableOpacity
-      style={{
-        width : ITEM_WIDTH,
-        height : ITEM_HEIGHT,
-        left : position[0],
-        top : position[1],
-        ...styles.item
-      }}
-      activeOpacity={0.8}
-      onPress={onPress}
-    >
-      <Image
-        source={imageItem}
-        style={styles.image}
+    const setColor = ended ? this.getColor() : (!!color ? color : 'transparent');
+
+    return <>
+      <View
+        style={{
+          position : 'absolute',
+          width : 30,
+          height : 30,
+          left : position[0] - 2,
+          top : position[1] - 4,
+          backgroundColor : setColor,
+          borderRadius : 15
+        }}
       />
-    </TouchableOpacity>;
+      <TouchableOpacity
+        style={{
+          width : ITEM_WIDTH,
+          height : ITEM_HEIGHT,
+          left : position[0],
+          top : position[1],
+          ...styles.item
+        }}
+        activeOpacity={0.8}
+        onPress={this.onPress}
+      >
+        <Image
+          source={imageItem}
+          style={styles.image}
+        />
+      </TouchableOpacity>
+    </>;
   }
 
 }

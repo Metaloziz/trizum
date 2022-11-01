@@ -63,7 +63,8 @@ export default class extends Component<any, any> {
     } = this.state;
 
     const {
-      size = 0
+      size = 0,
+      color = 'rgba(255,0,0,0.1)'
     } = this.props;
 
     const sizeWithBorder = size;
@@ -80,6 +81,7 @@ export default class extends Component<any, any> {
       <Animated.View
         style={{
           ...styles.inner,
+          backgroundColor : color,
           opacity : opacity.interpolate({
             inputRange : [0, 1],
             outputRange : [0, 1]

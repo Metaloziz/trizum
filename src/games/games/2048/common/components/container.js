@@ -28,6 +28,22 @@ class Container extends Component {
         };
     }
 
+    getMaxValue = () => {
+      let max = 0;
+
+      this.state.tiles?.map(a => {
+        if(a.value > max) {
+          max = parseInt(a.value);
+        }
+      });
+
+      return max;
+    }
+
+    getScore = () => {
+      return this.score;
+    }
+
     componentDidUpdate(prevProps,prevState,snapshot) {
         const { size } = this.props;
 
@@ -253,9 +269,13 @@ class Container extends Component {
                         self.props.onScore(self.score);
 
                         // The mighty 2048 tile
-                        if (merged.value === 2048) {
+                        if (merged.value === (self.props.digitMax || 2048)) {
+                          setTimeout(() => {
                             self.won = true;
-                            self.onWin(self.score);
+                            self.props.onWin(self.score);
+                          }, 1000);
+                            // self.won = true;
+                            // self.props.onWin(self.score);
                         }
                     } else {
                         self.moveTile(tile, positions.farthest);
