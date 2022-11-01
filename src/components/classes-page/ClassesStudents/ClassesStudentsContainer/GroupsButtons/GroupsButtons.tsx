@@ -23,7 +23,9 @@ export const GroupsButtons: FC<Props> = ({ selectedGroup, groups, getOneGroup })
   //---------------------------------------------------------
 
   useEffect(() => {
-    getOneGroup(groups[0].id);
+    if (groups[0]) {
+      getOneGroup(groups[0].id);
+    }
   }, []);
 
   return (
