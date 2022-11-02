@@ -1,3 +1,4 @@
+import { UserGroupStatus } from 'app/enums/UserGroupStatus';
 import { Roles } from 'app/stores/appStore';
 import groupStore from 'app/stores/groupStore';
 import usersStore from 'app/stores/usersStore';
@@ -5,6 +6,7 @@ import { RequestRegister } from 'app/types/AuthTypes';
 import { ResponseOneUser } from 'app/types/UserTypes';
 import { isStudentTeacherEducation } from 'components/users-page/student-page-franchisee-modal-add-user/utils/isStudentTeacherEducation';
 import { Dispatch, SetStateAction } from 'react';
+import { findActiveClassGroup } from 'utils/findActiveClassGroup';
 import { removeKeysWithSameValues } from 'utils/removeKeysWithSameValues';
 import { setErrorFormMessage } from 'utils/setErrorFormMessage';
 
@@ -74,6 +76,11 @@ export const action = async (
 
     // если есть новый ID группы, то нужно удалить старую и создать новую зависимость
     if (memoData.groupId) {
+      const oldClassGroup = findActiveClassGroup(user?.groups);
+
+      editUserGroup({ status: UserGroupStatus.suspended }, oldClassGroup!.userGroupId);
+      addUserGroup({ userId: memoData.userId, groupId: memoData.groupId });
+
       // todo доделать остановился 02.11
     }
 

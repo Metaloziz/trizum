@@ -9,7 +9,6 @@ import groupStore from 'app/stores/groupStore';
 import tariffsStore from 'app/stores/tariffsStore';
 import usersStore from 'app/stores/usersStore';
 import { RequestRegister } from 'app/types/AuthTypes';
-import { ResponseOneUserGroupT } from 'app/types/UserTypes';
 import SetStatusButton from 'components/button-open-close/SetStatusButton';
 import SetPaidStatusButton from 'components/button-paid-unpaid/SetPaidStatusButton';
 import Button from 'components/button/Button';
@@ -36,6 +35,7 @@ import { convertSexOptions } from 'utils/convertSexOptions';
 import { convertTariffOptions } from 'utils/convertTariffOptions';
 import { maxBirthdayYearAll, maxBirthdayYearStudent, minBirthdayYear } from 'utils/dateMask';
 import { filterRoleOptions } from 'utils/filterRoleOptions';
+import { findActiveClassGroup } from 'utils/findActiveClassGroup';
 import { removeEmptyFields } from 'utils/removeEmptyFields';
 import * as yup from 'yup';
 import TextFieldPhoneCustom from '../../text-field-phone-mui/TextFieldPhoneCustom';
@@ -70,17 +70,9 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
       }
     }, []);
 
+    console.log('currentUser', toJS(currentUser));
+
     const findSex = () => (currentUser?.sex ? sexOptions[0].value : sexOptions[1].value);
-
-    const findActiveClassGroup = (groupsCurrentUser?: ResponseOneUserGroupT[]) => {
-      if (groupsCurrentUser) {
-        const classGroup = groupsCurrentUser.filter(group => group.groupType === 'class'); // todo draft 02.11
-      }
-    };
-
-    useEffect(() => {
-      findActiveClassGroup(currentUser?.groups);
-    }, []);
 
     const defaultValues = {
       firstName: currentUser?.firstName || '',
@@ -94,7 +86,7 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
       email: currentUser?.email || '',
       franchise: '', // не изменяется при редактировании
       tariff: currentUser?.tariff?.id || '',
-      group: currentUser?.groups[0]?.groupId || '', // todo нужно найти группу типа Class и со статусов active
+      group: findActiveClassGroup(currentUser?.groups)?.groupId || '',
       password: currentUser?.password || '', // не обязателен при редактировании
     };
 

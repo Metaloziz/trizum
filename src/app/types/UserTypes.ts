@@ -1,3 +1,4 @@
+import { UserGroupStatus } from 'app/enums/UserGroupStatus';
 import { Roles } from 'app/stores/appStore';
 import { ChildrenResponse } from 'app/types/ChildrenResponse';
 import { FranchiseT } from 'app/types/FranchiseTypes';
@@ -36,6 +37,7 @@ export type ResponseOneUserGroupT = {
   groupName: string;
   groupType: null | string;
   userGroupId: string;
+  userGroupStatus: UserGroupStatus;
 };
 
 type ResponseUserAvatarT = {
