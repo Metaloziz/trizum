@@ -3,8 +3,8 @@ import { GamePresetT, GameT, PresetsGameSettings, ResultsNewT } from 'app/types/
 import { OptionT } from 'app/types/OptionT';
 import Button from 'components/button/Button';
 import { GameDesc } from 'components/game-page/GameCommon/GameDesc';
-import { GameModal } from 'components/game-page/GameCommon/GameModal/GameModal';
 import { GameResultModal } from 'components/game-page/GameCommon/GameModal/GameResultModal/GameResultModal';
+import { NewGameModal } from 'components/game-page/GameCommon/GameModal/NewGameModal';
 import { PlayButton } from 'components/game-page/GameCommon/PlayButton';
 import { SelectBlock } from 'components/game-page/GameCommon/SelectBlock';
 import styles from 'pages/game/Game.module.scss';
@@ -70,8 +70,8 @@ export const GameReturn: FC<GameReturnPropsT> = props => {
 
   return (
     <>
-      {(role === Roles.Methodist || role === Roles.Admin) && (
-        <GameModal open={isModalOpen} onClose={toggleModal} deletePreset={deletePreset} />
+      {(role === Roles.Methodist || role === Roles.Admin) && isModalOpen && (
+        <NewGameModal open={isModalOpen} onClose={toggleModal} deletePreset={deletePreset} />
       )}
 
       <GameResultModal

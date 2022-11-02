@@ -1,4 +1,6 @@
-import React, { FC, forwardRef, useId } from 'react';
+import { FormControlPropsSizeOverrides } from '@mui/material/FormControl/FormControl';
+import { OverridableStringUnion } from '@mui/types';
+import React, { FC, forwardRef, RefAttributes, useId } from 'react';
 
 import {
   FormControl,
@@ -20,15 +22,16 @@ interface Props {
   error?: string;
   value: string;
   defaultValue?: Option;
+  size?: OverridableStringUnion<'small' | 'medium', FormControlPropsSizeOverrides>;
 }
 
-const CustomSelect: FC<Props> = forwardRef((props, ref) => {
-  const { options, placeholder, className, onChange, title, value, error, defaultValue } = props;
+const CustomSelect: FC<Props & RefAttributes<HTMLInputElement>> = forwardRef((props, ref) => {
+  const { options, onChange, title, value, error, size = 'medium' } = props;
   const id = useId();
 
   return (
     <div>
-      <FormControl fullWidth>
+      <FormControl size={size} fullWidth>
         <InputLabel id="demo-simple-select-label">{title}</InputLabel>
         <Select
           error={!!error}

@@ -20,7 +20,7 @@ export type PresetsGameSettings = {
   templateCode: number;
   groupsCount: number;
   blinksCount: number;
-  errorAcceptable: number;
+  errorAacceptable: number;
   speed: number;
   colorsMap: string[];
   delay: number;

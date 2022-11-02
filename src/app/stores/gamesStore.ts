@@ -14,7 +14,7 @@ import {
 } from 'app/types/GameTypes';
 import { PresetT } from 'app/types/WorkTypes';
 import { makeAutoObservable, runInAction } from 'mobx';
-import { removeEmptyFields } from '../../utils/removeEmptyFields';
+import { removeEmptyFields } from 'utils/removeEmptyFields';
 import { SearchParamsType } from '../types/SearchParamsType';
 import appStore, { Roles } from 'app/stores/appStore';
 
@@ -28,6 +28,27 @@ class GamesStore {
     total: 0,
   };
 
+  private defaultSettings: PresetsGameSettings = {
+    timeComplete: 10,
+    elementsTotal: 4,
+    levelMaxCompleted: 1,
+    gameCode: '',
+    cycleTime: 1,
+    wordsCount: 1,
+    digitMax: 1,
+    templateCode: 1,
+    groupsCount: 4,
+    blinksCount: 4,
+    errorAacceptable: 1,
+    speed: 1,
+    colorsMap: [],
+    delay: 1,
+    description: '',
+    sound: 0,
+    digitMin: 1,
+    area: false,
+  };
+
   gamePreset: OneGamePresent = {
     gamePreset: {
       id: '',
@@ -39,28 +60,7 @@ class GamesStore {
       },
       status: '' as StatusTypes,
       level: 'easy',
-      settings: [
-        {
-          timeComplete: 10,
-          elementsTotal: 4,
-          levelMaxCompleted: 1,
-          gameCode: '',
-          cycleTime: 1,
-          wordsCount: 1,
-          digitMax: 1,
-          templateCode: 1,
-          groupsCount: 4,
-          blinksCount: 4,
-          errorAcceptable: 1,
-          speed: 1,
-          colorsMap: [],
-          delay: 1,
-          description: '',
-          sound: 0,
-          digitMin: 1,
-          area: false,
-        },
-      ] as PresetsGameSettings[],
+      settings: [{ ...this.defaultSettings }] as PresetsGameSettings[],
     },
     usedInWorks: [],
   };
@@ -164,7 +164,7 @@ class GamesStore {
             },
             status: '' as StatusTypes,
             level: '',
-            settings: [] as PresetsGameSettings[],
+            settings: [{ ...this.defaultSettings }] as PresetsGameSettings[],
           },
           usedInWorks: [],
         };

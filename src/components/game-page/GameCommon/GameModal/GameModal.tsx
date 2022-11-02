@@ -34,7 +34,7 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import { fieldSizeOptions } from 'utils/fieldSize';
 import { getOptionMui } from 'utils/getOption';
 import styles from './gameModal.module.scss';
-import { getSizeArea } from '../../../../utils/gameUtils/getSizeArea';
+import { getSizeArea } from 'utils/gameUtils/getSizeArea';
 
 type PropsT = {
   open: boolean;
@@ -77,7 +77,7 @@ export const GameModal: FC<PropsT> = observer(props => {
   const [digitMax, setDigitMax] = useState<string>(settings?.digitMax?.toString() || '1');
   const [digitMin, setDigitMin] = useState<string>(settings?.digitMin?.toString() || '1');
   const [errorAcceptable, setErrorAcceptable] = useState<string>(
-    settings?.errorAcceptable?.toString() || '1',
+    settings?.errorAacceptable?.toString() || '1',
   );
   const [speed, setSpeed] = useState<string>(settings?.speed?.toString() || '1');
   const [blinksCount, setBlinksCount] = useState<string>(settings?.blinksCount?.toString() || '1');
@@ -135,7 +135,7 @@ export const GameModal: FC<PropsT> = observer(props => {
     setWordsCount(settings?.wordsCount?.toString() || '');
     setDigitMax(settings?.digitMax?.toString() || '');
     setDigitMin(settings?.digitMin?.toString() || '');
-    setErrorAcceptable(settings?.errorAcceptable?.toString() || '');
+    setErrorAcceptable(settings?.errorAacceptable?.toString() || '');
     setSpeed(settings?.speed?.toString() || '');
     setBlinksCount(settings?.blinksCount?.toString() || '');
     setDescription(settings?.description || '');

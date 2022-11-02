@@ -24,7 +24,7 @@ export const DEFAULT_GAME_SETTINGS: { [key: string]: Partial<PresetsGameSettings
   },
   steamEngine: {
     timeComplete: 60,
-    errorAcceptable: 1,
+    errorAacceptable: 1,
     elementsTotal: 5,
   },
   silhouettes: {
@@ -46,7 +46,7 @@ export const DEFAULT_GAME_SETTINGS: { [key: string]: Partial<PresetsGameSettings
   },
   argus: {
     elementsTotal: 2,
-    errorAcceptable: 2,
+    errorAacceptable: 2,
     digitMax: 3,
     timeComplete: 10,
     speed: 2000,
