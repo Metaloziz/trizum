@@ -20,6 +20,7 @@ import { isMethodistTutor } from 'components/users-page/student-page-franchisee-
 import { isStudentCreated } from 'components/users-page/student-page-franchisee-modal-add-user/utils/isStudentCreated';
 import { isStudentRole } from 'components/users-page/student-page-franchisee-modal-add-user/utils/isStudentRole';
 import { isStudentTeacherEducation } from 'components/users-page/student-page-franchisee-modal-add-user/utils/isStudentTeacherEducation';
+import { regExp } from 'components/users-page/student-page-franchisee-modal-add-user/utils/regExp';
 import { roleOptions } from 'components/users-page/student-page-franchisee-modal-add-user/utils/roleOptions';
 import { StudentParentsFormContainer } from 'components/users-page/student-parrents-form-container/StudentParentsFormContainer';
 import { MAX_NAMES_LENGTH, MIN_NAMES_LENGTH } from 'constants/constants';
@@ -137,10 +138,7 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
             : yup
                 .string()
                 .email('Обязательное поле')
-                .matches(
-                  /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
-                  'Введите валидный email',
-                )
+                .matches(regExp, 'Введите валидный email')
                 .required('Обязательное поле'),
         franchise: currentUser
           ? yup.string().notRequired()
@@ -515,7 +513,7 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
         </form>
         <div>
           {/* редактирование родителей */}
-          {currentUser?.parents && (
+          {currentUser?.parents && !isParentShown && !studentId && (
             <StudentParentsFormContainer
               franchiseId={currentFranchiseId}
               studentId={currentUser.id ? currentUser.id : ''}
