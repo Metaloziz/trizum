@@ -1,5 +1,5 @@
 import authService from 'app/services/authService';
-import groupsService from 'app/services/groupsService';
+import groupStore from 'app/stores/groupStore';
 import usersStore from 'app/stores/usersStore';
 import { RequestRegister } from 'app/types/AuthTypes';
 
@@ -8,7 +8,7 @@ export const action = async (
   onCloseModal: (value: boolean) => void,
 ) => {
   const { currentUser, createParenting } = usersStore;
-  const { addUserGroup } = groupsService;
+  const { addUserGroup } = groupStore;
 
   // const response = await createUser(newUserData);
   const child = await authService.register(newUserData);

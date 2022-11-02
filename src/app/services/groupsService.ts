@@ -1,18 +1,15 @@
 import { Paths } from 'app/enums/Paths';
 import instance from 'app/services/config';
+import { AddUserGroupPayloadType } from 'app/types/addUserGroupPayloadType';
+import { EditUserGroupPayloadType } from 'app/types/EditUserGroupPayloadType';
 import {
   CreateGroupForServer,
   GroupParamsForServer,
   ResponseGroups,
   ResponseOneGroup,
 } from 'app/types/GroupTypes';
-import { WithPagination } from 'app/types/WithPagination';
 import { OlympiadPayloadType } from 'app/types/OlympiadPayloadType';
-
-export type AddUserGroupPayloadType = {
-  userId: string;
-  groupId: string;
-};
+import { WithPagination } from 'app/types/WithPagination';
 
 const groupsService = {
   getGroups: async (
@@ -63,6 +60,11 @@ const groupsService = {
 
   addUserGroup: async (addGroupData: AddUserGroupPayloadType) => {
     const { data } = await instance.post(`${Paths.UserGroups}`, addGroupData);
+    return data;
+  },
+
+  editUserGroupStatus: async (editGroupData: EditUserGroupPayloadType, userGroupId: string) => {
+    const { data } = await instance.post(`${Paths.UserGroups}/${userGroupId}`, editGroupData);
     return data;
   },
 

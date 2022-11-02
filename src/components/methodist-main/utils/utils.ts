@@ -1,7 +1,7 @@
-import { GroupLevels } from '../../../app/enums/GroupLevels';
-import { GroupTypes } from '../../../app/enums/GroupTypes';
-import { StatusEnum } from '../../../app/enums/StatusTypes';
-import { getOptionMui } from '../../../utils/getOption';
+import { GroupLevels } from 'app/enums/GroupLevels';
+import { GroupTypes } from 'app/enums/GroupTypes';
+import { StatusEnum } from 'app/enums/StatusTypes';
+import { getOptionMui } from 'utils/getOption';
 
 const groupTypesKeys = Object.keys(GroupTypes);
 

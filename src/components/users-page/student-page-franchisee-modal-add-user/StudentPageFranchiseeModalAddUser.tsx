@@ -9,6 +9,7 @@ import groupStore from 'app/stores/groupStore';
 import tariffsStore from 'app/stores/tariffsStore';
 import usersStore from 'app/stores/usersStore';
 import { RequestRegister } from 'app/types/AuthTypes';
+import { ResponseOneUserGroupT } from 'app/types/UserTypes';
 import SetStatusButton from 'components/button-open-close/SetStatusButton';
 import SetPaidStatusButton from 'components/button-paid-unpaid/SetPaidStatusButton';
 import Button from 'components/button/Button';
@@ -25,6 +26,7 @@ import { roleOptions } from 'components/users-page/student-page-franchisee-modal
 import { StudentParentsFormContainer } from 'components/users-page/student-parrents-form-container/StudentParentsFormContainer';
 import { MAX_NAMES_LENGTH, MIN_NAMES_LENGTH } from 'constants/constants';
 import { REG_NAME } from 'constants/regExp';
+import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -70,6 +72,16 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
 
     const findSex = () => (currentUser?.sex ? sexOptions[0].value : sexOptions[1].value);
 
+    const findActiveClassGroup = (groupsCurrentUser?: ResponseOneUserGroupT[]) => {
+      if (groupsCurrentUser) {
+        const classGroup = groupsCurrentUser.filter(group => group.groupType === 'class'); // todo draft 02.11
+      }
+    };
+
+    useEffect(() => {
+      findActiveClassGroup(currentUser?.groups);
+    }, []);
+
     const defaultValues = {
       firstName: currentUser?.firstName || '',
       middleName: currentUser?.middleName || '',
@@ -81,8 +93,8 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
       birthdate: currentUser?.birthdate?.date || '01.01.2000',
       email: currentUser?.email || '',
       franchise: '', // не изменяется при редактировании
-      tariff: currentUser?.tariff?.id || '', // не изменяется при редактировании
-      group: currentUser?.groups[0]?.groupId || '', // не изменяется при редактировании
+      tariff: currentUser?.tariff?.id || '',
+      group: currentUser?.groups[0]?.groupId || '', // todo нужно найти группу типа Class и со статусов active
       password: currentUser?.password || '', // не обязателен при редактировании
     };
 
@@ -219,8 +231,9 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
 
       if (isStudentTeacherEducation(selectedRole)) {
         loadCurrentGroups(selectedRole, {
-          franchiseId: franchiseOptions[0].value,
+          franchiseId: franchiseOptions[0].value || currentUser?.franchise?.id,
           type: 'class',
+          perPage: 1000,
         });
       }
 

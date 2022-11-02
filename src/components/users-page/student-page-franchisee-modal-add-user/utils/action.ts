@@ -1,14 +1,12 @@
-import { Dispatch, SetStateAction } from 'react';
-
-import groupsService from 'app/services/groupsService';
 import { Roles } from 'app/stores/appStore';
+import groupStore from 'app/stores/groupStore';
 import usersStore from 'app/stores/usersStore';
 import { RequestRegister } from 'app/types/AuthTypes';
 import { ResponseOneUser } from 'app/types/UserTypes';
-import { isMethodistTutor } from 'components/users-page/student-page-franchisee-modal-add-user/utils/IsMethodistTutor';
 import { isStudentTeacherEducation } from 'components/users-page/student-page-franchisee-modal-add-user/utils/isStudentTeacherEducation';
-import { setErrorFormMessage } from 'utils/setErrorFormMessage';
+import { Dispatch, SetStateAction } from 'react';
 import { removeKeysWithSameValues } from 'utils/removeKeysWithSameValues';
+import { setErrorFormMessage } from 'utils/setErrorFormMessage';
 
 export const action = async (
   user: ResponseOneUser | undefined,
@@ -25,7 +23,7 @@ export const action = async (
   groupId: string,
 ) => {
   const { createUser, updateUser } = usersStore;
-  const { addUserGroup } = groupsService;
+  const { addUserGroup, editUserGroup } = groupStore;
 
   const IS_ADD_MOD = !user;
 
@@ -70,13 +68,21 @@ export const action = async (
 
   let response;
 
+  // редактирование пользователя
   if (user) {
     const memoData = removeKeysWithSameValues(newUserData, user);
+
+    // если есть новый ID группы, то нужно удалить старую и создать новую зависимость
+    if (memoData.groupId) {
+      // todo доделать остановился 02.11
+    }
+
     response = await updateUser(memoData, user.id);
     if (typeof response === 'string') {
       setErrorFormMessage(response, setError);
       return;
     }
+    // создание пользователя
   } else {
     response = await createUser(newUserData);
     if (typeof response === 'string') {
@@ -96,6 +102,7 @@ export const action = async (
     reset();
     return;
   }
+
   if (typeof response === 'object' && 'id' in response) {
     setStudentId(response.id);
     setIsParentShown(true);

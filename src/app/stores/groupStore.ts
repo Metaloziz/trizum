@@ -3,7 +3,9 @@ import coursesService from 'app/services/coursesService';
 import franchiseService from 'app/services/franchiseService';
 import groupsService from 'app/services/groupsService';
 import appStore, { Roles } from 'app/stores/appStore';
+import { AddUserGroupPayloadType } from 'app/types/addUserGroupPayloadType';
 import { ShortCourseType } from 'app/types/CourseTypes';
+import { EditUserGroupPayloadType } from 'app/types/EditUserGroupPayloadType';
 import { FranchiseT } from 'app/types/FranchiseTypes';
 import {
   CreateGroupFroUI,
@@ -258,6 +260,14 @@ class GroupStore {
       await groupsService.editGroup({ status: GroupStatusValue.archive }, groupId);
       await this.getGroups();
     });
+  };
+
+  addUserGroup = async (addGroupData: AddUserGroupPayloadType) => {
+    await this.execute(() => groupsService.addUserGroup(addGroupData));
+  };
+
+  editUserGroup = async (editGroupData: EditUserGroupPayloadType, userGroupId: string) => {
+    await this.execute(() => groupsService.editUserGroupStatus(editGroupData, userGroupId));
   };
 
   getCurrentGroupFromLocalStorage = (groupId: string) => findElement(this.groups, groupId);
