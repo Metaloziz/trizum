@@ -29,7 +29,6 @@ const DEFAULT_VALUES: ShulteFormType = {
   timeComplete: 60,
   elementsTotal: 3,
   digitMin: 1,
-  digitMax: 10,
   colorsMap: [],
 };
 
@@ -37,7 +36,7 @@ export const ShulteFormSettings = (props: ShulteFormSettingsType): ReactElement 
   const { usedInWorks, gamePreset, onFormSubmit, deletedPreset, colorsMapState, setColorModal } =
     props;
   const { settings, status, id, level, name } = gamePreset;
-  const { elementsTotal, colorsMap, timeComplete, description, digitMin, digitMax } = settings[0];
+  const { elementsTotal, colorsMap, timeComplete, description, digitMin } = settings[0];
 
   const defaultValues: ShulteFormType =
     id === ''
@@ -50,7 +49,6 @@ export const ShulteFormSettings = (props: ShulteFormSettingsType): ReactElement 
           timeComplete,
           elementsTotal,
           digitMin,
-          digitMax,
           colorsMap,
         } as ShulteFormType);
 
@@ -117,26 +115,6 @@ export const ShulteFormSettings = (props: ShulteFormSettingsType): ReactElement 
                   error={errors.digitMin?.message}
                   onChange={event => onChange(convertEmptyStringToNull(event))}
                   value={convertNullToEmptyString(value!)}
-                  ref={ref}
-                />
-              )}
-              control={control}
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <Controller
-              name="digitMax"
-              render={({ field: { value, onChange, ref } }) => (
-                <TextFieldCustom
-                  type="text"
-                  label="Максимальное число на поле"
-                  size="small"
-                  fullWidth
-                  inputProps={{ type: 'number' }}
-                  error={errors.digitMax?.message}
-                  onChange={event => onChange(convertEmptyStringToNull(event))}
-                  value={convertNullToEmptyString(value)}
                   ref={ref}
                 />
               )}

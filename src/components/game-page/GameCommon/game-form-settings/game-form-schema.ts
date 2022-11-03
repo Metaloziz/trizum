@@ -62,11 +62,6 @@ export const SHULTE_SCHEMA = yup.object().shape({
     .required('Обязательное поле')
     .min(1, '1 минимальное число на поле')
     .max(999, '999 минимальное число на поле'),
-  digitMax: yup
-    .number()
-    .required('Обязательное поле')
-    .min(1, '1 максимальное число на поле')
-    .max(999, '999 максимальное число на поле'),
   colorsMap: yup
     .array(yup.string())
     .required('Обязательное поле')
