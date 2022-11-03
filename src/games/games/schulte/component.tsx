@@ -6,6 +6,7 @@ import { generateLayout } from './utils/logic';
 import { Game, GameResult } from '../../common/types';
 
 import Timer from '../../components/timer';
+import TimerRevert from '../../components/timerRevert';
 
 import ErrorBlock from './components/errorBlock';
 
@@ -36,12 +37,17 @@ const SizesConfig = [
 export default class extends Component<any, any> implements Game {
 
   counterFailed : any;
+  counterSuccess : any;
+  levelMaxCompleted : any;
   errorBlock : any;
+  successBlock : any;
 
   constructor(props : any) {
     super(props);
 
     this.counterFailed = 0;
+    this.counterSuccess = 0;
+    this.levelMaxCompleted = 0;
 
     this.state = {
       started : false,
@@ -63,6 +69,30 @@ export default class extends Component<any, any> implements Game {
 
   public getConfig = () => {
     return [
+      {
+        name : 'timeComplete',
+        type : 'select',
+        title : 'Время на прохождение',
+        option : [
+          {
+            title : 'Бесконечно',
+            value : 0,
+          },
+          {
+            title : '10 секунд',
+            value : 10,
+          },
+          {
+            title : '20 секунд',
+            value : 20,
+          },
+          {
+            title : '30 секунд',
+            value : 30,
+          },
+        ],
+        value : 0
+      },
       {
         name : 'size',
         type : 'select',
@@ -94,6 +124,7 @@ export default class extends Component<any, any> implements Game {
 
     return {
       ...size.option,
+      timeComplete : parseInt(result.timeComplete),
       groupsCount : result.groupsCount
     };
   }
@@ -124,6 +155,8 @@ export default class extends Component<any, any> implements Game {
     } = generateLayout(this.props);
 
     this.counterFailed = 0;
+    this.counterSuccess = 0;
+    this.levelMaxCompleted = 0;
 
     this.setState({
       started : false,
@@ -152,6 +185,12 @@ export default class extends Component<any, any> implements Game {
       return;
     }
 
+    if(parseInt(item.text) > this.levelMaxCompleted) {
+      this.levelMaxCompleted = parseInt(item.text);
+    }
+
+    this.counterSuccess++;
+    this.successBlock?.show(x, y);
     onFeedbackSuccess(item, x, y);
     this.onNext();
   }
@@ -162,7 +201,7 @@ export default class extends Component<any, any> implements Game {
     } = this.state;
 
     if(list.length == 0) {
-      this.end();
+      this.end(true);
       return;
     }
 
@@ -175,7 +214,7 @@ export default class extends Component<any, any> implements Game {
     });
   }
 
-  private end = () => {
+  private end = (finished = false) => {
     const timer : any = this.refs?.timer;
     const time = timer?.getValue();
 
@@ -184,14 +223,19 @@ export default class extends Component<any, any> implements Game {
     } = this.props;
 
     const result : GameResult = {
+      finished : finished,
       result : 'end',
       time : time,
-      failed : this.counterFailed
+      failed : this.counterFailed,
+      success : this.counterSuccess,
+      levelMaxCompleted : this.levelMaxCompleted
     };
 
     onEnd(result);
 
     this.counterFailed = 0;
+    this.counterSuccess = 0;
+    this.levelMaxCompleted = 0;
 
     this.stop();
   }
@@ -205,10 +249,39 @@ export default class extends Component<any, any> implements Game {
 
     const {
       elementsTotal,
-      width
+      width,
+      timeComplete
     } = this.props;
 
+    const cellSize = (width / elementsTotal);
+
     return <View style={styles.wrap}>
+      {started && timeComplete > 0 && <View style={styles.progressTime}>
+        <TimerRevert
+          time={timeComplete}
+          onEnd={() => this.end(false)}
+          renderComponent={() => <View
+            style={{
+              ...styles.progressTimeInner,
+              width : `100%`
+            }}
+          />}
+          renderTime={(t : any) => {
+            let progress = ((timeComplete - t) / timeComplete) * 100;
+
+            if(progress > 100) {
+              progress = 100;
+            }
+
+            return <View
+              style={{
+                ...styles.progressTimeInner,
+                width : `${progress}%`
+              }}
+            />
+          }}
+        />
+      </View>}
       {started && <Text style={styles.title}>Выберите: <Text style={{...styles.title, ...styles.titleActive, color : need?.color}}>{need?.text}</Text></Text>}
       <View
         style={{
@@ -220,6 +293,11 @@ export default class extends Component<any, any> implements Game {
         <ErrorBlock
           onRef={(ref : any) => this.errorBlock = ref}
           size={width/elementsTotal}
+        />
+        <ErrorBlock
+          onRef={(ref : any) => this.successBlock = ref}
+          size={width/elementsTotal}
+          color='rgba(0,255,0, 0.1)'
         />
         {layout.map((row : any, ri : number) => <View
           key={`row-${ri}`}
@@ -244,6 +322,7 @@ export default class extends Component<any, any> implements Game {
             <Text
               style={{
                 ...styles.cellTitle,
+                fontSize : cellSize * 0.3,
                 color : cell.color
               }}
             >{cell.text}</Text>
@@ -300,5 +379,19 @@ const styles = StyleSheet.create({
     marginTop : 12,
     fontSize : 14,
     lineHeight : 20,
-  }
+  },
+  progressTime : {
+    height : 6,
+    backgroundColor : '#E6EEF8',
+    borderRadius : 3,
+    overflow : 'hidden',
+    marginTop : 0,
+    marginHorizontal : 0,
+    marginBottom : 12
+  },
+  progressTimeInner : {
+    height : 6,
+    backgroundColor : '#7427CC',
+    borderRadius : 2,
+  },
 });

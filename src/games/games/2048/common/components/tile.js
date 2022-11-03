@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   },
   tile32Text: {
     color: '#f9f6f2',
-    marginTop: Dimensions.size["2"],
+    // marginTop: Dimensions.size["2"],
   },
   tile64: {
     backgroundColor: '#f75f3b',
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   tile256Text: {
     color: '#f9f6f2',
     fontSize: Dimensions.size["8"],
-    marginTop: Dimensions.size["2"],
+    // marginTop: Dimensions.size["2"],
   },
   tile512: {
     backgroundColor: '#edc950',
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   tile2048Text: {
     color: '#f9f6f2',
     fontSize: Dimensions.size["6"],
-    marginTop: Dimensions.size["4"],
+    // marginTop: Dimensions.size["4"],
   },
   tilesuper: {
     backgroundColor: '#3c3a33',
@@ -120,9 +120,26 @@ const Tile = (props) => {
     height: ITEM_WIDTH,
   }
   const tileTextStyle = props.value<= 2048 ? styles['tile' + props.value + 'Text'] : styles['tilesuperText']
+  let fontSize = 18;
+
+  switch(`${props.value}`.length) {
+    case 1:
+      fontSize = ITEM_WIDTH * 0.6;
+    break;
+    case 2:
+      fontSize = ITEM_WIDTH * 0.45;
+    break;
+    case 3:
+      fontSize = ITEM_WIDTH * 0.4;
+    break;
+    case 4:
+      fontSize = ITEM_WIDTH * 0.3;
+    break;
+  }
+
   return (
     <View style={[styles.tile, tileStyle, tilePositionStyle]}>
-      <Text style={[ styles.tileText,tileTextStyle]}>{props.value}</Text>
+      <Text style={[ styles.tileText,tileTextStyle, {fontSize}]}>{props.value}</Text>
     </View>
   )
 }

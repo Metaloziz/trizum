@@ -1,6 +1,8 @@
 import { GameProps, GameResult } from '../../common/types';
 
 export interface Props extends GameProps {
+  timeComplete?: number;
+  levelMaxCompleted?: number;
   blinksCount?: number;
   colorsMap?: string[];
   sound?: number;
@@ -9,6 +11,8 @@ export interface Props extends GameProps {
 
 const PropsDefault : Props = {
   width : 200,
+  timeComplete : 5,
+  levelMaxCompleted : 5,
   blinksCount : 2,
   sound : 1,
   colorsMap : [

@@ -8,8 +8,19 @@ import { AppRoutes } from 'app/enums/AppRoutes';
 import appStore, { Roles } from 'app/stores/appStore';
 import listGames from 'assets/svgs/list-games.svg';
 import homeImage from 'assets/svgs/student-navigation-link-home.svg';
-import paymentImage from 'assets/svgs/student-navigation-link-payment.svg';
-import resultsImage from 'assets/svgs/student-navigation-link-results.svg';
+import tariff from 'assets/svgs/student-navigation-sidebar/tariff.svg';
+import adminFranchise from 'assets/svgs/student-navigation-sidebar/admin_franchise.svg';
+import admin from 'assets/svgs/student-navigation-sidebar/admin.svg';
+import users from 'assets/svgs/student-navigation-sidebar/users.svg';
+import teacherStatistic from 'assets/svgs/student-navigation-sidebar/teacherStatistic.svg';
+import articles from 'assets/svgs/student-navigation-sidebar/articles.svg';
+import shedule from 'assets/svgs/student-navigation-sidebar/shedule.svg';
+import olimpiad from 'assets/svgs/student-navigation-sidebar/olimpiad.svg';
+import report from 'assets/svgs/student-navigation-sidebar/report.svg';
+import group from 'assets/svgs/student-navigation-sidebar/group_class.svg';
+import payment from 'assets/svgs/student-navigation-sidebar/payment.svg';
+import homework from 'assets/svgs/student-navigation-sidebar/homework.svg';
+
 import Navigation from 'components/navigation/Navigation';
 
 export type LinkT = { label: string; href: string; imageSrc: string };
@@ -33,35 +44,35 @@ const {
 
 const Links = {
   Index: { label: 'Главная', href: Index, imageSrc: homeImage },
-  Schedule: { label: 'Расписание', href: Schedule, imageSrc: resultsImage },
-  Payment: { label: 'Оплата', href: Payment, imageSrc: paymentImage },
+  Schedule: { label: 'Расписание', href: Schedule, imageSrc: shedule },
+  Payment: { label: 'Оплата', href: Payment, imageSrc: payment },
   Statistic: {
     label: 'Статистика',
     href: Statistic,
-    imageSrc: resultsImage,
+    imageSrc: teacherStatistic,
   },
   Games: { label: 'Список игр', href: Games, imageSrc: listGames },
-  Blog: { label: 'Статьи', href: Blog, imageSrc: paymentImage },
-  Classes: { label: 'Группы', href: Classes, imageSrc: paymentImage },
+  Blog: { label: 'Статьи', href: Blog, imageSrc: articles },
+  Classes: { label: 'Группы', href: Classes, imageSrc: group },
   UserInfo: {
     label: 'Персональная информация',
     href: UserInfo,
-    imageSrc: paymentImage,
+    imageSrc: admin,
   },
-  Olympiads: { label: 'Олимпиады', href: Olympiads, imageSrc: paymentImage },
-  Users: { label: 'Пользователи', href: Users, imageSrc: paymentImage },
-  Report: { label: 'Отчеты', href: Report, imageSrc: paymentImage },
+  Olympiads: { label: 'Олимпиады', href: Olympiads, imageSrc: olimpiad },
+  Users: { label: 'Пользователи', href: Users, imageSrc: users },
+  Report: { label: 'Отчеты', href: Report, imageSrc: report },
   Homework: {
     label: 'Домашняя работа',
     href: Homework,
-    imageSrc: paymentImage,
+    imageSrc: homework,
   },
   Franchising: {
     label: 'Франчайзинг',
     href: Franchising,
-    imageSrc: paymentImage,
+    imageSrc: adminFranchise,
   },
-  Rate: { label: 'Тарифы', href: Rate, imageSrc: paymentImage },
+  Rate: { label: 'Тарифы', href: Rate, imageSrc: tariff },
 };
 const studentLinks = [
   Links.Index,

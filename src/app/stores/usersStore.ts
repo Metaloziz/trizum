@@ -12,8 +12,8 @@ import {
 } from 'app/types/UserTypes';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { checkErrorMessage, ErrorMessageType } from 'utils/checkErrorMessage';
-import { dateNow } from '../../utils/dateNow';
-import { getNearestLessonObject } from '../../utils/getNearestLessonObject/getNearestLessonObject';
+import { dateNow } from 'utils/dateNow';
+import { getNearestLessonObject } from 'utils/getNearestLessonObject/getNearestLessonObject';
 import groupsService from '../services/groupsService';
 
 class UsersStore {
@@ -94,13 +94,18 @@ class UsersStore {
     data: RequestRegister,
   ): Promise<ResponseUserT | undefined | ErrorMessageType> => {
     try {
-      const res = await authService.register(data);
-      const isError = checkErrorMessage(res);
+      const response = await authService.register(data);
+      const isError = checkErrorMessage(response);
       if (isError) {
         return isError;
       }
+
+      runInAction(() => {
+        this.currentUser = response;
+      });
+
       await this.getUsers();
-      return res;
+      return response;
     } catch (e) {
       console.warn(e);
     }
@@ -158,11 +163,11 @@ class UsersStore {
   };
 
   updateParenting = async (payload: UpdateParentingPayloadType) => {
-    const res = await usersService.updateParenting(payload);
+    await usersService.updateParenting(payload);
   };
 
   deleteParenting = async (parentingId: string) => {
-    const res = await usersService.deleteParenting(parentingId);
+    await usersService.deleteParenting(parentingId);
   };
 
   resetCurrentUser = () => {

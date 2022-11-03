@@ -113,12 +113,12 @@ const HomeworkAddEditPage = observer(() => {
     }
     if (currentHomework) {
       const qwe: RequestCreateWork = {
-        type: currentHomework.type as WorkTypes,
+        type: currentHomework.work.type as WorkTypes,
         title: values.title,
         text: description,
         gamePresets: [],
       };
-      editHomework(qwe, currentHomework.id);
+      editHomework(qwe, currentHomework.work.id);
       setCurrentWork(undefined);
     }
     reset();

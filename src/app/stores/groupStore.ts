@@ -3,7 +3,9 @@ import coursesService from 'app/services/coursesService';
 import franchiseService from 'app/services/franchiseService';
 import groupsService from 'app/services/groupsService';
 import appStore, { Roles } from 'app/stores/appStore';
+import { AddUserGroupPayloadType } from 'app/types/addUserGroupPayloadType';
 import { ShortCourseType } from 'app/types/CourseTypes';
+import { EditUserGroupPayloadType } from 'app/types/EditUserGroupPayloadType';
 import { FranchiseT } from 'app/types/FranchiseTypes';
 import {
   CreateGroupFroUI,
@@ -25,8 +27,8 @@ import {
   scheduleItemToServerMapper,
   scheduleItemToUIMapper,
 } from 'utils/scheduleItemToServerMapper';
-import { getNextMonth } from '../../utils/getNextMonth';
-import { removeEmptyFields } from '../../utils/removeEmptyFields';
+import { getNextMonth } from 'utils/getNextMonth';
+import { removeEmptyFields } from 'utils/removeEmptyFields';
 import { GroupStatusValue } from '../enums/GroupStatus';
 import { GroupStatusTypes } from '../types/GroupStatusTypes';
 
@@ -260,6 +262,14 @@ class GroupStore {
     });
   };
 
+  addUserGroup = async (addGroupData: AddUserGroupPayloadType) => {
+    await this.execute(() => groupsService.addUserGroup(addGroupData));
+  };
+
+  editUserGroup = async (editGroupData: EditUserGroupPayloadType, userGroupId: string) => {
+    await this.execute(() => groupsService.editUserGroupStatus(editGroupData, userGroupId));
+  };
+
   getCurrentGroupFromLocalStorage = (groupId: string) => findElement(this.groups, groupId);
 
   nullableSelectedGroup = () => {
@@ -268,6 +278,10 @@ class GroupStore {
 
   cleanModalValues = () => {
     this.modalFields = { ...this.defaultValues };
+  };
+
+  setQueryFields = (params: Partial<GroupParamsForUI>) => {
+    this.queryFields = { ...this.queryFields, ...params };
   };
 
   clearQueryFields = () => {

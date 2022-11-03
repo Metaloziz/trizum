@@ -1,4 +1,3 @@
-
 import { GameProps, GameResult } from '../../common/types';
 
 export interface Props extends GameProps {
@@ -8,7 +7,6 @@ export interface Props extends GameProps {
   speed?: number; // Скорость кручения, оборотов в секунду
   groupsCount?: number; // Кол-во манометров
   onEnd?(result?: GameResult): void;
-
 }
 
 const PropsDefault : Props = {
@@ -17,7 +15,7 @@ const PropsDefault : Props = {
   elementsTotal : 5,
   errorAacceptable : 1,
   speed : 1,
-  groupsCount : 1,
+  groupsCount : 1
 };
 
 export {

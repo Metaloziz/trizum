@@ -145,7 +145,7 @@ const StudentParentsForm: FC<Props> = observer(
       birthdate: parent?.birthdate?.date || '01.01.2000',
       sex: sexOptions[0]?.value,
       isMain: parent?.main || isMainFirstParent,
-      franchiseId: userFranchiseId,
+      // franchiseId,
       password: parent?.password || '',
     };
 
@@ -155,7 +155,6 @@ const StudentParentsForm: FC<Props> = observer(
       setError,
       formState: { errors },
     } = useForm<typeof defaultValues>({
-      mode: 'onChange',
       defaultValues,
       resolver: yupResolver(schema),
     });

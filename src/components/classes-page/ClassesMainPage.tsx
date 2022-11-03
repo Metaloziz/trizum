@@ -56,7 +56,7 @@ export const ClassesMainPage = observer(() => {
         {/* методист не может видеть эту кнопку */}
         {!whoCanUseIt([Roles.Methodist]) && (
           <Button onClick={() => openModal()} variant="contained">
-            Добавить класс
+            Добавить группу
           </Button>
         )}
         <div className={styles.searchBar}>

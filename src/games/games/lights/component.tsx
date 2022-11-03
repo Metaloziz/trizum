@@ -27,6 +27,7 @@ export default class extends Component<any, any> implements Game {
     this.list = [];
 
     this.state = {
+      ended : false,
       started : false,
       another : 0,
       flight : true
@@ -46,6 +47,7 @@ export default class extends Component<any, any> implements Game {
 
   public resume = () => {
     this.setState({
+      ended : false,
       started : true
     });
   }
@@ -59,6 +61,7 @@ export default class extends Component<any, any> implements Game {
 
   public stop = () => {
     this.setState({
+      ended : false,
       started : false,
       another : 0,
       flight : true
@@ -67,6 +70,7 @@ export default class extends Component<any, any> implements Game {
 
   private reset = (cb : any) => {
     this.setState({
+      ended : false,
       started : false,
       another : 0,
       flight : true
@@ -157,26 +161,33 @@ export default class extends Component<any, any> implements Game {
   }
 
   private end = (status = 'win') => {
+    this.setState({
+      ended : true
+    });
+
     const time = this.timerRef?.getValue();
 
-    const {
-      onEnd = () => {}
-    } = this.props;
+    setTimeout(() => {
+      const {
+        onEnd = () => {}
+      } = this.props;
 
-    const result : GameResult = {
-      result : status == 'win' ? 'win' : 'lose',
-      time : time
-    };
+      const result : GameResult = {
+        result : status == 'win' ? 'win' : 'lose',
+        time : time
+      };
 
-    onEnd(result);
+      onEnd(result);
 
-    this.stop();
+      this.stop();
+    }, 2000);
   }
 
   renderInner = () => {
     const {
       flight = true,
-      another = 0
+      another = 0,
+      ended = false
     } = this.state;
     const {
       width,
@@ -194,6 +205,8 @@ export default class extends Component<any, any> implements Game {
         height={height}
         flight={flight}
         onPress={this.onPressResult('win', i)}
+        type='win'
+        ended={ended}
         {...this.props}
       />);
     }
@@ -204,6 +217,8 @@ export default class extends Component<any, any> implements Game {
         height={height}
         flight={flight}
         onPress={this.onPressResult('lose', -1)}
+        type='lose'
+        ended={ended}
         {...this.props}
       />);
     }

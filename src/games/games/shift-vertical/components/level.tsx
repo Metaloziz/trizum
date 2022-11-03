@@ -45,7 +45,7 @@ export default class extends Component<any, any> {
   getRandValue = (data : any, exclude = false) => {
     let arrayData = data.slice();
 
-    if(exclude !== false && arrayData.length !== 1) {
+    if(exclude !== false) {
       arrayData = arrayData.filter((a : any) => a != exclude);
     }
 
@@ -139,7 +139,7 @@ export default class extends Component<any, any> {
 
   render() {
     const {
-      cycleTime = 3
+      cycleTime = 3000
     } = this.props;
 
     const {
@@ -170,17 +170,18 @@ export default class extends Component<any, any> {
             </View>
           </View>
         </View>
+        <Text style={styles.titleBottom}> </Text>
         <View>
           <TimerButton
             onPress={this.onColor}
-            cycleTime={cycleTime}
+            cycleTime={cycleTime/1000}
           />
         </View>
       </View>;
     }
 
     return <View style={styles.wrap}>
-      <Text style={styles.title}>{stage == 1 ? 'ЦВЕТ' : 'ФОРМА'} ФИГУРЫ СОВПАДАЕТ?</Text>
+      <Text style={styles.title}> </Text>
       <View style={styles.inner}>
         <View style={styles.item}>
           <View style={styles.itemTitle}>
@@ -199,6 +200,7 @@ export default class extends Component<any, any> {
           </View>
         </View>
       </View>
+      <Text style={styles.titleBottom}>{stage == 1 ? 'ЦВЕТ' : 'ФОРМА'} ФИГУРЫ СОВПАДАЕТ?</Text>
       <View style={styles.wrapButtons}>
         <TouchableOpacity
           activeOpacity={0.8}
@@ -245,6 +247,13 @@ const styles = StyleSheet.create({
     color : '#2e8dfd',
     fontSize : 12,
     fontWeight : 'bold'
+  },
+  titleBottom : {
+    textAlign : 'center',
+    color : '#2e8dfd',
+    fontSize : 12,
+    fontWeight : 'bold',
+    marginBottom : 12
   },
   item : {
     flexDirection : 'row',

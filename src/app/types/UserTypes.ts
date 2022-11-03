@@ -1,4 +1,6 @@
+import { UserGroupStatus } from 'app/enums/UserGroupStatus';
 import { Roles } from 'app/stores/appStore';
+import { ChildrenResponse } from 'app/types/ChildrenResponse';
 import { FranchiseT } from 'app/types/FranchiseTypes';
 import { Nullable } from 'app/types/Nullable';
 import { TimeZoneType } from 'app/types/TimeZoneType';
@@ -30,24 +32,12 @@ export type RequestUsersForFilter = {
   active?: boolean;
 };
 
-export type RequestCreateUser = {
-  role: string;
-  franchiseId: string;
-  firstName: string;
-  middleName: string;
-  lastName: string;
-  city: string;
-  birthdate: string;
-  sex: boolean | null;
-  phone: string | null;
-  email: string | null;
-};
-
 export type ResponseOneUserGroupT = {
-  userGroupId: string;
   groupId: string;
-  groupCode: string;
+  groupName: string;
   groupType: null | string;
+  userGroupId: string;
+  userGroupStatus: UserGroupStatus;
 };
 
 type ResponseUserAvatarT = {
@@ -105,12 +95,6 @@ export type ParentT = {
   password: string;
 };
 
-export type ParentDataT = {
-  parentingId: string;
-  isMain: boolean;
-  parent: ParentT;
-};
-
 export type ResponseOneUser = {
   birthdate: TimeZoneType;
   sex: boolean | null; // male - true
@@ -121,6 +105,7 @@ export type ResponseOneUser = {
   payedUntill: null | any;
   isSecondChild: null | boolean;
   password: string;
+  children?: ChildrenResponse[];
 } & ResponseUserT;
 
 export type RequestParenting = {

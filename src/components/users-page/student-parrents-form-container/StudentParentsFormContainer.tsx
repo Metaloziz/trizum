@@ -11,7 +11,7 @@ import {
 } from 'components/users-page/student-parrents-form-container/store/store';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useState } from 'react';
-import { Roles } from '../../../app/stores/appStore';
+import { Roles } from 'app/stores/appStore';
 
 import style from './StudentParentsFormContainer.module.scss';
 
