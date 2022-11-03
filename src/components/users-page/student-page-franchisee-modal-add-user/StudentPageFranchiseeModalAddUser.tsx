@@ -317,7 +317,7 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
                                 field.onChange(e);
                               }}
                               title="Роль"
-                              options={filterRoleOptions(roleOptions, role)}
+                              options={filterRoleOptions(roleOptions.filter(option => option.value !== Roles.Parent), role)}
                               error={errors.role?.message}
                             />
                           )}
