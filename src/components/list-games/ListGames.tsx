@@ -11,14 +11,18 @@ import ItemGame from 'components/list-games/item-games/ItemGame';
 const ListGames: FC = () => {
   const { getGames, games } = gamesStore;
   const [isLoaded, setIsLoaded] = useState(false);
+
   const load = async () => {
     await getGames();
     setIsLoaded(true);
   };
+
   const onClick = (id: string) => {};
+
   useEffect(() => {
     load();
   }, []);
+
   return !isLoaded ? (
     <Loader />
   ) : (

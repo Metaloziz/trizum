@@ -8,6 +8,7 @@ import { BASE_URL } from 'constants/constants';
 import mockAvatar from 'public/img/avatarDefault.png';
 import React, { FC } from 'react';
 import { convertEngRoleToRu } from 'utils/convertEngRoleToRu';
+import { findActiveClassGroup } from 'utils/findActiveClassGroup';
 import { getFullUserName } from 'utils/getFullUserName';
 
 import modals from '../../../app/stores/CardStudentExtended';
@@ -32,7 +33,6 @@ const CardStudentExtended: FC<Props> = ({
     groups,
     roleCode,
     franchise,
-    active,
   },
   getOneUser,
 }) => {
@@ -53,6 +53,8 @@ const CardStudentExtended: FC<Props> = ({
     await getOneUser(id);
     modals.changeParents();
   };
+
+  const groupName = findActiveClassGroup(groups)?.groupName;
 
   return (
     <div className={styles.wrapper}>
@@ -89,7 +91,7 @@ const CardStudentExtended: FC<Props> = ({
               )}
               {!!groups.length && roleCode === Roles.Student && (
                 <p className={styles.list}>
-                  Группа: <span>{groups[0].groupName}</span>
+                  Группа: <span>{groupName}</span>
                 </p>
               )}
               {franchise && roleCode === Roles.Student && (

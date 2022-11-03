@@ -5,12 +5,10 @@ export const removeKeysWithSameValues = (newData: any, oldData: any): any => {
     if (newData[resultKey] !== oldData[resultKey]) {
       switch (resultKey) {
         case 'birthdate':
-          // eslint-disable-next-line no-case-declarations
-          const oldBirthdateDate = new Date(newData[resultKey]).toLocaleDateString();
-          // eslint-disable-next-line no-case-declarations
-          const newBirthdateDate = new Date(oldData[resultKey].date).toLocaleDateString();
-
-          if (oldBirthdateDate !== newBirthdateDate) {
+          if (
+            new Date(newData.birthdate).toLocaleDateString() !==
+            new Date(oldData.birthdate.date).toLocaleDateString()
+          ) {
             // @ts-ignore
             dataForUpdate[resultKey] = newData[resultKey];
           }
@@ -22,7 +20,7 @@ export const removeKeysWithSameValues = (newData: any, oldData: any): any => {
           }
           break;
         case 'groupId':
-          if (newData[resultKey] !== oldData.groups[0].groupId) {
+          if (newData[resultKey] !== oldData?.groups[0]?.groupId) {
             // @ts-ignore
             dataForUpdate[resultKey] = newData[resultKey];
           }

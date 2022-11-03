@@ -25,7 +25,6 @@ import { roleOptions } from 'components/users-page/student-page-franchisee-modal
 import { StudentParentsFormContainer } from 'components/users-page/student-parrents-form-container/StudentParentsFormContainer';
 import { MAX_NAMES_LENGTH, MIN_NAMES_LENGTH } from 'constants/constants';
 import { REG_NAME } from 'constants/regExp';
-import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -39,7 +38,6 @@ import { findActiveClassGroup } from 'utils/findActiveClassGroup';
 import { removeEmptyFields } from 'utils/removeEmptyFields';
 import * as yup from 'yup';
 import TextFieldPhoneCustom from '../../text-field-phone-mui/TextFieldPhoneCustom';
-
 import styles from './StudentPageFranchiseeModalAddUser.module.scss';
 
 type Props = {
@@ -69,8 +67,6 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
         setSelectedRole(currentUser.roleCode as Roles);
       }
     }, []);
-
-    console.log('currentUser', toJS(currentUser));
 
     const findSex = () => (currentUser?.sex ? sexOptions[0].value : sexOptions[1].value);
 
@@ -153,6 +149,11 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
           selectedRole === Roles.Student
             ? yup.string().required('Обязательное поле')
             : yup.string().notRequired(),
+        group: yup
+          .string()
+          .when('role', (value, rule: yup.StringSchema) =>
+            value === Roles.Student ? rule.required('Обязательное поле') : rule.notRequired(),
+          ),
         password: yup
           .string()
           .nullable()
