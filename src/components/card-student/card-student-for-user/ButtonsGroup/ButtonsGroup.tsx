@@ -13,11 +13,11 @@ type Props = {
 
 export const ButtonsGroup: FC<Props> = ({ openModal, openChatLink }) => (
   <div className={cn(styles.row, styles.buttonGroup)}>
-    <div className={styles.social}>
-      <span>Ссылки на чаты:</span>
-      <Image src={iconTelegram} width="25" height="25" alt="icon tablet" onClick={openChatLink} />
-      <Image src={iconWhatsApp} width="25" height="25" alt="icon tablet" onClick={openChatLink} />
-    </div>
+    {/* <div className={styles.social}> */}
+    {/*  <span>Ссылки на чаты:</span> */}
+    {/*  <Image src={iconTelegram} width="25" height="25" alt="icon tablet" onClick={openChatLink} /> */}
+    {/*  <Image src={iconWhatsApp} width="25" height="25" alt="icon tablet" onClick={openChatLink} /> */}
+    {/* </div> */}
     <Button size="small" onClick={openModal}>
       Принять участие в олимпиаде
     </Button>

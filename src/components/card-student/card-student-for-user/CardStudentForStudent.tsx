@@ -107,9 +107,9 @@ const CardStudentForStudent: FC<Props> = observer(({ isMainPage = true }) => {
           </div>
         </div>
       </div>
-      {isMainPage && (
-        <ButtonsGroup openChatLink={openChatLink} openModal={() => setShowModal(true)} />
-      )}
+      {/* {isMainPage && ( */}
+      {/*  <ButtonsGroup openChatLink={openChatLink} openModal={() => setShowModal(true)} /> */}
+      {/* )} */}
       <BasicModal visibility={showModal} changeVisibility={setShowModal}>
         <OlympiadPreviewText />
       </BasicModal>
