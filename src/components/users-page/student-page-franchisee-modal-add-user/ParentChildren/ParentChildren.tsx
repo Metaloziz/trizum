@@ -27,10 +27,7 @@ export const ParentChildren: FC<Props> = ({ childrenArr, setIsOpenAddChildModal 
             <TableHead sx={{ backgroundColor: '#0072e5' }}>
               <TableRow>
                 <TableCell sx={{ color: '#ffffff' }} align="center">
-                  Имя
-                </TableCell>
-                <TableCell sx={{ color: '#ffffff' }} align="center">
-                  Основной ?
+                  ФИО
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -40,7 +37,6 @@ export const ParentChildren: FC<Props> = ({ childrenArr, setIsOpenAddChildModal 
                   <TableCell align="center">
                     {child.firstName} {child.middleName} {child.lastName}
                   </TableCell>
-                  <TableCell align="center">{child.main ? 'основной' : 'не основной'}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

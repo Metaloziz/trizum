@@ -1,5 +1,6 @@
 import authService from 'app/services/authService';
 import usersService from 'app/services/usersService';
+import { Roles } from 'app/stores/appStore';
 import { RequestRegister } from 'app/types/AuthTypes';
 import { SearchUserType } from 'app/types/SearchUserType';
 import { UpdateParentingPayloadType } from 'app/types/updateParentingPayloadType';
@@ -94,18 +95,20 @@ class UsersStore {
     data: RequestRegister,
   ): Promise<ResponseUserT | undefined | ErrorMessageType> => {
     try {
-      const response = await authService.register(data);
-      const isError = checkErrorMessage(response);
+      const newUser = await authService.register(data);
+      const isError = checkErrorMessage(newUser);
       if (isError) {
         return isError;
       }
 
       runInAction(() => {
-        this.currentUser = response;
+        if (newUser.roleCode !== Roles.Parent) {
+          this.currentUser = newUser;
+        }
       });
 
       await this.getUsers();
-      return response;
+      return newUser;
     } catch (e) {
       console.warn(e);
     }
@@ -123,7 +126,7 @@ class UsersStore {
         return isError;
       }
       await this.getUsers();
-      await this.getOneUser(userId);
+      // await this.getOneUser(userId);
       return res;
     } catch (e) {
       console.warn(e);

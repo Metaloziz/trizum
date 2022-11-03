@@ -56,12 +56,11 @@ export const AddSecondChildForm: FC<Props> = observer(({ onCloseModal }) => {
       .matches(REG_NAME, 'Допустима только кириллица')
       .max(MAX_NAMES_LENGTH, `Максимальная длинна ${MAX_NAMES_LENGTH} символов`)
       .min(MIN_NAMES_LENGTH, `Минимальная длинна ${MIN_NAMES_LENGTH} символа`),
-    middleName: yup
-      .string()
-      .notRequired()
-      .matches(REG_NAME, 'Допустима только кириллица')
-      .max(MAX_NAMES_LENGTH, `Максимальная длинна ${MAX_NAMES_LENGTH} символов`)
-      .min(MIN_NAMES_LENGTH, `минимальная длинна ${MIN_NAMES_LENGTH} символа`),
+    middleName: yup.string().notRequired(),
+    // .matches(REG_NAME, 'Допустима только кириллица') // todo как валидировать
+    //  не обязательное поле
+    // .max(MAX_NAMES_LENGTH, `Максимальная длинна ${MAX_NAMES_LENGTH} символов`)
+    // .min(MIN_NAMES_LENGTH, `минимальная длинна ${MIN_NAMES_LENGTH} символа`),
     lastName: yup
       .string()
       .required('Обязательное поле')

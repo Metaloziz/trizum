@@ -196,11 +196,12 @@ const StudentParentsForm: FC<Props> = observer(
                 name="lastName"
                 render={({ field }) => (
                   <TextFieldCustom
+                    {...field}
                     type="text"
                     autoComplete="on"
                     label="Фамилия"
                     error={errors.lastName?.message}
-                    {...field}
+                    disabled={isDisableSubmit}
                   />
                 )}
                 control={control}
@@ -211,11 +212,12 @@ const StudentParentsForm: FC<Props> = observer(
                 name="firstName"
                 render={({ field }) => (
                   <TextFieldCustom
+                    {...field}
                     type="text"
                     autoComplete="on"
                     label="Имя"
                     error={errors.firstName?.message}
-                    {...field}
+                    disabled={isDisableSubmit}
                   />
                 )}
                 control={control}
@@ -226,11 +228,12 @@ const StudentParentsForm: FC<Props> = observer(
                 name="middleName"
                 render={({ field }) => (
                   <TextFieldCustom
+                    {...field}
                     type="text"
                     autoComplete="on"
-                    {...field}
                     label="Отчество"
                     error={errors.middleName?.message}
+                    disabled={isDisableSubmit}
                   />
                 )}
                 control={control}
@@ -241,11 +244,12 @@ const StudentParentsForm: FC<Props> = observer(
                 name="city"
                 render={({ field }) => (
                   <TextFieldCustom
+                    {...field}
                     type="text"
                     autoComplete="on"
-                    {...field}
                     label="Город"
                     error={errors.city?.message}
+                    disabled={isDisableSubmit}
                   />
                 )}
                 control={control}
@@ -255,7 +259,12 @@ const StudentParentsForm: FC<Props> = observer(
               <Controller
                 name="phone"
                 render={({ field }) => (
-                  <TextFieldPhoneCustom {...field} label="Телефон" error={errors.phone?.message} />
+                  <TextFieldPhoneCustom
+                    {...field}
+                    label="Телефон"
+                    error={errors.phone?.message}
+                    disabled={isDisableSubmit}
+                  />
                 )}
                 control={control}
               />
@@ -279,6 +288,7 @@ const StudentParentsForm: FC<Props> = observer(
                           label="Дата рождения"
                           error={!!errors.birthdate?.message}
                           helperText={errors.birthdate?.message}
+                          disabled={isDisableSubmit}
                         />
                       )}
                     />
@@ -292,11 +302,12 @@ const StudentParentsForm: FC<Props> = observer(
                 name="email"
                 render={({ field }) => (
                   <TextFieldCustom
+                    {...field}
                     type="text"
                     autoComplete="on"
-                    {...field}
                     label="Почта"
                     error={errors.email?.message}
+                    disabled={isDisableSubmit}
                   />
                 )}
                 control={control}
@@ -307,11 +318,12 @@ const StudentParentsForm: FC<Props> = observer(
                 name="password"
                 render={({ field }) => (
                   <TextFieldCustom
+                    {...field}
                     type="text"
                     autoComplete="on"
-                    {...field}
                     label="Пароль"
                     error={errors.password?.message}
+                    disabled={isDisableSubmit}
                   />
                 )}
                 control={control}
@@ -326,6 +338,7 @@ const StudentParentsForm: FC<Props> = observer(
                     title="Пол"
                     options={sexOptions}
                     error={errors.sex?.message}
+                    disabled={isDisableSubmit}
                   />
                 )}
                 control={control}
@@ -351,6 +364,7 @@ const StudentParentsForm: FC<Props> = observer(
                                     radioChangeHandler();
                                   }
                                 }}
+                                disabled={isDisableSubmit}
                               />
                             }
                             label="Основной"

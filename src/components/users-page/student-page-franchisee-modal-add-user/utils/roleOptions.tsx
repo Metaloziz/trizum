@@ -3,7 +3,7 @@ import { Roles } from 'app/stores/appStore';
 
 export const roleOptions = [
   { label: RoleNames.student, value: Roles.Student },
-  { label: RoleNames.parent, value: Roles.Parent },
+  // { label: RoleNames.parent, value: Roles.Parent },
   { label: RoleNames.teacherEducation, value: Roles.TeacherEducation },
   { label: RoleNames.teacher, value: Roles.Teacher },
   { label: RoleNames.franchiseeAdmin, value: Roles.FranchiseeAdmin },

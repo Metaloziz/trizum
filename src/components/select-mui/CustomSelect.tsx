@@ -23,10 +23,11 @@ interface Props {
   value: string;
   defaultValue?: Option;
   size?: OverridableStringUnion<'small' | 'medium', FormControlPropsSizeOverrides>;
+  disabled?: boolean;
 }
 
 const CustomSelect: FC<Props & RefAttributes<HTMLInputElement>> = forwardRef((props, ref) => {
-  const { options, onChange, title, value, error, size = 'medium' } = props;
+  const { options, onChange, title, value, error, size = 'medium', disabled } = props;
   const id = useId();
 
   return (
@@ -41,6 +42,7 @@ const CustomSelect: FC<Props & RefAttributes<HTMLInputElement>> = forwardRef((pr
           label={title}
           value={value || ''}
           onChange={onChange}
+          disabled={disabled}
         >
           {options.map(option => (
             <MenuItem key={option.value} value={option.value}>

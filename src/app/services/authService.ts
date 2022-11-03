@@ -1,5 +1,3 @@
-import { AxiosResponse } from 'axios';
-
 import { Paths } from 'app/enums/Paths';
 import instance from 'app/services/config';
 import {
@@ -13,6 +11,7 @@ import {
   ResponseMe,
   ResponseSMS,
 } from 'app/types/AuthTypes';
+import { AxiosResponse } from 'axios';
 import { LoginInfo } from 'pages/login/Login';
 
 const authService = {
@@ -44,7 +43,7 @@ const authService = {
     return res;
   },
   register: async (params: RequestRegister) => {
-    const { data }: AxiosResponse = await instance.post(Paths.Register, params);
+    const { data } = await instance.post(Paths.Register, params);
     return data;
   },
   avatar: async (params: ResponseAvatar) => {
