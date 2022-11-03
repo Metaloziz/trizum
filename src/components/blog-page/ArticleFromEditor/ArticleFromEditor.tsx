@@ -14,16 +14,14 @@ import { Loader } from 'components/loader/Loader';
 
 export const ArticleFromEditor: FC = observer(() => {
   const { setOneTest } = testsStore;
-  const {
-    getArticle: { title, content, test },
-    isLoading,
-  } = articlesStore;
+  const { getArticle, isLoading } = articlesStore;
+  const { title, content, test } = getArticle;
 
   useEffect(() => {
-    if (!!test) {
+    if (test?.id) {
       setOneTest(test.id);
     }
-  }, []);
+  }, [test?.id]);
 
   const editor = useMemo(() => withReact(createEditor()), []);
   const renderElement = (props: any) => <Elem {...props} />;

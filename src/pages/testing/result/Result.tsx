@@ -16,6 +16,7 @@ const Result: FC = observer(() => {
     case Roles.Franchisee:
     case Roles.Methodist:
     case Roles.TeacherEducation:
+    case Roles.Student:
       return <TestResultPage />;
     default:
       return <Custom404 />;

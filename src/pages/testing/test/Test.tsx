@@ -13,6 +13,7 @@ const Test: FC = observer(() => {
     case Roles.Franchisee:
     case Roles.Methodist:
     case Roles.TeacherEducation:
+    case Roles.Student:
       return <TestPage />;
     default:
       return <Custom404 />;
