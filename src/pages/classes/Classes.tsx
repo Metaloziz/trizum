@@ -9,12 +9,12 @@ import { ClassesMethodistPage } from 'components/classes-page/ClassesStudents/Cl
 
 const Classes = observer(() => {
   switch (appStore.role) {
-    case Roles.Teacher:
     case Roles.FranchiseeAdmin:
     case Roles.Franchisee:
     case Roles.Admin:
       return <ClassesMainPage />;
     case Roles.Methodist:
+    case Roles.Teacher:
       return <ClassesMethodistPage />;
 
     default:
