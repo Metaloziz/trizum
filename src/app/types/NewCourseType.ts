@@ -6,15 +6,19 @@ export class NewCourseType {
 
   type?: string = '';
 
+  status?: string = '';
+
   title?: string = '';
 
   level?: string = '';
 
-  status?: string = '';
-
   worksCount?: number = 0;
 
-  works?: NewWorkType[] = [];
+  createdAt? = new TimeZoneType();
 
-  createdAt?: TimeZoneType = new TimeZoneType();
+  works? = [new NewWorkType()];
+}
+
+export class ResponseCurrentCourse {
+  course = new NewCourseType();
 }

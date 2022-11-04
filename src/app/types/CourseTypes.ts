@@ -28,11 +28,6 @@ export type CourseType = ShortCourseType & {
   // usedInGroups: string[]; // todo not sure
 };
 
-export type CurrentCourseResponse = {
-  course: CourseType;
-  usedInGroups: string[];
-};
-
 export type AnswerT = {
   text: string;
   correct: boolean;

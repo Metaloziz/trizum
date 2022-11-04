@@ -2,9 +2,9 @@ import { Checkbox, TableCell, TableRow } from '@mui/material';
 import homeworkStore from 'app/stores/homeworkStore';
 import { FC } from 'react';
 import coursesStore from '../../../app/stores/coursesStore';
-import { NewWorkType } from '../../../app/types/NewWorkType';
-import { HomeworkViewModel } from '../../../app/viewModels/HomeworkViewModel';
-import { getNameFromEnum } from '../../../utils/getNameFromEnum';
+import { NewWorkType } from 'app/types/NewWorkType';
+import { HomeworkViewModel } from 'app/viewModels/HomeworkViewModel';
+import { getNameFromEnum } from 'utils/getNameFromEnum';
 
 type Props = {
   worksArray: typeof homeworkStore.worksArray;
@@ -14,19 +14,20 @@ type Props = {
 
 export const TableWorksRows: FC<Props> = ({ worksArray, setCurrentCourse, selectedWorks }) => {
   const switchWorkInclude = (work: HomeworkViewModel) => {
-    const currentWork = selectedWorks.find(el => el.workId === work.id);
+    const currentWork = selectedWorks.find(el => el.id === work.id);
 
     if (currentWork) {
-      setCurrentCourse({ works: selectedWorks.filter(el => el.workId !== currentWork.workId) });
+      setCurrentCourse({ works: selectedWorks.filter(el => el.id !== currentWork.id) });
     } else {
       setCurrentCourse({
-        works: [...selectedWorks, { index: selectedWorks.length, workId: work.id }],
+        // todo возможно здесь будет ошибка с ID
+        works: [...selectedWorks, { index: selectedWorks.length, id: work.id, work }],
       });
     }
   };
 
   const position = (work: HomeworkViewModel) => {
-    const currentWork = selectedWorks.find(el => el.workId === work.id);
+    const currentWork = selectedWorks.find(el => el.id === work.id);
     if (currentWork) {
       return selectedWorks.indexOf(currentWork) + 1;
     }

@@ -1,5 +1,9 @@
+import { HomeworkViewModel } from 'app/viewModels/HomeworkViewModel';
+
 export class NewWorkType {
   index: number = 0;
 
-  workId: string = '';
+  id: string = '';
+
+  work = new HomeworkViewModel();
 }

@@ -10,7 +10,7 @@ import { StatusT } from 'app/types/StatusT';
 
 import { TimeZoneType } from 'app/types/TimeZoneType';
 import moment from 'moment';
-import { getNextWeek } from '../../utils/getNextWeek';
+import { getNextWeek } from 'utils/getNextWeek';
 import { GroupTeacherType } from './GroupTeacherType';
 
 export type TeacherIdWTF = { id: string; firstName: string; middleName: string; lastName: string };

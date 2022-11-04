@@ -3,8 +3,8 @@ import { ShortCourseType } from 'app/types/CourseTypes';
 import { Nullable } from 'app/types/Nullable';
 import { runInAction, observable, makeObservable } from 'mobx';
 import * as yup from 'yup';
-import { execute } from '../../utils/execute';
-import { removeEmptyFields } from '../../utils/removeEmptyFields';
+import { execute } from 'utils/execute';
+import { removeEmptyFields } from 'utils/removeEmptyFields';
 import { GroupLevels } from '../enums/GroupLevels';
 import { StatusTypes } from '../enums/StatusTypes';
 import { CreateCoursePayloadType } from '../types/CreateCoursePayloadType';
@@ -54,16 +54,7 @@ class CoursesStore extends StoreBase {
     await this.execute(async () => {
       const { course } = await coursesService.getCurrentCourse(courseId);
 
-      const draft: NewCourseType = {
-        id: course.id,
-        title: course.title,
-        level: course.level,
-        type: course.type,
-        status: course.status,
-        works: course.works.map(work => ({ index: work.index, workId: work.work.id })),
-      };
-
-      this.setCurrentCourse(draft);
+      this.setCurrentCourse(course);
     });
   };
 
@@ -80,7 +71,7 @@ class CoursesStore extends StoreBase {
         if (this.currentCourse.works) {
           data.works = this.currentCourse.works?.map(el => ({
             index: Number(el.index),
-            workId: el.workId,
+            workId: el.id,
           }));
         }
 

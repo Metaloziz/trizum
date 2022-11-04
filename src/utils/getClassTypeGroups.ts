@@ -1,5 +1,4 @@
 import { Group } from 'app/types/LoadMeTypes';
-import { GroupsDataT } from 'app/types/ResponseLoadMeBaseT';
 import { ScheduleT } from 'app/types/ScheduleT';
 
 export const getClassTypeGroups = (data: Group[]): ScheduleT[] => {
@@ -11,6 +10,5 @@ export const getClassTypeGroups = (data: Group[]): ScheduleT[] => {
     newArr.push(...el.group.schedule);
   });
 
-  // console.log('getClassTypeGroups', [newArr]);
   return newArr;
 };

@@ -1,30 +1,17 @@
-import { ResponseOneGroup } from 'app/types/GroupTypes';
-import { NewCourseType } from 'app/types/NewCourseType';
-import { OneWorkResponseT } from 'app/types/WorkTypes';
+import { NewWorkType } from 'app/types/NewWorkType';
 import starGame from 'assets/svgs/star.svg';
 import Image from 'components/image/Image';
 import Panel from 'components/panel/Panel';
-import { toJS } from 'mobx';
 import React, { FC } from 'react';
 
 import style from './HomeWorkDescription.module.scss';
 
 type Props = {
-  selectedGroup: ResponseOneGroup;
-  currentCourse: NewCourseType;
-  currentHomework?: OneWorkResponseT;
+  currentHomework?: NewWorkType;
 };
 
-export const HomeWorkDescription: FC<Props> = ({
-  selectedGroup,
-  currentCourse,
-  currentHomework,
-}) => {
+export const HomeWorkDescription: FC<Props> = ({ currentHomework }) => {
   const games = currentHomework?.work?.gamePresets;
-
-  console.log('selectedGroup', toJS(selectedGroup));
-  console.log('currentCourse', toJS(currentCourse));
-  console.log('currentHomework', toJS(currentHomework));
 
   return (
     <div className={style.blockGames}>
