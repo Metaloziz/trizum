@@ -5,4 +5,6 @@ export enum SecondaryRoutes {
   CurrentElement = 'currentElement',
   StudentId = 'studentId',
   Result = 'result',
+  ArticleName = 'articleName',
+  GameName = 'gameName',
 }

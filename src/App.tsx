@@ -1,38 +1,36 @@
-import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-
-import { AppRoutes } from 'app/enums/AppRoutes';
-import { SecondaryRoutes } from 'app/enums/SecondaryRoutes';
-import AddNewsPage from 'components/add-news-page';
 import { ArticleFromEditor } from 'components/blog-page/ArticleFromEditor/ArticleFromEditor';
-import DefaultLayout from 'components/layout/default/DefaultLayout';
 import OlympiadsListPage from 'components/olympiads-list-page/OlympiadsListPage';
-import { observer } from 'mobx-react-lite';
-import Blog from 'pages/blog/Blog';
-import Classes from 'pages/classes/Classes';
-import Courses from 'pages/courses/Courses';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import DefaultLayout from 'components/layout/default/DefaultLayout';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import LoginWithSMS from 'pages/login/LoginWithSMS/LoginWithSMS';
+import { TestsList } from 'pages/testing/TestsList/TestsList';
+import { SecondaryRoutes } from 'app/enums/SecondaryRoutes';
 import Franchising from 'pages/franchising/Franchising';
+import AddNewsPage from 'components/add-news-page';
+import Statistic from 'pages/statistic/Statistic';
+import Olympiads from 'pages/olympiads/Olympiads';
+import Result from 'pages/testing/result/Result';
+import { AppRoutes } from 'app/enums/AppRoutes';
+import UserInfo from 'pages/user-info/UserInfo';
+import { Testing } from 'pages/testing/Testing';
+import Schedule from 'pages/schedule/Schedule';
+import Homework from 'pages/homework/Homework';
 import { GameWrapper } from 'pages/game/Game';
 import GameItems from 'pages/game/GameItems';
-import Home from 'pages/home/Home';
-import Homework from 'pages/homework/Homework';
-import LoginWithSMS from 'pages/login/LoginWithSMS/LoginWithSMS';
-import Olympiads from 'pages/olympiads/Olympiads';
-import Pay from 'pages/pay/Pay';
-import Rate from 'pages/rate/Rate';
-import Report from 'pages/report/Report';
-import Schedule from 'pages/schedule/Schedule';
-import Statistic from 'pages/statistic/Statistic';
-import Result from 'pages/testing/result/Result';
+import Classes from 'pages/classes/Classes';
+import Courses from 'pages/courses/Courses';
+import { observer } from 'mobx-react-lite';
 import Test from 'pages/testing/test/Test';
-import { Testing } from 'pages/testing/Testing';
-import { TestsList } from 'pages/testing/TestsList/TestsList';
-import UserInfo from 'pages/user-info/UserInfo';
+import Report from 'pages/report/Report';
 import Users from 'pages/users/Users';
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
+import Home from 'pages/home/Home';
+import Blog from 'pages/blog/Blog';
+import Rate from 'pages/rate/Rate';
+import Pay from 'pages/pay/Pay';
 import './App.css';
+
 import HomeWorkStatistics from './components/HomeWorkStatistics/HomeWorkStatistics';
 
 const App = observer(() => (
@@ -45,7 +43,7 @@ const App = observer(() => (
           <Route path={AppRoutes.Blog}>
             <Route path="" element={<Blog />} />
             <Route path={SecondaryRoutes.AddArticle} element={<AddNewsPage />} />
-            <Route path=":articleName" element={<ArticleFromEditor />} />
+            <Route path={`:${SecondaryRoutes.ArticleName}`} element={<ArticleFromEditor />} />
           </Route>
 
           <Route path={AppRoutes.Classes}>
@@ -55,11 +53,11 @@ const App = observer(() => (
 
           <Route path={AppRoutes.Courses} element={<Courses />} />
           <Route path={AppRoutes.Franchising} element={<Franchising />} />
-          <Route path={`${AppRoutes.Games}`} element={<GameWrapper />} />
+          <Route path={AppRoutes.Games} element={<GameWrapper />} />
 
-          <Route path={`${AppRoutes.Games}/:gameName`} element={<GameItems />} />
+          <Route path={`${AppRoutes.Games}/:${SecondaryRoutes.GameName}`} element={<GameItems />} />
           <Route path={AppRoutes.Homework} element={<Homework />} />
-          <Route path={AppRoutes.Signin} element={<LoginWithSMS />} />
+          <Route path={AppRoutes.SignIn} element={<LoginWithSMS />} />
 
           <Route path={AppRoutes.Olympiads}>
             <Route path="" element={<Olympiads />} />
