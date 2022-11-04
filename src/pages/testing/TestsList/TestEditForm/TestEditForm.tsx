@@ -14,8 +14,8 @@ import React, { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { mixElements } from 'utils/mixElements';
 import * as yup from 'yup';
-import { StatusTypes } from '../../../../app/enums/StatusTypes';
-import { Loader } from '../../../../components/loader/Loader';
+import { StatusTypes } from 'app/enums/StatusTypes';
+import { Loader } from 'components/loader/Loader';
 import { QuestionForm, QuestionFormData } from './QuestionForm/QuestionForm';
 import style from './TestEditForm.module.scss';
 
@@ -42,8 +42,6 @@ export const TestEditForm: FC<Props> = ({
   isLoading,
   editTest,
 }) => {
-  console.log('testData', [testData]); // todo draft
-
   useEffect(() => {
     if (isSuccessPost) {
       setTests();
