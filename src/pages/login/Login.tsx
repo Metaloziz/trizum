@@ -50,7 +50,6 @@ export const Login: FC = () => {
               <div>
                 <p className={style.modalSubtitle}>Пароль</p>
                 <input {...register('password')} type="password" />
-                {loginError && <p className={style.textErrorRed}>Неверный логин или пароль</p>}
                 <p className={style.textErrorRed}>{errors.password?.message}</p>
               </div>
               <button type="submit" className={style.modalButton} onClick={onSubmit} >
