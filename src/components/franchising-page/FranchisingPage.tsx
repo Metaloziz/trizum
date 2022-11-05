@@ -96,6 +96,7 @@ const FranchisingPage = observer(() => {
                   },
                 }}
               >
+                <TableCell>№</TableCell>
                 <TableCell>
                   Полное, сокращенное
                   <br />
@@ -126,7 +127,7 @@ const FranchisingPage = observer(() => {
             </TableHead>
             <TableBody>
               {store.filteredEntities.length ? (
-                store.filteredEntities.map(entity => (
+                store.filteredEntities.map((entity, index) => (
                   <TableRow
                     key={entity.id}
                     hover
@@ -137,12 +138,9 @@ const FranchisingPage = observer(() => {
                     }}
                   >
                     <TableCell>
-                      {/* {entity && (
-                        <>
-                          <Typography variant="caption">{entity.shortName || ''}</Typography>
-                          <br />
-                        </>
-                      )} */}
+                      <Typography variant="caption">{index + 1}.</Typography>
+                    </TableCell>
+                    <TableCell>
                       <Typography variant="caption">{entity.shortName || ''}</Typography>
                     </TableCell>
                     <TableCell>
