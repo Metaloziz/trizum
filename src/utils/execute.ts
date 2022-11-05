@@ -14,6 +14,7 @@ export const execute = async <T>(
     // TODO: корректная обработка ошибок
     const errorMsg = Axios.isAxiosError(e) ? e.message : (e as Error).message;
     appStore.setError(errorMsg);
+    appStore.setLoginError(errorMsg);
     return Promise.resolve(undefined);
   } finally {
     finishLoading && finishLoading();

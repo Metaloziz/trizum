@@ -128,6 +128,8 @@ class AppStore {
 
   error = '';
 
+  loginError = '';
+
   /* fields student only */
   allGameIdsWithCodes: GameIdWithCode[][] = [];
 
@@ -222,6 +224,10 @@ class AppStore {
       this.error = '';
     }, 5000);
   };
+
+    setLoginError = (error: string) => {
+    this.loginError = error;
+    }
 
   /* actions student only */
   setGameIdsWithCodes = (user: EmptyUser) => {
