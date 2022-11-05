@@ -72,7 +72,7 @@ export const ShiftVerticalSettings: FC<ShiftVerticalSettingsPropsT> = props => {
             <InputLabel>Кол-во форм</InputLabel>
             <Select
               value={blinksCount}
-              label="Формы"
+              label="Кол-во форм"
               onChange={({ target: { value } }) => setBlinksCount(value)}
             >
               {colorsOptions}

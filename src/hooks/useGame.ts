@@ -75,7 +75,7 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
   };
 
   const setPreset = async (data: Option) => {
-    setStarted(false);
+    stopGame();
     await getPreset(data.value);
   };
 
