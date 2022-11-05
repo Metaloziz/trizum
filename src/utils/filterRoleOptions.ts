@@ -6,7 +6,10 @@ export const filterRoleOptions = (roleOptions: OptionT[], role: string) => {
     case Roles.Franchisee:
       return roleOptions.filter(
         el =>
-          el.value !== Roles.Methodist && el.value !== Roles.Tutor && el.value !== Roles.Franchisee,
+          el.value !== Roles.Methodist &&
+          el.value !== Roles.Tutor &&
+          el.value !== Roles.Admin &&
+          el.value !== Roles.Franchisee,
       );
 
     case Roles.FranchiseeAdmin:
@@ -16,6 +19,7 @@ export const filterRoleOptions = (roleOptions: OptionT[], role: string) => {
           el.value !== Roles.Tutor &&
           el.value !== Roles.Franchisee &&
           el.value !== Roles.TeacherEducation &&
+          el.value !== Roles.Admin &&
           el.value !== Roles.FranchiseeAdmin,
       );
     case Roles.Tutor:
@@ -28,6 +32,31 @@ export const filterRoleOptions = (roleOptions: OptionT[], role: string) => {
           el.value !== Roles.Parent &&
           el.value !== Roles.Teacher &&
           el.value !== Roles.TeacherEducation,
+      );
+    default:
+      return roleOptions;
+  }
+};
+
+export const getRoleOptionsForFilter = (roleOptions: OptionT[], role: string) => {
+  switch (role) {
+    case Roles.Franchisee:
+      return roleOptions.filter(
+        el =>
+          el.value !== Roles.Methodist &&
+          el.value !== Roles.Tutor &&
+          el.value !== Roles.TeacherEducation &&
+          el.value !== Roles.FranchiseeAdmin &&
+          el.value !== Roles.Admin,
+      );
+
+    case Roles.FranchiseeAdmin:
+      return roleOptions.filter(
+        el =>
+          el.value !== Roles.Methodist &&
+          el.value !== Roles.Tutor &&
+          el.value !== Roles.TeacherEducation &&
+          el.value !== Roles.Admin,
       );
     default:
       return roleOptions;

@@ -35,6 +35,7 @@ import { convertEnumOptions } from 'utils/convertEnumOptions';
 import { GroupTypes } from 'app/enums/GroupTypes';
 import tariffsStore from 'app/stores/tariffsStore';
 import { convertTariffOptions } from 'utils/convertTariffOptions';
+import { getRoleOptionsForFilter } from '../../../utils/filterRoleOptions';
 
 const PAID = 'Оплачен';
 const NOT_PAID = 'Не оплачен';
@@ -333,7 +334,7 @@ export const Filter: FC<UserPageFilterProps> = observer(props => {
                   label="Роль"
                   onChange={handleChangeRole}
                 >
-                  {getAllOptionsMUI(roleOptions)}
+                  {getAllOptionsMUI(getRoleOptionsForFilter(roleOptions, role))}
                 </Select>
               </FormControl>
             </Grid>
