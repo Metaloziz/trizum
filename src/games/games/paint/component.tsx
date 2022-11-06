@@ -39,6 +39,31 @@ const MapElements = [
     image : require('./assets/animals/5.png'),
     mask : require('./assets/templates/5.png'),
   },
+  {
+    id : 6,
+    image : require('./assets/animals/6.png'),
+    mask : require('./assets/templates/6.png'),
+  },
+  {
+    id : 7,
+    image : require('./assets/animals/7.png'),
+    mask : require('./assets/templates/7.png'),
+  },
+  {
+    id : 8,
+    image : require('./assets/animals/8.png'),
+    mask : require('./assets/templates/8.png'),
+  },
+  {
+    id : 9,
+    image : require('./assets/animals/9.png'),
+    mask : require('./assets/templates/9.png'),
+  },
+  {
+    id : 10,
+    image : require('./assets/animals/10.png'),
+    mask : require('./assets/templates/10.png'),
+  },
 ];
 
 export default class extends Component<any, any> implements Game {

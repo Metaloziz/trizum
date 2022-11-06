@@ -1,9 +1,9 @@
 import { GameProps, GameResult } from '../../common/types';
 
 export interface Props extends GameProps {
-  elementsTotal?: number
-  groupsCount?: number;
+  elementsTotal?: number;
   timeComplete?: number;
+  digitMin?: number; // Минимальное число на поле
   colorsMap?: string[];
   onEnd(result?: GameResult): void;
 }
@@ -11,7 +11,7 @@ export interface Props extends GameProps {
 const PropsDefault : Props = {
   timeComplete: 0,
   elementsTotal: 3,
-  groupsCount : 1,
+  digitMin : 1,
   colorsMap : [
     '#333',
     '#f00',

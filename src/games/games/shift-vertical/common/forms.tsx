@@ -2,6 +2,53 @@ import React, { Component } from 'react';
 import Svg, { Rect, Circle, Polygon } from 'react-native-svg';
 
 export const GameForm : any = {
+  rightTriangle : (size : any, color : any) => {
+    return <Svg
+      width={size}
+      height={size}
+    >
+      <Polygon
+        points={`${size/2},0 ${(size/5)*4},${size} ${size/5},${size}`}
+        fill={color}
+      />
+    </Svg>;
+  },
+  fiveAngle : (size : any, color : any) => {
+    return <Svg
+      width={size}
+      height={size}
+    >
+      <Polygon
+        points={`${size/2},0 ${size},${size/2} ${(size/4)*3},${size} ${(size/4)},${size} 0,${size/2}`}
+        fill={color}
+      />
+    </Svg>;
+  },
+  sixAngle : (size : any, color : any) => {
+    return <Svg
+      width={size}
+      height={size}
+    >
+      <Polygon
+        points={`${size/4},0 ${(size/4)*3},0 ${size},${size/2} ${(size/4)*3},${size} ${(size/4)},${size} 0,${size/2}`}
+        fill={color}
+      />
+    </Svg>;
+  },
+  centerRect : (size : any, color : any) => {
+    return <Svg
+      width={size}
+      height={size}
+    >
+      <Rect
+        x={size/4}
+        y="0"
+        width={size/2}
+        height={size}
+        fill={color}
+      />
+    </Svg>;
+  },
   rect : (size : any, color : any) => {
     return <Svg
       width={size}
@@ -43,6 +90,17 @@ export const GameForm : any = {
     >
       <Polygon
         points={`${size/2},0 ${size},${size/2} ${size/2},${size} 0,${size/2}`}
+        fill={color}
+      />
+    </Svg>;
+  },
+  leftTriangle : (size : any, color : any) => {
+    return <Svg
+      width={size}
+      height={size}
+    >
+      <Polygon
+        points={`${0},0 ${size},${size} 0,${size}`}
         fill={color}
       />
     </Svg>;

@@ -8,16 +8,23 @@ import { rand, describeArc } from '../../../common/utils';
 import SteamArrow from './arrow';
 
 const BORDER_SIZE = 6;
-const SIZE_ANGLE = 55;
+// const SIZE_ANGLE = 55;
 
 export default class extends Component<any, any> {
 
   startAngle: number;
+  size_angle: number;
 
   constructor(props : any) {
     super(props);
 
-    this.startAngle = rand(0, 360 - SIZE_ANGLE);
+    const {
+      area = true
+    } = props;
+
+    this.size_angle = Math.round(360 / (area ? 6 : 8));
+
+    this.startAngle = rand(0, 360 - this.size_angle);
   }
 
   onPress = () => {
@@ -47,7 +54,7 @@ export default class extends Component<any, any> {
 
     const innerSize = size - (BORDER_SIZE*4);
     const centerSize = Math.round(size * 0.4);
-    const range = [this.startAngle, this.startAngle + SIZE_ANGLE];
+    const range = [this.startAngle, this.startAngle + this.size_angle];
 
     return <TouchableOpacity
       style={{

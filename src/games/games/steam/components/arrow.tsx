@@ -6,7 +6,9 @@ import { Svg, Polygon } from 'react-native-svg';
 const width = 12;
 const space = 6;
 
-const tick = 16;
+const FPS = 60;
+
+const tick = 1000/FPS;
 
 export default class extends Component<any, any> {
 
@@ -24,8 +26,9 @@ export default class extends Component<any, any> {
 
     this.timer = false;
 
-    const distance = speed * 360; // Общее кол-во градусов в секунду
-    this.inTick = (distance / 1000) * tick; // Кол-во градусов в один кадр
+    const distance = 360 / (speed/1000); // Общее кол-во градусов в секунду
+
+    this.inTick = ((distance / 1000) * tick)*2; // Кол-во градусов в один кадр
 
     let start = range[0] + ((range[1] - range[0])/2) + 180;
 

@@ -5,17 +5,17 @@ import { Props } from '../types';
 export function generateLayout(props : any) {
   const {
     elementsTotal= 3,
-    groupsCount = 1,
+    digitMin = 1,
     colorsMap = []
   } : Props = props;
 
   const size =  elementsTotal * elementsTotal;
-  const maxSizeColor = Math.ceil(size / groupsCount);
+  const maxSizeColor = Math.ceil(size / colorsMap.length);
   const resultMap = [];
 
-  for(let i = 0;i<groupsCount;i++) {
+  for(let i = 0;i<colorsMap.length;i++) {
     for(let c = 0;c<maxSizeColor;c++) {
-      const number = c+1;
+      const number = c+1 + (digitMin - 1);
 
       resultMap.push({
         text : `${number}`,

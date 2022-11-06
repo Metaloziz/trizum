@@ -107,16 +107,6 @@ export default class extends Component<any, any> implements Game {
   public getConfig = () => {
     return [
       {
-        name : 'groupsCount',
-        type : 'select',
-        title : 'Количество манометров',
-        option : [1, 2, 3, 4].map(a => ({
-          title : `${a}`,
-          value : a
-        })),
-        value : 1
-      },
-      {
         name : 'timeComplete',
         type : 'select',
         title : 'Время на прохождение уровня',
@@ -146,16 +136,6 @@ export default class extends Component<any, any> implements Game {
         })),
         value : 1
       },
-      {
-        name : 'speed',
-        type : 'select',
-        title : 'Скорость стрелки(обороты в секунду)',
-        option : [0.5, 1, 1.5].map(a => ({
-          title : `${a} оборотов`,
-          value : a
-        })),
-        value : 0.5
-      },
     ];
   }
 
@@ -164,8 +144,6 @@ export default class extends Component<any, any> implements Game {
       timeComplete : parseInt(result.timeComplete),
       elementsTotal : parseInt(result.elementsTotal),
       errorAacceptable : parseInt(result.errorAacceptable),
-      speed : parseFloat(result.speed),
-      groupsCount : parseInt(result.groupsCount)
     };
   }
 
@@ -202,10 +180,9 @@ export default class extends Component<any, any> implements Game {
   renderInner = () => {
     const {
       width,
-      speed,
-      groupsCount,
       timeComplete,
-      elementsTotal
+      elementsTotal,
+      gage = []
     } = this.props;
 
     const {
@@ -221,19 +198,21 @@ export default class extends Component<any, any> implements Game {
       scoreProgress = 100;
     }
 
-    const steamArray = [];
+    const steamArray : any[] = [];
 
-    for(let i = 0;i<groupsCount;i++) {
+
+    gage.map((a : any, i : any) => {
       steamArray.push(<View
         key={`steam-${i}`}
         style={styles.wrapItem}
       >
         <SteamItem
-          speed={speed}
+          speed={a.speed}
+          area={a.area}
           onScore={this.onScore}
         />
       </View>);
-    }
+    });
 
     return <View
       style={{

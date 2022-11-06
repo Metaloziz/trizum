@@ -70,6 +70,30 @@ export default class extends Component<any, any> implements Game {
   public getConfig = () => {
     return [
       {
+        name : 'digitMin',
+        type : 'select',
+        title : 'Минимальное число на поле',
+        option : [
+          {
+            title : '1',
+            value : 1,
+          },
+          {
+            title : '10',
+            value : 10,
+          },
+          {
+            title : '20',
+            value : 20,
+          },
+          {
+            title : '30',
+            value : 30,
+          },
+        ],
+        value : 1
+      },
+      {
         name : 'timeComplete',
         type : 'select',
         title : 'Время на прохождение',
@@ -100,22 +124,6 @@ export default class extends Component<any, any> implements Game {
         option : SizesConfig,
         value : 0
       },
-      {
-        name : 'groupsCount',
-        type : 'select',
-        title : 'Кол-во цветов',
-        option : [
-          {
-            title : '1 цвет',
-            value : 1
-          },
-          {
-            title : '2 цвета',
-            value : 2
-          },
-        ],
-        value : 1
-      },
     ];
   }
 
@@ -125,7 +133,7 @@ export default class extends Component<any, any> implements Game {
     return {
       ...size.option,
       timeComplete : parseInt(result.timeComplete),
-      groupsCount : result.groupsCount
+      digitMin : parseInt(result.digitMin)
     };
   }
 
