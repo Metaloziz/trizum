@@ -12,7 +12,7 @@ export const defaultResult = {
 export const newDefaultResult: ResultsNewT = {
   gameCode: '',
   time: 0,
-  result: 'end' as ResultT,
   success: 0,
   templateCode: 1,
+  finished: false,
 };

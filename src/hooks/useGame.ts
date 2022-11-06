@@ -6,7 +6,6 @@ import {
   PlaySendResultT,
   PresetsGameSettings,
   ResultsNewT,
-  ResultsT,
 } from 'app/types/GameTypes';
 import { Option } from 'components/select-mui/CustomSelect';
 import { DEFAULT_GAME_SETTINGS } from 'constants/games';
@@ -56,21 +55,12 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
     refs?.stop();
   };
 
-  const onEnd = (result?: ResultsT) => {
+  const onEnd = (result?: ResultsNewT) => {
     setResultModal(true);
     setStarted(false);
 
     if (result) {
-      // TODO: newResult временно пока данные с игры другие
-      const newResult: ResultsNewT = {
-        time: result.time,
-        gameCode: game.code,
-        success: result.score,
-        templateCode: 0,
-        result: result.result,
-        timeMax: result.timeDiff,
-      };
-      setGameResult(newResult);
+      setGameResult(result);
     }
   };
 
