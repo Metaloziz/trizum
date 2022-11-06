@@ -1,12 +1,7 @@
 import appStore, { Roles } from 'app/stores/appStore';
 import gamesStore from 'app/stores/gamesStore';
 import groupStore from 'app/stores/groupStore';
-import {
-  GameProps,
-  PlaySendResultT,
-  PresetsGameSettings,
-  ResultsNewT,
-} from 'app/types/GameTypes';
+import { GameProps, PlaySendResultT, PresetsGameSettings, ResultsNewT } from 'app/types/GameTypes';
 import { Option } from 'components/select-mui/CustomSelect';
 import { DEFAULT_GAME_SETTINGS } from 'constants/games';
 import { getPresetArrOptions } from 'constants/presetArr';
@@ -27,7 +22,7 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
 
   const [refs, setRef] = useState<any>(null);
   const [started, setStarted] = useState(false);
-  const [isModalOpen, toggleModal] = useState(false);
+  const [isModalOpen, setToggleModal] = useState(false);
   const [resultModal, setResultModal] = useState(false);
   const [gameResult, setGameResult] = useState<ResultsNewT>(newDefaultResult);
   const [settings, setSettings] = useState<Partial<PresetsGameSettings>>({});
@@ -53,6 +48,10 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
   const stopGame = () => {
     setStarted(false);
     refs?.stop();
+  };
+  const toggleModal = (value: boolean) => {
+    setToggleModal(value);
+    stopGame();
   };
 
   const onEnd = (result?: ResultsNewT) => {

@@ -9,7 +9,9 @@ export const filterRoleOptions = (roleOptions: OptionT[], role: string) => {
           el.value !== Roles.Methodist &&
           el.value !== Roles.Tutor &&
           el.value !== Roles.Admin &&
-          el.value !== Roles.Franchisee,
+          el.value !== Roles.TeacherEducation &&
+          el.value !== Roles.Franchisee &&
+          el.value !== Roles.FranchiseeAdmin,
       );
 
     case Roles.FranchiseeAdmin:
