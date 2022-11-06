@@ -18,6 +18,8 @@ export const Login: FC = () => {
     password: yup.string().required('обязательно поле'),
   });
 
+
+
   const {
     handleSubmit,
     register,
@@ -43,7 +45,16 @@ export const Login: FC = () => {
             <div className={style.body}>
               <div>
                 <p className={style.modalSubtitle}>Ваш номер телефона</p>
-                <input {...register('phone')} />
+                <input {...register('phone', {maxLength: 11})} onChange={
+                    (e) => {
+                      if (e.currentTarget.value[0] === '8') {
+                        e.currentTarget.value = e.currentTarget.value.replace('8', '7');
+                      }
+                      if (e.currentTarget.value.length > 11) {
+                        e.currentTarget.value = e.currentTarget.value.slice(0, 11);
+                      }
+                    }
+                } type='number' />
                 <p className={style.textErrorRed}>{errors.phone?.message}</p>
               </div>
 
