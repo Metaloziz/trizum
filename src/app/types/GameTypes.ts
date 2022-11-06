@@ -150,11 +150,11 @@ export type ResultsNewT = {
   levelMaxCompleted?: number;
   gameCode: string;
   templateCode: number;
-  success: number; //+
-  failed?: number; //+
+  success: number;
+  failed?: number;
   timeMax?: number;
-  time: number; //+
-  result: ResultT; //+
+  time: number;
+  finished: boolean;
 };
 
 export const RESULT = {

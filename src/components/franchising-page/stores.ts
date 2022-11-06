@@ -1,4 +1,4 @@
-import { makeObservable, observable, toJS } from 'mobx';
+import { makeObservable, observable, runInAction } from 'mobx';
 import * as yup from 'yup';
 
 import { FranchisingFilterViewModel } from './models/FranchisingFilterViewModel';
@@ -8,7 +8,6 @@ import { Nullable } from 'app/types/Nullable';
 import { FranchisingViewModel } from 'app/viewModels/FranchisingViewModel';
 import { FranchisingRepository } from 'components/franchising-page/repositories';
 
-import _ from 'lodash';
 import { innValidation } from 'utils/innValidation';
 import { orgnValidation } from 'utils/orgnValidation';
 import { kppValidation } from 'utils/kppValidation';
@@ -73,7 +72,11 @@ export class FranchisingStore extends StoreBase {
 
   list = async () => {
     this.execute(async () => {
-      this.entities = await this._repository.list();
+      const res = await this._repository.list();
+
+      runInAction(() => {
+        this.entities = res;
+      });
     });
   };
 
@@ -89,7 +92,6 @@ export class FranchisingStore extends StoreBase {
     this.execute(async () => {
       await this._repository.addOrEdit(this.editingEntity);
       await this.pull();
-      console.log(toJS(this.editingEntity));
     });
   };
 

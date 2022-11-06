@@ -29,7 +29,6 @@ export type ShulteGameSettingsType = {
   timeComplete?: Nullable<number>;
   elementsTotal: number;
   digitMin: number;
-  digitMax: number;
   colorsMap: string[];
 };
 

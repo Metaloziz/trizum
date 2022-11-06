@@ -50,7 +50,7 @@ export const BaseFormGameSettings = (props: BaseFormGameSettingsType): ReactElem
                   render={({ field: { value, onChange, ref } }) => (
                     <TextFieldCustom
                       type="text"
-                      label="Наименование шаблон"
+                      label="Наименование шаблона"
                       size="small"
                       fullWidth
                       error={errors.name?.message}

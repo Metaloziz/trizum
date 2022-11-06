@@ -1,3 +1,4 @@
+import tokenService from 'app/services/tokenService';
 import Axios, { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
 import dateTransformer from 'axios-date-reviver';
 import { StatusCodes } from 'http-status-codes';
@@ -112,6 +113,9 @@ export class HttpClient {
   };
 
   withBearerAuthorization = (token: string) => {
+    if (token === null) {
+      token = tokenService.getLocalAccessToken();
+    }
     this.config = {
       ...this.config,
       headers: {

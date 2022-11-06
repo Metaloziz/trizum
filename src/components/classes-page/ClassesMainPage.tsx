@@ -16,7 +16,7 @@ import AddEditGroup from 'components/classes-page/AddEditGroup';
 import SearchBar from 'components/classes-page/search-bar/SearchBar';
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
-import { whoCanUseIt } from '../../utils/whoCanUseIt';
+import { whoCanUseIt } from 'utils/whoCanUseIt';
 
 import styles from './ClassesMainPage.module.scss';
 import { ClassesRows } from './ClassesRows/ClassesRows';
@@ -53,8 +53,8 @@ export const ClassesMainPage = observer(() => {
   return (
     <>
       <div className={styles.wrapper}>
-        {/* методист не может видеть эту кнопку */}
-        {!whoCanUseIt([Roles.Methodist]) && (
+        {/* методист не может видеть эту кнопку и учитель */}
+        {!whoCanUseIt([Roles.Methodist, Roles.Teacher]) && (
           <Button onClick={() => openModal()} variant="contained">
             Добавить группу
           </Button>
