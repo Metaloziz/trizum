@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 import styles from './TeacherEducationMain.module.scss';
 
 import teacherEducationStore from 'app/stores/TeacherEducationStore';
 import BlogItem from 'components/molecules/BlogItem';
+import appStore, { Roles } from '../../app/stores/appStore';
+import { AppRoutes } from '../../app/enums/AppRoutes';
 
 const TeacherEducationMain = () => {
   const navigate = useNavigate();
   const { tests, setCurrentTest } = teacherEducationStore;
+  const { role } = appStore;
   const onTheoryClick = (id: string) => {
     const test = tests.find(t => t.id === id);
     // TODO: сделать слаг или айди
@@ -27,6 +30,7 @@ const TeacherEducationMain = () => {
       navigate(`/test/${id}`);
     }
   };
+
   return (
     <div className={styles.container}>
       {tests.map(item => (

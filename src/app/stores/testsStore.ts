@@ -147,7 +147,7 @@ class TestsStore {
   };
 
   get getTitleTest() {
-    return this.currentTest.test.title;
+    return this.currentTest?.test?.title;
   }
 }
 

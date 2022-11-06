@@ -11,8 +11,11 @@ import defaultAvatar from 'public/img/avatarDefault.png';
 import { DropDownStudents } from 'components/drop-down-student/DropDownStudents';
 import Image from 'components/image/Image';
 import { BASE_URL } from 'constants/constants';
+import { useNavigate } from 'react-router-dom';
+import { AppRoutes } from '../../app/enums/AppRoutes';
 
 const Account: FC = observer(() => {
+  const navigate = useNavigate();
   const { user, setRole, isLoggedIn } = appStore;
   const [isOpenChangeStudentModal, setIsOpenChangeStudentModal] = useState<boolean>(false);
 
@@ -24,6 +27,7 @@ const Account: FC = observer(() => {
     await tokenService.removeUser();
     appStore.logout();
     setRole(Roles.Unauthorized);
+    navigate(AppRoutes.Index);
   };
 
   const onChangeStudent = useCallback(async (id: string) => {
