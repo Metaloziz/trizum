@@ -16,10 +16,16 @@ const SPACE = 10;
 const START_TIMER = 3;
 const DELAY = 1200;
 
-const SOUND_DO = require('./assets/do.wav');
-const SOUND_RE = require('./assets/re.wav');
-const SOUND_MI = require('./assets/mi.wav');
+const SOUND_DO = require('./assets/do.mp3');
+const SOUND_RE = require('./assets/re.mp3');
+const SOUND_MI = require('./assets/mi.mp3');
 const SOUND_FA = require('./assets/fa.mp3');
+const SOUND_SOL = require('./assets/sol.mp3');
+const SOUND_LYA = require('./assets/lya.mp3');
+const SOUND_SI = require('./assets/si.mp3');
+const SOUND_DO2 = require('./assets/do2.mp3');
+const SOUND_MI2 = require('./assets/mi2.mp3');
+const SOUND_RE2 = require('./assets/re2.mp3');
 
 export default class extends Component<any, any> implements Game {
 
@@ -88,6 +94,12 @@ export default class extends Component<any, any> implements Game {
       SoundPreload(SOUND_RE),
       SoundPreload(SOUND_MI),
       SoundPreload(SOUND_FA),
+      SoundPreload(SOUND_SOL),
+      SoundPreload(SOUND_LYA),
+      SoundPreload(SOUND_SI),
+      SoundPreload(SOUND_DO2),
+      SoundPreload(SOUND_MI2),
+      SoundPreload(SOUND_RE2)
     ]).then(list => {
       this.soundItems = list;
 

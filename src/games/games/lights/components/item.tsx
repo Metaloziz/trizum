@@ -18,13 +18,20 @@ export default class extends Component<any, any> {
   timer : any;
   direction : any;
   directionCount : any;
+  tickTime : any;
 
   constructor(props : any) {
     super(props);
 
+    const {
+      speed
+    } = props;
+
     this.timer = false;
     this.direction = '';
     this.directionCount = 0;
+
+    this.tickTime = speed;
 
     this.state = {
       color : false,
@@ -187,7 +194,7 @@ export default class extends Component<any, any> {
   tick = () => {
     this.timer = setTimeout(() => {
       this.onTick();
-    }, tick);
+    }, this.tickTime);
   }
 
   clear = () => {
