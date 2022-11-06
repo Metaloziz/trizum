@@ -176,6 +176,7 @@ class AppStore {
             this.setGameIdsWithCodes(res.data);
           }
           this.isInitialized = true;
+          this.loginError = '';
         });
       }
     });
