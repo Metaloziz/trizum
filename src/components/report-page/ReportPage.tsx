@@ -8,6 +8,7 @@ import reportStore from '../../app/stores/reportStore';
 import { shortenName } from '../../utils/shortenName';
 import { Loader } from '../loader/Loader';
 import styles from './ReportPage.module.scss';
+import appStore, { Roles } from '../../app/stores/appStore';
 
 const columnNames = [
   'ФИО ученика',
@@ -21,6 +22,7 @@ const columnNames = [
 ];
 
 const ReportPage = observer(() => {
+  const { role } = appStore;
   const { getReports, reports: currentItem, total, queryFields, perPage } = reportStore;
   const [loading, setLoading] = useState<boolean>(false); // State для загрузки
 
@@ -42,7 +44,13 @@ const ReportPage = observer(() => {
         <div className={styles.leftBlock}>
           <ReportFilters />
           <div className={styles.tableContent}>
-            <Table reportlist={currentItem} colNames={columnNames} loading={loading}>
+            <Table
+              reportlist={currentItem}
+              colNames={columnNames.filter(
+                column => role === Roles.Franchisee && column !== 'Франшиза',
+              )}
+              loading={loading}
+            >
               {currentItem?.map(item => (
                 <tr key={item.id}>
                   <td>
@@ -52,7 +60,9 @@ const ReportPage = observer(() => {
                   </td>
                   <td>{item?.city || 'Нет данных'}</td>
                   <td>{item?.isActive ? 'Активный' : 'Не активный'}</td>
-                  <td>{item?.franchise?.shortName || 'Нет данных'}</td>
+                  {role !== Roles.Franchisee && (
+                    <td>{item?.franchise?.shortName || 'Нет данных'}</td>
+                  )}
                   <td>{transformDate(item?.birthdate?.date) || 'Нет данных'}</td>
                   <td>{item?.isPayed ? 'Оплачен' : 'Не оплачен'}</td>
                   <td>{transformDate(item?.payedUntil?.date) || 'Нет данных'}</td>
