@@ -19,6 +19,7 @@ import articlesImg from 'assets/svgs/student-navigation-sidebar/articles.svg';
 import groupImg from 'assets/svgs/student-navigation-sidebar/group_class.svg';
 import adminImg from 'assets/svgs/student-navigation-sidebar/admin.svg';
 import olimpiad from 'assets/svgs/student-navigation-sidebar/olimpiad.svg';
+import teacherStatistic from 'assets/svgs/student-navigation-sidebar/teacherStatistic.svg';
 
 import Navigation from 'components/navigation/Navigation';
 import useComponentVisible from 'HOC/drop-down-hook/DropDownHook';
@@ -56,7 +57,7 @@ const Links = {
   Statistic: {
     label: 'Статистика',
     href: Statistic,
-    imageSrc: resultsImage,
+    imageSrc: teacherStatistic,
   },
   // Games: { label: 'Список игр', href: Games, imageSrc: listGames },
   Games: { label: 'Список игр', href: Games, imageSrc: gameListImg },
@@ -85,8 +86,8 @@ const Links = {
 const studentLinks = [
   Links.Index,
   // Links.Olympiads,
-  Links.Payment,
-  Links.Statistic,
+  // Links.Payment,
+  // Links.Statistic,
   // Links.Games,
   Links.Blog,
 ];
