@@ -27,14 +27,20 @@ export const Login: FC = () => {
     control,
   } = useForm<LoginInfo>({
     resolver: yupResolver(schema),
-    defaultValues: { phone: '76660003334', password: 'Base76660003334' },
+    defaultValues: { phone: '+76660003334', password: 'Base76660003334' },
   });
 
   const  { loginError }  = appStore;
 
   const onSubmit = handleSubmit(loginData => {
-    loginWithPassword(loginData);
+    loginWithPassword({
+        phone: loginData.phone.replace(/\D/g, ''),
+        password: loginData.password,
+    })
+
   });
+
+  let maxVal = 11;
 
   return (
     <div className={style.modal}>
@@ -45,16 +51,17 @@ export const Login: FC = () => {
             <div className={style.body}>
               <div>
                 <p className={style.modalSubtitle}>Ваш номер телефона</p>
-                <input {...register('phone', {maxLength: 11})} onChange={
+                <input {...register('phone')} onChange={
                     (e) => {
-                      if (e.currentTarget.value[0] === '8') {
-                        e.currentTarget.value = e.currentTarget.value.replace('8', '7');
-                      }
-                      if (e.currentTarget.value.length > 11) {
+                      if (e.currentTarget.value.length > maxVal) {
                         e.currentTarget.value = e.currentTarget.value.slice(0, 11);
                       }
+                      e.target.value[0] === '+' ? maxVal = 12 : maxVal = 11;
+                      if (e.currentTarget.value[0] === '8') {
+                        e.currentTarget.value = e.currentTarget.value.replace('8', '+7');
+                      }
                     }
-                } type='number' />
+                }  />
                 <p className={style.textErrorRed}>{errors.phone?.message}</p>
               </div>
 
