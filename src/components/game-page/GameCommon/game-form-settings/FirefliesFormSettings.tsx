@@ -79,7 +79,7 @@ export const FirefliesFormSettings = (props: FormSettingsType): ReactElement => 
               render={({ field: { value, onChange, ref } }) => (
                 <TextFieldCustom
                   type="text"
-                  label="Время на прохождение игры, с."
+                  label="Время отслеживания светлячков, с."
                   size="small"
                   fullWidth
                   inputProps={{ type: 'number' }}
