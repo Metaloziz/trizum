@@ -146,7 +146,7 @@ export const OlympiadForm: FC<Props> = observer(({ setShowModal, mode = 'add', g
             defaultValue={group?.name || ''}
             error={!!errors?.name}
             label="Название олимпиады"
-            style={{ width: '400px' }}
+            style={{ width: '100%' }}
           />
         </div>
 
