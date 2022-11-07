@@ -1,8 +1,9 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
-import { GroupsLevelsValue } from 'app/enums/GroupLevels';
-import { StatusTypes } from 'app/enums/StatusTypes';
-import { TEN_DIGIT_MENU } from 'components/game-page/GameCommon/game-form-settings/constants';
+import {
+  BASE_DEFAULT_VALUES,
+  TEN_DIGIT_MENU,
+} from 'components/game-page/GameCommon/game-form-settings/constants';
 import {
   FormSettingsType,
   ShiftVerticalFormType,
@@ -16,15 +17,12 @@ import { BaseFormGameSettings } from './BaseFormGameSettings';
 import { SHIFT_VERTICAL_FORM_SCHEMA } from './game-form-schema';
 
 const DEFAULT_VALUES: ShiftVerticalFormType = {
-  name: '',
-  level: GroupsLevelsValue.easy,
-  status: StatusTypes.draft,
+  ...BASE_DEFAULT_VALUES,
   blinksCount: 2,
   cycleTime: 5,
   elementsTotal: 2,
   groupsCount: 2,
   timeComplete: undefined,
-  description: undefined,
 };
 
 export const ShiftVerticalFormSettings = (props: FormSettingsType): ReactElement => {

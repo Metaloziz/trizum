@@ -11,7 +11,7 @@ export const convertEmptyStringToNull = (
 };
 
 export const convertNullToEmptyString = (value: Nullable<string | number>) => {
-  if (value === null) {
+  if (value === null || value === undefined) {
     return '';
   }
   return value;

@@ -255,10 +255,12 @@ export const STEAM_ENGINE_SCHEMA = yup.object().shape({
       yup.object({
         speed: yup
           .number()
-          .notRequired()
+          .required('Обязательное поле')
           .min(1, 'Минимум 1 милисекунда')
-          .max(10000, 'Максимум 10 000 милисекунд'),
+          .max(99000, 'Максимум 99 000 милисекунд')
+          .nullable(),
         area: yup.boolean().notRequired(),
+        id: yup.number().notRequired(),
       }),
     )
     .required('Обязательное поле')
@@ -269,7 +271,8 @@ export const STEAM_ENGINE_SCHEMA = yup.object().shape({
     .number()
     .required('Обязательное поле')
     .min(1, 'Минимум 1 ошибок')
-    .max(99, 'Максимум 99 ошибок'),
+    .max(99, 'Максимум 99 ошибок')
+    .nullable(),
 });
 
 export const STEAM_ENGINE_FORM_SCHEMA = GAME_SCHEMA.concat(STEAM_ENGINE_SCHEMA);

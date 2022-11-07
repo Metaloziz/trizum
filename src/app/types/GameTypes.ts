@@ -1,4 +1,5 @@
 import { StatusTypes } from 'app/enums/StatusTypes';
+import { Nullable } from 'app/types/Nullable';
 
 export type GameT = {
   code: string;
@@ -27,6 +28,7 @@ export type PresetsGameSettings = {
   description: string;
   sound: SoundT;
   area: boolean;
+  gage: GageType[];
 };
 
 export type EditOrCreatePresetParamsT = {
@@ -171,4 +173,10 @@ export type GameIdWithCode = {
 export type GameProps = {
   actualPresets: Omit<GamePresetT, 'settings'>[];
   gamePreset: OneGamePresent;
+};
+
+export type GageType = {
+  speed?: Nullable<number>;
+  area: boolean;
+  id: number;
 };

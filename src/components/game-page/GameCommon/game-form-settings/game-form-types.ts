@@ -1,4 +1,4 @@
-import { GamePresetT } from 'app/types/GameTypes';
+import { GageType, GamePresetT } from 'app/types/GameTypes';
 import { Nullable } from 'app/types/Nullable';
 
 export type FormSettingsType = {
@@ -93,10 +93,7 @@ export type SteamEngineGameSettingsType = {
   timeComplete: number;
   elementsTotal: number;
   errorAacceptable: Nullable<number>;
-  gage: {
-    speed?: Nullable<number>;
-    area: boolean;
-  }[];
+  gage: GageType[];
 };
 
 export type SteamEngineFormType = BaseGameSettingsType & SteamEngineGameSettingsType;

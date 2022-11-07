@@ -47,6 +47,7 @@ class GamesStore {
     sound: 0,
     digitMin: 1,
     area: false,
+    gage: [{ id: 1, area: true, speed: 1 }],
   };
 
   gamePreset: OneGamePresent = {

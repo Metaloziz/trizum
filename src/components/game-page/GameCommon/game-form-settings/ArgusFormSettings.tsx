@@ -1,7 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
-import { GroupsLevelsValue } from 'app/enums/GroupLevels';
-import { StatusTypes } from 'app/enums/StatusTypes';
+import { BASE_DEFAULT_VALUES } from 'components/game-page/GameCommon/game-form-settings/constants';
 import {
   ArgusFormType,
   FormSettingsType,
@@ -14,10 +13,7 @@ import { BaseFormGameSettings } from './BaseFormGameSettings';
 import { ARGUS_FORM_SCHEMA } from './game-form-schema';
 
 const DEFAULT_VALUES: ArgusFormType = {
-  name: '',
-  level: GroupsLevelsValue.easy,
-  status: StatusTypes.draft,
-  description: undefined,
+  ...BASE_DEFAULT_VALUES,
   timeComplete: 60,
   elementsTotal: 2,
   errorAacceptable: 2,

@@ -65,6 +65,10 @@ export const NewGameModal: FC<PropsT> = observer(props => {
     setColorsMap(colorArr);
   }, []);
 
+  const closeModal = () => {
+    onClose(false);
+  };
+
   const onSubmit = async (value: GamesFormSettingsType) => {
     const { name, level: valueLevel, status: valueStatus, ...resValue } = value;
     const params = {
@@ -74,23 +78,20 @@ export const NewGameModal: FC<PropsT> = observer(props => {
       status: value.status,
       settings: [{ ...resValue }],
     } as EditOrCreatePresetParamsT;
+
     gamePreset?.gamePreset?.id ? await editPreset(params) : await createPresets(params);
 
     await gamesStore.getPresets();
     if (gamesStore.gamePreset.gamePreset.name) {
       await gamesStore.getPreset(gamesStore.gamePreset.gamePreset.name);
     }
-    onClose(false);
-  };
-
-  const closeModal = () => {
-    onClose(false);
+    closeModal();
   };
 
   const deletedPreset = () => {
     if (gamePreset.gamePreset.id) {
       deletePreset(gamePreset.gamePreset.id);
-      onClose(false);
+      closeModal();
     }
   };
 
@@ -148,6 +149,7 @@ export const NewGameModal: FC<PropsT> = observer(props => {
             deletedPreset={deletedPreset}
           />
         )}
+
         {game.code === GameIdentifiers.battleColors && (
           <BattlerColorsFormSettings
             usedInWorks={gamePreset.usedInWorks}
@@ -183,6 +185,7 @@ export const NewGameModal: FC<PropsT> = observer(props => {
             deletedPreset={deletedPreset}
           />
         )}
+
         {game.code === GameIdentifiers.fireflies && (
           <FirefliesFormSettings
             usedInWorks={gamePreset.usedInWorks}
@@ -191,6 +194,7 @@ export const NewGameModal: FC<PropsT> = observer(props => {
             deletedPreset={deletedPreset}
           />
         )}
+
         {game.code === GameIdentifiers.argus && (
           <ArgusFormSettings
             usedInWorks={gamePreset.usedInWorks}

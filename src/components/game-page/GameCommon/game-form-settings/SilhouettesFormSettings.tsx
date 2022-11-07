@@ -1,8 +1,9 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
-import { GroupsLevelsValue } from 'app/enums/GroupLevels';
-import { StatusTypes } from 'app/enums/StatusTypes';
-import { TEN_DIGIT_MENU } from 'components/game-page/GameCommon/game-form-settings/constants';
+import {
+  BASE_DEFAULT_VALUES,
+  TEN_DIGIT_MENU,
+} from 'components/game-page/GameCommon/game-form-settings/constants';
 import {
   FormSettingsType,
   SilhouettesFormType,
@@ -16,10 +17,7 @@ import { BaseFormGameSettings } from './BaseFormGameSettings';
 import { SILHOUETTES_FORM_SCHEMA } from './game-form-schema';
 
 const DEFAULT_VALUES: SilhouettesFormType = {
-  name: '',
-  level: GroupsLevelsValue.easy,
-  status: StatusTypes.draft,
-  description: undefined,
+  ...BASE_DEFAULT_VALUES,
   timeComplete: 60,
   elementsTotal: 2,
   digitMax: 4,
