@@ -33,12 +33,12 @@ export const SHIFT_VERTICAL_SCHEMA = yup.object().shape({
   groupsCount: yup
     .number()
     .required('Обязательное поле')
-    .min(1, 'Минимум 1 цвет')
+    .min(2, 'Минимум 2 цвета')
     .max(10, 'Максимум 10 цветов'),
   blinksCount: yup
     .number()
     .required('Обязательное поле')
-    .min(1, 'Минимум 1 форма')
+    .min(2, 'Минимум 2 формы')
     .max(10, 'Максимум 10 форм'),
 });
 
