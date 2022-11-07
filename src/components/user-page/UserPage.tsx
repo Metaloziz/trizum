@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite';
 import styles from './UserPage.module.scss';
 
 import authService from 'app/services/authService';
-import appStore, { EmptyUser } from 'app/stores/appStore';
+import appStore from 'app/stores/appStore';
 import gag from 'assets/svgs/user.svg';
 import Button from 'components/button/Button';
 import Image from 'components/image/Image';
@@ -17,7 +17,7 @@ import { BASE_URL } from 'constants/constants';
 const { REACT_APP_MODE: mode } = process.env;
 
 const UserPage = observer(() => {
-  const { user, setUser } = appStore;
+  const { user, setUser, logoutWithToken } = appStore;
   const [showModal, setShowModal] = useState<boolean>(false);
   const [phone, setPhone] = useState<string>(user.phone);
   const [email, setEmail] = useState(user.email);
@@ -59,7 +59,9 @@ const UserPage = observer(() => {
     try {
       const repl = phone.replaceAll(/\D/g, '');
       await authService.editSelf({ phone: repl, email });
+      appStore.isLoggedIn = false;
       setUser();
+      logoutWithToken();
     } catch (e) {
       console.warn(e);
       setErorr(true);
@@ -102,6 +104,7 @@ const UserPage = observer(() => {
   const userValues = Object.values(user);
   console.log(userKeys);
   console.log(userValues);
+
   return (
     <div className={styles.container}>
       <div>

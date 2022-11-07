@@ -184,6 +184,14 @@ class AppStore {
 
   logout = () => usersStore.resetUsersFilter();
 
+  logoutWithToken = async () => {
+    await execute(async () => {
+      await authService.logout();
+      await tokenService.removeUser();
+      this.reset();
+    });
+  }
+
   setRole = (role: Roles): void => {
     this.role = role;
     if (role === Roles.Unauthorized) {
@@ -226,9 +234,9 @@ class AppStore {
     }, 5000);
   };
 
-    setLoginError = (error: string) => {
+  setLoginError = (error: string) => {
     this.loginError = error;
-    }
+  };
 
   /* actions student only */
   setGameIdsWithCodes = (user: EmptyUser) => {
@@ -251,7 +259,15 @@ class AppStore {
       }
     }
   };
+
   /* actions student only */
+  reset = () => {
+    this.role = Roles.Unauthorized;
+    this.user = new EmptyUser();
+    this.isLoggedIn = false;
+    this.error = '';
+    this.loginError = '';
+  }
 }
 
 export default new AppStore();

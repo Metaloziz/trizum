@@ -63,6 +63,11 @@ const authService = {
     const { data } = await instance.post(Paths.Login, loginData);
     return data;
   },
+
+  logout: async () => {
+    const { data } = await instance.post(Paths.Auth);
+    return data;
+  },
 };
 
 export default authService;
