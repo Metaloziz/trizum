@@ -18,8 +18,6 @@ export const Login: FC = () => {
     password: yup.string().required('обязательно поле'),
   });
 
-
-
   const {
     handleSubmit,
     register,
@@ -30,14 +28,13 @@ export const Login: FC = () => {
     defaultValues: { phone: '+76660003334', password: 'Base76660003334' },
   });
 
-  const  { loginError }  = appStore;
+  const { loginError } = appStore;
 
   const onSubmit = handleSubmit(loginData => {
     loginWithPassword({
-        phone: loginData.phone.replace(/\D/g, ''),
-        password: loginData.password,
-    })
-
+      phone: loginData.phone.replace(/\D/g, ''),
+      password: loginData.password,
+    });
   });
 
   let maxVal = 11;
@@ -51,17 +48,22 @@ export const Login: FC = () => {
             <div className={style.body}>
               <div>
                 <p className={style.modalSubtitle}>Ваш номер телефона</p>
-                <input {...register('phone')} onChange={
-                    (e) => {
-                      if (e.currentTarget.value.length > maxVal) {
-                        e.currentTarget.value = e.currentTarget.value.slice(0, 11);
-                      }
-                      e.target.value[0] === '+' ? maxVal = 12 : maxVal = 11;
-                      if (e.currentTarget.value[0] === '8') {
-                        e.currentTarget.value = e.currentTarget.value.replace('8', '+7');
-                      }
+                <input
+                  {...register('phone')}
+                  onChange={e => {
+                    e.currentTarget.value = e.currentTarget.value.replace(/\D/g, '');
+                    if (e.currentTarget.value[0] !== '+') {
+                      e.currentTarget.value = '+' + e.currentTarget.value;
                     }
-                }  />
+                    if (e.currentTarget.value.length > maxVal) {
+                      e.currentTarget.value = e.currentTarget.value.slice(0, 11);
+                    }
+                    e.target.value[0] === '+' ? (maxVal = 12) : (maxVal = 11);
+                    if (e.currentTarget.value[0] === '8') {
+                      e.currentTarget.value = e.currentTarget.value.replace('8', '+7');
+                    }
+                  }}
+                />
                 <p className={style.textErrorRed}>{errors.phone?.message}</p>
               </div>
 
@@ -70,7 +72,7 @@ export const Login: FC = () => {
                 <input {...register('password')} type="password" />
                 <p className={style.textErrorRed}>{errors.password?.message}</p>
               </div>
-              <button type="submit" className={style.modalButton} onClick={onSubmit} >
+              <button type="submit" className={style.modalButton} onClick={onSubmit}>
                 Войти
               </button>
             </div>
