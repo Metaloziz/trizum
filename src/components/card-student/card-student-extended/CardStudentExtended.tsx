@@ -1,5 +1,6 @@
 import { Roles } from 'app/stores/appStore';
 import { ResponseOneUser, ResponseUserT } from 'app/types/UserTypes';
+import { IconPaidUnpaid } from 'components/button-paid-unpaid/IconPaidUnpaid/IconPaidUnpaid';
 import Button from 'components/button/Button';
 import { EditUserIcon } from 'components/card-student/card-student-extended/edit-user-icon/EditUserIcon';
 import CustomImageWrapper from 'components/custom-image-wrapper/CustomImageWrapper';
@@ -33,6 +34,7 @@ const CardStudentExtended: FC<Props> = ({
     groups,
     roleCode,
     franchise,
+    payed,
   },
   getOneUser,
 }) => {
@@ -107,9 +109,12 @@ const CardStudentExtended: FC<Props> = ({
         </div>
         <div className={styles.buttonWrapper}>
           {roleCode === Roles.Student && (
-            <Button variant="parents" size="small" onClick={setCurrentUserData}>
-              Родители
-            </Button>
+            <>
+              <IconPaidUnpaid isPaid={payed} />
+              <Button variant="parents" size="small" onClick={setCurrentUserData}>
+                Родители
+              </Button>
+            </>
           )}
         </div>
       </div>

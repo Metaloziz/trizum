@@ -1,15 +1,11 @@
-import { FC, useState } from 'react';
+import usersStore from 'app/stores/usersStore';
+import { ResponseUserT } from 'app/types/UserTypes';
 
 import cn from 'classnames';
+import { IsPaidIcon } from 'components/button-paid-unpaid/IsPaidIcon/IsPaidIcon';
+import { FC, useState } from 'react';
 
 import styles from './ButtonPaidUnpaid.module.scss';
-
-import usersService from 'app/services/usersService';
-import { ResponseUserT, UserStatusT } from 'app/types/UserTypes';
-import unpaid from 'assets/svgs/noun-payment-denied.svg';
-import paid from 'assets/svgs/noun-payment-approved.svg';
-import Image from 'components/image/Image';
-import usersStore from 'app/stores/usersStore';
 
 type Props = Pick<ResponseUserT, 'id' | 'active'>;
 
@@ -28,12 +24,6 @@ const SetPaidStatusButton: FC<Props> = ({ id, active }) => {
     }
   };
 
-  const iconButton = isActive ? (
-    <Image style={{ marginTop: '7px' }} src={unpaid} alt="lock" width={35} height={35} />
-  ) : (
-    <Image style={{ marginTop: '7px' }} src={paid} alt="open" width={35} height={35} />
-  );
-  console.log('icon', iconButton);
   return (
     <button
       type="button"
@@ -41,7 +31,9 @@ const SetPaidStatusButton: FC<Props> = ({ id, active }) => {
       onClick={setNewStatus}
       disabled={isDisable}
     >
-      <span className={styles.icon}>{iconButton}</span>
+      <span className={styles.icon}>
+        <IsPaidIcon isPaid={active} />
+      </span>
       {isActive ? 'Аннулировать оплату' : 'Оплатить'}
     </button>
   );
