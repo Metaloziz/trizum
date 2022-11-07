@@ -280,20 +280,22 @@ export const Filter: FC<UserPageFilterProps> = observer(props => {
               />
             </Grid>
 
-            <Grid item xs={12} sm={4}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Франшиза</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={franchiseId}
-                  label="Франшиза"
-                  onChange={handleChangeFranchiseId}
-                >
-                  {getAllOptionsMUI(franchiseOptions)}
-                </Select>
-              </FormControl>
-            </Grid>
+            { role !== 'franchisee' && role !=='franchiseeAdmin'  && (
+                <Grid item xs={12} sm={4}>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Франшиза</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={franchiseId}
+                        label="Франшиза"
+                        onChange={handleChangeFranchiseId}
+                    >
+                      {getAllOptionsMUI(franchiseOptions)}
+                    </Select>
+                  </FormControl>
+                </Grid>
+            )}
             <Grid item xs={12} sm={4}>
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">Тип группы</InputLabel>
