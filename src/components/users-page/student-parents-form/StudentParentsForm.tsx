@@ -1,27 +1,4 @@
-import { observer } from 'mobx-react-lite';
-import React, { FC, useState } from 'react';
-
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { maxBirthdayYearAll, minBirthdayYear } from 'utils/dateMask';
-import * as yup from 'yup';
-
-import { SexEnum } from 'app/enums/CommonEnums';
-import { Roles } from 'app/stores/appStore';
-import { RequestRegister } from 'app/types/AuthTypes';
-import { ParentT, ResponseOneUser, ResponseParenting } from 'app/types/UserTypes';
-import iconMedal from 'assets/svgs/medal.svg';
-import Button from 'components/button/Button';
-import Image from 'components/image/Image';
-import CustomSelect from 'components/select-mui/CustomSelect';
-import styles from 'components/users-page/student-parents-form/StudentParentsForm.module.scss';
-import { action } from 'components/users-page/student-parents-form/utils/action';
-import { sexOptions } from 'components/users-page/student-parents-form/utils/sexOptions';
-import { MAX_NAMES_LENGTH, MIN_NAMES_LENGTH } from 'constants/constants';
-import { REG_EMAIL, REG_NAME } from 'constants/regExp';
-import { OptionT } from 'app/types/OptionT';
-import TextFieldCustom from '../../text-field-mui/TextFieldCustom';
-import TextFieldPhoneCustom from '../../text-field-phone-mui/TextFieldPhoneCustom';
 import {
   Box,
   Checkbox,
@@ -33,6 +10,29 @@ import {
   TextField,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
+import { SexEnum } from 'app/enums/CommonEnums';
+import { Roles } from 'app/stores/appStore';
+import { RequestRegister } from 'app/types/AuthTypes';
+import { OptionT } from 'app/types/OptionT';
+import { ParentT, ResponseOneUser, ResponseParenting } from 'app/types/UserTypes';
+import iconMedal from 'assets/svgs/medal.svg';
+import Button from 'components/button/Button';
+import Image from 'components/image/Image';
+import CustomSelect from 'components/select-mui/CustomSelect';
+import { regExp } from 'components/users-page/student-page-franchisee-modal-add-user/utils/regExp';
+import styles from 'components/users-page/student-parents-form/StudentParentsForm.module.scss';
+import { action } from 'components/users-page/student-parents-form/utils/action';
+import { sexOptions } from 'components/users-page/student-parents-form/utils/sexOptions';
+import { MAX_NAMES_LENGTH, MIN_NAMES_LENGTH } from 'constants/constants';
+import { REG_NAME } from 'constants/regExp';
+import { observer } from 'mobx-react-lite';
+import React, { FC, useState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { maxBirthdayYearAll, minBirthdayYear } from 'utils/dateMask';
+import * as yup from 'yup';
+import TextFieldCustom from '../../text-field-mui/TextFieldCustom';
+import TextFieldPhoneCustom from '../../text-field-phone-mui/TextFieldPhoneCustom';
 
 type Props = {
   localParentFormID: number;
@@ -113,7 +113,7 @@ const StudentParentsForm: FC<Props> = observer(
         email: yup
           .string()
           .email('Введите валидный email')
-          .matches(REG_EMAIL, 'Введите валидный email')
+          .matches(regExp, 'Введите валидный email')
           .required('Обязательное поле'),
         birthdate: yup
           .date()

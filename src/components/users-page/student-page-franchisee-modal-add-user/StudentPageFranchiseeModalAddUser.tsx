@@ -57,6 +57,7 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
     const sexOptions = convertSexOptions();
     const groupOptions = convertGroupOptions(groups);
     const tariffsOptions = convertTariffOptions(tariffs);
+
     const [isParentShown, setIsParentShown] = useState(false);
     const [studentId, setStudentId] = useState('');
     const [selectedRole, setSelectedRole] = useState<Roles>();
@@ -137,7 +138,7 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
             ? yup.string().notRequired()
             : yup
                 .string()
-                .email('Обязательное поле')
+                .email('Введите валидный email')
                 .matches(regExp, 'Введите валидный email')
                 .required('Обязательное поле'),
         franchise: currentUser
@@ -318,7 +319,10 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
                                 field.onChange(e);
                               }}
                               title="Роль"
-                              options={filterRoleOptions(roleOptions.filter(option => option.value !== Roles.Parent), role)}
+                              options={filterRoleOptions(
+                                roleOptions.filter(option => option.value !== Roles.Parent),
+                                role,
+                              )}
                               error={errors.role?.message}
                             />
                           )}
