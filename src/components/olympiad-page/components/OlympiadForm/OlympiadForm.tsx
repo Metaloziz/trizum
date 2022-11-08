@@ -261,7 +261,7 @@ export const OlympiadForm: FC<Props> = observer(({ setShowModal, mode = 'add', g
                 <TextField
                   {...register('forGroupId')}
                   select
-                  label="Для класса"
+                  label="Группа"
                   defaultValue=""
                   helperText={errors.forGroupId?.message}
                   error={!!errors?.forGroupId}
