@@ -7,10 +7,13 @@ import TableHeader from 'components/molecules/ResultTable/TableHeader';
 import TableRow from 'components/molecules/ResultTable/TableRow/TableRow';
 
 type Props = {};
+
 const dates: string[] = [];
+
 for (let i = 1; i <= 30; i++) {
   dates.push(i.toString());
 }
+
 const mock = resultTableData;
 
 const ResultTable: FC<Props> = () => (

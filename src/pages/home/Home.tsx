@@ -16,7 +16,7 @@ import { Login } from 'pages/login/Login';
 
 const Home = observer((props: any) => {
   const { role } = appStore;
-  const {loginError} = appStore;
+  const { loginError } = appStore;
   const [part, setPart] = useState(<></>);
   useEffect(() => {
     switch (role) {
