@@ -47,6 +47,10 @@ export const ClassesMethodistPage: FC = observer(() => {
     getCurrentHomeWork();
   }, [selectedGroup]);
 
+  if (!groups?.length) {
+    return <h2>Нету данных</h2>;
+  }
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.pagination}>
@@ -67,7 +71,7 @@ export const ClassesMethodistPage: FC = observer(() => {
 
         <HomeWorkDescription currentHomework={currentHomework} />
 
-        {!!selectedGroup?.users.length && (
+        {!!selectedGroup?.users?.length && (
           <div className={styles.blockCardStudents}>
             {selectedGroup &&
               !!selectedGroup.users.length &&
