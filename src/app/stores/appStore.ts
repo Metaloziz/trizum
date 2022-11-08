@@ -190,7 +190,7 @@ class AppStore {
       await tokenService.removeUser();
       this.reset();
     });
-  }
+  };
 
   setRole = (role: Roles): void => {
     this.role = role;
@@ -267,7 +267,7 @@ class AppStore {
     this.isLoggedIn = false;
     this.error = '';
     this.loginError = '';
-  }
+  };
 }
 
 export default new AppStore();

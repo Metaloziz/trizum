@@ -478,20 +478,20 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
                       control={control}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <div className={styles.isActive_helper}>Статус пользователя в системе:</div>
-                    <div className={styles.isActive_status}>
-                      {currentUser?.active ? 'Активный' : 'Заблокирован'}
-                    </div>
-                  </Grid>
-                  {currentUser?.roleCode === Roles.Student && (
-                    <Grid item xs={12} sm={6}>
-                      <div className={styles.isActive_helper}>Статус оплаты:</div>
-                      <div className={styles.isActive_status}>
-                        {currentUser?.payed ? 'Оплачено' : 'Не оплачено'}
-                      </div>
-                    </Grid>
-                  )}
+                  {/* <Grid item xs={12} sm={6}> */}
+                  {/*  <div className={styles.isActive_helper}>Статус пользователя в системе:</div> */}
+                  {/*  <div className={styles.isActive_status}> */}
+                  {/*    {currentUser?.active ? 'Активный' : 'Заблокирован'} */}
+                  {/*  </div> */}
+                  {/* </Grid> */}
+                  {/* {currentUser?.roleCode === Roles.Student && ( */}
+                  {/*  <Grid item xs={12} sm={6}> */}
+                  {/*    <div className={styles.isActive_helper}>Статус оплаты:</div> */}
+                  {/*    <div className={styles.isActive_status}> */}
+                  {/*      {currentUser?.payed ? 'Оплачено' : 'Не оплачено'} */}
+                  {/*    </div> */}
+                  {/*  </Grid> */}
+                  {/* )} */}
 
                   {currentUser?.roleCode === Roles.Parent && setIsOpenAddChildModal && (
                     <ParentChildren
