@@ -1,4 +1,5 @@
-import appStore, { Roles } from 'app/stores/appStore';
+import { Roles } from "app/enums/Roles";
+import appStore from 'app/stores/appStore';
 
 import Navigation from 'components/navigation/Navigation';
 import { Links } from 'components/sidebar/Links';

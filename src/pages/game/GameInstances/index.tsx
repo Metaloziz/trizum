@@ -1,4 +1,4 @@
-import { Roles } from 'app/stores/appStore';
+import { Roles } from 'app/enums/Roles';
 import { GamePresetT, GameT, PresetsGameSettings, ResultsNewT } from 'app/types/GameTypes';
 import { OptionT } from 'app/types/OptionT';
 import Button from 'components/button/Button';

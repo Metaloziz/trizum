@@ -1,8 +1,9 @@
 import { DateTime } from 'app/enums/DateTime';
+import { Roles } from 'app/enums/Roles';
 import coursesService from 'app/services/coursesService';
 import franchiseService from 'app/services/franchiseService';
 import groupsService from 'app/services/groupsService';
-import appStore, { Roles } from 'app/stores/appStore';
+import appStore from 'app/stores/appStore';
 import { AddUserGroupPayloadType } from 'app/types/addUserGroupPayloadType';
 import { ShortCourseType } from 'app/types/CourseTypes';
 import { EditUserGroupPayloadType } from 'app/types/EditUserGroupPayloadType';

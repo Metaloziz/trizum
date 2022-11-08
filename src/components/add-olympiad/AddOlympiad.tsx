@@ -1,3 +1,4 @@
+import { Roles } from 'app/enums/Roles';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
 import styles from './AddOlympiad.module.scss';
@@ -16,7 +17,7 @@ import BasicModal from 'components/basic-modal/BasicModal';
 import { observer } from 'mobx-react-lite';
 import { changeDateView } from 'utils/changeDateView';
 import Pagination from '@mui/material/Pagination';
-import appStore, { Roles } from 'app/stores/appStore';
+import appStore from 'app/stores/appStore';
 import { useNavigate } from 'react-router-dom';
 import { AppRoutes } from 'app/enums/AppRoutes';
 

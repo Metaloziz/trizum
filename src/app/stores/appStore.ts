@@ -1,121 +1,18 @@
-/* eslint-disable max-classes-per-file */
-import { Group, WorkFromLoadme } from 'app/types/LoadMeTypes';
+import { Roles } from 'app/enums/Roles';
+import authService from 'app/services/authService';
+import tokenService from 'app/services/tokenService';
+import { EmptyUser } from 'app/stores/emptyUser';
+import usersStore from 'app/stores/usersStore';
+import { GameIdWithCode } from 'app/types/GameTypes';
+import { WorkFromLoadme } from 'app/types/LoadMeTypes';
 import { makeAutoObservable, runInAction } from 'mobx';
+import { LoginInfo } from 'pages/login/Login';
+import { execute } from 'utils/execute';
+import { getClosestLessonDate, now } from 'utils/getClosestLessonDate';
+import { getGameForStudent } from 'utils/getGameForStudent';
+import { throwErrorMessage } from 'utils/throwErrorMessage';
 
 import { RequestLogin, RequestSwitchUser } from '../types/AuthTypes';
-
-import authService from 'app/services/authService';
-import usersStore from 'app/stores/usersStore';
-import { PersonalRecordT, ResponseLoadMeParentT } from 'app/types/ResponseLoadMeBaseT';
-import { TimeZoneType } from 'app/types/TimeZoneType';
-import { canSwitchToT } from 'app/types/UserTypes';
-import { execute } from 'utils/execute';
-import { AvatarT } from 'app/types/AvatarT';
-import { FranchiseT } from 'app/types/FranchiseTypes';
-import { LoginInfo } from 'pages/login/Login';
-import tokenService from 'app/services/tokenService';
-import { getGameForStudent } from 'utils/getGameForStudent';
-import { GameIdWithCode } from 'app/types/GameTypes';
-import { getClosestLessonDate, now } from 'utils/getClosestLessonDate';
-
-export enum Roles {
-  /* Ученик */
-  Student = 'student',
-  /* Родитель */
-  Parent = 'parent',
-  /* Учитель на обучении */
-  TeacherEducation = 'teacherEducation',
-  /* Учитель */
-  Teacher = 'teacher',
-  /* Администратор франчайзи */
-  FranchiseeAdmin = 'franchiseeAdmin',
-  /* Франчайзи */
-  Franchisee = 'franchisee',
-  /* Методист */
-  Methodist = 'methodist',
-  /* Куратор */
-  Tutor = 'tutor',
-  /* Центр */
-  Admin = 'admin',
-  /* Неавторизованный */
-  Unauthorized = 'unauthorized',
-}
-
-export class EmptyUser {
-  id;
-
-  firstName;
-
-  middleName: null | string;
-
-  lastName;
-
-  email;
-
-  phone;
-
-  role;
-
-  franchise: FranchiseT = {} as FranchiseT;
-
-  city: null | string;
-
-  birthdate: TimeZoneType;
-
-  sex: null | string;
-
-  status;
-
-  avatar: AvatarT;
-
-  groups: Group[];
-
-  canSwitchTo: canSwitchToT[];
-
-  active = false;
-
-  parent: ResponseLoadMeParentT = {} as ResponseLoadMeParentT;
-
-  password: string;
-
-  personalRecord: PersonalRecordT;
-
-  constructor() {
-    this.id = '';
-    this.firstName = '';
-    this.middleName = '';
-    this.lastName = '';
-    this.email = '';
-    this.phone = '';
-    this.role = '';
-    this.city = '';
-    this.birthdate = {
-      date: '',
-      timezone_type: 0,
-      timezone: '',
-    };
-    this.personalRecord = {
-      attention: 0,
-      logic: 0,
-      memory: 0,
-      mind: 0,
-      vision: 0,
-    };
-    this.password = '';
-    this.sex = '';
-    this.status = '';
-    this.avatar = {
-      createdAt: {} as TimeZoneType,
-      type: '',
-      previewPath: '',
-      id: '',
-      path: '',
-    };
-    this.groups = [];
-    this.canSwitchTo = [];
-    this.parent = {} as ResponseLoadMeParentT;
-  }
-}
 
 class AppStore {
   role: Roles = Roles.Unauthorized;
@@ -212,7 +109,7 @@ class AppStore {
         }
       });
     } catch (e) {
-      console.log(e);
+      throwErrorMessage(e);
     }
   };
 
@@ -223,7 +120,7 @@ class AppStore {
         await this.loadme();
       });
     } catch (e) {
-      console.log(e);
+      throwErrorMessage(e);
     }
   };
 

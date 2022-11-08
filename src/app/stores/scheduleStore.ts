@@ -1,12 +1,11 @@
-import { AxiosError } from 'axios';
-import { makeAutoObservable, runInAction, toJS } from 'mobx';
+import { Roles } from 'app/enums/Roles';
+import franchiseService from 'app/services/franchiseService';
 import groupsService from 'app/services/groupsService';
+import usersService from 'app/services/usersService';
 import { ScheduleForUI } from 'app/types/GroupTypes';
 import { scheduleMapper } from 'app/types/mappers/ScheduleMapper';
-import usersService from 'app/services/usersService';
-import { Roles } from 'app/stores/appStore';
-import franchiseService from 'app/services/franchiseService';
-import _ from 'lodash';
+import { AxiosError } from 'axios';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { EditLessonPayload } from '../types/EditLessonPayload';
 
 class GroupStore {
@@ -47,7 +46,6 @@ class GroupStore {
   getGroups = async () => {
     const res = await groupsService.getGroups({ perPage: 1000, type: 'class' });
     runInAction(() => {
-      console.log('res.items', res.items);
       if (!!res.items) {
         this.groups = res.items.map(el => ({ groupName: el.name, groupId: el.id }));
         this.schedule = res.items.length
@@ -93,9 +91,6 @@ class GroupStore {
   };
 
   editLesson = ({ lessonIndex, groupId, schedule }: EditLessonPayload) => {
-    console.log('groupId', groupId);
-    console.log('this.groups', toJS(this.groups));
-
     // if (currentGroup) {
     //   console.log('currentGroup', currentGroup);
     //
@@ -113,7 +108,6 @@ class GroupStore {
   };
 
   get actualSchedule() {
-    console.log(_.cloneDeep(this.schedule), 'this.schedule');
     const withFilter = this.schedule.filter(
       el =>
         el.teacherId.includes(this.filters.teacherId) &&

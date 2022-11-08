@@ -1,6 +1,3 @@
-import { useEffect, useMemo } from 'react';
-
-import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import {
@@ -18,16 +15,17 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
+import { Roles } from 'app/enums/Roles';
+
+import { FranchisingStore } from 'components/franchising-page/stores';
 import { observer } from 'mobx-react';
+import { useEffect, useMemo } from 'react';
 
 import Button from '../button/Button';
 
 import { AddOrEditDialog } from './AddOrEditDialog';
 import { Filter } from './Filter';
 import { LoadingIndicator } from './ui/LoadingIndicator';
-
-import { FranchisingStore } from 'components/franchising-page/stores';
-import { Roles } from 'app/stores/appStore';
 
 export const _store = new FranchisingStore();
 

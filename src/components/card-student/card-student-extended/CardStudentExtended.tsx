@@ -1,4 +1,4 @@
-import { Roles } from 'app/stores/appStore';
+import { Roles } from 'app/enums/Roles';
 import { ResponseOneUser, ResponseUserT } from 'app/types/UserTypes';
 import { IconPaidUnpaid } from 'components/button-paid-unpaid/IconPaidUnpaid/IconPaidUnpaid';
 import Button from 'components/button/Button';
@@ -11,6 +11,7 @@ import React, { FC } from 'react';
 import { convertEngRoleToRu } from 'utils/convertEngRoleToRu';
 import { findActiveClassGroup } from 'utils/findActiveClassGroup';
 import { getFullUserName } from 'utils/getFullUserName';
+import { throwErrorMessage } from 'utils/throwErrorMessage';
 
 import modals from '../../../app/stores/CardStudentExtended';
 
@@ -47,7 +48,7 @@ const CardStudentExtended: FC<Props> = ({
       await getOneUser(id);
       modals.changeSetting();
     } catch (e) {
-      console.warn(e);
+      throwErrorMessage(e);
     }
   };
 

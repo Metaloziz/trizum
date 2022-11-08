@@ -1,5 +1,5 @@
+import { Roles } from 'app/enums/Roles';
 import { UserGroupStatus } from 'app/enums/UserGroupStatus';
-import { Roles } from 'app/stores/appStore';
 import { ChildrenResponse } from 'app/types/ChildrenResponse';
 import { FranchiseT } from 'app/types/FranchiseTypes';
 import { Nullable } from 'app/types/Nullable';

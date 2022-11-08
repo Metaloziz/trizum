@@ -1,3 +1,4 @@
+import { Roles } from 'app/enums/Roles';
 import { StatusTypes } from 'app/enums/StatusTypes';
 
 import gamesService from 'app/services/gamesService';
@@ -15,8 +16,9 @@ import {
 import { PresetT } from 'app/types/WorkTypes';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { removeEmptyFields } from 'utils/removeEmptyFields';
+import { throwErrorMessage } from 'utils/throwErrorMessage';
 import { SearchParamsType } from '../types/SearchParamsType';
-import appStore, { Roles } from 'app/stores/appStore';
+import appStore from 'app/stores/appStore';
 
 class GamesStore {
   presets: PresetT[] = [];
@@ -94,7 +96,7 @@ class GamesStore {
         this.filterPresets(res.code);
       });
     } catch (e) {
-      console.log(e);
+      throwErrorMessage(e);
     }
   };
 
@@ -105,7 +107,7 @@ class GamesStore {
         this.games = res;
       });
     } catch (e) {
-      console.log(e);
+      throwErrorMessage(e);
     }
   };
 
@@ -118,7 +120,7 @@ class GamesStore {
         this.newPresets = res;
       });
     } catch (e) {
-      console.warn(e);
+      throwErrorMessage(e);
     }
   };
 
@@ -128,7 +130,7 @@ class GamesStore {
         this.actualPresets = this.newPresets?.items?.filter(pr => pr.game?.code === code);
       });
     } catch (e) {
-      console.warn(e);
+      throwErrorMessage(e);
     }
   };
 
@@ -171,7 +173,7 @@ class GamesStore {
         };
       }
     } catch (e) {
-      console.warn(e);
+      throwErrorMessage(e);
     }
   };
 
@@ -204,7 +206,7 @@ class GamesStore {
         this.playResults = res;
       });
     } catch (e) {
-      console.warn(e);
+      throwErrorMessage(e);
     }
   };
 

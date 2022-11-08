@@ -1,18 +1,20 @@
-import { FC, useCallback, useState } from 'react';
-
-import { observer } from 'mobx-react-lite';
-import { convertEngRoleToRu } from 'utils/convertEngRoleToRu';
-
-import styles from './Account.module.scss';
+import { AppRoutes } from 'app/enums/AppRoutes';
+import { Roles } from 'app/enums/Roles';
 
 import tokenService from 'app/services/tokenService';
-import appStore, { Roles } from 'app/stores/appStore';
-import defaultAvatar from 'public/img/avatarDefault.png';
+import appStore from 'app/stores/appStore';
 import { DropDownStudents } from 'components/drop-down-student/DropDownStudents';
 import Image from 'components/image/Image';
 import { BASE_URL } from 'constants/constants';
+
+import { observer } from 'mobx-react-lite';
+import defaultAvatar from 'public/img/avatarDefault.png';
+import { FC, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AppRoutes } from '../../app/enums/AppRoutes';
+import { convertEngRoleToRu } from 'utils/convertEngRoleToRu';
+import { throwErrorMessage } from 'utils/throwErrorMessage';
+
+import styles from './Account.module.scss';
 
 const Account: FC = observer(() => {
   const navigate = useNavigate();
@@ -34,7 +36,7 @@ const Account: FC = observer(() => {
     try {
       await appStore.switchUser({ id });
     } catch (e) {
-      console.warn(e);
+      throwErrorMessage(e);
     }
   }, []);
 
@@ -42,9 +44,8 @@ const Account: FC = observer(() => {
     <div className={styles.container}>
       {isLoggedIn ? (
         <>
-          <button onClick={toggleChangeStudentModal} className={styles.avatar}>
+          <button type="button" onClick={toggleChangeStudentModal} className={styles.avatar}>
             <Image
-              // src={`https://lk.trizum.ru${user?.avatar?.path}`}
               src={user?.avatar?.path ? `${BASE_URL}${user?.avatar?.path}` : defaultAvatar}
               style={{ borderRadius: '50%' }}
               width={53}
@@ -61,7 +62,7 @@ const Account: FC = observer(() => {
             )}
           </button>
           <span className={styles.span}>{convertEngRoleToRu(appStore.role)}</span>
-          <button className={styles.logout} onClick={logout}>
+          <button type="button" className={styles.logout} onClick={logout}>
             Выйти из аккаунта
           </button>
         </>

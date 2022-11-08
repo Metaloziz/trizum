@@ -12,7 +12,7 @@ import {
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { SexEnum } from 'app/enums/CommonEnums';
-import { Roles } from 'app/stores/appStore';
+import { Roles } from 'app/enums/Roles';
 import { RequestRegister } from 'app/types/AuthTypes';
 import { OptionT } from 'app/types/OptionT';
 import { ParentT, ResponseOneUser, ResponseParenting } from 'app/types/UserTypes';
