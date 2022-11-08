@@ -20,6 +20,8 @@ import Pagination from '@mui/material/Pagination';
 import appStore from 'app/stores/appStore';
 import { useNavigate } from 'react-router-dom';
 import { AppRoutes } from 'app/enums/AppRoutes';
+import franchiseeStore from "../../app/stores/franchiseeStore";
+import coursesStore from "../../app/stores/coursesStore";
 
 const colNames = [
   'Название олимпиады',
@@ -55,12 +57,16 @@ const AddOlympiad = observer(() => {
     queryFieldsOlympiads,
     cleanOlympiadQueryFieldsWithoutRequest,
   } = groupStore;
+  const { getFranchisee} = franchiseeStore
+  const { getCourses } = coursesStore
   const IS_EDIT_ROLE = isEditRole(role as Roles);
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const [currentGroup, setCurrentGroup] = useState<ResponseGroups>();
 
   useEffect(() => {
+    getFranchisee();
+    getCourses();
     getOlympiadGroups();
     return () => {
       cleanOlympiadQueryFieldsWithoutRequest();
