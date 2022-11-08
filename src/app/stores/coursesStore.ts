@@ -50,6 +50,15 @@ class CoursesStore extends StoreBase {
     });
   };
 
+  getAllCourses = async () => {
+    await this.execute(async () => {
+      const {items} = await coursesService.getAllCourses();
+      runInAction(() => {
+        this.courses = items;
+      });
+    });
+  }
+
   getCurrentCourse = async (courseId: string) => {
     await this.execute(async () => {
       const { course } = await coursesService.getCurrentCourse(courseId);
