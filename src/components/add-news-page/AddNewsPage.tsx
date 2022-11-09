@@ -1,8 +1,7 @@
+import { PlateEditor } from 'components/PlateEditor/PlateEditor';
 import React, { useEffect, useState } from 'react';
-
 import styles from './AddNewsPage.module.scss';
 import Button from 'components/button/Button';
-import RichTextEditor from 'components/rich-text/RichTextEditor';
 import { CustomMultiSelect, StyledOption } from 'components/multiSelect/CustomMultiSelect';
 import { convertEnumOptions, EMPTY_ROLE_VALUE } from 'utils/convertEnumOptions';
 import { RoleNames } from 'app/enums/RoleNames';
@@ -104,7 +103,7 @@ const AddNewsPage = observer(() => {
     <div className={styles.content}>
       <div className={styles.innerContent}>
         <form>
-          <h1>Добавление статьи</h1>
+          <h1 className={styles.title}>Добавление статьи</h1>
           <div className={styles.nameBlock}>
             <div className={styles.input}>
               <TextField
@@ -158,7 +157,7 @@ const AddNewsPage = observer(() => {
             <p>Текст статьи</p>
             <p>* необходима хотя бы одна картинка в тексте. Она будет использоваться как превью.</p>
             <div className={styles.newsEditor}>
-              <RichTextEditor />
+              <PlateEditor />
             </div>
           </div>
 
