@@ -138,17 +138,26 @@ class AppStore {
   /* actions student only */
   setGameIdsWithCodes = (user: EmptyUser) => {
     this.allGameIdsWithCodes = getGameForStudent(user.groups);
-    const classType = user.groups.find(el => el.group.type === 'class');
+
+    const classType = user.groups.find(
+      el => el.group.type === 'class' && el.group.status === 'active',
+    );
     const schedule = classType?.group?.schedule;
+
     if (classType && schedule && schedule.length) {
       // TODO: добавить нахождение нужного урока по дате
+
       [this.currentGameIds] = this.allGameIdsWithCodes;
+
       const lesson = getClosestLessonDate(schedule, now);
+
       if (lesson) {
         this.hwDate = lesson.date;
         const index = schedule.findIndex(el => el.date === lesson.date && lesson.from === el.from);
+
         if (index !== -1) {
           const currentWork = classType.group.course.works.find(el => el.index === index);
+
           if (currentWork) {
             this.currentWork = currentWork.work;
           }

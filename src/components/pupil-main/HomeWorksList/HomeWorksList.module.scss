@@ -1,4 +1,4 @@
-@import "../../styles/variables";
+@import "./src/styles/variables";
 
 .container {
   width: 100%;
@@ -20,14 +20,55 @@
     order: 4;
   }
 
-  h2 {
-    font-size: 15px;
-    color: #00b8d9;
-    text-align: start;
-    margin-bottom: 5px;
-  }
-
   overflow-y: auto;
+
+  .item {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+
+    h2 {
+      font-size: 15px;
+      color: #00b8d9;
+      text-align: start;
+      margin-bottom: 5px;
+    }
+
+    .workTitle {
+      display: flex;
+      gap: 10px;
+
+      p {
+        font-weight: 700;
+        color: rgba(45, 41, 41, 0.86);
+      }
+    }
+
+    .text {
+      display: flex;
+      gap: 10px;
+    }
+
+    .lesson {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-end;
+      min-width: 200px;
+
+      div {
+        display: flex;
+        gap: 10px;
+
+        p {
+          font-weight: 700;
+          color: rgba(45, 41, 41, 0.86);
+        }
+      }
+
+
+    }
+  }
 
 }
 

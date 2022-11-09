@@ -1,9 +1,10 @@
 import appStore from 'app/stores/appStore';
 import CardStudent from 'components/card-student/CardStudent';
-import { games, homeworks } from 'components/pupil-main/consts/consts';
+import { games } from 'components/pupil-main/consts/consts';
+import { HomeWorksList } from 'components/pupil-main/HomeWorksList/HomeWorksList';
 import WeeklyGrowth from 'components/weekly-growth/WeeklyGrowth';
-import Homeworks from 'containers/homeworks/Homeworks';
 import KeepPlaying from 'containers/keep-playing/KeepPlaying';
+import { toJS } from 'mobx';
 
 import { observer } from 'mobx-react-lite';
 import styles from 'pages/home/Home.module.scss';
@@ -12,8 +13,13 @@ import { personalRecordsArr } from 'utils/personalRecordsArr';
 
 export const StudentMain: FC = observer(() => {
   const { user, currentGameIds } = appStore;
-  const { works } = appStore.user?.groups[0]?.group?.course || [];
+  const { works } = user?.groups[0]?.group?.course || [];
+  const { schedule } = user?.groups[0]?.group || [];
   const recordsArr = personalRecordsArr(user.personalRecord);
+
+  console.log('currentGameIds', toJS(currentGameIds));
+  console.log('works', toJS(works));
+  console.log('user', toJS(user));
 
   return (
     <main className={styles.main}>
@@ -22,7 +28,7 @@ export const StudentMain: FC = observer(() => {
         <WeeklyGrowth records={recordsArr} className={styles.weeklyGrowth} />
       </div>
       <div className={styles.rowHw}>
-        <Homeworks className={styles.homeworks} works={works} homeworks={homeworks} />
+        <HomeWorksList works={works} schedule={schedule} />
         <KeepPlaying
           actualGames={currentGameIds}
           className={styles.keepPlaying}
