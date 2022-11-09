@@ -28,7 +28,7 @@ export const TableWorksRows: FC<Props> = ({ worksArray, setCurrentCourse, select
   const position = (work: HomeworkViewModel) => {
     const currentWork = selectedWorks.find(el => el.work.id === work.id);
     if (currentWork) {
-      return selectedWorks.indexOf(currentWork);
+      return selectedWorks.indexOf(currentWork)+1;
     }
     return 0;
   };
