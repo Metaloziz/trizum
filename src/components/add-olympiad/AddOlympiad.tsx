@@ -58,7 +58,7 @@ const AddOlympiad = observer(() => {
     cleanOlympiadQueryFieldsWithoutRequest,
   } = groupStore;
   const { getFranchisee } = franchiseeStore;
-  const { getAllCourses } = coursesStore;
+  const { getCoursesOlimp } = coursesStore;
   const IS_EDIT_ROLE = isEditRole(role as Roles);
 
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -66,7 +66,7 @@ const AddOlympiad = observer(() => {
 
   useEffect(() => {
     getFranchisee();
-    getAllCourses();
+    getCoursesOlimp();
     getOlympiadGroups();
     return () => {
       cleanOlympiadQueryFieldsWithoutRequest();

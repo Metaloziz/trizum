@@ -50,9 +50,9 @@ class CoursesStore extends StoreBase {
     });
   };
 
-  getAllCourses = async () => {
+  getCoursesOlimp = async () => {
     await this.execute(async () => {
-      const {items} = await coursesService.getAllCourses();
+      const {items} = await coursesService.getCoursesOlimp();
       runInAction(() => {
         this.courses = items;
       });

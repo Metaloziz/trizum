@@ -14,6 +14,11 @@ const coursesService = {
     return data;
   },
 
+  getCoursesOlimp: async (): Promise< {items: ShortCourseType[]}> => {
+    const { data } = await instance.get(Paths.Courses + '?type=olympiad&status=active');
+    return data;
+  },
+
   getCurrentCourse: async (courseId: string) => {
     const { data } = await instance.get<ResponseCurrentCourse>(Paths.Courses + '/' + courseId);
     return data;
