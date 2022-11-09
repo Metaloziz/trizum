@@ -1,13 +1,13 @@
 import coursesService from 'app/services/coursesService';
+import { CoursePayloadType } from 'app/types/CoursePayloadType';
 import { ShortCourseType } from 'app/types/CourseTypes';
 import { Nullable } from 'app/types/Nullable';
 import { runInAction, observable, makeObservable } from 'mobx';
-import * as yup from 'yup';
 import { execute } from 'utils/execute';
 import { removeEmptyFields } from 'utils/removeEmptyFields';
+import * as yup from 'yup';
 import { GroupLevels } from '../enums/GroupLevels';
 import { StatusTypes } from '../enums/StatusTypes';
-import { CreateCoursePayloadType } from '../types/CreateCoursePayloadType';
 import { FilterData } from '../types/FilterData';
 import { NewCourseType } from '../types/NewCourseType';
 import { PaginationType } from '../types/PaginationType';
@@ -54,14 +54,14 @@ class CoursesStore extends StoreBase {
     await this.execute(async () => {
       const { course } = await coursesService.getCurrentCourse(courseId);
 
-      this.setCurrentCourse(course);
+      this.currentCourse = course;
     });
   };
 
   createCourse = async () => {
     execute(async () => {
       if (this.currentCourse) {
-        const data: CreateCoursePayloadType = {
+        const data: CoursePayloadType = {
           status: this.currentCourse.status as StatusTypes,
           level: this.currentCourse.level || GroupLevels.easy,
           type: this.currentCourse.type || '',
@@ -85,15 +85,25 @@ class CoursesStore extends StoreBase {
 
   editCourse = async () => {
     await this.execute(async () => {
-      const newCourse = removeEmptyFields(this.currentCourse);
+      const { id, ...payload } = this.currentCourse;
 
-      if (!newCourse.works.length) {
-        delete newCourse.works;
+      if (!payload?.works?.length) {
+        delete payload.works;
       }
 
-      await coursesService.editCourse(newCourse);
-      await this.getCourses();
-      this.setIsDialogOpen(false);
+      // Чтобы добавить в курс work, нужно отправить такой объект { index: ...,
+      // workId: ... }
+      const payloadWithWorks: CoursePayloadType = {
+        ...payload,
+        status: payload.status as StatusTypes,
+        works: payload.works?.map(work => ({ index: work.index, workId: work.work.id })),
+      };
+
+      if (id) {
+        await coursesService.editCourse(payloadWithWorks, id);
+        await this.getCourses();
+        this.setIsDialogOpen(false);
+      }
     });
   };
 

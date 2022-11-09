@@ -16,7 +16,7 @@ export class NewCourseType {
 
   createdAt? = new TimeZoneType();
 
-  works? = [new NewWorkType()];
+  works?: NewWorkType[] = [];
 }
 
 export class ResponseCurrentCourse {
