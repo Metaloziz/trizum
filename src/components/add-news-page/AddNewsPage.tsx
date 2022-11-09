@@ -1,3 +1,4 @@
+import { Roles } from 'app/enums/Roles';
 import React, { useEffect, useState } from 'react';
 
 import styles from './AddNewsPage.module.scss';
@@ -11,7 +12,6 @@ import testsStore from 'app/stores/testsStore';
 import { getAllOptionsMUI } from 'utils/getOption';
 import { convertTestOptions } from 'utils/convertTestOptions';
 import articlesStore from 'app/stores/articlesStore';
-import { Roles } from 'app/stores/appStore';
 import slateStore from 'app/stores/slateStore';
 import { observer } from 'mobx-react-lite';
 import { useForm } from 'react-hook-form';

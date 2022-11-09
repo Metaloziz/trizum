@@ -1,4 +1,5 @@
-import appStore, { Roles } from 'app/stores/appStore';
+import { Roles } from 'app/enums/Roles';
+import appStore from 'app/stores/appStore';
 import gamesStore from 'app/stores/gamesStore';
 import groupStore from 'app/stores/groupStore';
 import { GameProps, PlaySendResultT, PresetsGameSettings, ResultsNewT } from 'app/types/GameTypes';

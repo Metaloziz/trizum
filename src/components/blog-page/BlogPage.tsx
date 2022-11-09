@@ -1,3 +1,4 @@
+import { Roles } from 'app/enums/Roles';
 import React, { ChangeEvent, FunctionComponent, useEffect, useState } from 'react';
 
 import { observer } from 'mobx-react-lite';
@@ -6,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import styles from './BlogPage.module.scss';
 
 import { AppRoutes } from 'app/enums/AppRoutes';
-import { Roles } from 'app/stores/appStore';
 import articlesStore from 'app/stores/articlesStore';
 import Button from 'components/button/Button';
 import { SecondaryRoutes } from 'app/enums/SecondaryRoutes';

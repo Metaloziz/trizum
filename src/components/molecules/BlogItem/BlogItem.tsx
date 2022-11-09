@@ -1,3 +1,4 @@
+import { Roles } from 'app/enums/Roles';
 import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
@@ -6,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './BlogItem.module.scss';
 
 import { AppRoutes } from 'app/enums/AppRoutes';
-import appStore, { Roles } from 'app/stores/appStore';
+import appStore from 'app/stores/appStore';
 import articlesStore from 'app/stores/articlesStore';
 import testsStore from 'app/stores/testsStore';
 import Button from 'components/button/Button';

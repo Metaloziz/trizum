@@ -1,13 +1,11 @@
-import React, { useEffect } from 'react';
-
-import { Navigate, useNavigate } from 'react-router-dom';
-
-import styles from './TeacherEducationMain.module.scss';
-
 import teacherEducationStore from 'app/stores/TeacherEducationStore';
 import BlogItem from 'components/molecules/BlogItem';
-import appStore, { Roles } from '../../app/stores/appStore';
-import { AppRoutes } from '../../app/enums/AppRoutes';
+import React from 'react';
+
+import { useNavigate } from 'react-router-dom';
+import appStore from '../../app/stores/appStore';
+
+import styles from './TeacherEducationMain.module.scss';
 
 const TeacherEducationMain = () => {
   const navigate = useNavigate();

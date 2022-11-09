@@ -1,5 +1,6 @@
 import { AppRoutes } from 'app/enums/AppRoutes';
-import appStore, { Roles } from 'app/stores/appStore';
+import { Roles } from 'app/enums/Roles';
+import appStore from 'app/stores/appStore';
 import gamesStore from 'app/stores/gamesStore';
 import Image from 'components/image/Image';
 import { observer } from 'mobx-react';
@@ -200,16 +201,16 @@ class Game extends Component<any, any> {
 
     return (
       <div className={styles.innerContent}>
-        {/*     {(role === Roles.Methodist || role === Roles.Admin) && ( 
-          <GameModal open={isOpenModal} onClose={this.toggleModal} deletePreset={deletePreset} /> 
-         )} 
-         <GameResultModal 
-          open={resultModal} 
-          time={gameResult.time} 
-          error={gameResult.failed} 
-          success={gameResult.success} 
-          onClose={this.closeResultModal} 
-          onStart={this.onRepeat} 
+        {/*     {(role === Roles.Methodist || role === Roles.Admin) && (
+          <GameModal open={isOpenModal} onClose={this.toggleModal} deletePreset={deletePreset} />
+         )}
+         <GameResultModal
+          open={resultModal}
+          time={gameResult.time}
+          error={gameResult.failed}
+          success={gameResult.success}
+          onClose={this.closeResultModal}
+          onStart={this.onRepeat}
          /> */}
         <div className={styles.gameList}>
           {Games.map(gam => (

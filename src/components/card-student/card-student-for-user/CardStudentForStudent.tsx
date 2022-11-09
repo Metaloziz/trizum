@@ -1,9 +1,8 @@
-import appStore, { Roles } from 'app/stores/appStore';
-import usersStore from 'app/stores/usersStore';
+import { Roles } from 'app/enums/Roles';
+import appStore from 'app/stores/appStore';
 import iconFlag from 'assets/svgs/icon-flag.svg';
 import iconMonkey from 'assets/svgs/monkey.svg';
 import BasicModal from 'components/basic-modal/BasicModal';
-import { ButtonsGroup } from 'components/card-student/card-student-for-user/ButtonsGroup/ButtonsGroup';
 import { getAvatarImage } from 'components/card-student/card-student-for-user/helper/getAvatarImage';
 import { OlympiadPreviewText } from 'components/card-student/card-student-for-user/OlympiadPreviewText/OlympiadPreviewText';
 import CustomImageWrapper from 'components/custom-image-wrapper/CustomImageWrapper';
@@ -11,12 +10,12 @@ import Image from 'components/image/Image';
 import Setting from 'components/setting/Setting';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useEffect, useState } from 'react';
+import { getClosestLessonDate } from 'utils/getClosestLessonDate';
 
 import iconTablet from '../../../assets/svgs/icon-tablet.svg';
 import iconParrot from '../../../assets/svgs/parrot.svg';
 
 import styles from './CardStudentForUser.module.scss';
-import { getClosestLessonDate } from 'utils/getClosestLessonDate';
 
 type Props = {
   isMainPage?: boolean;
@@ -24,13 +23,13 @@ type Props = {
 
 const CardStudentForStudent: FC<Props> = observer(({ isMainPage = true }) => {
   const { user } = appStore;
-  const { firstName, middleName, lastName, role, avatar, city, groups } = user;
-  const { getFullUserName } = usersStore;
+  const { firstName, middleName, lastName, role, avatar, city } = user;
   const {
     firstName: teacherFirstName,
     middleName: teacherMiddleName,
     lastName: teacherLastName,
   } = user.groups[0].group.teacher;
+
   const lessonDate = getClosestLessonDate(
     user.groups[0].group.schedule,
     new Date().toLocaleDateString(),

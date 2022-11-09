@@ -1,4 +1,4 @@
-import { Roles } from 'app/stores/appStore';
+import { Roles } from 'app/enums/Roles';
 import { OptionT } from 'app/types/OptionT';
 
 export const filterRoleOptions = (roleOptions: OptionT[], role: string) => {

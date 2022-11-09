@@ -1,5 +1,6 @@
 import { AppRoutes } from 'app/enums/AppRoutes';
-import appStore, { Roles } from 'app/stores/appStore';
+import { Roles } from 'app/enums/Roles';
+import appStore from 'app/stores/appStore';
 import gamesStore from 'app/stores/gamesStore';
 import { GamePresetT, OneGamePresent } from 'app/types/GameTypes';
 import { observer } from 'mobx-react';

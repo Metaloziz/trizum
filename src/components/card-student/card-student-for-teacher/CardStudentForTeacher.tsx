@@ -1,4 +1,4 @@
-import { EmptyUser } from 'app/stores/appStore';
+import { EmptyUser } from 'app/stores/emptyUser';
 
 import iconFlag from 'assets/svgs/flag.svg';
 import Button from 'components/button/Button';
@@ -10,7 +10,7 @@ import Avatar from 'public/img/avatarDefault.png';
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getRuBirthdayDate } from 'utils/getRuBirthdayDate';
-import { AppRoutes } from '../../../app/enums/AppRoutes';
+import { AppRoutes } from 'app/enums/AppRoutes';
 
 import styles from './CardStudentForTeacher.module.scss';
 

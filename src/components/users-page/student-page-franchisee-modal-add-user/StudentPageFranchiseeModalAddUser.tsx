@@ -3,7 +3,8 @@ import { Box, FormControl, Grid, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { SexEnum } from 'app/enums/CommonEnums';
-import appStore, { Roles } from 'app/stores/appStore';
+import { Roles } from 'app/enums/Roles';
+import appStore from 'app/stores/appStore';
 import franchiseeStore from 'app/stores/franchiseeStore';
 import groupStore from 'app/stores/groupStore';
 import tariffsStore from 'app/stores/tariffsStore';
@@ -478,20 +479,20 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
                       control={control}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <div className={styles.isActive_helper}>Статус пользователя в системе:</div>
-                    <div className={styles.isActive_status}>
-                      {currentUser?.active ? 'Активный' : 'Заблокирован'}
-                    </div>
-                  </Grid>
-                  {currentUser?.roleCode === Roles.Student && (
-                    <Grid item xs={12} sm={6}>
-                      <div className={styles.isActive_helper}>Статус оплаты:</div>
-                      <div className={styles.isActive_status}>
-                        {currentUser?.payed ? 'Оплачено' : 'Не оплачено'}
-                      </div>
-                    </Grid>
-                  )}
+                  {/* <Grid item xs={12} sm={6}> */}
+                  {/*  <div className={styles.isActive_helper}>Статус пользователя в системе:</div> */}
+                  {/*  <div className={styles.isActive_status}> */}
+                  {/*    {currentUser?.active ? 'Активный' : 'Заблокирован'} */}
+                  {/*  </div> */}
+                  {/* </Grid> */}
+                  {/* {currentUser?.roleCode === Roles.Student && ( */}
+                  {/*  <Grid item xs={12} sm={6}> */}
+                  {/*    <div className={styles.isActive_helper}>Статус оплаты:</div> */}
+                  {/*    <div className={styles.isActive_status}> */}
+                  {/*      {currentUser?.payed ? 'Оплачено' : 'Не оплачено'} */}
+                  {/*    </div> */}
+                  {/*  </Grid> */}
+                  {/* )} */}
 
                   {currentUser?.roleCode === Roles.Parent && setIsOpenAddChildModal && (
                     <ParentChildren

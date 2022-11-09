@@ -1,3 +1,4 @@
+import { Roles } from 'app/enums/Roles';
 import React, { FC, useState } from 'react';
 
 import cn from 'classnames';
@@ -5,7 +6,7 @@ import { observer } from 'mobx-react-lite';
 
 import styles from './RoleButtons.module.scss';
 
-import appStore, { Roles } from 'app/stores/appStore';
+import appStore from 'app/stores/appStore';
 
 type Props = {
   name: string;

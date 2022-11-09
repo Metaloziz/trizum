@@ -1,8 +1,9 @@
+import { GameTypeTitle } from 'app/enums/gameTypeTitle';
 import { PersonalRecordT } from 'app/types/ResponseLoadMeBaseT';
 
 export type PersonalRecordsArrT = {
   title: string;
-  type: string;
+  type: keyof typeof GameTypeTitle;
   percents: number;
   color?: string;
   id: number;
@@ -10,35 +11,35 @@ export type PersonalRecordsArrT = {
 
 export const personalRecordsArr = (records: PersonalRecordT): PersonalRecordsArrT[] => [
   {
-    title: 'Логика',
+    title: GameTypeTitle.logic,
     type: 'logic',
     percents: records?.logic,
     color: 'red',
     id: +new Date().toDateString(),
   },
   {
-    title: 'Мышление',
+    title: GameTypeTitle.mind,
     type: 'mind',
     percents: records?.mind,
     id: +new Date().toDateString(),
     color: 'violet',
   },
   {
-    title: 'Внимание',
+    title: GameTypeTitle.attention,
     type: 'attention',
     color: 'aquamarine',
     id: +new Date().toDateString(),
     percents: records?.attention,
   },
   {
-    title: 'Концентрация',
+    title: GameTypeTitle.vision,
     type: 'vision',
     color: 'yellow',
     id: +new Date().toDateString(),
     percents: records?.vision,
   },
   {
-    title: 'Память',
+    title: GameTypeTitle.memory,
     type: 'memory',
     percents: records?.memory,
     color: 'yellow',

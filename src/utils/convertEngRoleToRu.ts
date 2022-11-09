@@ -1,5 +1,5 @@
 import { RoleNames } from 'app/enums/RoleNames';
-import { Roles } from 'app/stores/appStore';
+import { Roles } from 'app/enums/Roles';
 
 export const convertEngRoleToRu = (roleCode: string) => {
   let role = '';

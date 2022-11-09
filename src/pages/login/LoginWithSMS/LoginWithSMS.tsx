@@ -1,3 +1,4 @@
+import { Roles } from 'app/enums/Roles';
 import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 
@@ -6,7 +7,7 @@ import styles from 'pages/login/LoginWithSMS/LoginWithSMS.module.scss';
 import { AppRoutes } from 'app/enums/AppRoutes';
 import authService from 'app/services/authService';
 import tokenService from 'app/services/tokenService';
-import appStore, { Roles } from 'app/stores/appStore';
+import appStore from 'app/stores/appStore';
 import Button from 'components/button/Button';
 
 const func = (isTester: boolean, isAnalytic: boolean) => {

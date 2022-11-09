@@ -1,8 +1,9 @@
 import { FormControl, Grid, InputLabel, Select, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { GroupLevels } from 'app/enums/GroupLevels';
+import { Roles } from 'app/enums/Roles';
 import usersService from 'app/services/usersService';
-import appStore, { Roles } from 'app/stores/appStore';
+import appStore from 'app/stores/appStore';
 import groupStore from 'app/stores/groupStore';
 import BasicModal from 'components/basic-modal/BasicModal';
 import Button from 'components/button/Button';
@@ -10,10 +11,10 @@ import Lessons from 'components/classes-page/AddEditGroup/Lessons';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useEffect, useState } from 'react';
 import { getOptionMui } from 'utils/getOption';
-import { GroupStatus } from '../../../app/enums/GroupStatus';
-import { GroupStatusTypes } from '../../../app/types/GroupStatusTypes';
-import { getMUIOptionsFromEnum } from '../../../utils/getMUIOptionsFromEnum';
-import { getNameFromEnum } from '../../../utils/getNameFromEnum';
+import { GroupStatus } from 'app/enums/GroupStatus';
+import { GroupStatusTypes } from 'app/types/GroupStatusTypes';
+import { getMUIOptionsFromEnum } from 'utils/getMUIOptionsFromEnum';
+import { getNameFromEnum } from 'utils/getNameFromEnum';
 
 const AddEditGroup: FC = observer(() => {
   const {

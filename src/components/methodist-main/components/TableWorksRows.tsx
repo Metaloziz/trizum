@@ -1,10 +1,10 @@
 import { Checkbox, TableCell, TableRow } from '@mui/material';
 import homeworkStore from 'app/stores/homeworkStore';
-import { FC } from 'react';
-import coursesStore from '../../../app/stores/coursesStore';
 import { NewWorkType } from 'app/types/NewWorkType';
 import { HomeworkViewModel } from 'app/viewModels/HomeworkViewModel';
+import { FC } from 'react';
 import { getNameFromEnum } from 'utils/getNameFromEnum';
+import coursesStore from '../../../app/stores/coursesStore';
 
 type Props = {
   worksArray: typeof homeworkStore.worksArray;
@@ -14,22 +14,21 @@ type Props = {
 
 export const TableWorksRows: FC<Props> = ({ worksArray, setCurrentCourse, selectedWorks }) => {
   const switchWorkInclude = (work: HomeworkViewModel) => {
-    const currentWork = selectedWorks.find(el => el.id === work.id);
+    const currentWork = selectedWorks.find(el => el.work.id === work.id);
 
     if (currentWork) {
-      setCurrentCourse({ works: selectedWorks.filter(el => el.id !== currentWork.id) });
+      setCurrentCourse({ works: selectedWorks.filter(el => el.work.id !== currentWork.work.id) });
     } else {
       setCurrentCourse({
-        // todo возможно здесь будет ошибка с ID
         works: [...selectedWorks, { index: selectedWorks.length, id: work.id, work }],
       });
     }
   };
 
   const position = (work: HomeworkViewModel) => {
-    const currentWork = selectedWorks.find(el => el.id === work.id);
+    const currentWork = selectedWorks.find(el => el.work.id === work.id);
     if (currentWork) {
-      return selectedWorks.indexOf(currentWork) + 1;
+      return selectedWorks.indexOf(currentWork)+1;
     }
     return 0;
   };

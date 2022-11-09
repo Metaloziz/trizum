@@ -18,13 +18,16 @@ const KeepPlaying: FC<KeepPlayingProps> = ({ className, games, works, actualGame
 
     navigate(`${AppRoutes.Game}/${gameUrl}`);
   };
+
   const gamesForShow: KeepPlayingItemProps[] = [];
+
   if (actualGames && actualGames.length) {
     for (let i = 0; i < actualGames.length; i++) {
       const found = games.find(el => el.code === actualGames[i].gameCode);
       found && gamesForShow.push(found);
     }
   }
+
   return (
     <div className={classNames(styles.container, className)}>
       <div className={styles.title}>Осталось времени</div>

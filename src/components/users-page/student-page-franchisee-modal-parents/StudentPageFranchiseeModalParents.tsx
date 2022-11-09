@@ -1,4 +1,4 @@
-import { Roles } from 'app/stores/appStore';
+import { Roles } from 'app/enums/Roles';
 import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react';
 

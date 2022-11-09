@@ -55,7 +55,7 @@ export const GameResultModal: FC<GameResultModalPropsT> = props => {
 
         <div className={styles.btnBlock}>
           <Button onClick={onClose}>Закончить</Button>
-          <Button onClick={onStart}>Ещё раз</Button>
+          {/* <Button onClick={onStart}>Ещё раз</Button> Алекс попросил убрать  */}
         </div>
       </div>
     </Dialog>

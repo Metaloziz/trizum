@@ -1,10 +1,11 @@
+import { Roles } from 'app/enums/Roles';
 import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 import { Navigate } from 'react-router-dom';
 
 import { AppRoutes } from 'app/enums/AppRoutes';
-import appStore, { Roles } from 'app/stores/appStore';
+import appStore from 'app/stores/appStore';
 import BlogPage from 'components/blog-page/BlogPage';
 
 type Props = Record<string, unknown>;

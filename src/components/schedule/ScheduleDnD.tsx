@@ -1,4 +1,5 @@
-import appStore, { Roles } from 'app/stores/appStore';
+import { Roles } from 'app/enums/Roles';
+import appStore from 'app/stores/appStore';
 import teacherMainStore from 'app/stores/scheduleStore';
 import AddEditGroup from 'components/classes-page/AddEditGroup';
 import { Toolbar } from 'components/schedule/ScheduleComponents/ScheduleComponents';
