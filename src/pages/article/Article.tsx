@@ -1,5 +1,6 @@
 import { AppRoutes } from 'app/enums/AppRoutes';
-import appStore, { Roles } from 'app/stores/appStore';
+import { Roles } from 'app/enums/Roles';
+import appStore from 'app/stores/appStore';
 import articlesStore from 'app/stores/articlesStore';
 import { ArticleFromEditor } from 'components/blog-page/ArticleFromEditor/ArticleFromEditor';
 import React, { ReactElement, useEffect } from 'react';

@@ -1,8 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { Grid } from '@mui/material';
 import { RoleNames } from 'app/enums/RoleNames';
+import { Roles } from 'app/enums/Roles';
 import { StatusTypes } from 'app/enums/StatusTypes';
-import { Roles } from 'app/stores/appStore';
 import { ArticleDescriptionType } from 'app/types/ArticleDescriptionType';
 import { ArticlePayloadT } from 'app/types/ArticlePayloadT';
 import { Nullable } from 'app/types/Nullable';

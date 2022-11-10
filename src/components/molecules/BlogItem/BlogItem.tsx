@@ -3,9 +3,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import { IconButton } from '@mui/material';
 
 import { AppRoutes } from 'app/enums/AppRoutes';
+import { Roles } from 'app/enums/Roles';
 import { SecondaryRoutes } from 'app/enums/SecondaryRoutes';
 import { StatusTypes } from 'app/enums/StatusTypes';
-import appStore, { Roles } from 'app/stores/appStore';
+import appStore from 'app/stores/appStore';
 import articlesStore from 'app/stores/articlesStore';
 import testsStore from 'app/stores/testsStore';
 import Button from 'components/button/Button';

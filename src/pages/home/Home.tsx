@@ -1,9 +1,8 @@
 import Blog from 'pages/blog/Blog';
 import { useEffect, useState } from 'react';
-
+import { Roles } from 'app/enums/Roles';
 import { observer } from 'mobx-react-lite';
-
-import appStore, { Roles } from 'app/stores/appStore';
+import appStore from 'app/stores/appStore';
 import AdminMain from 'components/admin-main/AdminMain';
 import FranchiseeAdminMain from 'components/franchisee-admin-main';
 import FranchiseeMain from 'components/franchisee-main';

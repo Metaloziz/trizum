@@ -1,5 +1,6 @@
 import { AppRoutes } from 'app/enums/AppRoutes';
-import appStore, { Roles } from 'app/stores/appStore';
+import { Roles } from 'app/enums/Roles';
+import appStore from 'app/stores/appStore';
 import articlesStore from 'app/stores/articlesStore';
 import { ArticleEditor } from 'components/article-editor/ArticleEditor';
 import { observer } from 'mobx-react-lite';
