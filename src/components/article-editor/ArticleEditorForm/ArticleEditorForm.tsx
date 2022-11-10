@@ -1,32 +1,27 @@
-import { yupResolver } from '@hookform/resolvers/yup';
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { Grid } from '@mui/material';
-import { AppRoutes } from 'app/enums/AppRoutes';
 import { RoleNames } from 'app/enums/RoleNames';
 import { StatusTypes } from 'app/enums/StatusTypes';
 import { Roles } from 'app/stores/appStore';
-import articlesStore from 'app/stores/articlesStore';
-import testsStore from 'app/stores/testsStore';
 import { ArticleDescriptionType } from 'app/types/ArticleDescriptionType';
 import { ArticlePayloadT } from 'app/types/ArticlePayloadT';
 import { Nullable } from 'app/types/Nullable';
-import { ResultMessage } from 'components/add-news-page/ResultMessage/ResultMessage';
+import { OptionT } from 'app/types/OptionT';
+import styles from 'components/article-editor/ArticleEditor.module.scss';
+import { ResultMessage } from 'components/article-editor/ResultMessage/ResultMessage';
 import Button from 'components/button/Button';
 import { CustomMultiSelect } from 'components/multiSelect/CustomMultiSelect';
 import { PlateEditor } from 'components/PlateEditor/PlateEditor';
-import { MyParagraphElement } from 'components/PlateEditor/types';
 import CustomSelect from 'components/select-mui/CustomSelect';
 import TextFieldCustom from 'components/text-field-mui/TextFieldCustom';
 import { STATUS_MENU } from 'constants/selectMenu';
-import { observer } from 'mobx-react-lite';
-import React, { useEffect } from 'react';
+import React, { ReactElement } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import { convertEnumInOptions } from 'utils/convertEnumInOptions';
 import { convertArrayToNull, convertNullStringToNull, convertNullToArray } from 'utils/convertNull';
-import { convertTestOptions } from 'utils/convertTestOptions';
 import { convertEmptyStringToNull, convertNullToEmptyString } from 'utils/convertTextFieldUtils';
+import { filterSelectMenu } from 'utils/filterSelectMenu';
 import * as yup from 'yup';
-import styles from './AddNewsPage.module.scss';
 
 const ROLES_OPTIONS = [
   { value: 'null', label: 'Для ролей:' },
@@ -42,35 +37,35 @@ const SCHEMA = yup.object().shape({
   content: yup.array().required(),
 });
 
-type ArticleFormT = {
+export type ArticleFormT = {
   title: string;
   description: string;
   testId: Nullable<string>;
-  roles: string[];
+  roles: Nullable<string[]>;
   status: StatusTypes;
   content: any[];
 };
 
-const AddNewsPage = observer(() => {
-  const { tests, setTests, setSearchParams } = testsStore;
-  const { successPost, article, setDefaultIsSuccessPost } = articlesStore;
+type ArticleEditorFormProps = {
+  testOptions: OptionT[];
+  onReadTheoryClick: () => void;
+  successPost: Nullable<string>;
+  defaultValues: ArticleFormT;
+  titleArticle: string;
+  onSubmitForm: (data: ArticlePayloadT) => void;
+  statusArticle: StatusTypes;
+};
 
-  const testOptions = convertTestOptions(tests);
-
-  useEffect(() => {
-    setSearchParams({ per_page: 1000 });
-    setDefaultIsSuccessPost();
-    setTests();
-  }, []);
-
-  const defaultValues: ArticleFormT = {
-    roles: ['null'],
-    description: '',
-    title: '',
-    testId: null,
-    status: StatusTypes.draft,
-    content: [{ type: 'p', children: [{ text: '' }] } as MyParagraphElement],
-  };
+export const ArticleEditorForm = (props: ArticleEditorFormProps): ReactElement => {
+  const {
+    testOptions,
+    successPost,
+    onReadTheoryClick,
+    defaultValues,
+    titleArticle,
+    onSubmitForm,
+    statusArticle,
+  } = props;
 
   const {
     handleSubmit,
@@ -78,43 +73,41 @@ const AddNewsPage = observer(() => {
     formState: { errors, isSubmitSuccessful },
   } = useForm<ArticleFormT>({ resolver: yupResolver(SCHEMA), defaultValues });
 
-  const navigate = useNavigate();
-
-  const onReadTheoryClick = (): void => {
-    navigate(`${AppRoutes.Blog}/${article?.title}`);
-  };
+  const menu = filterSelectMenu(statusArticle, STATUS_MENU);
 
   const onSubmit = handleSubmit(data => {
     const { status, roles, testId, content, title, description } = data;
+
     const newDescription: ArticleDescriptionType = {
       type: 'description',
       text: description,
     };
+    const newContent = [...content];
 
-    content.push(newDescription); // добавление описания вне редактора
+    newContent.push(newDescription); // добавление описания вне редактора
 
     const newArticle: ArticlePayloadT = {
       title,
-      content,
+      content: newContent,
       status,
       testId,
-      forFranchisee: roles.includes(Roles.Franchisee),
-      forFranchiseeAdmin: roles.includes(Roles.FranchiseeAdmin),
-      forMethodist: roles.includes(Roles.Methodist),
-      forStudents: roles.includes(Roles.Student),
-      forTeachers: roles.includes(Roles.Teacher),
-      forTeachersEducation: roles.includes(Roles.TeacherEducation),
-      forTutor: roles.includes(Roles.Tutor),
+      forFranchisee: roles?.includes(Roles.Franchisee),
+      forFranchiseeAdmin: roles?.includes(Roles.FranchiseeAdmin),
+      forMethodist: roles?.includes(Roles.Methodist),
+      forStudents: roles?.includes(Roles.Student),
+      forTeachers: roles?.includes(Roles.Teacher),
+      forTeachersEducation: roles?.includes(Roles.TeacherEducation),
+      forTutor: roles?.includes(Roles.Tutor),
     };
 
-    // postArticle(newArticle);
+    onSubmitForm(newArticle);
   });
 
   return (
     <div className={styles.content}>
       <div className={styles.innerContent}>
         <form>
-          <h1 className={styles.title}>Добавление статьи</h1>
+          <h1 className={styles.title}>{titleArticle}</h1>
           <Grid direction="row" container spacing={2} marginBottom={2}>
             <Grid item xs={12} sm={6}>
               <Controller
@@ -131,6 +124,7 @@ const AddNewsPage = observer(() => {
                     onChange={event => onChange(convertEmptyStringToNull(event))}
                     value={convertNullToEmptyString(value!)}
                     ref={ref}
+                    disabled={statusArticle !== StatusTypes.draft}
                   />
                 )}
                 control={control}
@@ -147,7 +141,7 @@ const AddNewsPage = observer(() => {
                     sx={{ backgroundColor: 'white' }}
                     onChange={onChange}
                     title="Уровень"
-                    options={STATUS_MENU}
+                    options={menu}
                     error={errors.status?.message}
                     ref={ref}
                   />
@@ -169,6 +163,7 @@ const AddNewsPage = observer(() => {
                     options={testOptions}
                     error={errors.testId?.message}
                     ref={ref}
+                    disabled={statusArticle !== StatusTypes.draft}
                   />
                 )}
                 control={control}
@@ -188,6 +183,7 @@ const AddNewsPage = observer(() => {
                     placeholder="Доступно ролям"
                     options={ROLES_OPTIONS}
                     error={errors.roles?.message}
+                    disabled={statusArticle !== StatusTypes.draft}
                   />
                 )}
                 control={control}
@@ -210,6 +206,7 @@ const AddNewsPage = observer(() => {
                     onChange={event => onChange(convertEmptyStringToNull(event))}
                     value={convertNullToEmptyString(value!)}
                     ref={ref}
+                    disabled={statusArticle !== StatusTypes.draft}
                   />
                 )}
                 control={control}
@@ -218,6 +215,7 @@ const AddNewsPage = observer(() => {
 
             <Grid item xs={12} sm={6}>
               <p>*первая картинка будет использоваться как превью.</p>
+              <p>*менять данные можно только в статьях со статусом черновик.</p>
             </Grid>
 
             <Grid item xs={12} sm={12}>
@@ -229,14 +227,15 @@ const AddNewsPage = observer(() => {
                     onChange={onChange}
                     className={styles.editor}
                     placeholder="Текст статьи..."
+                    readOnly={statusArticle !== StatusTypes.draft}
+                    hiddenToolbar={statusArticle !== StatusTypes.draft}
                   />
                 )}
                 control={control}
               />
 
-              <ResultMessage successPost={!!successPost} onClick={onReadTheoryClick} />
+              <ResultMessage successPost={successPost} onClick={onReadTheoryClick} />
 
-              <div className={styles.error}>{successPost}</div>
               <div className={styles.newsBtn}>
                 <Button onClick={onSubmit} disabled={isSubmitSuccessful}>
                   Сохранить
@@ -248,6 +247,4 @@ const AddNewsPage = observer(() => {
       </div>
     </div>
   );
-});
-
-export default AddNewsPage;
+};

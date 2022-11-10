@@ -1,0 +1,35 @@
+@import "src/styles/global";
+
+.content {
+  width: 100%;
+  max-width: 100%;
+}
+
+.container {
+  min-width: 150px;
+  display: flex;
+  align-items: center;
+
+  & .title {
+    width: 50%;
+  }
+
+  & p {
+    color: #000000;
+  }
+}
+
+.select {
+  height: 40px;
+  border: 0;
+  width: 100%;
+
+  fieldset {
+    display: none;
+  }
+}
+
+.base {
+  background: #FFFFFF;
+}
+
