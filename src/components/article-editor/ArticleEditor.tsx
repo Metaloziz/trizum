@@ -55,7 +55,7 @@ export const ArticleEditor = observer(() => {
       defaultValues={defaultValues}
       titleArticle={article?.id ? 'Редактирование статьи' : 'Добавление статьи'}
       onSubmitForm={onSubmit}
-      statusArticle={article?.status!}
+      statusArticle={defaultValues.status}
     />
   );
 });
