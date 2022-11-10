@@ -15,7 +15,8 @@ import { ArticlePreview } from 'components/blog-page/ArticlePreview/ArticlePrevi
 import { whoCanUseIt } from 'utils/whoCanUseIt';
 
 const BlogPage: FunctionComponent = observer(() => {
-  const { articles, getArticles, page, perPage, total, setSearchArticlesParams } = articlesStore;
+  const { articles, getArticles, page, perPage, total, setSearchArticlesParams, setNullArticle } =
+    articlesStore;
 
   const [currentPage, setCurrentPage] = useState(page + 1);
 
@@ -27,12 +28,13 @@ const BlogPage: FunctionComponent = observer(() => {
 
   useEffect(() => {
     getArticles();
+    setNullArticle();
   }, []);
 
   const navigate = useNavigate();
 
   const onClickAddPost = () => {
-    navigate(`${AppRoutes.Blog}/${SecondaryRoutes.AddArticle}`);
+    navigate(`${AppRoutes.BlogEditor}/${SecondaryRoutes.AddArticle}`);
   };
 
   const onClickAddTest = () => {

@@ -1,15 +1,14 @@
-import { Roles } from 'app/enums/Roles';
+import Blog from 'pages/blog/Blog';
 import { useEffect, useState } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import appStore from 'app/stores/appStore';
+import appStore, { Roles } from 'app/stores/appStore';
 import AdminMain from 'components/admin-main/AdminMain';
 import FranchiseeAdminMain from 'components/franchisee-admin-main';
 import FranchiseeMain from 'components/franchisee-main';
 import MethodistMain from 'components/methodist-main';
 import { StudentMain } from 'components/pupil-main/StudentMain';
-import TeacherEducationMain from 'components/teacher-education/TeacherEducationMain';
 import TeacherMain from 'components/teacher-main/teacherMain';
 import TutorMain from 'components/tutor-main';
 import styles from 'pages/home/Home.module.scss';
@@ -25,7 +24,7 @@ const Home = observer(() => {
         setPart(<StudentMain />);
         break;
       case Roles.TeacherEducation:
-        setPart(<TeacherEducationMain />);
+        setPart(<Blog />);
         break;
       case Roles.Teacher:
         setPart(<TeacherMain />);

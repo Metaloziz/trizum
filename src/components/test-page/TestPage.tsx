@@ -59,7 +59,7 @@ const TestPage: FC = observer(() => {
     if (newQuestion) {
       setCurrentQuestion(newQuestion);
     } else {
-      postResult({ articleId: article.id, result });
+      postResult({ articleId: article!.id, result });
       onEndTest();
     }
 

@@ -4,6 +4,7 @@ export const AppRoutes = {
   Game: '/game',
   Games: '/game',
   Blog: '/blog',
+  BlogEditor: '/blog/editor',
   Classes: '/classes',
   Courses: '/classes',
   SignIn: '/account/signin',

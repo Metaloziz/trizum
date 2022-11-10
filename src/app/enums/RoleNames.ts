@@ -9,3 +9,15 @@ export const RoleNames = {
   tutor: 'Куратор',
   admin: 'Центр',
 };
+
+export const RolesNameArticle: { [key: string]: string } = {
+  forStudents: 'student',
+  forParent: 'parent',
+  forTeachersEducation: 'teacherEducation',
+  forTeachers: 'teacher',
+  forFranchiseeAdmin: 'franchiseeAdmin',
+  forFranchisee: 'franchisee',
+  forMethodist: 'methodist',
+  forTutor: 'tutor',
+  forAdmin: 'admin',
+};
