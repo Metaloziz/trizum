@@ -1,5 +1,6 @@
 import { Roles } from 'app/enums/Roles';
 import appStore from 'app/stores/appStore';
+import { ScheduleT } from 'app/types/ScheduleT';
 import iconFlag from 'assets/svgs/icon-flag.svg';
 import iconMonkey from 'assets/svgs/monkey.svg';
 import BasicModal from 'components/basic-modal/BasicModal';
@@ -10,62 +11,45 @@ import Image from 'components/image/Image';
 import Setting from 'components/setting/Setting';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useEffect, useState } from 'react';
-import { getClosestLessonDate } from 'utils/getClosestLessonDate';
+import { dateNow } from 'utils/dateNow';
+import { getNearestLessonObject } from 'utils/getNearestLessonObject/getNearestLessonObject';
 
 import iconTablet from '../../../assets/svgs/icon-tablet.svg';
 import iconParrot from '../../../assets/svgs/parrot.svg';
 
 import styles from './CardStudentForUser.module.scss';
 
-type Props = {
-  isMainPage?: boolean;
-};
+const CardStudentForStudent: FC = observer(() => {
+  const { user, teacherName, fullUserName, getSchedule } = appStore;
+  const { role, avatar, city } = user;
 
-const CardStudentForStudent: FC<Props> = observer(({ isMainPage = true }) => {
-  const { user } = appStore;
-  const { firstName, middleName, lastName, role, avatar, city } = user;
-  const {
-    firstName: teacherFirstName,
-    middleName: teacherMiddleName,
-    lastName: teacherLastName,
-  } = user.groups[0].group.teacher;
-
-  const lessonDate = getClosestLessonDate(
-    user.groups[0].group.schedule,
-    new Date().toLocaleDateString(),
-  );
-  const lessonTime = lessonDate ? `${lessonDate.date} в ${lessonDate.from}` : 'нет занятий';
-
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
-
-  const fullName = `${firstName} ${middleName} ${lastName}`;
-
-  const changeSize = () => {
-    setInnerWidth(window.innerWidth);
-  };
+  const [lessonDate, setLessonDate] = useState<ScheduleT>();
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    window.addEventListener('resize', changeSize);
-    return () => {
-      window.removeEventListener('resize', changeSize);
-    };
-  }, [window.innerWidth]);
+    const currentLessonDate = getNearestLessonObject(getSchedule, dateNow());
+    if (currentLessonDate) {
+      setLessonDate(currentLessonDate);
+    }
+  }, []);
+
+  const lessonTime = lessonDate ? `${lessonDate.date} в ${lessonDate.from}` : 'нет занятий';
 
   // eslint-disable-next-line no-alert
   const openChatLink = () => alert('открывается ссылка на чат'); // todo заменить на настоящие ссылки
 
   return (
-    <div className={`${styles.wrapper} ${isMainPage ? '' : styles.olympiadPage}`}>
+    <div className={styles.wrapper}>
       <div className={styles.row}>
-        {innerWidth > 680 && (
-          <CustomImageWrapper className={styles.image} variant="circle">
-            <Image src={getAvatarImage(avatar?.path)} width="170" height="170" alt="student" />
-            <div className={styles.userSetting}>{isMainPage && <Setting />}</div>
-          </CustomImageWrapper>
-        )}
+        <CustomImageWrapper className={styles.image} variant="circle">
+          <Image src={getAvatarImage(avatar?.path)} width="170" height="170" alt="student" />
+          <div className={styles.userSetting}>
+            <Setting />
+          </div>
+        </CustomImageWrapper>
+
         <div>
-          <h3 className={styles.title}>{fullName}</h3>
+          <h3 className={styles.title}>{fullUserName}</h3>
           <div className={styles.mt15}>
             <ul className={styles.list}>
               <li>
@@ -92,7 +76,7 @@ const CardStudentForStudent: FC<Props> = observer(({ isMainPage = true }) => {
                 </span>
                 Учитель:
               </li>
-              <li>{`${teacherFirstName} ${teacherMiddleName} ${teacherLastName}`}</li>
+              <li>{teacherName}</li>
             </ul>
             <ul className={styles.list}>
               <li>

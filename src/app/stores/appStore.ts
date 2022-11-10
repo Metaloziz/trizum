@@ -174,6 +174,28 @@ class AppStore {
     this.error = '';
     this.loginError = '';
   };
+
+  get teacherName() {
+    const {
+      firstName: teacherFirstName,
+      middleName: teacherMiddleName,
+      lastName: teacherLastName,
+    } = this.user.groups[0].group.teacher;
+
+    return `${teacherFirstName} ${teacherMiddleName} ${teacherLastName}`;
+  }
+
+  get fullUserName() {
+    const { firstName, middleName, lastName } = this.user;
+
+    return `${firstName} ${middleName} ${lastName}`;
+  }
+
+  get getSchedule() {
+    const { schedule } = this.user?.groups[0]?.group || [];
+
+    return schedule;
+  }
 }
 
 export default new AppStore();
