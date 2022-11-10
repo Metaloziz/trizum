@@ -1,3 +1,4 @@
+import Blog from 'pages/blog/Blog';
 import { useEffect, useState } from 'react';
 
 import { observer } from 'mobx-react-lite';
@@ -8,15 +9,14 @@ import FranchiseeAdminMain from 'components/franchisee-admin-main';
 import FranchiseeMain from 'components/franchisee-main';
 import MethodistMain from 'components/methodist-main';
 import { StudentMain } from 'components/pupil-main/StudentMain';
-import TeacherEducationMain from 'components/teacher-education/TeacherEducationMain';
 import TeacherMain from 'components/teacher-main/teacherMain';
 import TutorMain from 'components/tutor-main';
 import styles from 'pages/home/Home.module.scss';
 import { Login } from 'pages/login/Login';
 
-const Home = observer((props: any) => {
+const Home = observer(() => {
   const { role } = appStore;
-  const {loginError} = appStore;
+  const { loginError } = appStore;
   const [part, setPart] = useState(<></>);
   useEffect(() => {
     switch (role) {
@@ -24,7 +24,7 @@ const Home = observer((props: any) => {
         setPart(<StudentMain />);
         break;
       case Roles.TeacherEducation:
-        setPart(<TeacherEducationMain />);
+        setPart(<Blog />);
         break;
       case Roles.Teacher:
         setPart(<TeacherMain />);
