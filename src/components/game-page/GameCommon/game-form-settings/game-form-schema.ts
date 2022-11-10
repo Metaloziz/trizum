@@ -276,3 +276,19 @@ export const STEAM_ENGINE_SCHEMA = yup.object().shape({
 });
 
 export const STEAM_ENGINE_FORM_SCHEMA = GAME_SCHEMA.concat(STEAM_ENGINE_SCHEMA);
+
+export const GAME_DIFFERENCE_SCHEMA = yup.object().shape({
+  timeComplete: yup
+    .number()
+    .required('Обязательное поле')
+    .min(5, 'Минимум 5 секунд')
+    .max(3600, 'Максимум 3600 секунд')
+    .nullable(),
+  errorAacceptable: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 ошибок')
+    .max(99, 'Максимум 99 ошибок'),
+});
+
+export const GAME_DIFFERENCE_FORM_SCHEMA = GAME_SCHEMA.concat(GAME_DIFFERENCE_SCHEMA);

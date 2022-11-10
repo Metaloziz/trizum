@@ -14,6 +14,7 @@ import Paint from 'pages/game/GameInstances/Paint';
 import ShiftVertical from 'pages/game/GameInstances/ShiftVertical';
 import Shulte from 'pages/game/GameInstances/Shulte';
 import Steam from 'pages/game/GameInstances/Steam';
+import Difference from 'pages/game/GameInstances/Difference';
 
 import React, { FunctionComponent } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
@@ -34,6 +35,7 @@ const GAMES: { [key: string]: FunctionComponent<GameContainerProps> } = {
   fireflies: Lights,
   argus: Argus,
   mental: Mental,
+  difference: Difference,
 };
 
 const GameItems = observer(() => {

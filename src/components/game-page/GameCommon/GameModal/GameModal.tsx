@@ -36,6 +36,7 @@ import { getOptionMui } from 'utils/getOption';
 import styles from './gameModal.module.scss';
 import { getSizeArea } from 'utils/gameUtils/getSizeArea';
 import { filterGameStatus } from 'utils/gameStatusFilter';
+import { GameDifferenceSettings } from '../GameSettings/GameDifferenceSettings';
 
 type PropsT = {
   open: boolean;
@@ -388,6 +389,21 @@ export const GameModal: FC<PropsT> = observer(props => {
               )}
               {game.code === GameIdentifiers.argus && (
                 <ArgusSettings
+                  speed={speed}
+                  setSpeed={setSpeed}
+                  elementsTotal={elementsTotal}
+                  setElementsTotal={setElementsTotal}
+                  setErrorAcceptable={setErrorAcceptable}
+                  errorAcceptable={errorAcceptable}
+                  digitMax={digitMax}
+                  setDigitMax={setDigitMax}
+                  delayOptions={fieldSizeOptions().map(el =>
+                    getOptionMui(el.value + '000', el.label + '000'),
+                  )}
+                />
+              )}
+              {game.code === GameIdentifiers.difference && (
+                <GameDifferenceSettings
                   speed={speed}
                   setSpeed={setSpeed}
                   elementsTotal={elementsTotal}

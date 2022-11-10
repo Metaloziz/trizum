@@ -98,6 +98,13 @@ export type SteamEngineGameSettingsType = {
 
 export type SteamEngineFormType = BaseGameSettingsType & SteamEngineGameSettingsType;
 
+export type GameDifferenceSettingsType = {
+  timeComplete: number;
+  errorAacceptable: number;
+};
+
+export type GameDifferenceFormType = BaseGameSettingsType & GameDifferenceSettingsType;
+
 export type GamesFormSettingsType = BaseGameSettingsType &
   (
     | ShiftVerticalFormType
@@ -107,4 +114,5 @@ export type GamesFormSettingsType = BaseGameSettingsType &
     | MemoryRhythmFormType
     | SilhouettesFormType
     | SteamEngineFormType
+    | GameDifferenceFormType
   );

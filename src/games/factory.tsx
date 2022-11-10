@@ -41,6 +41,10 @@ import {
     PropsDefault as ArgusPropsDefault,
     Component as ArgusComponent
 } from './games/argus';
+import {
+    PropsDefault as DifferencePropsDefault,
+    Component as DifferenceComponent
+} from './games/difference';
 
 export const GameIdentifiers = {
     shulte: 'shulte',
@@ -53,6 +57,7 @@ export const GameIdentifiers = {
     memoryRhythm: 'memoryRhythm',
     fireflies: 'fireflies',
     argus: 'argus',
+    difference: "difference"
 };
 
 export const GameList = {
@@ -106,6 +111,11 @@ export const GameList = {
         component: ArgusComponent,
         props: ArgusPropsDefault
     },
+    [GameIdentifiers.difference]: {
+        name: "Найди отличие",
+        component: DifferenceComponent,
+        props: DifferencePropsDefault
+    }
 };
 
 export function factory(

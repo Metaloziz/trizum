@@ -17,6 +17,7 @@ import Blink from '../../assets/images/game/blink.png';
 import Steam from '../../assets/images/game/steam.png';
 import Argus from '../../assets/images/game/argus.png';
 import Fireflies from '../../assets/images/game/firelines.png';
+import Difference from '../../assets/images/game/difference.png';
 
 import { Factory } from '../../games';
 
@@ -73,6 +74,11 @@ const Games = [
     name: 'argus',
     prevImg: Argus,
   },
+  {
+    title: 'Найди отличие',
+    name: 'difference',
+    prevImg: Difference,
+  },
 ];
 
 class Game extends Component<any, any> {
@@ -125,6 +131,7 @@ class Game extends Component<any, any> {
         gameResult: result,
       },
       async () => {
+        console.log("on end --- game ---", result)
         await gamesStore.sendResults({
           userGroupId: '1ed25e67-b3ef-6bc2-9492-95bc14986080',
           courseWorkId: '1ed25e4d-c767-6336-80f6-5d295491aaa1',
