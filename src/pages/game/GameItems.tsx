@@ -23,7 +23,7 @@ export type GameContainerProps = {
   gamePreset: OneGamePresent;
 };
 
-const qwe: { [key: string]: FunctionComponent<GameContainerProps> } = {
+const GAMES: { [key: string]: FunctionComponent<GameContainerProps> } = {
   shulte: Shulte,
   battleColors: BattleColors,
   game2048: Game2048,
@@ -46,7 +46,7 @@ const GameItems = observer(() => {
   }
 
   if (gameName) {
-    const GameComponent = qwe[gameName];
+    const GameComponent = GAMES[gameName];
     return <GameComponent gamePreset={gamePreset} actualPresets={actualPresets} />;
   }
 

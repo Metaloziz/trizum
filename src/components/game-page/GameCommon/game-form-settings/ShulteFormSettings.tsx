@@ -20,7 +20,7 @@ import { convertEmptyStringToNull, convertNullToEmptyString } from 'utils/conver
 import { BaseFormGameSettings } from './BaseFormGameSettings';
 import { SHULTE_FORM_SCHEMA } from './game-form-schema';
 
-const colorsObj: OptionT[] = [
+const COLOR_OPTIONS: OptionT[] = [
   { label: 'Выбор цвета:', value: 'null' },
   { label: 'Зелёный', value: '#076d4d' },
   { label: 'Чёрный', value: '#000000' },
@@ -152,7 +152,7 @@ export const ShulteFormSettings = (props: FormSettingsType): ReactElement => {
                     onChange(convertArrayToNull(event));
                   }}
                   value={convertNullToArray(valueField || null)}
-                  options={colorsObj}
+                  options={COLOR_OPTIONS}
                   error={errors.colorsMap?.message}
                 />
               )}
