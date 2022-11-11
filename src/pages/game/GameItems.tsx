@@ -13,6 +13,7 @@ import Paint from 'pages/game/GameInstances/Paint';
 import ShiftVertical from 'pages/game/GameInstances/ShiftVertical';
 import Shulte from 'pages/game/GameInstances/Shulte';
 import Steam from 'pages/game/GameInstances/Steam';
+import BullsCows from 'pages/game/GameInstances/BullsAndCows';
 
 import React, { FunctionComponent } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
@@ -33,6 +34,7 @@ const qwe: { [key: string]: FunctionComponent<GameContainerProps> } = {
   fireflies: Lights,
   argus: Argus,
   mental: Mental,
+  bullsCows: BullsCows,
 };
 
 const GameItems = observer(() => {

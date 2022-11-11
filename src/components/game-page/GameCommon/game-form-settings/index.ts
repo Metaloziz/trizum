@@ -7,4 +7,5 @@ export { MemoryRhythmFormSettings } from './MemoryRhythmFormSettings';
 export { Game2048FormSettings } from './Game2048FormSettings';
 export { SilhouettesFormSettings } from './SilhouettesFormSettings';
 export { SteamEngineFormSettings } from './SteamEngineFormSettings';
+export { BullsAndCowsSettings } from './BullsAndCowsSettings';
 export type { GamesFormSettingsType } from './game-form-types';

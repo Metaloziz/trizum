@@ -98,6 +98,15 @@ export type SteamEngineGameSettingsType = {
 
 export type SteamEngineFormType = BaseGameSettingsType & SteamEngineGameSettingsType;
 
+export type BullsAndCowsSettingsType = {
+  timeComplete: number;
+  levelMaxCompleted: number;
+  errorAacceptable: number;
+  digitMax: number;
+};
+
+export type BullsAndCowsFormType = BaseGameSettingsType & BullsAndCowsSettingsType;
+
 export type GamesFormSettingsType = BaseGameSettingsType &
   (
     | ShiftVerticalFormType
@@ -107,4 +116,5 @@ export type GamesFormSettingsType = BaseGameSettingsType &
     | MemoryRhythmFormType
     | SilhouettesFormType
     | SteamEngineFormType
+    | BullsAndCowsFormType
   );

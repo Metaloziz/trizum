@@ -12,6 +12,7 @@ import {
   SilhouettesFormSettings,
   SteamEngineFormSettings,
   FirefliesFormSettings,
+  BullsAndCowsSettings,
   GamesFormSettingsType,
 } from 'components/game-page/GameCommon/game-form-settings/';
 
@@ -197,6 +198,14 @@ export const NewGameModal: FC<PropsT> = observer(props => {
 
         {game.code === GameIdentifiers.argus && (
           <ArgusFormSettings
+            usedInWorks={gamePreset.usedInWorks}
+            gamePreset={gamePreset.gamePreset}
+            onFormSubmit={onSubmit}
+            deletedPreset={deletedPreset}
+          />
+        )}
+        {game.code === GameIdentifiers.bullsCows && (
+          <BullsAndCowsSettings
             usedInWorks={gamePreset.usedInWorks}
             gamePreset={gamePreset.gamePreset}
             onFormSubmit={onSubmit}
