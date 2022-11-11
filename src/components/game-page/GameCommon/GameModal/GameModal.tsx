@@ -153,6 +153,7 @@ export const GameModal: FC<PropsT> = observer(props => {
       settings: [
         {
           timeComplete: Number(timeComplete),
+          timeMax: 3600,
           elementsTotal: Number(elementsTotal),
           wordsCount: Number(wordsCount),
           digitMin: Number(digitMin),

@@ -32,6 +32,7 @@ class GamesStore {
 
   private defaultSettings: PresetsGameSettings = {
     timeComplete: 10,
+    timeMax: 3600,
     elementsTotal: 4,
     levelMaxCompleted: 1,
     gameCode: '',
@@ -178,12 +179,14 @@ class GamesStore {
   };
 
   createPresets = async (params: EditOrCreatePresetParamsT) => {
+    params.settings[0].timeMax = 3600;
     await gamesService.createPresetGame(params);
     await this.getPresets();
     this.filterPresets(this.game.code);
   };
 
   editPreset = async (params: EditOrCreatePresetParamsT) => {
+    params.settings[0].timeMax = 3600;
     await gamesService.editPresetGame(this.gamePreset.gamePreset.id, params);
     await this.getPresets();
     this.filterPresets(this.game.code);
