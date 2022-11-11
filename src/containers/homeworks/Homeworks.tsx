@@ -9,7 +9,7 @@ import { FC } from 'react';
 
 import styles from './Homeworks.module.scss';
 
-const Homeworks: FC<HomeworksProps> = ({ homeworks, className }) => {
+const Homeworks: FC<HomeworksProps> = ({ className }) => {
   const { role, currentWork, hwDate } = appStore;
   if (currentWork && hwDate) {
     return (

@@ -7,9 +7,11 @@ import { GameIdWithCode } from 'app/types/GameTypes';
 import { WorkFromLoadme } from 'app/types/LoadMeTypes';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { LoginInfo } from 'pages/login/Login';
+import { dateNow } from 'utils/dateNow';
 import { execute } from 'utils/execute';
-import { getClosestLessonDate, now } from 'utils/getClosestLessonDate';
+import { getActiveClassGroup } from 'utils/getActiveClassGroup';
 import { getGameForStudent } from 'utils/getGameForStudent';
+import { getNearestLessonObject } from 'utils/getNearestLessonObject/getNearestLessonObject';
 import { throwErrorMessage } from 'utils/throwErrorMessage';
 
 import { RequestLogin, RequestSwitchUser } from '../types/AuthTypes';
@@ -139,17 +141,16 @@ class AppStore {
   setGameIdsWithCodes = (user: EmptyUser) => {
     this.allGameIdsWithCodes = getGameForStudent(user.groups);
 
-    const classType = user.groups.find(
-      el => el.group.type === 'class' && el.group.status === 'active',
-    );
-    const schedule = classType?.group?.schedule;
+    const classType = user.groups.find(el => el.group.type === 'class' && el.status === 'active');
+
+    const schedule = this.getSchedule;
 
     if (classType && schedule && schedule.length) {
       // TODO: добавить нахождение нужного урока по дате
 
       [this.currentGameIds] = this.allGameIdsWithCodes;
 
-      const lesson = getClosestLessonDate(schedule, now);
+      const lesson = getNearestLessonObject(schedule, dateNow());
 
       if (lesson) {
         this.hwDate = lesson.date;
@@ -176,25 +177,31 @@ class AppStore {
   };
 
   get teacherName() {
+    const group = getActiveClassGroup(this.user);
+
+    if (!group) return '';
+
     const {
       firstName: teacherFirstName,
       middleName: teacherMiddleName,
       lastName: teacherLastName,
-    } = this.user.groups[0].group.teacher;
+    } = group.group.teacher;
 
-    return `${teacherFirstName} ${teacherMiddleName} ${teacherLastName}`;
+    return `${teacherLastName} ${teacherFirstName} ${teacherMiddleName}`;
   }
 
   get fullUserName() {
     const { firstName, middleName, lastName } = this.user;
 
-    return `${firstName} ${middleName} ${lastName}`;
+    return `${lastName} ${firstName} ${middleName}`;
   }
 
   get getSchedule() {
-    const { schedule } = this.user?.groups[0]?.group || [];
+    const result = getActiveClassGroup(this.user);
 
-    return schedule;
+    if (!result) return [];
+
+    return result.group.schedule;
   }
 }
 

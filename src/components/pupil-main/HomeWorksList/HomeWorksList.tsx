@@ -20,7 +20,8 @@ export const HomeWorksList: FC<Props> = ({ works, schedule }) => {
   const [lessonIndex, setLessonIndex] = useState(-1);
 
   useEffect(() => {
-    setLessonIndex(getLessonIndex(schedule));
+    const index = getLessonIndex(schedule);
+    setLessonIndex(index);
   }, [schedule]);
 
   return (
@@ -42,7 +43,7 @@ export const HomeWorksList: FC<Props> = ({ works, schedule }) => {
           )}
         </>
       ) : (
-        <h2>Нет домашних работ</h2>
+        <h2>На сегодня нет домашних работ</h2>
       )}
     </div>
   );

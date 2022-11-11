@@ -1,6 +1,7 @@
 import appStore from 'app/stores/appStore';
 import CardStudent from 'components/card-student/CardStudent';
 import { games } from 'components/pupil-main/consts/consts';
+import { getWorksAndSchedule } from 'components/pupil-main/getWorksAndSchedule/getWorksAndSchedule';
 import { HomeWorksList } from 'components/pupil-main/HomeWorksList/HomeWorksList';
 import WeeklyGrowth from 'components/weekly-growth/WeeklyGrowth';
 import KeepPlaying from 'containers/keep-playing/KeepPlaying';
@@ -13,8 +14,9 @@ import { personalRecordsArr } from 'utils/personalRecordsArr';
 
 export const StudentMain: FC = observer(() => {
   const { user, currentGameIds } = appStore;
-  const { works } = user?.groups[0]?.group?.course || [];
-  const { schedule } = user?.groups[0]?.group || [];
+
+  const { works, schedule } = getWorksAndSchedule(user.groups);
+
   const recordsArr = personalRecordsArr(user.personalRecord);
 
   console.log('currentGameIds', toJS(currentGameIds));
@@ -29,12 +31,7 @@ export const StudentMain: FC = observer(() => {
       </div>
       <div className={styles.rowHw}>
         <HomeWorksList works={works} schedule={schedule} />
-        <KeepPlaying
-          actualGames={currentGameIds}
-          className={styles.keepPlaying}
-          works={works}
-          games={games}
-        />
+        <KeepPlaying actualGames={currentGameIds} className={styles.keepPlaying} games={games} />
       </div>
     </main>
   );

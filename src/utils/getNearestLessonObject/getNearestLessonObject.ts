@@ -1,4 +1,4 @@
-import { ScheduleT, ShortScheduleT } from '../../app/types/ScheduleT';
+import { ScheduleT, ShortScheduleT } from 'app/types/ScheduleT';
 import { getNearestDateHelper } from './helper/getNearestDateHelper';
 
 export const getNearestLessonObject = (

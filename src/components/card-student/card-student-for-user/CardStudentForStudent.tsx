@@ -12,6 +12,7 @@ import Setting from 'components/setting/Setting';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useEffect, useState } from 'react';
 import { dateNow } from 'utils/dateNow';
+import { getActiveClassGroup } from 'utils/getActiveClassGroup';
 import { getNearestLessonObject } from 'utils/getNearestLessonObject/getNearestLessonObject';
 
 import iconTablet from '../../../assets/svgs/icon-tablet.svg';
@@ -21,10 +22,13 @@ import styles from './CardStudentForUser.module.scss';
 
 const CardStudentForStudent: FC = observer(() => {
   const { user, teacherName, fullUserName, getSchedule } = appStore;
+
   const { role, avatar, city } = user;
 
   const [lessonDate, setLessonDate] = useState<ScheduleT>();
   const [showModal, setShowModal] = useState(false);
+
+  const group = getActiveClassGroup(user);
 
   useEffect(() => {
     const currentLessonDate = getNearestLessonObject(getSchedule, dateNow());
@@ -74,7 +78,7 @@ const CardStudentForStudent: FC = observer(() => {
                 <span>
                   <Image src={iconParrot} width="25" height="25" alt="parrot" />
                 </span>
-                Учитель:
+                <p>Учитель:</p>
               </li>
               <li>{teacherName}</li>
             </ul>
@@ -83,9 +87,18 @@ const CardStudentForStudent: FC = observer(() => {
                 <span>
                   <Image src={iconTablet} width="25" height="25" alt="icon tablet" />
                 </span>
-                Следующее занятие:
+                <p>Следующее занятие:</p>
               </li>
               <li>{lessonTime}</li>
+            </ul>
+            <ul className={styles.list}>
+              <li>
+                <span>
+                  <Image src={iconTablet} width="25" height="25" alt="icon tablet" />
+                </span>
+                <p>Класс:</p>
+              </li>
+              <li>{group?.group.name}</li>
             </ul>
           </div>
         </div>

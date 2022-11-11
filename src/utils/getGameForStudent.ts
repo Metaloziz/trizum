@@ -2,7 +2,7 @@ import { Group } from 'app/types/LoadMeTypes';
 import { GameIdWithCode } from 'app/types/GameTypes';
 
 export const getGameForStudent = (groupAr: Group[]) => {
-  const classType = groupAr.find(el => el.group.type === 'class');
+  const classType = groupAr.find(el => el.group.type === 'class' && el.status === 'active');
 
   if (!classType) return [];
 
