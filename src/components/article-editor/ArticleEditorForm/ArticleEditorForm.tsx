@@ -25,7 +25,7 @@ import * as yup from 'yup';
 
 const ROLES_OPTIONS = [
   { value: 'null', label: 'Для ролей:' },
-  ...convertEnumInOptions(RoleNames, [RoleNames.admin, RoleNames.parent]),
+  ...convertEnumInOptions(RoleNames, [RoleNames.admin, RoleNames.parent, RoleNames.methodist]),
 ];
 
 const SCHEMA = yup.object().shape({
@@ -93,7 +93,7 @@ export const ArticleEditorForm = (props: ArticleEditorFormProps): ReactElement =
       testId,
       forFranchisee: roles?.includes(Roles.Franchisee),
       forFranchiseeAdmin: roles?.includes(Roles.FranchiseeAdmin),
-      forMethodist: roles?.includes(Roles.Methodist),
+      forMethodist: true,
       forStudents: roles?.includes(Roles.Student),
       forTeachers: roles?.includes(Roles.Teacher),
       forTeachersEducation: roles?.includes(Roles.TeacherEducation),
