@@ -37,10 +37,12 @@ const StyledButton = styled('button')(
   ({ theme }) => `
   box-sizing: border-box;
   min-height: calc(1em + 18px);
-  min-width: 320px;
+  min-width: 160px;
   max-width:1000px;
   width:100%;
   padding: 8.5px 14px;
+  border: rgba(0, 0, 0, 0.23) solid 1px;
+  border-radius: 4px;
   
   text-align: left;
   line-height: 1.5;
