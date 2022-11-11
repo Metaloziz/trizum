@@ -15,10 +15,16 @@ import {
 } from 'app/types/GameTypes';
 import { PresetT } from 'app/types/WorkTypes';
 import { makeAutoObservable, runInAction } from 'mobx';
+import { getActiveClassGroup } from 'utils/getActiveClassGroup';
 import { removeEmptyFields } from 'utils/removeEmptyFields';
 import { throwErrorMessage } from 'utils/throwErrorMessage';
 import { SearchParamsType } from '../types/SearchParamsType';
 import appStore from 'app/stores/appStore';
+
+type IdentificationParamsType = Pick<
+  PlaySendResultT,
+  'userGroupId' | 'courseWorkId' | 'workGamePresetId'
+>;
 
 class GamesStore {
   presets: PresetT[] = [];
@@ -84,6 +90,12 @@ class GamesStore {
   isCurrentGameView: boolean = false;
 
   stopFunc: any;
+
+  identificationParams: IdentificationParamsType = {
+    userGroupId: '',
+    workGamePresetId: '',
+    courseWorkId: '',
+  };
 
   constructor() {
     makeAutoObservable(this);
@@ -219,6 +231,20 @@ class GamesStore {
 
   setStopFunc = (func: () => any) => {
     this.stopFunc = func;
+  };
+
+  getIdentificationParams = () => {
+    const group = getActiveClassGroup(appStore.user);
+
+    return {
+      userGroupId: group?.group.id,
+      // courseWorkId: group.group.course.,
+      workGamePresetId: '',
+    };
+  };
+
+  setActiveWork = (params: IdentificationParamsType) => {
+    this.identificationParams = params;
   };
 }
 

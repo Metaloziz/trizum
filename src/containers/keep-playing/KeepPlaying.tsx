@@ -3,26 +3,39 @@ import appStore from 'app/stores/appStore';
 import gamesStore from 'app/stores/gamesStore';
 
 import { KeepPlayingProps } from 'app/types/ComponentsProps';
+import { GamePresetFromLoadme } from 'app/types/LoadMeTypes';
 
 import classNames from 'classnames';
 import KeepPlayingItem from 'components/keep-playing-item/KeepPlayingItem';
-import { FC } from 'react';
+import { getLessonIndex } from 'components/pupil-main/helper/getLessonIndex';
+import { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getActiveClassGroup } from 'utils/getActiveClassGroup';
+import { getNearestLessonObject } from 'utils/getNearestLessonObject/getNearestLessonObject';
 
 import styles from './KeepPlaying.module.scss';
 
 const KeepPlaying: FC<KeepPlayingProps> = ({ className }) => {
   const navigate = useNavigate();
 
-  const { getPreset } = gamesStore;
-  const { currentWork } = appStore;
+  const { getPreset, setActiveWork } = gamesStore;
+  const { currentWork, user } = appStore;
 
   const gamePresets = currentWork?.gamePresets;
 
-  const setRoute = async (gameUrl: string) => {
-    await getPreset(gameUrl);
+  const setRoute = async (game: GamePresetFromLoadme) => {
+    const gameCode = game?.gamePreset?.game.code || '';
 
-    navigate(`${AppRoutes.Game}/${gameUrl}`);
+    await getPreset(gameCode);
+
+    const group = getActiveClassGroup(user);
+
+    setActiveWork({
+      userGroupId: group?.id || '',
+      workGamePresetId: game.gamePreset.id,
+      courseWorkId: currentWork?.id || '', // todo
+    });
+    navigate(`${AppRoutes.Game}/${gameCode}`);
   };
 
   return (
@@ -33,7 +46,7 @@ const KeepPlaying: FC<KeepPlayingProps> = ({ className }) => {
           <KeepPlayingItem
             key={game.id}
             title={game.gamePreset.game.name}
-            onClick={() => setRoute(game?.gamePreset?.game.code || '')}
+            onClick={() => setRoute(game)}
           />
         ))}
     </div>

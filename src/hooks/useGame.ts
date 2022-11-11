@@ -19,7 +19,8 @@ type useGameProps = GameProps & {
 export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) => {
   const { role, user } = appStore;
   const { groups, getGroups } = groupStore;
-  const { deletePreset, getPreset, getPresets, getGame, game, sendResults } = gamesStore;
+  const { deletePreset, getPreset, getPresets, getGame, game, sendResults, identificationParams } =
+    gamesStore;
 
   const [refs, setRef] = useState<any>(null);
   const [started, setStarted] = useState(false);
@@ -81,11 +82,14 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
     if (role === Roles.Student) {
       const params: PlaySendResultT = {
         /* нормальные настройки(но не факт) */
-        userGroupId: user.groups[0].id,
-        courseWorkId: user.groups[0].group.course.works[0].id,
+        // userGroupId: user.groups[0].id,
+        userGroupId: identificationParams.userGroupId,
+        // courseWorkId: user.groups[0].group.course.works[0].id,
+        courseWorkId: identificationParams.courseWorkId,
         /* конец нормальных настроек */
         /* под вопросом - уточнить у аналитиков и Александра */
-        workGamePresetId: user.groups[0].group.course.works[0].work.gamePresets[0].id,
+        // workGamePresetId: user.groups[0].group.course.works[0].work.gamePresets[0].id,
+        workGamePresetId: identificationParams.workGamePresetId,
         finished: resultModal,
         groupsCount: settings.groupsCount!,
         elementsTotal: settings.elementsTotal!,
