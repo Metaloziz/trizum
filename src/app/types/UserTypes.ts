@@ -18,6 +18,7 @@ export type RequestUsersForFilter = {
   page?: number | null;
   perPage?: number | null;
   franchiseId?: string | null;
+  groupId?: string | null;
   firstName?: string | null;
   middleName?: string | null;
   lastName?: string | null;

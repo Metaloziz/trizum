@@ -27,16 +27,18 @@ import { RoleNames } from 'app/enums/RoleNames';
 import { observer } from 'mobx-react-lite';
 import { RequestUsersForFilter } from 'app/types/UserTypes';
 import { Moment } from 'moment/moment';
-import { getAllOptionsMUI } from 'utils/getOption';
 import franchiseeStore from 'app/stores/franchiseeStore';
-import { convertFranchiseeOptions } from 'utils/convertFranchiseeOptions';
 import groupStore from 'app/stores/groupStore';
-import { convertGroupOptions } from 'utils/convertGroupOptions';
-import { convertEnumOptions } from 'utils/convertEnumOptions';
 import { GroupTypes } from 'app/enums/GroupTypes';
 import tariffsStore from 'app/stores/tariffsStore';
-import { convertTariffOptions } from 'utils/convertTariffOptions';
-import { getRoleOptionsForFilter } from 'utils/filterRoleOptions';
+import {
+  convertEnumOptions,
+  convertFranchiseeOptions,
+  convertGroupOptions,
+  convertTariffOptions,
+  getAllOptionsMUI,
+  getRoleOptionsForFilter,
+} from 'utils';
 
 const PAID = 'Оплачен';
 const NOT_PAID = 'Не оплачен';
@@ -115,6 +117,7 @@ export const Filter: FC<UserPageFilterProps> = observer(props => {
       lastName,
       city,
       franchiseId,
+      groupId,
       page: 0,
       perPage,
       phone,
@@ -144,11 +147,13 @@ export const Filter: FC<UserPageFilterProps> = observer(props => {
   };
 
   const handleChangeGroupId = ({ target: { value } }: SelectChangeEvent) => {
+    console.log('groupdId', value);
     setGroupId(value);
   };
 
   const handleChangeGroupType = ({ target: { value } }: SelectChangeEvent) => {
     // setGroupId('');
+    console.log('group type', value);
     setGroupType(value);
   };
 

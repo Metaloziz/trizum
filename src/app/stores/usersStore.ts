@@ -49,6 +49,7 @@ class UsersStore {
     page: 0,
     city: '',
     franchiseId: '',
+    groupId: '',
     lastName: '',
     middleName: '',
     firstName: '',
