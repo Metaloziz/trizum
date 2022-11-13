@@ -1,5 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, FormControl, Grid, TextField } from '@mui/material';
+import { observer } from 'mobx-react-lite';
+import React, { FC, useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { SexEnum } from 'app/enums/CommonEnums';
@@ -26,17 +29,17 @@ import { roleOptions } from 'components/users-page/student-page-franchisee-modal
 import { StudentParentsFormContainer } from 'components/users-page/student-parrents-form-container/StudentParentsFormContainer';
 import { MAX_NAMES_LENGTH, MIN_NAMES_LENGTH } from 'constants/constants';
 import { REG_NAME } from 'constants/regExp';
-import { observer } from 'mobx-react-lite';
-import React, { FC, useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { convertFranchiseeOptions } from 'utils/convertFranchiseeOptions';
-import { convertGroupOptions } from 'utils/convertGroupOptions';
-import { convertSexOptions } from 'utils/convertSexOptions';
-import { convertTariffOptions } from 'utils/convertTariffOptions';
-import { maxBirthdayYearAll, maxBirthdayYearStudent, minBirthdayYear } from 'utils/dateMask';
-import { filterRoleOptions } from 'utils/filterRoleOptions';
-import { findActiveClassGroup } from 'utils/findActiveClassGroup';
-import { removeEmptyFields } from 'utils/removeEmptyFields';
+
+import {
+  convertFranchiseeOptions,
+  convertTariffOptions,
+  convertGroupOptions,
+  findActiveClassGroup,
+  convertSexOptions,
+  getMaxMinYear,
+  removeEmptyFields,
+  filterRoleOptions,
+} from 'utils';
 import * as yup from 'yup';
 import TextFieldPhoneCustom from '../../text-field-phone-mui/TextFieldPhoneCustom';
 import styles from './StudentPageFranchiseeModalAddUser.module.scss';
@@ -71,7 +74,6 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
     }, []);
 
     const findSex = () => (currentUser?.sex ? sexOptions[0].value : sexOptions[1].value);
-
     const defaultValues = {
       firstName: currentUser?.firstName || '',
       middleName: currentUser?.middleName || '',
@@ -125,9 +127,16 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
         birthdate: yup
           .date()
           .required('Обязательное поле')
-          .min(`01-01-${minBirthdayYear}`, 'Не верно выбран возраст')
+          .min(
+            `${selectedRole === Roles.Student ? getMaxMinYear(17) : getMaxMinYear(102)}`,
+            `${
+              selectedRole === Roles.Student
+                ? 'Ученик не может быть старше 17 лет'
+                : 'Возраст выбран не верно'
+            }`,
+          )
           .max(
-            `01-01-${selectedRole === Roles.Student ? maxBirthdayYearStudent : maxBirthdayYearAll}`,
+            `${selectedRole === Roles.Student ? getMaxMinYear(3) : getMaxMinYear(18)}`,
             `${
               selectedRole === Roles.Student
                 ? 'Ученик не может быть младше 3 лет'
