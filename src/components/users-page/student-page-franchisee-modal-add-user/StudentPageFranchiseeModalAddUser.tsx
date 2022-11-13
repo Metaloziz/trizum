@@ -84,7 +84,7 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
       phone: currentUser?.phone || '',
       birthdate: currentUser?.birthdate?.date || '01.01.2000',
       email: currentUser?.email || '',
-      franchise: '', // не изменяется при редактировании
+      franchise: currentUser?.franchise?.id || '', // изменяется для Учителя на обучении
       tariff: currentUser?.tariff?.id || '',
       group: findActiveClassGroup(currentUser?.groups)?.groupId || '',
       password: currentUser?.password || '', // не обязателен при редактировании
@@ -190,6 +190,7 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
     });
 
     const onSubmit = handleSubmit(async values => {
+      console.log(values.franchise);
       const newUserData: RequestRegister = {
         sex: (values.sex as SexEnum) === SexEnum.Male,
         franchiseId: values.franchise,
