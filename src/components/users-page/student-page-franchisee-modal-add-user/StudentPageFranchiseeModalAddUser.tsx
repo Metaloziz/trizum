@@ -243,7 +243,6 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
 
       resetField('franchise');
     }, [selectedRole]);
-
     return (
       <>
         <form onSubmit={onSubmit}>
@@ -339,66 +338,109 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
                           control={control}
                         />
                       </Grid>
-                      {isMethodistTutor(selectedRole) && !isFranchiseRole && (
-                        <Grid item xs={12} sm={6}>
-                          <Controller
-                            name="franchise"
-                            render={({ field }) => (
-                              <CustomSelect
-                                {...field}
-                                onChange={e => {
-                                  field.onChange(e);
-                                  getCurrentGroups(e.target.value);
-                                  setCurrentFranchiseId(e.target.value);
-                                }}
-                                title="Франшиза"
-                                options={franchiseOptions}
-                                error={errors.franchise?.message}
-                              />
-                            )}
-                            control={control}
-                          />
-                        </Grid>
-                      )}
+                      {isMethodistTutor(selectedRole) &&
+                        !isFranchiseRole &&
+                        !Boolean(selectedRole === Roles.TeacherEducation) && (
+                          <Grid item xs={12} sm={6}>
+                            <Controller
+                              name="franchise"
+                              render={({ field }) => (
+                                <CustomSelect
+                                  {...field}
+                                  onChange={e => {
+                                    field.onChange(e);
+                                    getCurrentGroups(e.target.value);
+                                    setCurrentFranchiseId(e.target.value);
+                                  }}
+                                  title="Франшиза"
+                                  options={franchiseOptions}
+                                  error={errors.franchise?.message}
+                                />
+                              )}
+                              control={control}
+                            />
+                          </Grid>
+                        )}
                     </>
                   )}
+
                   {isStudentRole(selectedRole) && (
-                    <Grid item xs={12} sm={6}>
-                      <Controller
-                        name="tariff"
-                        render={({ field }) => (
-                          <CustomSelect
-                            {...field}
-                            onChange={e => {
-                              field.onChange(e);
-                            }}
-                            title="Тариф"
-                            options={tariffsOptions}
-                            error={errors?.tariff?.message?.toString()}
-                          />
-                        )}
-                        control={control}
-                      />
-                    </Grid>
+                    <>
+                      <Grid item xs={12} sm={6}>
+                        <Controller
+                          name="tariff"
+                          render={({ field }) => (
+                            <CustomSelect
+                              {...field}
+                              onChange={e => {
+                                field.onChange(e);
+                              }}
+                              title="Тариф"
+                              options={tariffsOptions}
+                              error={errors?.tariff?.message?.toString()}
+                            />
+                          )}
+                          control={control}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Controller
+                          name="group"
+                          render={({ field }) => (
+                            <CustomSelect
+                              {...field}
+                              onChange={e => {
+                                field.onChange(e);
+                              }}
+                              title="Группа"
+                              options={groupOptions}
+                              error={errors.group?.message}
+                            />
+                          )}
+                          control={control}
+                        />
+                      </Grid>
+                    </>
                   )}
-                  {isStudentTeacherEducation(selectedRole) && (
-                    <Grid item xs={12} sm={6}>
-                      <Controller
-                        name="group"
-                        render={({ field }) => (
-                          <CustomSelect
-                            {...field}
-                            onChange={e => {
-                              field.onChange(e);
-                            }}
-                            title="Группа"
-                            options={groupOptions}
-                            error={errors.group?.message}
-                          />
-                        )}
-                        control={control}
-                      />
-                    </Grid>
+                  {selectedRole === Roles.TeacherEducation && currentUser?.id && (
+                    <>
+                      <Grid item xs={12} sm={6}>
+                        <Controller
+                          name="franchise"
+                          render={({ field }) => (
+                            <CustomSelect
+                              {...field}
+                              onChange={e => {
+                                field.onChange(e);
+                                getCurrentGroups(e.target.value);
+                                setCurrentFranchiseId(e.target.value);
+                              }}
+                              title="Франшиза"
+                              options={franchiseOptions}
+                              error={errors.franchise?.message}
+                            />
+                          )}
+                          control={control}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Controller
+                          name="group"
+                          render={({ field }) => (
+                            <CustomSelect
+                              {...field}
+                              onChange={e => {
+                                field.onChange(e);
+                              }}
+                              title="Группа"
+                              options={groupOptions}
+                              error={errors.group?.message}
+                            />
+                          )}
+                          control={control}
+                        />
+                      </Grid>
+                    </>
                   )}
                   {!isStudentRole(selectedRole) && (
                     <>
