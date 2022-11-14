@@ -61,12 +61,14 @@ export default class extends Component<any, any> implements Game {
   setGuessNumber = (key: string, value: string) =>
     this.setState((prev: any) => ({
       ...prev,
-      guessNumber: { ...prev.guessNumber, [key]: value },
+      guessNumber: { ...prev.guessNumber, [key]: { label: value, value } },
     }));
 
-  updateGuessNumber = (key: string, value: string) => {
-    this.setState((prev: any) => ({ ...prev, guessNumber: { ...prev.guessNumber, [key]: value } }));
-  };
+  updateGuessNumber = (key: string, { label, value }: any) =>
+    this.setState((prev: any) => ({
+      ...prev,
+      guessNumber: { ...prev.guessNumber, [key]: { label, value } },
+    }));
 
   clearGuessNumber = () => {
     const { digitMax } = this.props;
@@ -119,32 +121,28 @@ export default class extends Component<any, any> implements Game {
   };
 
   onWin = () => {
-    const {
-      onEnd = () => {}
-    } = this.props;
+    const { onEnd = () => {} } = this.props;
 
-    const result : GameResult = {
-      result : 'win'
+    const result: GameResult = {
+      result: 'win',
     };
 
     onEnd(result);
 
     this.stop();
-  }
+  };
 
   onEnd = () => {
-    const {
-      onEnd = () => {}
-    } = this.props;
+    const { onEnd = () => {} } = this.props;
 
-    const result : GameResult = {
-      result : 'lose'
+    const result: GameResult = {
+      result: 'lose',
     };
 
     onEnd(result);
 
     this.stop();
-  }
+  };
 
   startLogic = () => {
     const { errorAacceptable } = this.props;
@@ -154,7 +152,9 @@ export default class extends Component<any, any> implements Game {
 
   checkAnswer = () => {
     const { guessNumber, secretNumber, userErrorAacceptable } = this.state;
-    const userValue = Object.values(guessNumber).join('');
+    const userValue = Object.values(guessNumber)
+      .map((item: any) => item.value)
+      .join('');
 
     let secretArray = [] as any;
     let guessArray = [] as any;
@@ -186,14 +186,19 @@ export default class extends Component<any, any> implements Game {
 
     this.setBullsAndCows(bulls, cows);
     this.setPrevGuessNumber(userValue.split(''));
-    this.clearGuessNumber();
     this.setDownUserErrorAacceptable();
-    
-    console.log('checkAnswer', { userValue, secretNumber, bulls, cows, guessArray, state: this.state });
-    if(userErrorAacceptable - 1 === 0) {
+
+    console.log('checkAnswer', {
+      userValue,
+      secretNumber,
+      bulls,
+      cows,
+      guessArray,
+      state: this.state,
+    });
+    if (userErrorAacceptable - 1 === 0) {
       return this.onEnd();
     }
-
   };
 
   renderFields = () => {
@@ -204,7 +209,7 @@ export default class extends Component<any, any> implements Game {
         key={field}
         id={field.toString()}
         options={options}
-        onChangeValue={this.updateGuessNumber}
+        onChange={this.updateGuessNumber}
         value={this.state.guessNumber[field]}
       />
     ));

@@ -33,8 +33,6 @@ const BullsAndCows: FC<GameProps> = props => {
     stopGame,
   } = useGame({ ...props, gameName });
 
-  console.log({game})
-
   return (
     <GameReturn
       stopGame={stopGame}
