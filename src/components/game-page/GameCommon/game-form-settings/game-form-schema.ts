@@ -276,3 +276,39 @@ export const STEAM_ENGINE_SCHEMA = yup.object().shape({
 });
 
 export const STEAM_ENGINE_FORM_SCHEMA = GAME_SCHEMA.concat(STEAM_ENGINE_SCHEMA);
+
+export const FRAZES_SCHEMA = yup.object().shape({
+  elementsTotal: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 ответ')
+    .max(99, 'Максимум 99 ответов')
+    .nullable(),
+  errorAacceptable: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 ошибок')
+    .max(99, 'Максимум 99 ошибок')
+    .nullable(),
+  digitMax: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 уровень')
+    .max(99, 'Максимум 99 уровней')
+    .nullable(),
+  timeComplete: yup
+    .number()
+    .notRequired()
+    .min(5, 'Минимум 5 секунд')
+    .max(3600, 'Максимум 3600 секунд')
+    .nullable(),
+  speed: yup
+    .number()
+    .notRequired()
+    .min(1, 'Минимум 1 милисекунда')
+    .max(99000, 'Максимум 99 000 милисекунд')
+    .nullable(),
+  wordsFull: yup.boolean().notRequired(),
+});
+
+export const FRAZES_FORM_SCHEMA = GAME_SCHEMA.concat(FRAZES_SCHEMA);

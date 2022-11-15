@@ -14,7 +14,7 @@ const imageBackground = require('./assets/background.png');
 
 const START_TIMER = 3;
 
-const defaultWords = ['Чашка', 'Слово 1', 'Слово 2'];
+const defaultWords = ['Чашка', 'Фразоскоп', 'Игра'];
 
 export default class extends Component<any, any> implements Game {
   timerAll: any;
@@ -23,12 +23,13 @@ export default class extends Component<any, any> implements Game {
     super(props);
 
     this.state = {
-      started: true,
+      started: false,
       success: 0,
       errors: 0,
       level: 0,
       words: defaultWords,
       userWord: '',
+      fullWord: false,
     };
   }
 
@@ -77,7 +78,9 @@ export default class extends Component<any, any> implements Game {
   };
 
   startLogic = () => {
-    const { elementsTotal } = this.props;
+    const { elementsTotal, wordsFull } = this.props;
+    this.setState({fullWord: wordsFull})
+    console.log("start logic ---", this.props)
   };
 
   onEnd = () => {

@@ -98,6 +98,17 @@ export type SteamEngineGameSettingsType = {
 
 export type SteamEngineFormType = BaseGameSettingsType & SteamEngineGameSettingsType;
 
+export type FrazesGameSettingsType = {
+  elementsTotal: number;
+  errorAacceptable: number;
+  digitMax: number;
+  timeComplete: number;
+  speed: number;
+  wordsFull: boolean;
+}
+
+export type FrazesFormType = BaseGameSettingsType & FrazesGameSettingsType;
+
 export type GamesFormSettingsType = BaseGameSettingsType &
   (
     | ShiftVerticalFormType
