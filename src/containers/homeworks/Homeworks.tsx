@@ -23,8 +23,8 @@ const Homeworks: FC<HomeworksProps> = ({ className }) => {
           <Homework className={styles.homework} key={Math.random()} {...homework} />
         ))} */}
         <div>
-          <div className={styles.title}>{currentWork.title}</div>
-          <div className={styles.text}>{currentWork.text}</div>
+          <div className={styles.title}>{currentWork.work.title}</div>
+          <div className={styles.text}>{currentWork.work.text}</div>
         </div>
       </div>
     );

@@ -11,7 +11,6 @@ export type GamesT = Omit<GameT, 'code'>[];
 export type SoundT = 0 | 1 | undefined;
 export type PresetsGameSettings = {
   timeComplete: number;
-  timeMax: number;
   elementsTotal: number;
   levelMaxCompleted: number;
   gameCode: string;
@@ -58,6 +57,7 @@ export type EditOrCreatePresetParamsT = {
   }[];
   level: string;
   status: string;
+  timeMax: number;
 };
 
 export type GamePresetT = {
@@ -66,6 +66,7 @@ export type GamePresetT = {
   game: GameT;
   status: StatusTypes;
   level: string;
+  timeMax: number;
   settings: Partial<PresetsGameSettings>[];
 };
 

@@ -20,6 +20,7 @@ import { removeEmptyFields } from 'utils/removeEmptyFields';
 import { throwErrorMessage } from 'utils/throwErrorMessage';
 import { SearchParamsType } from '../types/SearchParamsType';
 import appStore from 'app/stores/appStore';
+import { TIME_MAX } from 'constants/constants';
 
 type IdentificationParamsType = Pick<
   PlaySendResultT,
@@ -38,7 +39,6 @@ class GamesStore {
 
   private defaultSettings: PresetsGameSettings = {
     timeComplete: 10,
-    timeMax: 3600,
     elementsTotal: 4,
     levelMaxCompleted: 1,
     gameCode: '',
@@ -70,6 +70,7 @@ class GamesStore {
       },
       status: '' as StatusTypes,
       level: 'easy',
+      timeMax: TIME_MAX,
       settings: [{ ...this.defaultSettings }] as PresetsGameSettings[],
     },
     usedInWorks: [],
@@ -180,6 +181,7 @@ class GamesStore {
             },
             status: '' as StatusTypes,
             level: '',
+            timeMax: TIME_MAX,
             settings: [{ ...this.defaultSettings }] as PresetsGameSettings[],
           },
           usedInWorks: [],
@@ -191,14 +193,14 @@ class GamesStore {
   };
 
   createPresets = async (params: EditOrCreatePresetParamsT) => {
-    params.settings[0].timeMax = 3600;
+    params.timeMax = 3600;
     await gamesService.createPresetGame(params);
     await this.getPresets();
     this.filterPresets(this.game.code);
   };
 
   editPreset = async (params: EditOrCreatePresetParamsT) => {
-    params.settings[0].timeMax = 3600;
+    params.timeMax = 3600;
     await gamesService.editPresetGame(this.gamePreset.gamePreset.id, params);
     await this.getPresets();
     this.filterPresets(this.game.code);

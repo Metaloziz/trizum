@@ -6,6 +6,7 @@ import { getLessonIndex } from 'components/pupil-main/helper/getLessonIndex';
 import { Switcher } from 'components/pupil-main/HomeWorksList/WorkItems/Switcher/Switcher';
 import { Work } from 'components/pupil-main/HomeWorksList/WorkItems/Work/Work';
 import { WorkItems } from 'components/pupil-main/HomeWorksList/WorkItems/WorkItems';
+import { ONE_DIFFERENCE_INDEX } from 'constants/constants';
 import { FC, useState, useEffect } from 'react';
 import { whoCanUseIt } from 'utils/whoCanUseIt';
 import style from './HomeWorksList.module.scss';
@@ -26,7 +27,7 @@ export const HomeWorksList: FC<Props> = ({ works, schedule }) => {
 
   return (
     <div className={classNames(style.container)}>
-      {works ? (
+      {!!works.length ? (
         <>
           <Panel className={style.panel}>Домашнее задание</Panel>
           {whoCanUseIt([Roles.TeacherEducation]) && (
@@ -39,7 +40,7 @@ export const HomeWorksList: FC<Props> = ({ works, schedule }) => {
           {isListView ? (
             <WorkItems works={works} schedule={schedule} />
           ) : (
-            <Work work={works[lessonIndex]} lesson={schedule[lessonIndex]} />
+            <Work work={works[lessonIndex - ONE_DIFFERENCE_INDEX]} lesson={schedule[lessonIndex]} />
           )}
         </>
       ) : (

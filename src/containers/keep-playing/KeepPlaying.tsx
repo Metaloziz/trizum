@@ -7,11 +7,9 @@ import { GamePresetFromLoadme } from 'app/types/LoadMeTypes';
 
 import classNames from 'classnames';
 import KeepPlayingItem from 'components/keep-playing-item/KeepPlayingItem';
-import { getLessonIndex } from 'components/pupil-main/helper/getLessonIndex';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getActiveClassGroup } from 'utils/getActiveClassGroup';
-import { getNearestLessonObject } from 'utils/getNearestLessonObject/getNearestLessonObject';
 
 import styles from './KeepPlaying.module.scss';
 
@@ -21,7 +19,7 @@ const KeepPlaying: FC<KeepPlayingProps> = ({ className }) => {
   const { getPreset, setActiveWork } = gamesStore;
   const { currentWork, user } = appStore;
 
-  const gamePresets = currentWork?.gamePresets;
+  const gamePresets = currentWork?.work.gamePresets;
 
   const setRoute = async (game: GamePresetFromLoadme) => {
     const gameCode = game?.gamePreset?.game.code || '';
@@ -32,7 +30,7 @@ const KeepPlaying: FC<KeepPlayingProps> = ({ className }) => {
 
     setActiveWork({
       userGroupId: group?.id || '',
-      workGamePresetId: game.gamePreset.id,
+      workGamePresetId: game.id,
       courseWorkId: currentWork?.id || '', // todo
     });
     navigate(`${AppRoutes.Game}/${gameCode}`);

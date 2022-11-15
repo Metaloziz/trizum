@@ -4,7 +4,8 @@ import tokenService from 'app/services/tokenService';
 import { EmptyUser } from 'app/stores/emptyUser';
 import usersStore from 'app/stores/usersStore';
 import { GameIdWithCode } from 'app/types/GameTypes';
-import { WorkFromLoadme } from 'app/types/LoadMeTypes';
+import { WorkWithIdFromLoadme } from 'app/types/LoadMeTypes';
+import { ONE_DIFFERENCE_INDEX } from 'constants/constants';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { LoginInfo } from 'pages/login/Login';
 import { dateNow } from 'utils/dateNow';
@@ -34,7 +35,7 @@ class AppStore {
 
   currentGameIds: GameIdWithCode[] = [];
 
-  currentWork?: WorkFromLoadme;
+  currentWork?: WorkWithIdFromLoadme;
 
   hwDate?: string;
   /* fields student only */
@@ -157,10 +158,12 @@ class AppStore {
         const index = schedule.findIndex(el => el.date === lesson.date && lesson.from === el.from);
 
         if (index !== -1) {
-          const currentWork = classType.group.course.works.find(el => el.index === index);
+          const currentWork = classType.group.course.works.find(
+            el => el.index === index - ONE_DIFFERENCE_INDEX,
+          );
 
           if (currentWork) {
-            this.currentWork = currentWork.work;
+            this.currentWork = currentWork;
           }
         }
       }
