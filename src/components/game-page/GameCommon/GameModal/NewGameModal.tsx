@@ -137,8 +137,8 @@ export const NewGameModal: FC<PropsT> = observer(props => {
             gamePreset={gamePreset.gamePreset}
             onFormSubmit={onSubmit}
             deletedPreset={deletedPreset}
-            colorsMapState={colorsMapState}
-            setColorModal={setColorModal}
+            // colorsMapState={colorsMapState}
+            // setColorModal={setColorModal}
           />
         )}
 
