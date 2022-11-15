@@ -41,6 +41,10 @@ import {
     PropsDefault as ArgusPropsDefault,
     Component as ArgusComponent
 } from './games/argus';
+import {
+    PropsDefault as FrazesPropsDefault,
+    Component as FrazesComponent
+} from './games/frazes';
 
 export const GameIdentifiers = {
     shulte: 'shulte',
@@ -53,6 +57,7 @@ export const GameIdentifiers = {
     memoryRhythm: 'memoryRhythm',
     fireflies: 'fireflies',
     argus: 'argus',
+    frazes: 'frazes',
 };
 
 export const GameList = {
@@ -106,6 +111,11 @@ export const GameList = {
         component: ArgusComponent,
         props: ArgusPropsDefault
     },
+    [GameIdentifiers.frazes]: {
+        name: 'Фразоскоп',
+        component: FrazesComponent,
+        props: FrazesPropsDefault
+    }
 };
 
 export function factory(

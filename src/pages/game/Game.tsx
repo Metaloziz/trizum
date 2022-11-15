@@ -16,6 +16,7 @@ import Blink from '../../assets/images/game/blink.png';
 import Steam from '../../assets/images/game/steam.png';
 import Argus from '../../assets/images/game/argus.png';
 import Fireflies from '../../assets/images/game/firelines.png';
+import Frazes from '../../assets/images/game/frazes.png';
 
 import { Factory } from '../../games';
 
@@ -71,6 +72,11 @@ const Games = [
     title: 'Аргус',
     name: 'argus',
     prevImg: Argus,
+  },
+  {
+    title: 'Фразоскоп',
+    name: 'frazes',
+    prevImg: Frazes,
   },
 ];
 
