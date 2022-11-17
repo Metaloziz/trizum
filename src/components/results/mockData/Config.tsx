@@ -1,13 +1,11 @@
-import { ScriptableScaleContext } from 'chart.js';
-import { AnyObject } from 'chart.js/types/basic';
-
-const labels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+import { days } from 'components/results/mockData/helper/days';
+import { foo } from 'components/results/mockData/helper/foo';
 
 const Utils = {
   CHART_COLORS: {
-    blue: '#002bff',
-    yellow: '#ffa700',
-    red: '#ff0000',
+    blue: '#00eaff',
+    yellow: '#00eaff',
+    red: '#00eaff',
   },
 };
 
@@ -33,14 +31,15 @@ function getGradient(ctx: any, chartArea: any) {
 }
 
 const MONOTONE = 'monotone' as const;
+const labels = days({ count: 31 });
 
 export const config = {
   data: {
     labels,
     datasets: [
       {
-        label: 'My First dataset',
-        backgroundColor: 'red',
+        label: 'Затраченное время',
+        // backgroundColor: 'red',
         borderWidth: 2,
         pointRadius: 0,
         borderColor(context: any) {
@@ -54,7 +53,7 @@ export const config = {
           // eslint-disable-next-line consistent-return
           return getGradient(ctx, chartArea);
         },
-        data: [0, 80, 5, 2, 20, 70, 45, 65, 5, 2, 20, 70, 45, 65],
+        data: foo(),
         cubicInterpolationMode: MONOTONE,
       },
     ],
@@ -68,17 +67,11 @@ export const config = {
     scales: {
       x: {
         grid: {
-          color(context: ScriptableScaleContext, options: AnyObject) {
+          color() {
             return '#fff';
           },
         },
         ticks: {
-          callback: (e: number | string) => {
-            if (typeof e === 'number' && e % 2) {
-              return '';
-            }
-            return e;
-          },
           color: '#BABEC6',
         },
       },
@@ -89,18 +82,12 @@ export const config = {
         },
         ticks: {
           display: false,
-          callback: (e: number | string) => {
-            if (typeof e === 'number' && e % 2) {
-              return e;
-            }
-            return '';
-          },
         },
       },
     },
     plugins: {
       legend: {
-        display: false,
+        display: true,
       },
     },
     backgroundColor: '',

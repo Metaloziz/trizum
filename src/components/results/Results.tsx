@@ -1,3 +1,5 @@
+import appStore from 'app/stores/appStore';
+import usersStore from 'app/stores/usersStore';
 import {
   ArcElement,
   CategoryScale,
@@ -26,9 +28,12 @@ import SelectResults from 'components/molecules/SelectResults/SelectResults';
 import { config } from 'components/results/mockData/Config';
 import { gamesAr, options, ResultsView, gamesArr } from 'components/results/mockData/mockData';
 import Tablet from 'components/tablet/Tablet';
+import { observer } from 'mobx-react-lite';
 import React, { FC, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { SingleValue } from 'react-select';
+
+// ResultTable
 
 import styles from './Results.module.scss';
 
@@ -56,7 +61,9 @@ export type ValueLabelT = {
   label: string;
 };
 
-const Results: FC = () => {
+const Results: FC = observer(() => {
+
+
   const [selectedGames, setSelectedGames] = useState<ValueLabelT[]>([]);
   const [view, setView] = useState(ResultsView.Table);
   const [selectValue, setSelectValue] = useState<SingleValue<ValueLabelT>>();
@@ -112,18 +119,20 @@ const Results: FC = () => {
                 {/* <FilterItem title=" Те, что окрашены в красный цвет" /> */}
                 {/* <FilterItem title=" Те, что окрашены в красный цвет" /> */}
               </div>
-              <SelectResults
-                options={options}
-                onChange={onChangeSelect}
-                className={styles.filters_select}
-              />
+              {/* <SelectResults */}
+              {/*  options={options} */}
+              {/*  onChange={onChangeSelect} */}
+              {/*  className={styles.filters_select} */}
+              {/* /> */}
             </div>
           </div>
-          {view === ResultsView.Table ? (
-            <ResultTable />
-          ) : (
-            <Line className={styles.canvas} {...config} />
-          )}
+
+          {/* график */}
+
+          <Line className={styles.canvas} {...config} />
+
+          {/* график */}
+
           <div className={styles.buttons}>
             <div className={styles.buttonsView}>
               <BlueButton
@@ -187,16 +196,8 @@ const Results: FC = () => {
             </div>
           </div>
         </Tablet>
-        {/* <div className={styles.description}> */}
-        {/*  <h4>Скорость распознавания образов</h4> */}
-        {/*  <p className={styles.text}> */}
-        {/*    На экране будут появляться группы шариков с разными цветами, буквами */}
-        {/*    и символами. Те, что окрашены в красный цвет - можно уничтожать, все */}
-        {/*    остальные нельзя. */}
-        {/*  </p> */}
-        {/* </div> */}
       </div>
     </div>
   );
-};
+});
 export default Results;
