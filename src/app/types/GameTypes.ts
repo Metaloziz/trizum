@@ -38,6 +38,7 @@ export type EditOrCreatePresetParamsT = {
   name: string;
   settings: {
     timeComplete: number;
+    timeMax: number;
     elementsTotal: number;
     levelMaxCompleted: number;
     gameCode: string;
@@ -58,16 +59,7 @@ export type EditOrCreatePresetParamsT = {
   }[];
   level: string;
   status: string;
-};
-
-export type CreatePresetResponseT = {
-  time: number;
-  levelMaxCompleted: number;
-  gameCode: string;
-  actionsSuccessfulCount: number;
-  actions: number;
-  templateCode: number;
-  speed: number;
+  timeMax: number;
 };
 
 export type GamePresetT = {
@@ -76,6 +68,7 @@ export type GamePresetT = {
   game: GameT;
   status: StatusTypes;
   level: string;
+  timeMax: number;
   settings: Partial<PresetsGameSettings>[];
 };
 
@@ -140,15 +133,6 @@ export type PlaySendResultT = {
 
 export type ResultT = 'end' | 'lose' | 'win';
 
-export type ResultsT = {
-  time: number;
-  timeDiff: number;
-  score: number;
-  success: number;
-  failed: number;
-  result: ResultT;
-};
-
 export type ResultsNewT = {
   levelMinCompleted?: number;
   levelMaxCompleted?: number;
@@ -159,12 +143,6 @@ export type ResultsNewT = {
   timeMax?: number;
   time: number;
   finished: boolean;
-};
-
-export const RESULT = {
-  end: 'Конец игры',
-  lose: 'Проигрыш',
-  win: 'Победа',
 };
 
 export type GameIdWithCode = {

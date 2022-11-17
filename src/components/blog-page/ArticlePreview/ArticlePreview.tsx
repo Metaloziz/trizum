@@ -8,17 +8,18 @@ type Props = {
 };
 export const ArticlePreview: FC<Props> = ({ articles }) => (
   <div>
-    {articles.map(item => {
-      const picture = findPictureUrl(item.content);
+    {articles.map(({ title, content, test, id, status, description }) => {
+      const picture = findPictureUrl(content);
 
       return (
         <BlogItem
-          id={item.id}
-          key={item.id}
-          title={item.title}
-          description={item.description.text}
+          id={id}
+          key={id}
+          title={title}
+          description={description}
           imgSrc={picture}
-          testId={item.test}
+          testId={test}
+          status={status}
         />
       );
     })}

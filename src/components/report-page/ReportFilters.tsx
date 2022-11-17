@@ -226,7 +226,7 @@ const ReportFilters: React.FC = observer(() => {
               px: 1,
             }}
           >
-            <Button variant="addExel">Выгрузить в Excel</Button>
+            {/* <Button variant="addExel">Выгрузить в Excel</Button> */}
             <Button onClick={clearQueryFieldsWithRequest}>Сбросить</Button>
             <Button onClick={searchHandler}>Найти</Button>
           </Stack>

@@ -13,6 +13,11 @@ export const removeEmptyFields = (obj: any) => {
     if (key === 'page') {
       result[key] = obj[key];
     }
+
+    // так как отчество не обязательное, то его можно удалить
+    if (key === 'middleName') {
+      result[key] = obj[key];
+    }
   });
   return result;
 };

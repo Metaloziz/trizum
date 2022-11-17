@@ -1,10 +1,11 @@
 import { Grid, FormControl, InputLabel, Select } from '@mui/material';
+import { Roles } from 'app/enums/Roles';
 import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react';
-import appStore, { Roles } from '../../../app/stores/appStore';
+import appStore from '../../../app/stores/appStore';
 import teacherMainStore from '../../../app/stores/scheduleStore';
-import { checkRoleForClasses } from '../../../utils/checkRoleForClasses';
-import { getOptionMui } from '../../../utils/getOption';
+import { checkRoleForClasses } from 'utils/checkRoleForClasses';
+import { getOptionMui } from 'utils/getOption';
 
 export const ChildrenToolbar: FC = observer(() => {
   const { role } = appStore;

@@ -1,27 +1,14 @@
 import { Grid, Stack } from '@mui/material';
-import { GroupLevels, GroupsLevelsValue } from 'app/enums/GroupLevels';
-import { StatusEnum, StatusTypes } from 'app/enums/StatusTypes';
+import { StatusTypes } from 'app/enums/StatusTypes';
 import Button from 'components/button/Button';
 import { BaseGameSettingsType } from 'components/game-page/GameCommon/game-form-settings/game-form-types';
 import styles from 'components/game-page/GameCommon/GameModal/gameModal.module.scss';
-import CustomSelect, { Option } from 'components/select-mui/CustomSelect';
+import CustomSelect from 'components/select-mui/CustomSelect';
 import TextFieldCustom from 'components/text-field-mui/TextFieldCustom';
+import { GROUP_LEVEL_MENU, STATUS_MENU } from 'constants/selectMenu';
 import React, { ReactElement, ReactNode } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { convertEmptyStringToNull, convertNullToEmptyString } from 'utils/convertTextFieldUtils';
-
-const GROUP_LEVEL_MENU: Option[] = [
-  { value: GroupsLevelsValue.easy, label: GroupLevels.easy },
-  { value: GroupsLevelsValue.medium, label: GroupLevels.medium },
-  { value: GroupsLevelsValue.hard, label: GroupLevels.hard },
-];
-
-const STATUS_MENU: Option[] = [
-  { value: StatusTypes.draft, label: StatusEnum.draft },
-  { value: StatusTypes.active, label: StatusEnum.active },
-  { value: StatusTypes.removal, label: StatusEnum.removal },
-  { value: StatusTypes.archive, label: StatusEnum.archive },
-];
 
 type BaseFormGameSettingsType = {
   children: ReactNode;

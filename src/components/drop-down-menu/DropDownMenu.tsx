@@ -1,37 +1,34 @@
-import { FC, useEffect, useState } from 'react';
+import { AppRoutes } from 'app/enums/AppRoutes';
+import { Roles } from 'app/enums/Roles';
+import appStore from 'app/stores/appStore';
+import homeImage from 'assets/svgs/student-navigation-link-home.svg';
+import adminImg from 'assets/svgs/student-navigation-sidebar/admin.svg';
+import adminFranchiseImg from 'assets/svgs/student-navigation-sidebar/admin_franchise.svg';
+import articlesImg from 'assets/svgs/student-navigation-sidebar/articles.svg';
+import gameListImg from 'assets/svgs/student-navigation-sidebar/gameList.svg';
+import groupImg from 'assets/svgs/student-navigation-sidebar/group_class.svg';
+import homeworkImg from 'assets/svgs/student-navigation-sidebar/homework.svg';
+import olimpiad from 'assets/svgs/student-navigation-sidebar/olimpiad.svg';
+import paymentImg from 'assets/svgs/student-navigation-sidebar/payment.svg';
+import reportImg from 'assets/svgs/student-navigation-sidebar/report.svg';
+import scheduleImg from 'assets/svgs/student-navigation-sidebar/shedule.svg';
+import tariffImg from 'assets/svgs/student-navigation-sidebar/tariff.svg';
+import teacherStatistic from 'assets/svgs/student-navigation-sidebar/teacherStatistic.svg';
+import usersImg from 'assets/svgs/student-navigation-sidebar/users.svg';
 
 import cn from 'classnames';
-
-import styles from './DropDownMenu.module.scss';
-
-import { AppRoutes } from 'app/enums/AppRoutes';
-import homeImage from 'assets/svgs/student-navigation-link-home.svg';
-import resultsImage from 'assets/svgs/student-navigation-sidebar/result.svg';
-import homeworkImg from 'assets/svgs/student-navigation-sidebar/homework.svg';
-import adminFranchiseImg from 'assets/svgs/student-navigation-sidebar/admin_franchise.svg';
-import reportImg from 'assets/svgs/student-navigation-sidebar/report.svg';
-import usersImg from 'assets/svgs/student-navigation-sidebar/users.svg';
-import scheduleImg from 'assets/svgs/student-navigation-sidebar/shedule.svg';
-import paymentImg from 'assets/svgs/student-navigation-sidebar/payment.svg';
-import tariffImg from 'assets/svgs/student-navigation-sidebar/tariff.svg';
-import gameListImg from 'assets/svgs/student-navigation-sidebar/gameList.svg';
-import articlesImg from 'assets/svgs/student-navigation-sidebar/articles.svg';
-import groupImg from 'assets/svgs/student-navigation-sidebar/group_class.svg';
-import adminImg from 'assets/svgs/student-navigation-sidebar/admin.svg';
-import olimpiad from 'assets/svgs/student-navigation-sidebar/olimpiad.svg';
-import teacherStatistic from 'assets/svgs/student-navigation-sidebar/teacherStatistic.svg';
 
 import Navigation from 'components/navigation/Navigation';
 import useComponentVisible from 'HOC/drop-down-hook/DropDownHook';
 import { observer } from 'mobx-react-lite';
-import appStore, { Roles } from 'app/stores/appStore';
+import { FC, useEffect, useState } from 'react';
+
+import styles from './DropDownMenu.module.scss';
 
 interface Props {
   active: boolean;
   onClose: () => void;
 }
-
-export type LinkT = { label: string; href: string; imageSrc: string };
 
 const {
   Index,

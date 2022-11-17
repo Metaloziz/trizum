@@ -1,4 +1,4 @@
-import { Roles } from 'app/stores/appStore';
+import { Roles } from 'app/enums/Roles';
 
 export const checkRoleForClasses = (role: Roles) => {
   switch (role) {

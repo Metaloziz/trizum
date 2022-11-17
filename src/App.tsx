@@ -1,6 +1,7 @@
-import { ArticleFromEditor } from 'components/blog-page/ArticleFromEditor/ArticleFromEditor';
 import OlympiadsListPage from 'components/olympiads-list-page/OlympiadsListPage';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { Article } from 'pages/article/Article';
+import BlogEditor from 'pages/blog/blog-editor/BlogEditor';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import DefaultLayout from 'components/layout/default/DefaultLayout';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
@@ -8,7 +9,6 @@ import LoginWithSMS from 'pages/login/LoginWithSMS/LoginWithSMS';
 import { TestsList } from 'pages/testing/TestsList/TestsList';
 import { SecondaryRoutes } from 'app/enums/SecondaryRoutes';
 import Franchising from 'pages/franchising/Franchising';
-import AddNewsPage from 'components/add-news-page';
 import Statistic from 'pages/statistic/Statistic';
 import Olympiads from 'pages/olympiads/Olympiads';
 import Result from 'pages/testing/result/Result';
@@ -42,8 +42,10 @@ const App = observer(() => (
 
           <Route path={AppRoutes.Blog}>
             <Route path="" element={<Blog />} />
-            <Route path={SecondaryRoutes.AddArticle} element={<AddNewsPage />} />
-            <Route path={`:${SecondaryRoutes.ArticleName}`} element={<ArticleFromEditor />} />
+            <Route path=":id" element={<Article />} />
+            <Route path={AppRoutes.BlogEditor}>
+              <Route path=":id" element={<BlogEditor />} />
+            </Route>
           </Route>
 
           <Route path={AppRoutes.Classes}>

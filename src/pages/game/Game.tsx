@@ -1,5 +1,6 @@
 import { AppRoutes } from 'app/enums/AppRoutes';
-import appStore, { Roles } from 'app/stores/appStore';
+import { Roles } from 'app/enums/Roles';
+import appStore from 'app/stores/appStore';
 import gamesStore from 'app/stores/gamesStore';
 import Image from 'components/image/Image';
 import { observer } from 'mobx-react';
@@ -16,6 +17,7 @@ import Blink from '../../assets/images/game/blink.png';
 import Steam from '../../assets/images/game/steam.png';
 import Argus from '../../assets/images/game/argus.png';
 import Fireflies from '../../assets/images/game/firelines.png';
+import Difference from '../../assets/images/game/difference.png';
 import Frazes from '../../assets/images/game/frazes.png';
 
 import { Factory } from '../../games';
@@ -74,10 +76,15 @@ const Games = [
     prevImg: Argus,
   },
   {
+    title: 'Найди отличие',
+    name: 'difference',
+    prevImg: Difference,
+  },
+  {
     title: 'Фразоскоп',
     name: 'frazes',
     prevImg: Frazes,
-  },
+  }
 ];
 
 class Game extends Component<any, any> {
@@ -130,6 +137,7 @@ class Game extends Component<any, any> {
         gameResult: result,
       },
       async () => {
+        console.log("on end --- game ---", result)
         await gamesStore.sendResults({
           userGroupId: '1ed25e67-b3ef-6bc2-9492-95bc14986080',
           courseWorkId: '1ed25e4d-c767-6336-80f6-5d295491aaa1',
@@ -206,16 +214,16 @@ class Game extends Component<any, any> {
 
     return (
       <div className={styles.innerContent}>
-        {/*     {(role === Roles.Methodist || role === Roles.Admin) && ( 
-          <GameModal open={isOpenModal} onClose={this.toggleModal} deletePreset={deletePreset} /> 
-         )} 
-         <GameResultModal 
-          open={resultModal} 
-          time={gameResult.time} 
-          error={gameResult.failed} 
-          success={gameResult.success} 
-          onClose={this.closeResultModal} 
-          onStart={this.onRepeat} 
+        {/*     {(role === Roles.Methodist || role === Roles.Admin) && (
+          <GameModal open={isOpenModal} onClose={this.toggleModal} deletePreset={deletePreset} />
+         )}
+         <GameResultModal
+          open={resultModal}
+          time={gameResult.time}
+          error={gameResult.failed}
+          success={gameResult.success}
+          onClose={this.closeResultModal}
+          onStart={this.onRepeat}
          /> */}
         <div className={styles.gameList}>
           {Games.map(gam => (

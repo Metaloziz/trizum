@@ -3,7 +3,7 @@ import { Box, FormControl, Grid, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { SexEnum } from 'app/enums/CommonEnums';
-import { Roles } from 'app/stores/appStore';
+import { Roles } from 'app/enums/Roles';
 import groupStore from 'app/stores/groupStore';
 import tariffsStore from 'app/stores/tariffsStore';
 import usersStore from 'app/stores/usersStore';
@@ -16,10 +16,7 @@ import { REG_NAME } from 'constants/regExp';
 import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { convertGroupOptions } from 'utils/convertGroupOptions';
-import { convertSexOptions } from 'utils/convertSexOptions';
-import { convertTariffOptions } from 'utils/convertTariffOptions';
-import { maxBirthdayYearStudent, minBirthdayYear } from 'utils/dateMask';
+import { convertGroupOptions, convertSexOptions, convertTariffOptions, getMaxMinYear } from 'utils';
 import * as yup from 'yup';
 import { action } from './action/action';
 
@@ -84,8 +81,8 @@ export const AddSecondChildForm: FC<Props> = observer(({ onCloseModal }) => {
     birthdate: yup
       .date()
       .required('Обязательное поле')
-      .min(`01-01-${minBirthdayYear}`, 'Не верно выбран возраст')
-      .max(`01-01-${maxBirthdayYearStudent}`, 'Ученик не может быть младше 3 лет'),
+      .min(getMaxMinYear(17), 'Не верно выбран возраст')
+      .max(getMaxMinYear(3), 'Ученик не может быть младше 3 лет'),
 
     tariff: yup.string().required('Обязательное поле'),
     group: yup.string().required('Обязательное поле'),

@@ -1,6 +1,6 @@
+import { Roles } from 'app/enums/Roles';
 import authService from 'app/services/authService';
 import usersService from 'app/services/usersService';
-import { Roles } from 'app/stores/appStore';
 import { RequestRegister } from 'app/types/AuthTypes';
 import { SearchUserType } from 'app/types/SearchUserType';
 import { UpdateParentingPayloadType } from 'app/types/updateParentingPayloadType';
@@ -15,6 +15,7 @@ import { makeAutoObservable, runInAction } from 'mobx';
 import { checkErrorMessage, ErrorMessageType } from 'utils/checkErrorMessage';
 import { dateNow } from 'utils/dateNow';
 import { getNearestLessonObject } from 'utils/getNearestLessonObject/getNearestLessonObject';
+import { throwErrorMessage } from 'utils/throwErrorMessage';
 import groupsService from '../services/groupsService';
 
 class UsersStore {
@@ -48,6 +49,7 @@ class UsersStore {
     page: 0,
     city: '',
     franchiseId: '',
+    groupId: '',
     lastName: '',
     middleName: '',
     firstName: '',
@@ -110,7 +112,7 @@ class UsersStore {
       await this.getUsers();
       return newUser;
     } catch (e) {
-      console.warn(e);
+      throwErrorMessage(e);
     }
     return undefined;
   };
@@ -129,7 +131,7 @@ class UsersStore {
       // await this.getOneUser(userId);
       return res;
     } catch (e) {
-      console.warn(e);
+      throwErrorMessage(e);
     }
     return undefined;
   };
@@ -138,7 +140,7 @@ class UsersStore {
     try {
       return await usersService.createParenting(data);
     } catch (e) {
-      console.warn(e);
+      throwErrorMessage(e);
       return undefined;
     }
   };
@@ -151,7 +153,7 @@ class UsersStore {
       });
       return res;
     } catch (e) {
-      console.warn(e);
+      throwErrorMessage(e);
     }
     return undefined;
   };

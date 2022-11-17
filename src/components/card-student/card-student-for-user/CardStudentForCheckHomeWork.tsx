@@ -1,4 +1,4 @@
-import { Roles } from 'app/stores/appStore';
+import { Roles } from 'app/enums/Roles';
 import usersStore from 'app/stores/usersStore';
 import iconFlag from 'assets/svgs/icon-flag.svg';
 import iconMonkey from 'assets/svgs/monkey.svg';
@@ -8,7 +8,7 @@ import Image from 'components/image/Image';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { SecondaryRoutes } from '../../../app/enums/SecondaryRoutes';
+import { SecondaryRoutes } from 'app/enums/SecondaryRoutes';
 
 import iconTablet from '../../../assets/svgs/icon-tablet.svg';
 import iconParrot from '../../../assets/svgs/parrot.svg';

@@ -1,15 +1,15 @@
-import { FC } from 'react';
+import { Roles } from 'app/enums/Roles';
+
+import appStore from 'app/stores/appStore';
+import { HomeworksProps } from 'app/types/ComponentsProps';
 
 import classNames from 'classnames';
+import Panel from 'components/panel/Panel';
+import { FC } from 'react';
 
 import styles from './Homeworks.module.scss';
 
-import appStore, { Roles } from 'app/stores/appStore';
-import { HomeworksProps } from 'app/types/ComponentsProps';
-import Homework from 'components/homework/Homework';
-import Panel from 'components/panel/Panel';
-
-const Homeworks: FC<HomeworksProps> = ({ homeworks, className }) => {
+const Homeworks: FC<HomeworksProps> = ({ className }) => {
   const { role, currentWork, hwDate } = appStore;
   if (currentWork && hwDate) {
     return (
@@ -23,8 +23,8 @@ const Homeworks: FC<HomeworksProps> = ({ homeworks, className }) => {
           <Homework className={styles.homework} key={Math.random()} {...homework} />
         ))} */}
         <div>
-          <div className={styles.title}>{currentWork.title}</div>
-          <div className={styles.text}>{currentWork.text}</div>
+          <div className={styles.title}>{currentWork.work.title}</div>
+          <div className={styles.text}>{currentWork.work.text}</div>
         </div>
       </div>
     );

@@ -1,17 +1,19 @@
-import { makeAutoObservable, runInAction } from 'mobx';
-
 import { StatusTypes } from 'app/enums/StatusTypes';
 import { articlesService } from 'app/services/articlesService';
-import { ArticleT } from 'app/types/ArticleT';
-import { executeError } from 'utils/executeError';
-import { findDescription } from 'utils/findDescription';
 import { ArticlePayloadT } from 'app/types/ArticlePayloadT';
+import { ArticleT } from 'app/types/ArticleT';
+import { Nullable } from 'app/types/Nullable';
 import { SearchParams } from 'app/types/SearchParams';
-import { OneTestBodyT } from 'app/types/TestsT';
 import { TimeZoneType } from 'app/types/TimeZoneType';
-import { ArticleDescriptionType } from 'app/types/ArticleDescriptionType';
 
-type ArticleStoreType = ArticleT & { description: ArticleDescriptionType };
+import { ArticleFormT } from 'components/article-editor/ArticleEditorForm/ArticleEditorForm';
+import { MyParagraphElement } from 'components/PlateEditor/types';
+import { makeAutoObservable, runInAction } from 'mobx';
+import { executeError } from 'utils/executeError';
+import { deleteDescription, findDescription } from 'utils/findDescription';
+import { getArticleRolesArray } from 'utils/getArticleRolesArray';
+
+type ArticleStoreType = ArticleT & { description: string };
 export type ArticlesStoreType = Omit<ArticleStoreType, 'test'> & { test: string };
 
 class ArticlesStore {
@@ -19,8 +21,8 @@ class ArticlesStore {
     {
       id: '1',
       title: 'default',
-      description: { type: '', text: '' },
-      content: [{ text: '' }],
+      description: '',
+      content: [],
       test: '',
       status: StatusTypes.draft,
       createdAt: new TimeZoneType(),
@@ -40,23 +42,37 @@ class ArticlesStore {
 
   total = 1;
 
-  isSuccessPost: boolean | null = null;
+  successPost: Nullable<string> = null;
 
-  article: ArticleStoreType = {
-    id: '1',
-    title: 'default',
-    content: [{ text: '' }],
-    description: { type: '', text: '' }, // not from API
-    test: new OneTestBodyT(),
+  articleId: Nullable<string> = null;
+
+  article: Nullable<ArticleStoreType> = null;
+  //   {
+  //   id: '1',
+  //   title: 'default',
+  //   content: [],
+  //   description: '', // not from API
+  //   test: new OneTestBodyT(),
+  //   status: StatusTypes.draft,
+  //   createdAt: new TimeZoneType(),
+  //   forFranchisee: true,
+  //   forFranchiseeAdmin: true,
+  //   forMethodist: true,
+  //   forStudents: true,
+  //   forTeachers: true,
+  //   forTeachersEducation: true,
+  //   forTutor: true,
+  // };
+
+  defaultValues: Nullable<ArticleFormT> = null;
+
+  private newArticleValues: ArticleFormT = {
+    roles: ['null'],
+    description: '',
+    title: '',
+    testId: null,
     status: StatusTypes.draft,
-    createdAt: new TimeZoneType(),
-    forFranchisee: true,
-    forFranchiseeAdmin: true,
-    forMethodist: true,
-    forStudents: true,
-    forTeachers: true,
-    forTeachersEducation: true,
-    forTutor: true,
+    content: [{ type: 'p', children: [{ text: '' }] } as MyParagraphElement],
   };
 
   isLoading: boolean = false;
@@ -95,11 +111,23 @@ class ArticlesStore {
   getCurrentArticle = (articleId: string) => {
     executeError(async () => {
       const result = await articlesService.getArticle(articleId);
+      const { content, status, title, test } = result;
+      const roles: Nullable<string[]> = getArticleRolesArray(result);
 
       runInAction(() => {
-        const description = findDescription(result.content);
+        const articleDescription = findDescription(content);
+        const newContent = deleteDescription(content);
 
-        this.article = { ...result, description };
+        this.defaultValues = {
+          title,
+          roles,
+          status,
+          content: newContent,
+          description: articleDescription,
+          testId: test ? test.id : null,
+        };
+
+        this.article = { ...result, description: articleDescription, content: newContent };
       });
     }, this);
   };
@@ -109,10 +137,10 @@ class ArticlesStore {
       const result = await articlesService.postArticle(newArticle);
 
       if (result?.id) {
-        this.getCurrentArticle(result.id);
+        this.setArticleId(result.id);
       }
       runInAction(() => {
-        this.isSuccessPost = !!result?.id;
+        this.successPost = 'Cтатья создана';
       });
     }, this);
   };
@@ -120,34 +148,37 @@ class ArticlesStore {
   editArticle = (articleId: string, newArticle: Partial<ArticlePayloadT>) => {
     executeError(async () => {
       const result = await articlesService.editArticle(articleId, newArticle);
-
+      if (result?.id) {
+        this.setArticleId(result.id);
+      }
       runInAction(() => {
-        const description = findDescription(result.content);
-        this.article = { ...result, description };
+        this.successPost = 'Cтатья отредактирована';
       });
     }, this);
   };
 
   deleteArticle = (articleId: string) => {
     executeError(async () => {
-      const result1 = await articlesService.editArticle(articleId, { status: 'removal' });
-
-      if (result1?.id) {
-        const result = await articlesService.deleteArticle(articleId);
-
-        if (result.result) {
-          runInAction(() => {
-            this.articles = this.articles.filter(article => article.id !== articleId);
-          });
-        }
-      }
+      await articlesService.editArticle(articleId, { status: 'removal' });
     }, this);
   };
 
-  setDefaultIsSuccessPost = () => {
+  setDefaultIsSuccessPost = (isSuccessPost: string | null = null) => {
     runInAction(() => {
-      this.isSuccessPost = null;
+      this.successPost = isSuccessPost;
     });
+  };
+
+  setNullArticle = () => {
+    this.article = null;
+  };
+
+  setDefaultValues = (defaultValues: Nullable<ArticleFormT> = this.newArticleValues) => {
+    this.defaultValues = defaultValues;
+  };
+
+  setArticleId = (id: Nullable<string> = null) => {
+    this.articleId = id;
   };
 
   get getArticle() {

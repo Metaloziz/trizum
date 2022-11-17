@@ -1,7 +1,17 @@
+@import "src/styles/mixins";
+
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  & h2 {
+    @include title-tag-h2()
+
+  }
+
+  & .title {
+    text-align: center;
+  }
 
   .buttons {
     align-self: flex-start;

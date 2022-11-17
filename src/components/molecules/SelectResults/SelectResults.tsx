@@ -13,6 +13,7 @@ type Props = {
 
 const SelectResults: FC<Props> = props => {
   const { options, minWidth, onChange, className } = props;
+
   const selectStyles = {
     control: (base: CSSObjectWithLabel) => ({
       ...base,
@@ -79,6 +80,7 @@ const SelectResults: FC<Props> = props => {
       backgroundColor: isFocused ? '#fff' : '#E6EEF8',
     }),
   };
+
   return (
     <Select
       options={options}

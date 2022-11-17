@@ -1,9 +1,10 @@
 import { AppRoutes } from 'app/enums/AppRoutes';
+import { Roles } from 'app/enums/Roles';
 import React, { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import appStore, { Roles } from 'app/stores/appStore';
+import appStore from 'app/stores/appStore';
 import { Navigate } from 'react-router-dom';
 import RatePage from 'components/rate/RatePage';
 

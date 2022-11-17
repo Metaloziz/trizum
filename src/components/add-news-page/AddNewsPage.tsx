@@ -1,54 +1,61 @@
-import React, { useEffect, useState } from 'react';
-
-import styles from './AddNewsPage.module.scss';
-import Button from 'components/button/Button';
-import RichTextEditor from 'components/rich-text/RichTextEditor';
-import { CustomMultiSelect, StyledOption } from 'components/multiSelect/CustomMultiSelect';
-import { convertEnumOptions, EMPTY_ROLE_VALUE } from 'utils/convertEnumOptions';
-import { RoleNames } from 'app/enums/RoleNames';
-import { TextField } from '@mui/material';
-import testsStore from 'app/stores/testsStore';
-import { getAllOptionsMUI } from 'utils/getOption';
-import { convertTestOptions } from 'utils/convertTestOptions';
-import articlesStore from 'app/stores/articlesStore';
-import { Roles } from 'app/stores/appStore';
-import slateStore from 'app/stores/slateStore';
-import { observer } from 'mobx-react-lite';
-import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import { ArticlePayloadT } from 'app/types/ArticlePayloadT';
-import { useNavigate } from 'react-router-dom';
+import { Grid } from '@mui/material';
 import { AppRoutes } from 'app/enums/AppRoutes';
-import { ResultMessage } from 'components/add-news-page/ResultMessage/ResultMessage';
+import { RoleNames } from 'app/enums/RoleNames';
+import { Roles } from 'app/enums/Roles';
+import { StatusTypes } from 'app/enums/StatusTypes';
+import articlesStore from 'app/stores/articlesStore';
+import testsStore from 'app/stores/testsStore';
 import { ArticleDescriptionType } from 'app/types/ArticleDescriptionType';
+import { ArticlePayloadT } from 'app/types/ArticlePayloadT';
+import { Nullable } from 'app/types/Nullable';
+import { ResultMessage } from 'components/add-news-page/ResultMessage/ResultMessage';
+import Button from 'components/button/Button';
+import { CustomMultiSelect } from 'components/multiSelect/CustomMultiSelect';
+import { PlateEditor } from 'components/PlateEditor/PlateEditor';
+import { MyParagraphElement } from 'components/PlateEditor/types';
+import CustomSelect from 'components/select-mui/CustomSelect';
+import TextFieldCustom from 'components/text-field-mui/TextFieldCustom';
+import { STATUS_MENU } from 'constants/selectMenu';
+import { observer } from 'mobx-react-lite';
+import React, { useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { convertEnumInOptions } from 'utils/convertEnumInOptions';
+import { convertArrayToNull, convertNullStringToNull, convertNullToArray } from 'utils/convertNull';
+import { convertTestOptions } from 'utils/convertTestOptions';
+import { convertEmptyStringToNull, convertNullToEmptyString } from 'utils/convertTextFieldUtils';
+import * as yup from 'yup';
+import styles from './AddNewsPage.module.scss';
+
+const ROLES_OPTIONS = [
+  { value: 'null', label: 'Для ролей:' },
+  ...convertEnumInOptions(RoleNames, [RoleNames.admin, RoleNames.parent]),
+];
+
+const SCHEMA = yup.object().shape({
+  title: yup.string().required('Обязательно поле'),
+  description: yup.string(),
+  testId: yup.string().nullable(),
+  roles: yup.array(yup.string()).notRequired().nullable(),
+  status: yup.string(),
+  content: yup.array().required(),
+});
 
 type ArticleFormT = {
   title: string;
   description: string;
-  testId: string;
-  roles: number[];
+  testId: Nullable<string>;
+  roles: string[];
+  status: StatusTypes;
+  content: any[];
 };
 
 const AddNewsPage = observer(() => {
-  const { content } = slateStore;
   const { tests, setTests, setSearchParams } = testsStore;
-  const { postArticle, isSuccessPost, article, setDefaultIsSuccessPost } = articlesStore;
+  const { successPost, article, setDefaultIsSuccessPost } = articlesStore;
 
-  const [roles, setRoles] = useState<any>([EMPTY_ROLE_VALUE]);
-
-  const rolesOptions = convertEnumOptions(RoleNames);
   const testOptions = convertTestOptions(tests);
-
-  const removeDefaultRole = (newRoles: any[]) => {
-    const EmptyRoleIndex = newRoles.indexOf(EMPTY_ROLE_VALUE);
-
-    if (EmptyRoleIndex >= 0 && newRoles.length > 1) {
-      newRoles.splice(EmptyRoleIndex, 1);
-    }
-
-    setRoles(newRoles);
-  };
 
   useEffect(() => {
     setSearchParams({ per_page: 1000 });
@@ -56,33 +63,41 @@ const AddNewsPage = observer(() => {
     setTests();
   }, []);
 
-  const schema = yup.object().shape({
-    title: yup.string().required('обязательно поле'),
-    description: yup.string().required('обязательно поле'),
-    testId: yup.string().notRequired(),
-  });
+  const defaultValues: ArticleFormT = {
+    roles: ['null'],
+    description: '',
+    title: '',
+    testId: null,
+    status: StatusTypes.draft,
+    content: [{ type: 'p', children: [{ text: '' }] } as MyParagraphElement],
+  };
 
   const {
     handleSubmit,
-    register,
+    control,
     formState: { errors, isSubmitSuccessful },
-  } = useForm<ArticleFormT>({ resolver: yupResolver(schema) });
+  } = useForm<ArticleFormT>({ resolver: yupResolver(SCHEMA), defaultValues });
 
   const navigate = useNavigate();
 
   const onReadTheoryClick = (): void => {
-    navigate(`${AppRoutes.Blog}/${article.title}`);
+    navigate(`${AppRoutes.Blog}/${article?.title}`);
   };
 
   const onSubmit = handleSubmit(data => {
-    const description: ArticleDescriptionType = { type: 'description', text: data.description };
+    const { status, roles, testId, content, title, description } = data;
+    const newDescription: ArticleDescriptionType = {
+      type: 'description',
+      text: description,
+    };
 
-    content.push(description); // добавление описания вне редактора
+    content.push(newDescription); // добавление описания вне редактора
 
     const newArticle: ArticlePayloadT = {
-      title: data.title,
+      title,
       content,
-      status: 'active',
+      status,
+      testId,
       forFranchisee: roles.includes(Roles.Franchisee),
       forFranchiseeAdmin: roles.includes(Roles.FranchiseeAdmin),
       forMethodist: roles.includes(Roles.Methodist),
@@ -92,84 +107,143 @@ const AddNewsPage = observer(() => {
       forTutor: roles.includes(Roles.Tutor),
     };
 
-    // добавление теста необязательно
-    if (data.testId) {
-      newArticle.testId = data.testId;
-    }
-
-    postArticle(newArticle);
+    // postArticle(newArticle);
   });
 
   return (
     <div className={styles.content}>
       <div className={styles.innerContent}>
         <form>
-          <h1>Добавление статьи</h1>
-          <div className={styles.nameBlock}>
-            <div className={styles.input}>
-              <TextField
-                {...register('title')}
-                label="Заголовок"
-                helperText={errors.title?.message}
-                error={!!errors.title}
-                defaultValue=""
-                fullWidth
+          <h1 className={styles.title}>Добавление статьи</h1>
+          <Grid direction="row" container spacing={2} marginBottom={2}>
+            <Grid item xs={12} sm={6}>
+              <Controller
+                name="title"
+                render={({ field: { value, onChange, ref } }) => (
+                  <TextFieldCustom
+                    className={styles.input}
+                    sx={{ backgroundColor: 'white' }}
+                    type="text"
+                    label="Заголовок"
+                    size="small"
+                    fullWidth
+                    error={errors.title?.message}
+                    onChange={event => onChange(convertEmptyStringToNull(event))}
+                    value={convertNullToEmptyString(value!)}
+                    ref={ref}
+                  />
+                )}
+                control={control}
               />
-            </div>
-            <div className={styles.input}>
-              <TextField
-                {...register('description')}
-                label="Описание статьи"
-                helperText={errors.description?.message}
-                error={!!errors.description}
-                defaultValue=""
-                multiline
-                rows={3}
-                fullWidth
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <Controller
+                name="status"
+                render={({ field: { onChange, value, ref } }) => (
+                  <CustomSelect
+                    size="small"
+                    value={value}
+                    sx={{ backgroundColor: 'white' }}
+                    onChange={onChange}
+                    title="Уровень"
+                    options={STATUS_MENU}
+                    error={errors.status?.message}
+                    ref={ref}
+                  />
+                )}
+                control={control}
               />
-            </div>
-            <div className={styles.test}>
-              <TextField
-                {...register('testId')}
-                label="Тест"
-                helperText={errors.testId?.message}
-                error={!!errors.testId}
-                defaultValue=""
-                fullWidth
-                select
-              >
-                {getAllOptionsMUI(testOptions)}
-              </TextField>
-            </div>
+            </Grid>
 
-            <div className={styles.selectBlock}>
-              <p>Доступно ролям:</p>
+            <Grid item xs={12} sm={6}>
+              <Controller
+                name="testId"
+                render={({ field: { onChange, value, ref } }) => (
+                  <CustomSelect
+                    size="small"
+                    value={value || ''}
+                    sx={{ backgroundColor: 'white' }}
+                    onChange={event => onChange(convertNullStringToNull(event))}
+                    title="Тест"
+                    options={testOptions}
+                    error={errors.testId?.message}
+                    ref={ref}
+                  />
+                )}
+                control={control}
+              />
+            </Grid>
 
-              <CustomMultiSelect value={roles} onChange={e => removeDefaultRole(e)}>
-                {rolesOptions.map(({ value, label }) => (
-                  <StyledOption key={value} value={value}>
-                    {label}
-                  </StyledOption>
-                ))}
-              </CustomMultiSelect>
-            </div>
-          </div>
-          <div>
-            <p>Текст статьи</p>
-            <p>* необходима хотя бы одна картинка в тексте. Она будет использоваться как превью.</p>
-            <div className={styles.newsEditor}>
-              <RichTextEditor />
-            </div>
-          </div>
+            <Grid item xs={12} sm={6}>
+              <Controller
+                name="roles"
+                render={({ field: { onChange, value: valueField } }) => (
+                  <CustomMultiSelect
+                    onChange={event => {
+                      onChange(convertArrayToNull(event));
+                    }}
+                    value={convertNullToArray(valueField)}
+                    classNameContainer={styles.statusField}
+                    placeholder="Доступно ролям"
+                    options={ROLES_OPTIONS}
+                    error={errors.roles?.message}
+                  />
+                )}
+                control={control}
+              />
+            </Grid>
 
-          <ResultMessage successPost={isSuccessPost} onClick={onReadTheoryClick} />
+            <Grid item xs={12} sm={6}>
+              <Controller
+                name="description"
+                render={({ field: { value, onChange, ref } }) => (
+                  <TextFieldCustom
+                    type="text"
+                    sx={{ backgroundColor: 'white' }}
+                    label="Описание статьи"
+                    size="small"
+                    fullWidth
+                    multiline
+                    rows={3}
+                    error={errors.description?.message}
+                    onChange={event => onChange(convertEmptyStringToNull(event))}
+                    value={convertNullToEmptyString(value!)}
+                    ref={ref}
+                  />
+                )}
+                control={control}
+              />
+            </Grid>
 
-          <div className={styles.error}>{isSuccessPost}</div>
-          <div className={styles.newsBtn}>
-            <Button onClick={onSubmit} disabled={isSubmitSuccessful}>
-              Сохранить
-            </Button>
-          </div>
+            <Grid item xs={12} sm={6}>
+              <p>*первая картинка будет использоваться как превью.</p>
+            </Grid>
+
+            <Grid item xs={12} sm={12}>
+              <Controller
+                name="content"
+                render={({ field: { onChange, value } }) => (
+                  <PlateEditor
+                    value={value}
+                    onChange={onChange}
+                    className={styles.editor}
+                    placeholder="Текст статьи..."
+                  />
+                )}
+                control={control}
+              />
+
+              <ResultMessage successPost={!!successPost} onClick={onReadTheoryClick} />
+
+              <div className={styles.error}>{successPost}</div>
+              <div className={styles.newsBtn}>
+                <Button onClick={onSubmit} disabled={isSubmitSuccessful}>
+                  Сохранить
+                </Button>
+              </div>
+            </Grid>
+          </Grid>
         </form>
       </div>
     </div>

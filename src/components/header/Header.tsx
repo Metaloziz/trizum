@@ -1,3 +1,4 @@
+import { Roles } from 'app/enums/Roles';
 import { FC, useState } from 'react';
 
 import classNames from 'classnames';
@@ -10,7 +11,6 @@ import DropDownMenu from 'components/drop-down-menu/DropDownMenu';
 import Logo from 'components/logo/Logo';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import { whoCanUseIt } from 'utils/whoCanUseIt';
-import { Roles } from 'app/stores/appStore';
 
 type Props = { className: string };
 

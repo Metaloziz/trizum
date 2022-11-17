@@ -1,3 +1,4 @@
+import { Roles } from 'app/enums/Roles';
 import usersStore from 'app/stores/usersStore';
 
 import { ParentT } from 'app/types/UserTypes';
@@ -11,7 +12,6 @@ import {
 } from 'components/users-page/student-parrents-form-container/store/store';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useState } from 'react';
-import { Roles } from 'app/stores/appStore';
 
 import style from './StudentParentsFormContainer.module.scss';
 

@@ -1,9 +1,10 @@
+import { Roles } from 'app/enums/Roles';
 import { observer } from 'mobx-react-lite';
 import moment from 'moment';
 import React, { FC, useState, useEffect } from 'react';
-import appStore, { Roles } from '../../../app/stores/appStore';
+import appStore from '../../../app/stores/appStore';
 import teacherMainStore from '../../../app/stores/scheduleStore';
-import { EditLessonPayload } from '../../../app/types/EditLessonPayload';
+import { EditLessonPayload } from 'app/types/EditLessonPayload';
 import iconSettings from '../../../assets/svgs/icon-settings.svg';
 import BasicModal from '../../basic-modal/BasicModal';
 import Image from '../../image/Image';

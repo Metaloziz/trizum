@@ -10,7 +10,7 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import { Roles } from 'app/stores/appStore';
+import { Roles } from 'app/enums/Roles';
 import groupStore from 'app/stores/groupStore';
 import AddEditGroup from 'components/classes-page/AddEditGroup';
 import SearchBar from 'components/classes-page/search-bar/SearchBar';

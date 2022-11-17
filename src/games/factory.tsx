@@ -42,9 +42,11 @@ import {
     Component as ArgusComponent
 } from './games/argus';
 import {
-    PropsDefault as FrazesPropsDefault,
-    Component as FrazesComponent
-} from './games/frazes';
+    PropsDefault as DifferencePropsDefault,
+    Component as DifferenceComponent
+} from './games/difference';
+import {    PropsDefault as FrazesPropsDefault,
+    Component as FrazesComponent} from './games/frazes'
 
 export const GameIdentifiers = {
     shulte: 'shulte',
@@ -58,6 +60,7 @@ export const GameIdentifiers = {
     fireflies: 'fireflies',
     argus: 'argus',
     frazes: 'frazes',
+    difference: "difference"
 };
 
 export const GameList = {
@@ -111,11 +114,16 @@ export const GameList = {
         component: ArgusComponent,
         props: ArgusPropsDefault
     },
+    [GameIdentifiers.difference]: {
+        name: "Найди отличие",
+        component: DifferenceComponent,
+        props: DifferencePropsDefault
+    },
     [GameIdentifiers.frazes]: {
         name: 'Фразоскоп',
         component: FrazesComponent,
         props: FrazesPropsDefault
-    }
+    },
 };
 
 export function factory(

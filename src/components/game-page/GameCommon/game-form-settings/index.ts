@@ -5,6 +5,7 @@ export { ShulteFormSettings } from './ShulteFormSettings';
 export { ShiftVerticalFormSettings } from './ShiftVerticalFormSettings';
 export { MemoryRhythmFormSettings } from './MemoryRhythmFormSettings';
 export { Game2048FormSettings } from './Game2048FormSettings';
+export { GameDifferenceFormSettings } from './GameDifferenceFormSettings';
 export { SilhouettesFormSettings } from './SilhouettesFormSettings';
 export { SteamEngineFormSettings } from './SteamEngineFormSettings';
 export { FrazesFormSettings } from './FrazesFormSettings';

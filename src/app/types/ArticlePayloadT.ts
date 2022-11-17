@@ -1,10 +1,11 @@
-import { Descendant } from 'slate';
+import { Nullable } from 'app/types/Nullable';
+import { MyValue } from 'components/PlateEditor/types';
 import { StatusT } from 'app/types/StatusT';
 
 export type ArticlePayloadT = {
   title: string;
-  content: Descendant[];
-  testId?: string;
+  content: MyValue;
+  testId?: Nullable<string>;
   status?: StatusT;
   forStudents?: boolean;
   forTeachersEducation?: boolean;

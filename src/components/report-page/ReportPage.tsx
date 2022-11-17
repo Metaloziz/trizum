@@ -1,14 +1,15 @@
 import Pagination from '@mui/material/Pagination';
+import { Roles } from 'app/enums/Roles';
 import ReportFilters from 'components/report-page/ReportFilters';
 import Table from 'components/table/Table';
 import { observer } from 'mobx-react-lite';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { transformDate } from 'utils/transformData';
 import reportStore from '../../app/stores/reportStore';
-import { shortenName } from '../../utils/shortenName';
+import { shortenName } from 'utils/shortenName';
 import { Loader } from '../loader/Loader';
 import styles from './ReportPage.module.scss';
-import appStore, { Roles } from '../../app/stores/appStore';
+import appStore from '../../app/stores/appStore';
 
 const columnNames = [
   'ФИО ученика',
