@@ -152,6 +152,7 @@ type CustomMultiSelectPropsType = {
   classNameContainer?: string;
   id?: string;
   label?: string;
+  placeholder?: string;
 };
 
 export const CustomMultiSelect = React.forwardRef(
