@@ -62,8 +62,7 @@ export type ValueLabelT = {
 };
 
 const Results: FC = observer(() => {
-
-
+  // hello 2222222
   const [selectedGames, setSelectedGames] = useState<ValueLabelT[]>([]);
   const [view, setView] = useState(ResultsView.Table);
   const [selectValue, setSelectValue] = useState<SingleValue<ValueLabelT>>();
