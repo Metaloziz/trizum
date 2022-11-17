@@ -29,6 +29,8 @@ export type PresetsGameSettings = {
   sound: SoundT;
   area: boolean;
   gage: GageType[];
+  wordsFull: boolean;
+  words: string[];
 };
 
 export type EditOrCreatePresetParamsT = {

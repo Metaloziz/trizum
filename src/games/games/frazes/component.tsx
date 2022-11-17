@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { View, TouchableOpacity, StyleSheet, Text, Image } from 'react-native';
-import { Props } from './types';
+import { View, StyleSheet, Image } from 'react-native';
 
 import Timer from '../../components/timerRevert';
 import TimerAll from '../../components/timer';
@@ -14,9 +13,8 @@ const imageBackground = require('./assets/background.png');
 
 const START_TIMER = 3;
 
-const defaultWords = ['Чашка', 'Фразоскоп', 'Игра'];
-
 export default class extends Component<any, any> implements Game {
+  timer: any;
   timerAll: any;
 
   constructor(props: any) {
@@ -27,14 +25,15 @@ export default class extends Component<any, any> implements Game {
       success: 0,
       errors: 0,
       level: 0,
-      words: defaultWords,
+      words: [],
       userWord: '',
-      fullWord: false,
+      wordsFull: false,
+      visibleWord: true,
     };
   }
 
   componentDidMount() {
-    const { onRef = () => {} } = this.props;
+    const { onRef = () => {}, speed } = this.props;
 
     onRef(this);
   }
@@ -58,6 +57,7 @@ export default class extends Component<any, any> implements Game {
       level: 0,
       success: 0,
       errors: 0,
+      visibleWord: true,
     });
   };
 
@@ -78,9 +78,10 @@ export default class extends Component<any, any> implements Game {
   };
 
   startLogic = () => {
-    const { elementsTotal, wordsFull } = this.props;
-    this.setState({fullWord: wordsFull})
-    console.log("start logic ---", this.props)
+    const { wordsFull, words, speed } = this.props;
+    console.log(this.props);
+    this.setState({ wordsFull, words, speed });
+    this.setVisible(false, true);
   };
 
   onEnd = () => {
@@ -90,8 +91,7 @@ export default class extends Component<any, any> implements Game {
   private end = (status = 'win') => {
     const { onEnd = () => {} } = this.props;
 
-    const timer: any = this.timerAll;
-    const time = timer?.getValue();
+    const time = this.timerAll?.getValue();
 
     const result: GameResult = {
       result: status == 'win' ? 'win' : 'lose',
@@ -106,22 +106,28 @@ export default class extends Component<any, any> implements Game {
   };
 
   onResult = (result: boolean) => {
-    console.log('on result ---', { result });
-    const {errorAacceptable} = this.props;
-    const {words} = this.state;
+    const { errorAacceptable } = this.props;
+    const { words } = this.state;
     const level = this.state.level + 1;
     const success = this.state.success + (result ? 1 : 0);
     const errors = this.state.errors + (result ? 0 : 1);
 
+    if (!(errors >= errorAacceptable) && level < words.length) {
+      this.setVisible(false);
+    }
+
     this.setState(
-      (prev: any) => ({ ...prev, level, success, errors, userWord: '' }),
+      (prev: any) => ({ ...prev, level, success, errors, userWord: '', visibleWord: true }),
       () => {
         if (errors >= errorAacceptable) {
-          this.end('lose');
+          return this.end('lose');
         }
 
         if (success >= words.length) {
-          this.end('win');
+          return this.end('win');
+        }
+        if (words.length === level) {
+          return this.end('win');
         }
       },
     );
@@ -131,21 +137,28 @@ export default class extends Component<any, any> implements Game {
     this.setState((prev: any) => ({ ...prev, userWord: prev.userWord + char }));
 
   backSpace = () => {
-    const {userWord} = this.state;
-    this.setState({userWord: userWord.slice(0, userWord.length - 1)});
-  }
+    const { userWord } = this.state;
+    this.setState({ userWord: userWord.slice(0, userWord.length - 1) });
+  };
+
+  setVisible = (visibleWord: boolean, init = false) => {
+    const { speed } = this.props;
+    const timer = init ? START_TIMER * 1000 : START_TIMER;
+    console.log('set visible ---', { visibleWord, init, timer });
+    setTimeout(() => this.setState({ visibleWord }), speed + timer);
+  };
 
   renderInner = () => {
-    const { level = 0, success = 0 } = this.state;
+    const { level = 0 } = this.state;
 
-    const { width, timeComplete, digitMax } = this.props;
+    const { width, timeComplete, words } = this.props;
 
     const levels = [];
 
-    for (let i = 0; i < digitMax; i++) {
+    for (let i = 0; i < words.length; i++) {
       levels.push(
         <View key={`level-${i}`} style={styles.level}>
-          {i <= success && <View style={styles.levelInner} />}
+          {i <= level && <View style={styles.levelInner} />}
         </View>,
       );
     }
@@ -161,7 +174,7 @@ export default class extends Component<any, any> implements Game {
         {timeComplete > 0 && (
           <View style={styles.progressTime}>
             <Timer
-              ref="timer"
+              ref={ref => (this.timer = ref)}
               time={timeComplete}
               onEnd={this.onEnd}
               renderComponent={() => (
@@ -172,8 +185,8 @@ export default class extends Component<any, any> implements Game {
                   }}
                 />
               )}
-              renderTime={(t: any) => {
-                let progress = ((timeComplete - t) / timeComplete) * 100;
+              renderTime={(time: any) => {
+                let progress = ((timeComplete - time) / timeComplete) * 100;
 
                 if (progress > 100) {
                   progress = 100;
@@ -198,9 +211,17 @@ export default class extends Component<any, any> implements Game {
             userWord={this.state.userWord}
             level={this.state.level}
             onResult={this.onResult}
+            visibleWord={this.state.visibleWord}
+            wordsFull={this.state.wordsFull}
+            errors={this.state.errors}
           />
-          <VirtualKeyboard onKeyPress={this.updateUserWord} backspaceHandler={this.backSpace} />
+          <VirtualKeyboard
+            onKeyPress={this.updateUserWord}
+            backspaceHandler={this.backSpace}
+            visibleWord={this.state.visibleWord}
+          />
         </View>
+        <TimerAll ref={(ref: any) => (this.timerAll = ref)} />
       </View>
     );
   };

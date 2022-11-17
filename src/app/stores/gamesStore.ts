@@ -48,6 +48,8 @@ class GamesStore {
     digitMin: 1,
     area: false,
     gage: [{ id: 1, area: true, speed: 1 }],
+    wordsFull: false,
+    words: [],
   };
 
   gamePreset: OneGamePresent = {
