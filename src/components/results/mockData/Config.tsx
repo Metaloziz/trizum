@@ -31,9 +31,10 @@ function getGradient(ctx: any, chartArea: any) {
 }
 
 const MONOTONE = 'monotone' as const;
-const labels = days({ count: 31 });
+const labels = days({ count: foo().length });
 
 export const config = {
+  type: 'line',
   data: {
     labels,
     datasets: [
