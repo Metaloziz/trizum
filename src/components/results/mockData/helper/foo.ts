@@ -1,33 +1,31 @@
 import appStore from 'app/stores/appStore';
+import gamesStore from 'app/stores/gamesStore';
 import usersStore from 'app/stores/usersStore';
 import { toJS } from 'mobx';
 
+const getData = (data: string) => data.slice(0, 10);
+
 export const foo = (numberOfMonth?: number): number[] => {
-  const {user} = appStore;
-  let arr: number[] = [];
+  const arrOfTimes: number[] = [0];
+  let indexArrOfTimes: number = 0;
 
-  // массив со всей информацией о времени работы
-  const arrayWithTieIfo: Array<{ date: string, from: string, name: string, to: string }> = [];
+  const { playResults } = gamesStore;
+  const arrayOfItems = toJS(playResults).items;
+  // console.log('createdAt', arrayOfItems);
 
-  const groups = [...toJS(user.groups)];
-  groups.map(group => group.group.schedule.forEach(item => arrayWithTieIfo.push(item)));
+  arrayOfItems.forEach((item, index, array) => {
+    const currentDate = getData(item.createdAt.date);
+    const previousDate = index === 0 ? currentDate : getData(array[index - 1].createdAt.date);
 
-  // возвращаем массив состоящий из количества потраченных часов за день
-  // без учета минут и без учета дней без информации
-  arr = arrayWithTieIfo.map(item => {
-    let hours: number = 0;
-    console.log('item', item);
-    const from = Number(item.from.slice(0, 2));
-    const to = Number(item.to.slice(0, 2));
-    hours = Math.ceil(to - from);
-    return hours;
+    console.log('created', previousDate);
+
+    if (currentDate === previousDate) {
+      arrOfTimes[indexArrOfTimes] += item.time;
+    } else {
+      indexArrOfTimes++;
+      arrOfTimes[indexArrOfTimes] = item.time;
+    }
   });
-  console.log('item ', arr);
-  return arr;
+  console.log('createdAt', arrOfTimes);
+  return arrOfTimes;
 };
-
-// Как я представляю нужно создать массив из данных только по одному месяцу,
-// пробежать for-ом из 31 итерации и при совпадении с
-// числом пушить разницу часов(с учетом минут:)) если совпадений нет, пушить 0.
-// Получится чистая статистика за оди конкретный месяц, номер которого мы передам
-// в функцию как аргумент

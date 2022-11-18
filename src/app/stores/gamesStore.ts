@@ -226,9 +226,9 @@ class GamesStore {
     await gamesService.sendPlayResults(params);
   };
 
-  getPlayResults = async () => {
+  getPlayResults = async (userId: string) => {
     try {
-      const res = await gamesService.getPlayResults();
+      const res = await gamesService.getPlayResults(userId);
       runInAction(() => {
         this.playResults = res;
       });

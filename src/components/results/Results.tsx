@@ -1,4 +1,6 @@
+import { useFloating } from '@udecode/plate';
 import appStore from 'app/stores/appStore';
+import gamesStore from 'app/stores/gamesStore';
 import usersStore from 'app/stores/usersStore';
 import {
   ArcElement,
@@ -28,8 +30,9 @@ import SelectResults from 'components/molecules/SelectResults/SelectResults';
 import { config } from 'components/results/mockData/Config';
 import { gamesAr, options, ResultsView, gamesArr } from 'components/results/mockData/mockData';
 import Tablet from 'components/tablet/Tablet';
+import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import { SingleValue } from 'react-select';
 
@@ -68,6 +71,12 @@ const Results: FC = observer(() => {
   const [selectValue, setSelectValue] = useState<SingleValue<ValueLabelT>>();
 
   const mockSelectData: ValueLabelT[] = [{ value: 'value', label: 'label' }];
+  const { playResults, getPlayResults } = gamesStore;
+  const { user } = appStore;
+
+  useEffect(() => {
+    getPlayResults(user.id);
+  }, []);
 
   const onGameNameClick = (selectedGame: ValueLabelT) => {
     if (selectedGame.value === 'total' && !selectedGames.includes(selectedGame)) {
@@ -128,7 +137,7 @@ const Results: FC = observer(() => {
 
           {/* график */}
 
-          <Line className={styles.canvas} {...config} />
+          {playResults && <Line className={styles.canvas} {...config} />}
 
           {/* график */}
 

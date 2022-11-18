@@ -1,4 +1,4 @@
-import { GameT } from 'app/types/GameTypes';
+import { GameT, ResultsNewT } from 'app/types/GameTypes';
 import { GroupT } from 'app/types/GroupTypes';
 import { Nullable } from 'app/types/Nullable';
 import { StatusT } from 'app/types/StatusT';
@@ -45,9 +45,34 @@ export type WorkWithIdFromLoadme = {
   work: WorkFromLoadme;
 };
 
+export type WorksGroupType = {
+  [key: string]: WorksDataType;
+};
+
+export type WorksDataType = {
+  completed: boolean;
+  index: string;
+  workId: string;
+  games: { [key: string]: WorksGamesDataType };
+};
+
+export type WorksGamesDataType = {
+  finished: boolean;
+  gamePresetId: string;
+  playResultId: string;
+  result: WorksGroupResultType;
+};
+
+export type WorksGroupResultType = Omit<ResultsNewT, 'finished' | 'gameCode' | 'templateCode'>;
+
 export type Group = {
   id: string;
-  stats: any[];
+  stats:
+    | {
+        completed: boolean;
+        works: WorksGroupType;
+      }
+    | [];
   status: string;
   group: {
     id: string;

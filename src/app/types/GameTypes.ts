@@ -98,9 +98,10 @@ export type PlayResultT = {
     timezone: string;
   };
   type: string;
+  // todo нужна доработка типов
 };
 export type PlayResultsResponseT = {
-  item: PlayResultT[];
+  items: PlayResultT[];
   page: number;
   perPage: number;
   total: number;

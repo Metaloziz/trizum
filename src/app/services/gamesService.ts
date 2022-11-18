@@ -45,8 +45,13 @@ const gamesService = {
     const { data } = await instance.post(`${Paths.Presets}/${id}`, { status: 'removal' });
     return data;
   },
-  getPlayResults: async (): Promise<PlayResultsResponseT> => {
-    const { data } = await instance.get(Paths.PlayResults);
+  getPlayResults: async (userId: string): Promise<PlayResultsResponseT> => {
+    const { data } = await instance.get(Paths.PlayResults, {
+      params: {
+        user_id: userId,
+        per_page: 1000,
+      },
+    });
     return data;
   },
 };
