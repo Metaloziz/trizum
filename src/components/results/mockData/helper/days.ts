@@ -3,7 +3,7 @@ export function days(config: { count: number }) {
   const count = cfg.count || 7;
   const values = [];
 
-  for (let i = 0; i < count; ++i) {
+  for (let i = 1; i <= count; ++i) {
     values.push(i);
   }
 

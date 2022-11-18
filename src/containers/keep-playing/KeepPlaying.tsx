@@ -19,6 +19,8 @@ const KeepPlaying: FC<KeepPlayingProps> = ({ className }) => {
   const { getPreset, setActiveWork } = gamesStore;
   const { currentWork, user } = appStore;
 
+  console.log('currentWork', currentWork);
+
   const gamePresets = currentWork?.work.gamePresets;
 
   const setRoute = async (game: GamePresetFromLoadme) => {
