@@ -1,23 +1,24 @@
-import { FC, useEffect, useMemo } from 'react';
+import { Roles } from 'app/enums/Roles';
+
+import appStore from 'app/stores/appStore';
 
 import cn from 'classnames';
+import Sidebar from 'components/sidebar/Sidebar';
 import { observer } from 'mobx-react-lite';
+import { FC, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import Header from '../../header/Header';
 
 import styles from './DefaultLayout.module.scss';
 
-import appStore, { Roles } from 'app/stores/appStore';
-import Sidebar from 'components/sidebar/Sidebar';
-
 type Props = Record<string, any>;
 
 const DefaultLayout: FC<Props> = observer(({ children, ...rest }) => {
-  const { isLoggedIn, isInitialized, role } = appStore;
+  const { isInitialized, role, loadme } = appStore;
 
   useEffect(() => {
-    appStore.loadme();
+    loadme();
   }, []);
   return !isInitialized ? (
     <>Initialising...</>

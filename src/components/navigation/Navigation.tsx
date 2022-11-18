@@ -1,7 +1,7 @@
+import { LinkT } from 'components/sidebar/LinkT';
 import { FC } from 'react';
 
 import NavigationLink from 'components/link/NavigationLink';
-import { LinkT } from 'components/sidebar/Sidebar';
 
 interface Props {
   links: LinkT[];

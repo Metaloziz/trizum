@@ -12,8 +12,10 @@ import {
   SilhouettesFormSettings,
   SteamEngineFormSettings,
   FirefliesFormSettings,
-  BullsAndCowsSettings,
+  FrazesFormSettings,
   GamesFormSettingsType,
+  GameDifferenceFormSettings,
+  BullsAndCowsSettings,
 } from 'components/game-page/GameCommon/game-form-settings/';
 
 import {
@@ -137,8 +139,8 @@ export const NewGameModal: FC<PropsT> = observer(props => {
             gamePreset={gamePreset.gamePreset}
             onFormSubmit={onSubmit}
             deletedPreset={deletedPreset}
-            colorsMapState={colorsMapState}
-            setColorModal={setColorModal}
+            // colorsMapState={colorsMapState}
+            // setColorModal={setColorModal}
           />
         )}
 
@@ -198,6 +200,22 @@ export const NewGameModal: FC<PropsT> = observer(props => {
 
         {game.code === GameIdentifiers.argus && (
           <ArgusFormSettings
+            usedInWorks={gamePreset.usedInWorks}
+            gamePreset={gamePreset.gamePreset}
+            onFormSubmit={onSubmit}
+            deletedPreset={deletedPreset}
+          />
+        )}
+        {game.code === GameIdentifiers.difference && (
+          <GameDifferenceFormSettings
+            usedInWorks={gamePreset.usedInWorks}
+            gamePreset={gamePreset.gamePreset}
+            onFormSubmit={onSubmit}
+            deletedPreset={deletedPreset}
+          />
+        )}
+        {game.code === GameIdentifiers.frazes && (
+          <FrazesFormSettings
             usedInWorks={gamePreset.usedInWorks}
             gamePreset={gamePreset.gamePreset}
             onFormSubmit={onSubmit}

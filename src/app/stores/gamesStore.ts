@@ -1,3 +1,4 @@
+import { Roles } from 'app/enums/Roles';
 import { StatusTypes } from 'app/enums/StatusTypes';
 
 import gamesService from 'app/services/gamesService';
@@ -14,9 +15,17 @@ import {
 } from 'app/types/GameTypes';
 import { PresetT } from 'app/types/WorkTypes';
 import { makeAutoObservable, runInAction } from 'mobx';
+import { getActiveClassGroup } from 'utils/getActiveClassGroup';
 import { removeEmptyFields } from 'utils/removeEmptyFields';
+import { throwErrorMessage } from 'utils/throwErrorMessage';
 import { SearchParamsType } from '../types/SearchParamsType';
-import appStore, { Roles } from 'app/stores/appStore';
+import appStore from 'app/stores/appStore';
+import { TIME_MAX } from 'constants/constants';
+
+type IdentificationParamsType = Pick<
+  PlaySendResultT,
+  'userGroupId' | 'courseWorkId' | 'workGamePresetId'
+>;
 
 class GamesStore {
   presets: PresetT[] = [];
@@ -48,6 +57,8 @@ class GamesStore {
     digitMin: 1,
     area: false,
     gage: [{ id: 1, area: true, speed: 1 }],
+    wordsFull: false,
+    words: [],
   };
 
   gamePreset: OneGamePresent = {
@@ -61,6 +72,7 @@ class GamesStore {
       },
       status: '' as StatusTypes,
       level: 'easy',
+      timeMax: TIME_MAX,
       settings: [{ ...this.defaultSettings }] as PresetsGameSettings[],
     },
     usedInWorks: [],
@@ -82,6 +94,12 @@ class GamesStore {
 
   stopFunc: any;
 
+  identificationParams: IdentificationParamsType = {
+    userGroupId: '',
+    workGamePresetId: '',
+    courseWorkId: '',
+  };
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -94,7 +112,7 @@ class GamesStore {
         this.filterPresets(res.code);
       });
     } catch (e) {
-      console.log(e);
+      throwErrorMessage(e);
     }
   };
 
@@ -105,7 +123,7 @@ class GamesStore {
         this.games = res;
       });
     } catch (e) {
-      console.log(e);
+      throwErrorMessage(e);
     }
   };
 
@@ -118,7 +136,7 @@ class GamesStore {
         this.newPresets = res;
       });
     } catch (e) {
-      console.warn(e);
+      throwErrorMessage(e);
     }
   };
 
@@ -128,7 +146,7 @@ class GamesStore {
         this.actualPresets = this.newPresets?.items?.filter(pr => pr.game?.code === code);
       });
     } catch (e) {
-      console.warn(e);
+      throwErrorMessage(e);
     }
   };
 
@@ -165,23 +183,26 @@ class GamesStore {
             },
             status: '' as StatusTypes,
             level: '',
+            timeMax: TIME_MAX,
             settings: [{ ...this.defaultSettings }] as PresetsGameSettings[],
           },
           usedInWorks: [],
         };
       }
     } catch (e) {
-      console.warn(e);
+      throwErrorMessage(e);
     }
   };
 
   createPresets = async (params: EditOrCreatePresetParamsT) => {
+    params.timeMax = 3600;
     await gamesService.createPresetGame(params);
     await this.getPresets();
     this.filterPresets(this.game.code);
   };
 
   editPreset = async (params: EditOrCreatePresetParamsT) => {
+    params.timeMax = 3600;
     await gamesService.editPresetGame(this.gamePreset.gamePreset.id, params);
     await this.getPresets();
     this.filterPresets(this.game.code);
@@ -204,7 +225,7 @@ class GamesStore {
         this.playResults = res;
       });
     } catch (e) {
-      console.warn(e);
+      throwErrorMessage(e);
     }
   };
 
@@ -214,6 +235,20 @@ class GamesStore {
 
   setStopFunc = (func: () => any) => {
     this.stopFunc = func;
+  };
+
+  getIdentificationParams = () => {
+    const group = getActiveClassGroup(appStore.user);
+
+    return {
+      userGroupId: group?.group.id,
+      // courseWorkId: group.group.course.,
+      workGamePresetId: '',
+    };
+  };
+
+  setActiveWork = (params: IdentificationParamsType) => {
+    this.identificationParams = params;
   };
 }
 

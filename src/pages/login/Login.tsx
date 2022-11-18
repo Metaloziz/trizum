@@ -37,7 +37,7 @@ export const Login: FC = () => {
     });
   });
 
-  let maxVal = 11;
+  const maxVal = 12;
 
   return (
     <div className={style.modal}>
@@ -58,7 +58,6 @@ export const Login: FC = () => {
                     if (e.currentTarget.value.length > maxVal) {
                       e.currentTarget.value = e.currentTarget.value.slice(0, 11);
                     }
-                    e.target.value[0] === '+' ? (maxVal = 12) : (maxVal = 11);
                     if (e.currentTarget.value[0] === '8') {
                       e.currentTarget.value = e.currentTarget.value.replace('8', '+7');
                     }

@@ -12,7 +12,7 @@ import {
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { SexEnum } from 'app/enums/CommonEnums';
-import { Roles } from 'app/stores/appStore';
+import { Roles } from 'app/enums/Roles';
 import { RequestRegister } from 'app/types/AuthTypes';
 import { OptionT } from 'app/types/OptionT';
 import { ParentT, ResponseOneUser, ResponseParenting } from 'app/types/UserTypes';
@@ -29,10 +29,10 @@ import { REG_NAME } from 'constants/regExp';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { maxBirthdayYearAll, minBirthdayYear } from 'utils/dateMask';
 import * as yup from 'yup';
 import TextFieldCustom from '../../text-field-mui/TextFieldCustom';
 import TextFieldPhoneCustom from '../../text-field-phone-mui/TextFieldPhoneCustom';
+import { getMaxMinYear } from '../../../utils/index';
 
 type Props = {
   localParentFormID: number;
@@ -118,8 +118,8 @@ const StudentParentsForm: FC<Props> = observer(
         birthdate: yup
           .date()
           .required('Обязательное поле')
-          .min(`01-01-${minBirthdayYear}`, 'Не верно выбран возраст')
-          .max(`01-01-${maxBirthdayYearAll}`, 'Возраст выбран не верно'),
+          .min(`${getMaxMinYear(102)}`, 'Не верно выбран возраст')
+          .max(`${getMaxMinYear(18)}`, 'Возраст выбран не верно'),
         sex: yup.string().required('Обязательное поле'),
         isMain: yup.boolean().required('Обязательное поле'),
         password: yup

@@ -1,13 +1,12 @@
+import { AppRoutes } from 'app/enums/AppRoutes';
+import { Roles } from 'app/enums/Roles';
+import { OneGamePresent, PresetsGameSettings } from 'app/types/GameTypes';
+import { PlayButton } from 'components/game-page/GameCommon/PlayButton';
 import React, { FC, useEffect } from 'react';
-import { AppRoutes } from '../../../app/enums/AppRoutes';
-import { Roles } from '../../../app/stores/appStore';
-import { OneGamePresent, PresetsGameSettings } from '../../../app/types/GameTypes';
 import Button from '../../../components/button/Button';
-import { GameDesc } from '../../../components/game-page/GameCommon/GameDesc';
-import { PlayButton } from '../../../components/game-page/GameCommon/PlayButton';
 import InformationItem from '../../../components/information-item/InformationItem';
-import { Option } from '../../../components/select-mui/CustomSelect';
-import { RedirectCurrentPageButton } from '../../../components/test-page/RedirectArticlesPageButton/RedirectCurrentPageButton';
+import { Option } from 'components/select-mui/CustomSelect';
+import { RedirectCurrentPageButton } from 'components/test-page/RedirectArticlesPageButton/RedirectCurrentPageButton';
 import styles from '../Game.module.scss';
 
 type Props = {

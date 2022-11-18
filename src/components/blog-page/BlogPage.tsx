@@ -1,3 +1,4 @@
+import { Roles } from 'app/enums/Roles';
 import React, { ChangeEvent, FunctionComponent, useEffect, useState } from 'react';
 
 import { observer } from 'mobx-react-lite';
@@ -6,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import styles from './BlogPage.module.scss';
 
 import { AppRoutes } from 'app/enums/AppRoutes';
-import { Roles } from 'app/stores/appStore';
 import articlesStore from 'app/stores/articlesStore';
 import Button from 'components/button/Button';
 import { SecondaryRoutes } from 'app/enums/SecondaryRoutes';
@@ -15,7 +15,8 @@ import { ArticlePreview } from 'components/blog-page/ArticlePreview/ArticlePrevi
 import { whoCanUseIt } from 'utils/whoCanUseIt';
 
 const BlogPage: FunctionComponent = observer(() => {
-  const { articles, getArticles, page, perPage, total, setSearchArticlesParams } = articlesStore;
+  const { articles, getArticles, page, perPage, total, setSearchArticlesParams, setNullArticle } =
+    articlesStore;
 
   const [currentPage, setCurrentPage] = useState(page + 1);
 
@@ -27,12 +28,13 @@ const BlogPage: FunctionComponent = observer(() => {
 
   useEffect(() => {
     getArticles();
+    setNullArticle();
   }, []);
 
   const navigate = useNavigate();
 
   const onClickAddPost = () => {
-    navigate(`${AppRoutes.Blog}/${SecondaryRoutes.AddArticle}`);
+    navigate(`${AppRoutes.BlogEditor}/${SecondaryRoutes.AddArticle}`);
   };
 
   const onClickAddTest = () => {

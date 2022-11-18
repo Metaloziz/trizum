@@ -3,12 +3,15 @@
 .container {
   display: flex;
   align-items: center;
-  padding-left: 35px;
+  padding: 0 20px 0 35px;
   background-color: white;
   box-shadow: 0 20px 70px 0 #5659921a;
   border-radius: 30px;
   height: 90px;
   margin-bottom: 30px;
+  width: 100%;
+  min-width: 200px;
+  //padding: 5px;
 
   img {
     margin-left: 3px;

@@ -1,5 +1,5 @@
+import { Roles } from 'app/enums/Roles';
 import { UserGroupStatus } from 'app/enums/UserGroupStatus';
-import { Roles } from 'app/stores/appStore';
 import { ChildrenResponse } from 'app/types/ChildrenResponse';
 import { FranchiseT } from 'app/types/FranchiseTypes';
 import { Nullable } from 'app/types/Nullable';
@@ -18,6 +18,7 @@ export type RequestUsersForFilter = {
   page?: number | null;
   perPage?: number | null;
   franchiseId?: string | null;
+  groupId?: string | null;
   firstName?: string | null;
   middleName?: string | null;
   lastName?: string | null;

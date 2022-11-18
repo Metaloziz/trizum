@@ -1,8 +1,9 @@
 import { DateTime } from 'app/enums/DateTime';
+import { Roles } from 'app/enums/Roles';
 import coursesService from 'app/services/coursesService';
 import franchiseService from 'app/services/franchiseService';
 import groupsService from 'app/services/groupsService';
-import appStore, { Roles } from 'app/stores/appStore';
+import appStore from 'app/stores/appStore';
 import { AddUserGroupPayloadType } from 'app/types/addUserGroupPayloadType';
 import { ShortCourseType } from 'app/types/CourseTypes';
 import { EditUserGroupPayloadType } from 'app/types/EditUserGroupPayloadType';
@@ -23,12 +24,12 @@ import { AxiosError } from 'axios';
 import { makeAutoObservable, runInAction } from 'mobx';
 import moment from 'moment';
 import { findElement } from 'utils/findIndexElement';
+import { getNextMonth } from 'utils/getNextMonth';
+import { removeEmptyFields } from 'utils/removeEmptyFields';
 import {
   scheduleItemToServerMapper,
   scheduleItemToUIMapper,
 } from 'utils/scheduleItemToServerMapper';
-import { getNextMonth } from 'utils/getNextMonth';
-import { removeEmptyFields } from 'utils/removeEmptyFields';
 import { GroupStatusValue } from '../enums/GroupStatus';
 import { GroupStatusTypes } from '../types/GroupStatusTypes';
 
@@ -206,10 +207,11 @@ class GroupStore {
       const r = await groupsService.getOneGroup(id);
       runInAction(() => {
         this.selectedGroup = r;
-        this.schedule =
-          r.schedule && r.schedule.length
-            ? r.schedule.map(el => scheduleItemToUIMapper(el))
-            : this.setEmptyScheduleItems(r.course.worksCount);
+        if (r.schedule && r.schedule.length) {
+          this.schedule = r.schedule.map(el => scheduleItemToUIMapper(el));
+        } else {
+          this.schedule = this.setEmptyScheduleItems(r.course.worksCount);
+        }
       });
       return r;
     });

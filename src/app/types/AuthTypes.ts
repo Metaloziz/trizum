@@ -1,4 +1,4 @@
-import { Roles } from 'app/stores/appStore';
+import { Roles } from 'app/enums/Roles';
 
 export type RequestSMS = { phone: string };
 export type RequestLogin = { phone: string; smsCode: number };

@@ -1,4 +1,4 @@
-import { Roles } from 'app/stores/appStore';
+import { Roles } from 'app/enums/Roles';
 import { OptionT } from 'app/types/OptionT';
 
 export const filterRoleOptions = (roleOptions: OptionT[], role: string) => {
@@ -10,8 +10,7 @@ export const filterRoleOptions = (roleOptions: OptionT[], role: string) => {
           el.value !== Roles.Tutor &&
           el.value !== Roles.Admin &&
           el.value !== Roles.TeacherEducation &&
-          el.value !== Roles.Franchisee &&
-          el.value !== Roles.FranchiseeAdmin,
+          el.value !== Roles.Franchisee,
       );
 
     case Roles.FranchiseeAdmin:
@@ -48,7 +47,6 @@ export const getRoleOptionsForFilter = (roleOptions: OptionT[], role: string) =>
           el.value !== Roles.Methodist &&
           el.value !== Roles.Tutor &&
           el.value !== Roles.TeacherEducation &&
-          el.value !== Roles.FranchiseeAdmin &&
           el.value !== Roles.Admin,
       );
 

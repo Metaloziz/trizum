@@ -35,6 +35,7 @@ const usersService = {
         role: params?.role || undefined,
         per_page: params?.perPage || undefined,
         franchise_id: params?.franchiseId || undefined,
+        group_id: params?.groupId || undefined,
         first_name: params?.firstName || undefined,
         middle_name: params?.middleName || undefined,
         last_name: params?.lastName || undefined,

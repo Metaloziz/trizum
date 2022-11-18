@@ -98,6 +98,23 @@ export type SteamEngineGameSettingsType = {
 
 export type SteamEngineFormType = BaseGameSettingsType & SteamEngineGameSettingsType;
 
+export type GameDifferenceSettingsType = {
+  timeComplete: number;
+  errorAacceptable: number;
+};
+
+export type GameDifferenceFormType = BaseGameSettingsType & GameDifferenceSettingsType;
+
+export type FrazesGameSettingsType = {
+  errorAacceptable: number;
+  timeComplete: number;
+  speed: number;
+  wordsFull: boolean;
+  words: string[];
+};
+
+export type FrazesFormType = BaseGameSettingsType & FrazesGameSettingsType;
+
 export type BullsAndCowsSettingsType = {
   timeComplete: number;
   levelMaxCompleted: number;
@@ -116,5 +133,7 @@ export type GamesFormSettingsType = BaseGameSettingsType &
     | MemoryRhythmFormType
     | SilhouettesFormType
     | SteamEngineFormType
+    | GameDifferenceFormType
+    | FrazesFormType
     | BullsAndCowsFormType
   );

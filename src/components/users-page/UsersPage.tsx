@@ -1,4 +1,5 @@
-import appStore, { Roles } from 'app/stores/appStore';
+import { Roles } from 'app/enums/Roles';
+import appStore from 'app/stores/appStore';
 import { AddSecondChildForm } from 'components/users-page/student-page-franchisee-modal-add-user/ParentChildren/AddSecondChildeForm/AddSecondChildForm';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import Pagination from '@mui/material/Pagination';

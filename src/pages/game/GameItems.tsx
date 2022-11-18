@@ -1,5 +1,6 @@
 import { AppRoutes } from 'app/enums/AppRoutes';
-import appStore, { Roles } from 'app/stores/appStore';
+import { Roles } from 'app/enums/Roles';
+import appStore from 'app/stores/appStore';
 import gamesStore from 'app/stores/gamesStore';
 import { GamePresetT, OneGamePresent } from 'app/types/GameTypes';
 import { observer } from 'mobx-react';
@@ -13,6 +14,8 @@ import Paint from 'pages/game/GameInstances/Paint';
 import ShiftVertical from 'pages/game/GameInstances/ShiftVertical';
 import Shulte from 'pages/game/GameInstances/Shulte';
 import Steam from 'pages/game/GameInstances/Steam';
+import Difference from 'pages/game/GameInstances/Difference';
+import Frazes from 'pages/game/GameInstances/Frazes';
 import BullsCows from 'pages/game/GameInstances/BullsAndCows';
 
 import React, { FunctionComponent } from 'react';
@@ -23,7 +26,7 @@ export type GameContainerProps = {
   gamePreset: OneGamePresent;
 };
 
-const qwe: { [key: string]: FunctionComponent<GameContainerProps> } = {
+const GAMES: { [key: string]: FunctionComponent<GameContainerProps> } = {
   shulte: Shulte,
   battleColors: BattleColors,
   game2048: Game2048,
@@ -34,6 +37,8 @@ const qwe: { [key: string]: FunctionComponent<GameContainerProps> } = {
   fireflies: Lights,
   argus: Argus,
   mental: Mental,
+  difference: Difference,
+  frazes: Frazes,
   bullsCows: BullsCows,
 };
 
@@ -47,7 +52,7 @@ const GameItems = observer(() => {
   }
 
   if (gameName) {
-    const GameComponent = qwe[gameName];
+    const GameComponent = GAMES[gameName];
     return <GameComponent gamePreset={gamePreset} actualPresets={actualPresets} />;
   }
 

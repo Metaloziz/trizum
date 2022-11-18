@@ -1,7 +1,7 @@
 import { DateTime } from 'app/enums/DateTime';
 import { GroupLevels } from 'app/enums/GroupLevels';
 import { GroupTypes } from 'app/enums/GroupTypes';
-import { EmptyUser } from 'app/stores/appStore';
+import { EmptyUser } from 'app/stores/emptyUser';
 import { FranchiseT } from 'app/types/FranchiseTypes';
 import { GamePresetFromLoadme } from 'app/types/LoadMeTypes';
 import { Nullable } from 'app/types/Nullable';

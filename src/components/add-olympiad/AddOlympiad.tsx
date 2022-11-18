@@ -1,3 +1,4 @@
+import { Roles } from 'app/enums/Roles';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
 import styles from './AddOlympiad.module.scss';
@@ -16,9 +17,11 @@ import BasicModal from 'components/basic-modal/BasicModal';
 import { observer } from 'mobx-react-lite';
 import { changeDateView } from 'utils/changeDateView';
 import Pagination from '@mui/material/Pagination';
-import appStore, { Roles } from 'app/stores/appStore';
+import appStore from 'app/stores/appStore';
 import { useNavigate } from 'react-router-dom';
 import { AppRoutes } from 'app/enums/AppRoutes';
+import franchiseeStore from '../../app/stores/franchiseeStore';
+import coursesStore from '../../app/stores/coursesStore';
 
 const colNames = [
   'Название олимпиады',
@@ -54,12 +57,16 @@ const AddOlympiad = observer(() => {
     queryFieldsOlympiads,
     cleanOlympiadQueryFieldsWithoutRequest,
   } = groupStore;
+  const { getFranchisee } = franchiseeStore;
+  const { getCoursesOlimp } = coursesStore;
   const IS_EDIT_ROLE = isEditRole(role as Roles);
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const [currentGroup, setCurrentGroup] = useState<ResponseGroups>();
 
   useEffect(() => {
+    getFranchisee();
+    getCoursesOlimp();
     getOlympiadGroups();
     return () => {
       cleanOlympiadQueryFieldsWithoutRequest();

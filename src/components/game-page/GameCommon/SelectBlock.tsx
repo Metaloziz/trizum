@@ -38,14 +38,14 @@ export const SelectBlock: FC<SelectBlockPropsT> = props => {
       {/* <div className={styles.wrapGameBlock_header_select}> */}
       {/*  <InformationItem variant="select" size="normal" placeholder="Месяц" /> */}
       {/* </div> */}
-      <div className={styles.wrapGameBlock_header_select}>
-        <InformationItem
-          variant="select"
-          size="normal"
-          placeholder="Группа"
-          option={groupOptions}
-        />
-      </div>
+      {/* <div className={styles.wrapGameBlock_header_select}> */}
+      {/*  <InformationItem */}
+      {/*    variant="select" */}
+      {/*    size="normal" */}
+      {/*    placeholder="Группа" */}
+      {/*    option={groupOptions} */}
+      {/*  /> */}
+      {/* </div> */}
       <Button onClick={openModal}>{presetId ? 'Изменить настройки' : 'Создать настройки'}</Button>
     </div>
   );

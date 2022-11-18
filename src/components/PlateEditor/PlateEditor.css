@@ -1,0 +1,92 @@
+.slate-table td {
+    border: 1px solid;
+}
+
+[data-slate-editor] {
+    padding: 40px;
+    position: relative;
+    width: calc(100% + 20px);
+    height: inherit;
+    overflow: auto;
+    overflow-x: hidden;
+    min-height: 200px;
+    max-height: inherit;
+    background: white;
+}
+
+[data-slate-editor] > h1 {
+    font: 400 1.5rem / 1.21em 'Montserrat', sans-serif;
+}
+
+[data-slate-editor] > h2 {
+    font: 400 1.25rem / 1.2em 'Montserrat', sans-serif;
+}
+
+[data-slate-editor] > h3 {
+    font: 400 1.125rem / 1.2em 'Montserrat', sans-serif;
+}
+
+[data-slate-editor] > h4 {
+    font: 400 1rem / 1.25em 'Montserrat', sans-serif;
+}
+
+[data-slate-editor] > h5 {
+    font: 400 0.875rem / 1.22em 'Montserrat', sans-serif;
+}
+
+[data-slate-editor] > h6 {
+    font: 400 0.75rem / 1.25em 'Montserrat', sans-serif;
+}
+
+.slate-HeadingToolbar {
+    padding: 10px !important;
+    margin: 0 !important;
+    position: relative !important;
+    background: white;
+    width: 100%;
+}
+
+.tippy-box[data-theme~='tomato'] {
+    background-color: tomato;
+    color: yellow;
+}
+
+.slate-selection-area {
+    background: #4f90f22d;
+    border: 1px solid #4f90f2;
+}
+
+.drag-button {
+    overflow: hidden;
+    padding: 0;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border-style: none;
+    cursor: pointer;
+    outline: 0;
+
+    min-width: 18px;
+    min-height: 18px;
+}
+
+.MuiSvgIcon-root {
+    font-size: 18px !important;
+}
+
+.slate-code_block {
+    background-color: #111827 !important;
+}
+
+.slate-code_block code {
+    color: white;
+}
+
+.plate-container {
+    position: relative;
+    width: 100%;
+    min-height: 300px;
+    max-height: 1000px;
+    height: inherit;
+    display: flex;
+    flex-direction: column;
+}
