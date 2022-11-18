@@ -1,14 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
-import {
-  BASE_DEFAULT_VALUES,
-  TEN_DIGIT_MENU,
-} from 'components/game-page/GameCommon/game-form-settings/constants';
+import { BASE_DEFAULT_VALUES } from 'components/game-page/GameCommon/game-form-settings/constants';
 import {
   BullsAndCowsFormType,
   FormSettingsType,
 } from 'components/game-page/GameCommon/game-form-settings/game-form-types';
-import CustomSelect from 'components/select-mui/CustomSelect';
 import TextFieldCustom from 'components/text-field-mui/TextFieldCustom';
 import React, { ReactElement } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
@@ -18,8 +14,8 @@ import { BULLS_AND_COWS_FORM_SCHEMA } from './game-form-schema';
 
 const DEFAULT_VALUES: BullsAndCowsFormType = {
   ...BASE_DEFAULT_VALUES,
-  timeComplete: 60,
-  levelMaxCompleted: 5,
+  timeComplete: 120,
+  levelMaxCompleted: 2,
   errorAacceptable: 10,
   digitMax: 4,
 };
