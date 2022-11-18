@@ -89,7 +89,12 @@ class GamesStore {
 
   games: GamesT = [];
 
-  playResults: PlayResultsResponseT = {} as PlayResultsResponseT;
+  playResults: PlayResultsResponseT = {
+    items: [],
+    page: 0,
+    perPage: 0,
+    total: 0,
+  };
 
   isCurrentGameView: boolean = false;
 

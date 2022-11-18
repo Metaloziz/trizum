@@ -1,17 +1,17 @@
-import appStore from 'app/stores/appStore';
-import gamesStore from 'app/stores/gamesStore';
-import usersStore from 'app/stores/usersStore';
+import { PlayResultsResponseT } from 'app/types/GameTypes';
 import { toJS } from 'mobx';
 
-const getData = (data: string) => data.slice(0, 10);
+export const foo = (playResults: PlayResultsResponseT): number[] => {
+  console.log('playResults', toJS(playResults));
 
-export const foo = (numberOfMonth?: number): number[] => {
+  const getData = (data: string) => data.slice(0, 10);
+
   const arrOfTimes: number[] = [0];
   let indexArrOfTimes: number = 0;
 
-  const { playResults } = gamesStore;
-  const arrayOfItems = toJS(playResults).items;
-  // console.log('createdAt', arrayOfItems);
+  const arrayOfItems = playResults.items;
+
+  // console.log('arrayOfItems', arrayOfItems);
 
   arrayOfItems.forEach((item, index, array) => {
     const currentDate = getData(item.createdAt.date);

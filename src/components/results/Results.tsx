@@ -1,7 +1,5 @@
-import { useFloating } from '@udecode/plate';
 import appStore from 'app/stores/appStore';
 import gamesStore from 'app/stores/gamesStore';
-import usersStore from 'app/stores/usersStore';
 import {
   ArcElement,
   CategoryScale,
@@ -25,19 +23,15 @@ import BlueButton from 'components/atoms/GameResultItem/BlueButton';
 import UserCard from 'components/atoms/userCard';
 import Button from 'components/button/Button';
 import CalendarResults from 'components/molecules/CalendarResults';
-import ResultTable from 'components/molecules/ResultTable';
 import SelectResults from 'components/molecules/SelectResults/SelectResults';
-import { config } from 'components/results/mockData/Config';
-import { gamesAr, options, ResultsView, gamesArr } from 'components/results/mockData/mockData';
+import { LineContainer } from 'components/results/LineContainer/LineContainer';
+import { gamesAr, ResultsView, gamesArr } from 'components/results/mockData/mockData';
 import Tablet from 'components/tablet/Tablet';
-import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useState, useEffect } from 'react';
-import { Line } from 'react-chartjs-2';
 import { SingleValue } from 'react-select';
 
 // ResultTable
-
 import styles from './Results.module.scss';
 
 Chart.register(
@@ -65,7 +59,6 @@ export type ValueLabelT = {
 };
 
 const Results: FC = observer(() => {
-  // hello 2222222
   const [selectedGames, setSelectedGames] = useState<ValueLabelT[]>([]);
   const [view, setView] = useState(ResultsView.Table);
   const [selectValue, setSelectValue] = useState<SingleValue<ValueLabelT>>();
@@ -73,6 +66,7 @@ const Results: FC = observer(() => {
   const mockSelectData: ValueLabelT[] = [{ value: 'value', label: 'label' }];
   const { playResults, getPlayResults } = gamesStore;
   const { user } = appStore;
+  console.log('user', user);
 
   useEffect(() => {
     getPlayResults(user.id);
@@ -109,12 +103,6 @@ const Results: FC = observer(() => {
 
   return (
     <div className={styles.container}>
-      {/* <div className={styles.back}> */}
-      {/* <button type="button" className={styles.buttonArrow}> */}
-      {/*  <Image src={buttonImage} alt="arrow" width={26} height={13} /> */}
-      {/* </button> */}
-      {/* <span>На предыдущую страницу</span> */}
-      {/* </div> */}
       <div className={styles.main}>
         <Tablet>
           <div className={styles.blockTop}>
@@ -122,22 +110,13 @@ const Results: FC = observer(() => {
               <UserCard city="Москва" status="Ученик" fullName="Днепровская А.А." />
             </div>
             <div className={styles.filters}>
-              <div className={styles.badges}>
-                {/* <FilterItem title=" Те, что окрашены в красный цвет" /> */}
-                {/* <FilterItem title=" Те, что окрашены в красный цвет" /> */}
-                {/* <FilterItem title=" Те, что окрашены в красный цвет" /> */}
-              </div>
-              {/* <SelectResults */}
-              {/*  options={options} */}
-              {/*  onChange={onChangeSelect} */}
-              {/*  className={styles.filters_select} */}
-              {/* /> */}
+              <div className={styles.badges} />
             </div>
           </div>
 
           {/* график */}
 
-          {playResults && <Line className={styles.canvas} {...config} />}
+          {playResults && <LineContainer />}
 
           {/* график */}
 
