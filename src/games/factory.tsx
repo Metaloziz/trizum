@@ -57,7 +57,7 @@ export const GameIdentifiers = {
     memoryRhythm: 'memoryRhythm',
     fireflies: 'fireflies',
     argus: 'argus',
-    bullsCows: 'bullsCows'
+    bullsAndCows: 'bullsAndCows'
 };
 
 export const GameList = {
@@ -111,7 +111,7 @@ export const GameList = {
         component: ArgusComponent,
         props: ArgusPropsDefault
     },
-    [GameIdentifiers.bullsCows]: {
+    [GameIdentifiers.bullsAndCows]: {
         name: 'Быки и коровы',
         component: BullsCowsComponent,
         props: BullsCowsPropsDefault

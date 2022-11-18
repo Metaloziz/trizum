@@ -10,8 +10,8 @@ export interface Props extends GameProps {
 
 const PropsDefault : Props = {
   width : 200,
-  timeComplete : 60,
-  levelMaxCompleted: 5,
+  timeComplete : 120,
+  levelMaxCompleted: 2,
   errorAacceptable: 10,
   digitMax: 4
 };

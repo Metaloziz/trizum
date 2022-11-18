@@ -14,7 +14,7 @@ import React, { ReactElement } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { convertEmptyStringToNull, convertNullToEmptyString } from 'utils/convertTextFieldUtils';
 import { BaseFormGameSettings } from './BaseFormGameSettings';
-import { BATTLE_COLORS_FORM_SCHEMA } from './game-form-schema';
+import { BULLS_AND_COWS_FORM_SCHEMA } from './game-form-schema';
 
 const DEFAULT_VALUES: BullsAndCowsFormType = {
   ...BASE_DEFAULT_VALUES,
@@ -44,7 +44,7 @@ export const BullsAndCowsSettings = (props: FormSettingsType): ReactElement => {
         } as BullsAndCowsFormType);
 
   const methods = useForm<BullsAndCowsFormType>({
-    // resolver: yupResolver(BATTLE_COLORS_FORM_SCHEMA),
+    resolver: yupResolver(BULLS_AND_COWS_FORM_SCHEMA),
     defaultValues,
     mode: 'onBlur',
   });
@@ -79,6 +79,63 @@ export const BullsAndCowsSettings = (props: FormSettingsType): ReactElement => {
                   fullWidth
                   inputProps={{ type: 'number' }}
                   error={errors.timeComplete?.message}
+                  onChange={event => onChange(convertEmptyStringToNull(event))}
+                  value={convertNullToEmptyString(value!)}
+                  ref={ref}
+                />
+              )}
+              control={control}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Controller
+              name="levelMaxCompleted"
+              render={({ field: { value, onChange, ref } }) => (
+                <TextFieldCustom
+                  type="text"
+                  label="Кол-во уровней"
+                  size="small"
+                  fullWidth
+                  inputProps={{ type: 'number' }}
+                  error={errors.levelMaxCompleted?.message}
+                  onChange={event => onChange(convertEmptyStringToNull(event))}
+                  value={convertNullToEmptyString(value!)}
+                  ref={ref}
+                />
+              )}
+              control={control}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Controller
+              name="errorAacceptable"
+              render={({ field: { value, onChange, ref } }) => (
+                <TextFieldCustom
+                  type="text"
+                  label="Кол-во возможных ошибок на одном уровне"
+                  size="small"
+                  fullWidth
+                  inputProps={{ type: 'number' }}
+                  error={errors.errorAacceptable?.message}
+                  onChange={event => onChange(convertEmptyStringToNull(event))}
+                  value={convertNullToEmptyString(value!)}
+                  ref={ref}
+                />
+              )}
+              control={control}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Controller
+              name="digitMax"
+              render={({ field: { value, onChange, ref } }) => (
+                <TextFieldCustom
+                  type="text"
+                  label="Кол-во цифр для угадывания"
+                  size="small"
+                  fullWidth
+                  inputProps={{ type: 'number' }}
+                  error={errors.digitMax?.message}
                   onChange={event => onChange(convertEmptyStringToNull(event))}
                   value={convertNullToEmptyString(value!)}
                   ref={ref}

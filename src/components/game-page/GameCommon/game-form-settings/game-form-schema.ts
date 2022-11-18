@@ -276,3 +276,31 @@ export const STEAM_ENGINE_SCHEMA = yup.object().shape({
 });
 
 export const STEAM_ENGINE_FORM_SCHEMA = GAME_SCHEMA.concat(STEAM_ENGINE_SCHEMA);
+
+export const BULLS_AND_COWS_SCHEMA = yup.object().shape({
+  timeComplete: yup
+    .number()
+    .notRequired()
+    .min(5, 'Минимум 5 секунд')
+    .max(3600, 'Максимум 3600 секунд')
+    .nullable(),
+  levelMaxCompleted: yup
+    .number()
+    .notRequired()
+    .min(1, 'Минимум 1 уровень')
+    .max(99, 'Максимум 99 уровней')
+    .nullable(),
+  errorAacceptable: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 ошибок')
+    .max(99, 'Максимум 99 ошибок'),
+  digitMax: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 цифра для угадывания')
+    .max(10, 'Максимум 10 цифр для угадывания')
+    .nullable(),
+});
+
+export const BULLS_AND_COWS_FORM_SCHEMA = GAME_SCHEMA.concat(BULLS_AND_COWS_SCHEMA);

@@ -4,7 +4,7 @@ import { useGame } from 'hooks/useGame';
 import { GameReturn } from 'pages/game/GameInstances/index';
 import React, { FC } from 'react';
 
-const gameName = GameIdentifiers.bullsCows;
+const gameName = GameIdentifiers.bullsAndCows;
 const GameInstance = Factory(gameName);
 
 const BullsAndCows: FC<GameProps> = props => {

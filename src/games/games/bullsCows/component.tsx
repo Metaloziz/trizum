@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { View, TouchableOpacity, StyleSheet, Text, Image } from 'react-native';
 import { Game, GameResult } from '../../common/types';
 
-import TimerAll from '../../components/timer';
+import Timer from '../../components/timerRevert';
 import StartTimer from '../../components/startTimer';
 import { Field, CounterCowsAndBulls, PrevValue, UsersAttempt } from './components';
 import _ from 'lodash';
@@ -11,22 +11,8 @@ import _ from 'lodash';
 const buttonArrow = require('./assets/buttonArrow.png');
 
 const START_TIMER = 3;
-
-const options = [
-  { value: '0', label: '0' },
-  { value: '1', label: '1' },
-  { value: '2', label: '2' },
-  { value: '3', label: '3' },
-  { value: '4', label: '4' },
-  { value: '5', label: '5' },
-  { value: '6', label: '6' },
-  { value: '7', label: '7' },
-  { value: '8', label: '8' },
-  { value: '9', label: '9' },
-];
-
 export default class extends Component<any, any> implements Game {
-  timerAll: any;
+  timerRef: any;
 
   constructor(props: any) {
     super(props);
@@ -36,7 +22,7 @@ export default class extends Component<any, any> implements Game {
       success: 0,
       errors: 0,
       level: 0,
-      secretNumber: Math.random().toString().slice(2, 6),
+      secretNumbers: [],
       guessNumber: {},
       prevGuessNumber: [],
       userErrorAacceptable: 0,
@@ -45,18 +31,27 @@ export default class extends Component<any, any> implements Game {
     };
   }
 
+  genereateSecretNumber = () => {
+    const { digitMax, levelMaxCompleted } = this.props;
+    const secretNumbers: string[] = [];
+    _.range(0, levelMaxCompleted).map(() =>
+      secretNumbers.push(
+        Math.random()
+          .toString()
+          .slice(2, 2 + digitMax),
+      ),
+    );
+    return secretNumbers;
+  };
+
   setErrors = (errors: number) => this.setState({ errors });
   setUserErrorAacceptable = (count: number) => this.setState({ userErrorAacceptable: count });
   setPrevGuessNumber = (value: string[]) => this.setState({ prevGuessNumber: value });
 
-  setDownUserErrorAacceptable = () =>
-    this.setState((prev: any) => ({
-      ...prev,
-      userErrorAacceptable: prev.userErrorAacceptable - 1,
-    }));
+  setLevelErrorAacceptable = (userErrorAacceptable: number) =>
+    this.setState({ userErrorAacceptable });
 
-  setBullsAndCows = (bulls: number, cows: number) =>
-    this.setState((prev: any) => ({ ...prev, bulls, cows }));
+  setBullsAndCows = (bulls: number, cows: number) => this.setState({ bulls, cows });
 
   setGuessNumber = (key: string, value: string) =>
     this.setState((prev: any) => ({
@@ -101,6 +96,7 @@ export default class extends Component<any, any> implements Game {
       level: 0,
       success: 0,
       errors: 0,
+      prevGuessNumber: [],
     });
   };
 
@@ -133,10 +129,17 @@ export default class extends Component<any, any> implements Game {
   };
 
   onEnd = () => {
-    const { onEnd = () => {} } = this.props;
+    const { timeComplete, onEnd = () => {} } = this.props;
+
+    const success = this.state.level - 1;
+    const failed = this.state.errors;
 
     const result: GameResult = {
       result: 'lose',
+      finished: false,
+      success,
+      failed,
+      time: timeComplete,
     };
 
     onEnd(result);
@@ -144,17 +147,64 @@ export default class extends Component<any, any> implements Game {
     this.stop();
   };
 
+  private end = (status = 'win') => {
+    const {timeComplete, onEnd = () => {} } = this.props;
+    const timer = this.timerRef?.getValue();
+    const time = timeComplete - timer; 
+
+    const result: GameResult = {
+      result: status == 'win' ? 'win' : 'lose',
+      success: this.state.success,
+      failed: this.state.errors,
+      time,
+    };
+
+    onEnd(result);
+
+    this.stop();
+  };
+
+  onResult = (result: boolean) => {
+    const { errorAacceptable, levelMaxCompleted } = this.props;
+
+    const level = this.state.level + 1;
+    const success = this.state.success + (result ? 1 : 0);
+    const errors = this.state.errors + (result ? 0 : 1);
+
+    this.setState(
+      {
+        level,
+        success,
+        errors,
+        userErrorAacceptable: errorAacceptable,
+        prevGuessNumber: [],
+      },
+      () => {
+        if (level > levelMaxCompleted) {
+          this.end('win');
+        }
+
+        this.clearGuessNumber();
+      },
+    );
+  };
+
   startLogic = () => {
     const { errorAacceptable } = this.props;
-    this.setUserErrorAacceptable(errorAacceptable);
+    const secretNumbers = this.genereateSecretNumber();
+
+    this.setState({
+      level: 1,
+      userErrorAacceptable: errorAacceptable,
+      secretNumbers,
+    });
+
     this.clearGuessNumber();
   };
 
-  checkAnswer = () => {
-    const { guessNumber, secretNumber, userErrorAacceptable } = this.state;
-    const userValue = Object.values(guessNumber)
-      .map((item: any) => item.value)
-      .join('');
+  calcAnswer = (userNumber: string) => {
+    const { level, secretNumbers } = this.state;
+    const secretNumber = secretNumbers[level - 1];
 
     let secretArray = [] as any;
     let guessArray = [] as any;
@@ -162,7 +212,7 @@ export default class extends Component<any, any> implements Game {
     let cows = 0;
 
     secretArray = secretNumber.split('');
-    guessArray = userValue.split('');
+    guessArray = userNumber.split('');
 
     secretArray.forEach(function (key: any, index: any) {
       if (secretArray[index] === guessArray[index]) {
@@ -179,26 +229,30 @@ export default class extends Component<any, any> implements Game {
       }
     });
 
-    if (bulls === 4) {
-      console.log('WIN !!!!');
-      return this.onWin();
-    }
+    return { bulls, cows };
+  };
+
+  checkAnswer = () => {
+    const { digitMax } = this.props;
+    const { guessNumber } = this.state;
+
+    const userValue = Object.values(guessNumber)
+      .map((item: any) => item.value)
+      .join('');
+
+    const { bulls, cows } = this.calcAnswer(userValue);
+
+    const userErrorAacceptable = this.state.userErrorAacceptable - 1;
 
     this.setBullsAndCows(bulls, cows);
-    this.setPrevGuessNumber(userValue.split(''));
-    this.setDownUserErrorAacceptable();
 
-    console.log('checkAnswer', {
-      userValue,
-      secretNumber,
-      bulls,
-      cows,
-      guessArray,
-      state: this.state,
-    });
-    if (userErrorAacceptable - 1 === 0) {
-      return this.onEnd();
-    }
+    this.setLevelErrorAacceptable(userErrorAacceptable);
+    this.setPrevGuessNumber(userValue.split(''));
+
+
+    if (bulls === digitMax) return this.onResult(true);
+
+    if (userErrorAacceptable === 0) return this.onResult(false);
   };
 
   renderFields = () => {
@@ -208,7 +262,6 @@ export default class extends Component<any, any> implements Game {
       <Field
         key={field}
         id={field.toString()}
-        options={options}
         onChange={this.updateGuessNumber}
         value={this.state.guessNumber[field]}
       />
@@ -216,7 +269,7 @@ export default class extends Component<any, any> implements Game {
   };
 
   renderInner = () => {
-    const { width, elementsTotal, timeComplete } = this.props;
+    const { width, levelMaxCompleted, timeComplete } = this.props;
 
     return (
       <View
@@ -225,8 +278,43 @@ export default class extends Component<any, any> implements Game {
           ...styles.inner,
         }}
       >
+        {timeComplete > 0 && (
+          <View style={styles.progressTime}>
+            <Timer
+              ref={ref => (this.timerRef = ref)}
+              time={timeComplete}
+              onEnd={this.onEnd}
+              renderComponent={() => (
+                <View
+                  style={{
+                    ...styles.progressTimeInner,
+                    width: `100%`,
+                  }}
+                />
+              )}
+              renderTime={(time: number) => {
+                let progress = ((timeComplete - time) / timeComplete) * 100;
+
+                if (progress > 100) {
+                  progress = 100;
+                }
+
+                return (
+                  <View
+                    style={{
+                      ...styles.progressTimeInner,
+                      width: `${progress}%`,
+                    }}
+                  />
+                );
+              }}
+            />
+          </View>
+        )}
         <View style={styles.header}>
-          <Text style={styles.label}>Уровень 1</Text>
+          <Text style={styles.label}>
+            Уровень {this.state.level}/{levelMaxCompleted}
+          </Text>
           <UsersAttempt count={this.state.userErrorAacceptable} />
         </View>
         <View style={styles.gameArea}>
@@ -240,9 +328,7 @@ export default class extends Component<any, any> implements Game {
           <View style={styles.inputsWrapper}>{this.renderFields()}</View>
           <TouchableOpacity style={styles.button} onPress={this.checkAnswer}>
             <Text style={styles.buttonLabel}>
-              {this.state.userErrorAacceptable < this.props.errorAacceptable
-                ? 'Попробовать еще'
-                : 'Играть'}
+              {this.state.prevGuessNumber.length > 0 ? 'Попробовать еще' : 'Играть'}
             </Text>
             <Image style={styles.buttonIcon} source={buttonArrow} />
           </TouchableOpacity>
@@ -304,6 +390,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
   },
   header: {
+    marginTop: 15,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -311,7 +398,6 @@ const styles = StyleSheet.create({
   gameArea: {
     marginVertical: 'auto',
     marginHorizontal: 'auto',
-    maxWidth: 418,
   },
   counterWrapper: {
     flexDirection: 'row',
@@ -333,6 +419,7 @@ const styles = StyleSheet.create({
   },
   inputsWrapper: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'center',
     marginVertical: 50,

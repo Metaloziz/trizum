@@ -204,7 +204,7 @@ export const NewGameModal: FC<PropsT> = observer(props => {
             deletedPreset={deletedPreset}
           />
         )}
-        {game.code === GameIdentifiers.bullsCows && (
+        {game.code === GameIdentifiers.bullsAndCows && (
           <BullsAndCowsSettings
             usedInWorks={gamePreset.usedInWorks}
             gamePreset={gamePreset.gamePreset}
