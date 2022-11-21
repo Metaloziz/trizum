@@ -5,7 +5,11 @@ export const GAME_SCHEMA = yup.object().shape({
     .string()
     .required('Обязательное поле')
     .min(1, 'Минимум 1 символ')
-    .max(50, 'Максимум 50 символо'),
+    .max(30, 'Максимум 30 символо')
+    .matches(
+      /^[a-zA-Zа-яёА-ЯЁ0-9 -]+$/,
+      'Допускаются символы латинские или кириллицы, числа, пробелы, знак «-»',
+    ),
   level: yup.string().required('Обязательное поле'),
   status: yup.string().required('Обязательное поле'),
   description: yup.string().notRequired().nullable(),

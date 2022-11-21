@@ -207,7 +207,11 @@ class GamesStore {
 
   editPreset = async (params: EditOrCreatePresetParamsT) => {
     params.timeMax = 3600;
-    await gamesService.editPresetGame(this.gamePreset.gamePreset.id, params);
+    const res = await gamesService.editPresetGame(this.gamePreset.gamePreset.id, params);
+    runInAction(() => {
+      this.gamePreset.gamePreset = res;
+      this.gamePreset.gamePreset.settings = res.settings;
+    });
     await this.getPresets({ game_code: this.game.code });
     this.filterPresets(this.game.code);
   };

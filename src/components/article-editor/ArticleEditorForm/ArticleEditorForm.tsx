@@ -35,8 +35,9 @@ const SCHEMA = yup.object().shape({
     .max(250, 'Максимум 250 символов')
     .matches(
       /^[a-zA-Zа-яёА-ЯЁ0-9 \-,./()"]+$/,
-      'Допускаются символы латинские или кириллицы, числа, пробелы и знаки «-», «,», «.» , «/», «(», «)»',
-    ),
+      'Допускаются символы латинские или кириллицы, числа, пробелы, двойные кавычки и знаки «-», «,», «.» , «/», «(», «)»',
+    )
+    .nullable(),
   description: yup.string(),
   testId: yup.string().nullable(),
   roles: yup.array(yup.string()).notRequired().nullable(),
