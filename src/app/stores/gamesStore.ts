@@ -12,6 +12,7 @@ import {
   PlayResultsResponseT,
   PlaySendResultT,
   PresetsGameSettings,
+  PlayResultsSearchParams,
 } from 'app/types/GameTypes';
 import { SearchGameParamsType } from 'app/types/SearchGameParamsType';
 import { PresetT } from 'app/types/WorkTypes';
@@ -78,6 +79,8 @@ class GamesStore {
     },
     usedInWorks: [],
   };
+
+  playResultsSearchParams = new PlayResultsSearchParams();
 
   game: GameT = {
     code: '',
@@ -231,9 +234,11 @@ class GamesStore {
     await gamesService.sendPlayResults(params);
   };
 
-  getPlayResults = async (userId: string) => {
+  getPlayResults = async () => {
     try {
-      const res = await gamesService.getPlayResults(userId);
+      const params = removeEmptyFields(this.playResultsSearchParams);
+
+      const res = await gamesService.getPlayResults(params);
       runInAction(() => {
         this.playResults = res;
       });
@@ -258,6 +263,10 @@ class GamesStore {
       // courseWorkId: group.group.course.,
       workGamePresetId: '',
     };
+  };
+
+  setPlayResultsSearchParams = (params: Partial<PlayResultsSearchParams>) => {
+    this.playResultsSearchParams = { ...this.playResultsSearchParams, ...params };
   };
 
   setActiveWork = (params: IdentificationParamsType) => {

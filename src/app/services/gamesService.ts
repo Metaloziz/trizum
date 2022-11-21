@@ -9,6 +9,7 @@ import {
   OneGamePresent,
   PlayResultsResponseT,
   PlaySendResultT,
+  PlayResultsSearchParams,
 } from 'app/types/GameTypes';
 import { SearchParamsType } from '../types/SearchParamsType';
 
@@ -45,13 +46,8 @@ const gamesService = {
     const { data } = await instance.post(`${Paths.Presets}/${id}`, { status: 'removal' });
     return data;
   },
-  getPlayResults: async (userId: string): Promise<PlayResultsResponseT> => {
-    const { data } = await instance.get(Paths.PlayResults, {
-      params: {
-        user_id: userId,
-        per_page: 1000,
-      },
-    });
+  getPlayResults: async (params: PlayResultsSearchParams) => {
+    const { data } = await instance.get<PlayResultsResponseT>(Paths.PlayResults, { params });
     return data;
   },
 };

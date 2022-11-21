@@ -62,24 +62,6 @@ export const getConfig = (playResults: PlayResultsResponseT) => {
           data,
           cubicInterpolationMode: MONOTONE,
         },
-        {
-          label: 'Затраченное время (мин/день)',
-          borderWidth: 2,
-          pointRadius: 0,
-          borderColor(context: any) {
-            const { chart } = context;
-            const { ctx, chartArea } = chart;
-
-            if (!chartArea) {
-              // This case happens on initial chart load
-              return;
-            }
-            // eslint-disable-next-line consistent-return
-            return getGradient(ctx, chartArea);
-          },
-          data: [1, 100, 2000, 30, 3213, 1131, 321, 3123, 12, 31, 2231, 3123],
-          cubicInterpolationMode: MONOTONE,
-        },
       ],
     },
     options: {
