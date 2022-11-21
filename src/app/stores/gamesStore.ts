@@ -157,13 +157,13 @@ class GamesStore {
     try {
       let preset;
       if (appStore.role !== Roles.Student) {
-        const zxc = this.newPresets.items.find(el => el.name === presetName);
+        const zxc = this.newPresets.items.find(el => el.id === presetName);
         if (zxc) {
           preset = { gameCode: zxc.name, gameId: zxc.id };
         }
       }
       if (appStore.role === Roles.Student) {
-        const zxc = appStore.currentGameIds.find(el => el.gameCode === presetName);
+        const zxc = appStore.currentGameIds.find(el => el.gameId === presetName);
         if (zxc) {
           preset = zxc;
         }
@@ -174,7 +174,8 @@ class GamesStore {
           this.gamePreset = res;
           this.gamePreset.gamePreset.settings = res.gamePreset.settings;
         });
-      } else {
+      }
+      if (presetName === 'newSample') {
         this.gamePreset = {
           gamePreset: {
             id: '',

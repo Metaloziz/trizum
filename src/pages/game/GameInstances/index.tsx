@@ -22,7 +22,7 @@ type GameReturnPropsT = {
   gameViewSize: number;
   presetArr: OptionT[];
   gamePreset: GamePresetT;
-  setPreset: (data: OptionT) => void;
+  setPreset: (data: string) => void;
   groupOptions: OptionT[];
   started: boolean;
   startGame: () => void;
@@ -33,6 +33,7 @@ type GameReturnPropsT = {
   navigate: NavigateFunction;
   children: React.ReactNode;
   game?: GameT;
+  isLoading: boolean;
 };
 
 const KEY_GAME = ['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft'];
@@ -60,6 +61,7 @@ export const GameReturn: FC<GameReturnPropsT> = props => {
     children,
     stopGame,
     game,
+    isLoading,
   } = props;
 
   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
@@ -98,6 +100,7 @@ export const GameReturn: FC<GameReturnPropsT> = props => {
                 presetId={gamePreset.id}
                 setPreset={setPreset}
                 groupOptions={groupOptions}
+                isLoading={isLoading}
               />
             )}
           </div>
@@ -111,7 +114,7 @@ export const GameReturn: FC<GameReturnPropsT> = props => {
               <div className={styles.wrapGame}>
                 <div className={styles.wrapGame_overlay}>
                   {children}
-                  {!started && <PlayButton onStart={startGame} />}
+                  {!started && <PlayButton isDisable={isLoading} onStart={startGame} />}
                 </div>
               </div>
             </div>

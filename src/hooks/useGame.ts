@@ -74,9 +74,9 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
     }
   };
 
-  const setPreset = async (data: Option) => {
+  const setPreset = async (data: string) => {
     stopGame();
-    await getPreset(data.value);
+    await getPreset(data);
   };
 
   // const toggleModal = (value: boolean) => setIsModalOpen(value);

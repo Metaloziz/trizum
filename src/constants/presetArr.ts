@@ -1,19 +1,20 @@
-import { StatusEnum, StatusTypes } from 'app/enums/StatusTypes';
+import { StatusEnum } from 'app/enums/StatusTypes';
 import { GamePresetT } from 'app/types/GameTypes';
 import { Option } from 'components/select-mui/CustomSelect';
 
 export const getPresetArrOptions = (actualPreset: Omit<GamePresetT, 'settings'>[]) => {
   const presetArr: Option[] = [
     {
-      value: 'Создать шаблон',
+      value: 'newSample',
       label: 'Создать шаблон',
     },
   ];
-  actualPreset?.map(el =>
+  actualPreset?.map(el => {
     presetArr.push({
-      value: el.name,
-      label: `${el.name} \n ${StatusEnum[el.status]}`,
-    }),
-  );
+      value: el.id,
+      label: `${el.name} /Статус: ${StatusEnum[el.status]}`,
+    });
+    return el;
+  });
   return presetArr;
 };

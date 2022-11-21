@@ -62,6 +62,7 @@ const GameItems = observer(() => {
       onEnd,
       navigate,
       stopGame,
+      isLoading,
     } = useGame({ gamePreset, actualPresets, gameName });
 
     if (role === Roles.Unauthorized) {
@@ -92,6 +93,7 @@ const GameItems = observer(() => {
         toggleModal={toggleModal}
         onRepeat={onRepeat}
         navigate={navigate}
+        isLoading={isLoading}
       >
         <GameInstance width={gameViewSize} onEnd={onEnd} onRef={onRef} {...settings} />
       </GameReturn>
