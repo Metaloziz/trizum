@@ -2,44 +2,37 @@ import { AppRoutes } from 'app/enums/AppRoutes';
 import { Roles } from 'app/enums/Roles';
 import appStore from 'app/stores/appStore';
 import gamesStore from 'app/stores/gamesStore';
-import { GamePresetT, OneGamePresent } from 'app/types/GameTypes';
+import { GamePresetT, OneGamePresent, PresetsGameSettings, ResultsNewT } from 'app/types/GameTypes';
+import { Factory, GameIdentifiers } from 'games';
+import { useGame } from 'hooks/useGame';
 import { observer } from 'mobx-react';
-import Argus from 'pages/game/GameInstances/Argus';
-import BattleColors from 'pages/game/GameInstances/BattleColors';
-import Blinks from 'pages/game/GameInstances/Blinks';
-import BullsAndCows from 'pages/game/GameInstances/BullsAndCows';
-import Game2048 from 'pages/game/GameInstances/Game2048';
-import Lights from 'pages/game/GameInstances/Lights';
-import Mental from 'pages/game/GameInstances/Mental';
-import Paint from 'pages/game/GameInstances/Paint';
-import ShiftVertical from 'pages/game/GameInstances/ShiftVertical';
-import Shulte from 'pages/game/GameInstances/Shulte';
-import Steam from 'pages/game/GameInstances/Steam';
-import Difference from 'pages/game/GameInstances/Difference';
-import Frazes from 'pages/game/GameInstances/Frazes';
+import { GameReturn } from 'pages/game/GameInstances';
 
 import React, { FunctionComponent } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 
-export type GameContainerProps = {
+export type GameContainerProps = Partial<PresetsGameSettings> & {
   actualPresets: Omit<GamePresetT, 'settings'>[];
   gamePreset: OneGamePresent;
+  width: number;
+  onEnd: (result?: ResultsNewT) => void;
+  onRef: (refGame: any) => void;
 };
 
-const GAMES: { [key: string]: FunctionComponent<GameContainerProps> } = {
-  shulte: Shulte,
-  battleColors: BattleColors,
-  game2048: Game2048,
-  shiftVertical: ShiftVertical,
-  steamEngine: Steam,
-  silhouettes: Paint,
-  memoryRhythm: Blinks,
-  fireflies: Lights,
-  argus: Argus,
-  mental: Mental,
-  difference: Difference,
-  frazes: Frazes,
-  bullsAndCows: BullsAndCows,
+const GAMES: { [key: string]: FunctionComponent<GameContainerProps & any> } = {
+  [GameIdentifiers.shulte]: Factory(GameIdentifiers.shulte),
+  [GameIdentifiers.battleColors]: Factory(GameIdentifiers.battleColors),
+  [GameIdentifiers.game2048]: Factory(GameIdentifiers.game2048),
+  [GameIdentifiers.shiftVertical]: Factory(GameIdentifiers.shiftVertical),
+  [GameIdentifiers.steamEngine]: Factory(GameIdentifiers.steamEngine),
+  [GameIdentifiers.silhouettes]: Factory(GameIdentifiers.silhouettes),
+  [GameIdentifiers.memoryRhythm]: Factory(GameIdentifiers.memoryRhythm),
+  [GameIdentifiers.fireflies]: Factory(GameIdentifiers.fireflies),
+  [GameIdentifiers.argus]: Factory(GameIdentifiers.argus),
+  [GameIdentifiers.mental]: Factory(GameIdentifiers.mental),
+  [GameIdentifiers.difference]: Factory(GameIdentifiers.difference),
+  [GameIdentifiers.frazes]: Factory(GameIdentifiers.frazes),
+  [GameIdentifiers.bullsAndCows]: Factory(GameIdentifiers.bullsAndCows),
 };
 
 const GameItems = observer(() => {
@@ -47,13 +40,62 @@ const GameItems = observer(() => {
   const { gamePreset, actualPresets } = gamesStore;
   const { gameName } = useParams<'gameName'>();
 
-  if (role === Roles.Unauthorized) {
-    return <Navigate to={AppRoutes.Index} />;
-  }
-
   if (gameName) {
-    const GameComponent = GAMES[gameName];
-    return <GameComponent gamePreset={gamePreset} actualPresets={actualPresets} />;
+    const {
+      gameResult,
+      gameTitle,
+      gameViewSize,
+      presetArr,
+      game,
+      startGame,
+      settings,
+      closeResultModal,
+      onRepeat,
+      resultModal,
+      setPreset,
+      groupOptions,
+      started,
+      deletePreset,
+      isModalOpen,
+      toggleModal,
+      onRef,
+      onEnd,
+      navigate,
+      stopGame,
+    } = useGame({ gamePreset, actualPresets, gameName });
+
+    if (role === Roles.Unauthorized) {
+      return <Navigate to={AppRoutes.Index} />;
+    }
+
+    const GameInstance = GAMES[gameName];
+
+    return (
+      <GameReturn
+        stopGame={stopGame}
+        game={game}
+        gameTitle={gameTitle}
+        startGame={startGame}
+        gameResult={gameResult}
+        started={started}
+        gamePreset={gamePreset.gamePreset}
+        setPreset={setPreset}
+        presetArr={presetArr}
+        role={role}
+        isModalOpen={isModalOpen}
+        resultModal={resultModal}
+        closeResultModal={closeResultModal}
+        settings={settings}
+        deletePreset={deletePreset}
+        gameViewSize={gameViewSize}
+        groupOptions={groupOptions}
+        toggleModal={toggleModal}
+        onRepeat={onRepeat}
+        navigate={navigate}
+      >
+        <GameInstance width={gameViewSize} onEnd={onEnd} onRef={onRef} {...settings} />
+      </GameReturn>
+    );
   }
 
   return <Navigate to={AppRoutes.Games} />;
