@@ -13,6 +13,7 @@ import {
   PlaySendResultT,
   PresetsGameSettings,
 } from 'app/types/GameTypes';
+import { SearchGameParamsType } from 'app/types/SearchGameParamsType';
 import { PresetT } from 'app/types/WorkTypes';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { getActiveClassGroup } from 'utils/getActiveClassGroup';
@@ -100,6 +101,8 @@ class GamesStore {
     courseWorkId: '',
   };
 
+  isLoading: boolean = false;
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -127,7 +130,7 @@ class GamesStore {
     }
   };
 
-  getPresets = async (searchPresetParams?: Partial<SearchParamsType>) => {
+  getPresets = async (searchPresetParams?: Partial<SearchParamsType & SearchGameParamsType>) => {
     try {
       const params = removeEmptyFields(searchPresetParams || {});
       params.per_page = 1000; // todo hardcode
@@ -197,20 +200,20 @@ class GamesStore {
   createPresets = async (params: EditOrCreatePresetParamsT) => {
     params.timeMax = 3600;
     await gamesService.createPresetGame(params);
-    await this.getPresets();
+    await this.getPresets({ game_code: this.game.code });
     this.filterPresets(this.game.code);
   };
 
   editPreset = async (params: EditOrCreatePresetParamsT) => {
     params.timeMax = 3600;
     await gamesService.editPresetGame(this.gamePreset.gamePreset.id, params);
-    await this.getPresets();
+    await this.getPresets({ game_code: this.game.code });
     this.filterPresets(this.game.code);
   };
 
   deletePreset = async (id: string) => {
     await gamesService.deletePreset(id);
-    await this.getPresets();
+    await this.getPresets({ game_code: this.game.code });
     this.filterPresets(this.game.code);
   };
 
@@ -249,6 +252,10 @@ class GamesStore {
 
   setActiveWork = (params: IdentificationParamsType) => {
     this.identificationParams = params;
+  };
+
+  setIsLoading = (isLoading: boolean) => {
+    this.isLoading = isLoading;
   };
 }
 

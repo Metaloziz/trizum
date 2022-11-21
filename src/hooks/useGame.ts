@@ -17,10 +17,19 @@ type useGameProps = GameProps & {
 };
 
 export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) => {
-  const { role, user } = appStore;
-  const { groups, getGroups } = groupStore;
-  const { deletePreset, getPreset, getPresets, getGame, game, sendResults, identificationParams } =
-    gamesStore;
+  const { role } = appStore;
+  const { groups } = groupStore;
+  const {
+    deletePreset,
+    getPreset,
+    getPresets,
+    getGame,
+    game,
+    sendResults,
+    identificationParams,
+    setIsLoading,
+    isLoading,
+  } = gamesStore;
 
   const [refs, setRef] = useState<any>(null);
   const [started, setStarted] = useState(false);
@@ -119,15 +128,17 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
   };
 
   const requestPresets = async () => {
+    setIsLoading(true);
     if (role !== Roles.Student) {
-      await getGroups();
-      await getPresets();
+      // await getGroups();
+      await getPresets({ game_code: gameName });
     }
     await getGame(gameName);
 
     if (role === Roles.Student) {
       // getPreset()
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -168,5 +179,6 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
     onEnd,
     onRef,
     stopGame,
+    isLoading,
   };
 };

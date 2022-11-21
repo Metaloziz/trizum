@@ -7,6 +7,7 @@ import { observer } from 'mobx-react';
 import Argus from 'pages/game/GameInstances/Argus';
 import BattleColors from 'pages/game/GameInstances/BattleColors';
 import Blinks from 'pages/game/GameInstances/Blinks';
+import BullsAndCows from 'pages/game/GameInstances/BullsAndCows';
 import Game2048 from 'pages/game/GameInstances/Game2048';
 import Lights from 'pages/game/GameInstances/Lights';
 import Mental from 'pages/game/GameInstances/Mental';
@@ -16,7 +17,6 @@ import Shulte from 'pages/game/GameInstances/Shulte';
 import Steam from 'pages/game/GameInstances/Steam';
 import Difference from 'pages/game/GameInstances/Difference';
 import Frazes from 'pages/game/GameInstances/Frazes';
-import BullsCows from 'pages/game/GameInstances/BullsAndCows';
 
 import React, { FunctionComponent } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
@@ -39,7 +39,7 @@ const GAMES: { [key: string]: FunctionComponent<GameContainerProps> } = {
   mental: Mental,
   difference: Difference,
   frazes: Frazes,
-  bullsCows: BullsCows,
+  bullsAndCows: BullsAndCows,
 };
 
 const GameItems = observer(() => {

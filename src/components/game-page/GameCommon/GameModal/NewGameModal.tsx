@@ -84,7 +84,7 @@ export const NewGameModal: FC<PropsT> = observer(props => {
 
     gamePreset?.gamePreset?.id ? await editPreset(params) : await createPresets(params);
 
-    await gamesStore.getPresets();
+    // await gamesStore.getPresets();
     if (gamesStore.gamePreset.gamePreset.name) {
       await gamesStore.getPreset(gamesStore.gamePreset.gamePreset.name);
     }
