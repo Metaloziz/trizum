@@ -29,7 +29,14 @@ const ROLES_OPTIONS = [
 ];
 
 const SCHEMA = yup.object().shape({
-  title: yup.string().required('Обязательно поле'),
+  title: yup
+    .string()
+    .required('Обязательно поле')
+    .max(250, 'Максимум 250 символов')
+    .matches(
+      /^[a-zA-Zа-яёА-ЯЁ0-9 \-,./()"]+$/,
+      'Допускаются символы латинские или кириллицы, числа, пробелы и знаки «-», «,», «.» , «/», «(», «)»',
+    ),
   description: yup.string(),
   testId: yup.string().nullable(),
   roles: yup.array(yup.string()).notRequired().nullable(),
