@@ -1,27 +1,39 @@
 import { PlayResultsResponseT } from 'app/types/GameTypes';
 import { toJS } from 'mobx';
+import { getDaysCount } from 'utils/getDaysCount';
 
 const SEC_PER_MINUTE = 60;
 
-export const getDataForLine = (playResults: PlayResultsResponseT): number[] => {
+export const getDataForLine = (
+  playResults: PlayResultsResponseT,
+  daysLabels: string[],
+): number[] => {
+  const arrOfTimes: number[] = new Array(daysLabels.length).fill(0);
+
+  playResults.items.forEach(result => {
+    const date = result.createdAt.date.split(' ')[0].split('-').reverse().join('.');
+
+    const currentIndex = daysLabels.indexOf(date);
+    if (currentIndex >= 0) {
+      arrOfTimes[currentIndex] = result.time;
+    }
+  });
+
   const getData = (data: string) => data.slice(8, 10);
   const arrayOfItems = playResults.items;
 
-  function getDaysInMonth(year: number, month: number) {
-    return new Date(year, month, 0).getDate();
-  }
+  const start = playResults.items[0].createdAt.date.split(' ')[0];
+  const end = playResults.items[playResults.items.length - 1].createdAt.date.split(' ')[0];
 
-  const dateObject = new Date(arrayOfItems[0].createdAt.date);
-  const currentYear = dateObject.getFullYear();
-  const currentMonth = dateObject.getMonth() + 1;
+  console.log('startend', toJS([end, start]));
 
-  const countOfDays = getDaysInMonth(currentYear, currentMonth);
+  const daysCount = getDaysCount(end, start);
 
   console.log('arrOfTimes', toJS(playResults));
 
-  const arrOfTimes: number[] = new Array(countOfDays).fill(0, 0, countOfDays);
+  console.log('daysCount', toJS(daysCount));
 
-  arrayOfItems.forEach((item, index, array) => {
+  arrayOfItems.forEach(item => {
     const currentDate = Number(getData(item.createdAt.date));
 
     arrOfTimes[currentDate - 1] += item.time / SEC_PER_MINUTE;

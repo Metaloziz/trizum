@@ -5,12 +5,12 @@ import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react';
 import { Line } from 'react-chartjs-2';
 
-type Props = {
+export type LineContainerProps = {
   playResults: PlayResultsResponseT;
 };
 
-export const LineContainer: FC<Props> = observer(({ playResults }) => (
+export const LineContainer: FC<LineContainerProps> = observer(({ playResults }) => (
   <div>
-    {playResults.items.length && <Line className={styles.canvas} {...getConfig(playResults)} />}
+    {!!playResults.items.length && <Line className={styles.canvas} {...getConfig(playResults)} />}
   </div>
 ));

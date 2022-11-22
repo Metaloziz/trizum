@@ -1,48 +1,21 @@
 import { PlayResultsResponseT } from 'app/types/GameTypes';
-import { days } from 'components/results/mockData/helper/days';
+import { getGradient, getLimitsDays } from 'components/results/LineContainer/getConfigHelper';
 import { getDataForLine } from 'components/results/mockData/helper/getDataForLine';
+import { getDaysLabels } from 'components/results/mockData/helper/getDaysLabels';
+import { getDaysCount } from 'utils/getDaysCount';
 
 export const getConfig = (playResults: PlayResultsResponseT) => {
-  const Utils = {
-    CHART_COLORS: {
-      blue: '#00eaff',
-      yellow: '#006eff',
-      red: '#ffffff',
-    },
-  };
+  const { start, end } = getLimitsDays(playResults);
 
-  let width: any;
-  let height: any;
-  let gradient: any;
+  const daysCount = getDaysCount(start, end);
 
-  function getGradient(ctx: any, chartArea: any) {
-    const chartWidth = chartArea.right - chartArea.left;
-    const chartHeight = chartArea.bottom - chartArea.top;
-    if (!gradient || width !== chartWidth || height !== chartHeight) {
-      // Create the gradient because this is either the first render
-      // or the size of the chart has changed
-      width = chartWidth;
-      height = chartHeight;
-      gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
-      gradient.addColorStop(0, Utils.CHART_COLORS.blue);
-      // gradient.addColorStop(0.5, Utils.CHART_COLORS.yellow);
-      // gradient.addColorStop(1, Utils.CHART_COLORS.red);
-    }
-
-    return gradient;
-  }
-
-  const MONOTONE = 'monotone' as const;
-  const data = getDataForLine(playResults);
-
-  const labels = days({ count: data.length });
-
-  const labels2 = labels.map(day => day + '.11');
+  const labels = getDaysLabels(start, daysCount);
+  const data = getDataForLine(playResults, labels);
 
   return {
     type: 'line',
     data: {
-      labels: labels2,
+      labels,
       datasets: [
         {
           label: ' Затраченное время учёбу, мин/день ',
@@ -60,7 +33,6 @@ export const getConfig = (playResults: PlayResultsResponseT) => {
             return getGradient(ctx, chartArea);
           },
           data,
-          cubicInterpolationMode: MONOTONE,
         },
       ],
     },

@@ -1,6 +1,5 @@
-import { Button, TextField } from '@mui/material';
+import { TextField } from '@mui/material';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
-import { PickersMonth } from '@mui/x-date-pickers/MonthPicker/PickersMonth';
 import appStore from 'app/stores/appStore';
 import gamesStore from 'app/stores/gamesStore';
 import {
@@ -24,13 +23,12 @@ import {
 } from 'chart.js';
 import UserCard from 'components/atoms/userCard';
 import { LineContainer } from 'components/results/LineContainer/LineContainer';
-import { ResultsView } from 'components/results/mockData/mockData';
 import Tablet from 'components/tablet/Tablet';
 import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
+import moment from 'moment';
 import { Moment } from 'moment/moment';
 import React, { FC, useState, useEffect } from 'react';
-import { SingleValue } from 'react-select';
 
 // ResultTable
 import styles from './Results.module.scss';
@@ -60,11 +58,11 @@ export type ValueLabelT = {
 };
 
 const Results: FC = observer(() => {
-  const { playResults, getPlayResults, setPlayResultsSearchParams } = gamesStore;
   const { user, fullUserName } = appStore;
+  const { playResults, getPlayResults, setPlayResultsSearchParams } = gamesStore;
 
   const [createdSince, setCreatedSince] = useState<Moment | null>(null);
-  const [createdUntil, setCreatedUntil] = useState<Moment | null>(null);
+  const [createdUntil, setCreatedUntil] = useState<Moment | null>(moment());
 
   const handleChangeCreatedSince = (newValue: Moment | null) => {
     setCreatedSince(newValue);
@@ -74,18 +72,22 @@ const Results: FC = observer(() => {
     setCreatedUntil(newValue);
   };
 
-  console.log('playResults', toJS(playResults));
+  const start = createdSince?.format('DD.MM.YYYY');
+  const end = createdUntil?.format('DD.MM.YYYY');
+
   console.log('user', toJS(user));
 
-  useEffect(() => {
+  const getData = () => {
     setPlayResultsSearchParams({
       user_id: user.id,
       per_page: 1000,
-      created_since: createdSince?.format('DD.MM.YYYY'),
-      created_until: createdUntil?.format('DD.MM.YYYY'),
+      created_since: start,
+      created_until: end,
     });
     getPlayResults();
-  }, [createdSince, createdUntil]);
+  };
+
+  useEffect(getData, [createdSince, createdUntil]);
 
   return (
     <div className={styles.container}>
@@ -112,14 +114,18 @@ const Results: FC = observer(() => {
               inputFormat="DD/MM/YYYY"
               value={createdSince}
               onChange={handleChangeCreatedSince}
-              renderInput={params => <TextField {...params} fullWidth />}
+              renderInput={params => (
+                <TextField {...params} onKeyDown={event => event.preventDefault()} fullWidth />
+              )}
             />
             <DesktopDatePicker
               label="По"
               inputFormat="DD/MM/YYYY"
               value={createdUntil}
               onChange={handleChangeCreatedUntil}
-              renderInput={params => <TextField {...params} fullWidth />}
+              renderInput={params => (
+                <TextField {...params} onKeyDown={event => event.preventDefault()} fullWidth />
+              )}
             />
           </div>
         </Tablet>
