@@ -82,7 +82,7 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
       sex: findSex() || sexOptions[0].value,
       city: currentUser?.city || '',
       phone: currentUser?.phone || '',
-      birthdate: currentUser?.birthdate?.date || '01.01.2000',
+      birthdate: currentUser?.birthdate?.date || '01.01.2010',
       email: currentUser?.email || '',
       franchise: currentUser?.franchise?.id || '', // изменяется для Учителя на обучении
       tariff: currentUser?.tariff?.id || '',
