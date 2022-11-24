@@ -21,12 +21,12 @@ export const TestsList = observer(() => {
 
   const onPageChange = (event: ChangeEvent<unknown>, newCurrentPage: number) => {
     setCurrentPage(newCurrentPage);
-    setSearchParams({ page: newCurrentPage - 1 });
+    setSearchParams({ page: newCurrentPage - 1, status: undefined });
     setTests();
   };
 
   useEffect(() => {
-    setSearchParams({ page: 0 });
+    setSearchParams({ page: 0, status: null });
     setTests();
   }, []);
 

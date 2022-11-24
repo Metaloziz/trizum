@@ -10,7 +10,7 @@ import { addIdElements } from 'utils/addIdElements';
 import { executeError } from 'utils/executeError';
 
 export type TestSearchParams = Partial<{
-  status: StatusT;
+  status?: Nullable<StatusT>;
   page: number;
   per_page: number;
 }>;
@@ -52,6 +52,7 @@ class TestsStore {
 
   private searchParams: TestSearchParams = {
     per_page: 5,
+    status: null,
     page: 0,
   };
 
