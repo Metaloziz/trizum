@@ -1,3 +1,4 @@
+import { OneTestBodyT } from 'app/types/TestsT';
 import { FC, useEffect } from 'react';
 
 import { observer } from 'mobx-react-lite';
@@ -24,7 +25,7 @@ const TestResultPage: FC = observer(() => {
     <div className={styles.wrapper}>
       <div className={styles.containerItem}>
         <div>
-          <h1>{currentTest.test.title}</h1>
+          <h1>{currentTest?.test.title}</h1>
         </div>
         <div className={styles.itemBlock}>
           <div className={styles.itemPic}>
@@ -39,7 +40,15 @@ const TestResultPage: FC = observer(() => {
               {/* </div> */}
               <div className={styles.resultInfo}>
                 {/* <p>Ваш результат:</p> */}
-                <ResultTestMessage result={result} currentTest={currentTest} />
+                <ResultTestMessage
+                  result={result}
+                  currentTest={
+                    currentTest || {
+                      test: new OneTestBodyT(),
+                      usedInWorks: [],
+                    }
+                  }
+                />
               </div>
             </div>
             <div className={styles.recommendations}>

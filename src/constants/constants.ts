@@ -1,7 +1,7 @@
 // form
 export const MAX_NAMES_LENGTH = 30;
 export const MAX_TEST_QUESTION_LENGTH = 60;
-export const MIN_NAMES_LENGTH = 3;
+export const MIN_NAMES_LENGTH = 1;
 export const PHONE_LENGTH = 11;
 
 // common

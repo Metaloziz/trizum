@@ -1,9 +1,11 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import TextField from '@mui/material/TextField';
+import { StatusTypes } from 'app/enums/StatusTypes';
 import testsStore from 'app/stores/testsStore';
-import { OneTestBodyT, TestPayloadT, OneTestT, TestContentT } from 'app/types/TestsT';
+import { OneTestBodyT, OneTestT, TestContentT, TestPayloadT } from 'app/types/TestsT';
 import BasicModal from 'components/basic-modal/BasicModal';
 import Button from 'components/button/Button';
+import { Loader } from 'components/loader/Loader';
 import {
   MAX_NAMES_LENGTH,
   MAX_TEST_RESULT,
@@ -14,9 +16,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { mixElements } from 'utils/mixElements';
 import * as yup from 'yup';
-import { StatusTypes } from 'app/enums/StatusTypes';
-import { Loader } from 'components/loader/Loader';
-import { QuestionForm, QuestionFormData } from './QuestionForm/QuestionForm';
+import { QuestionFormData } from './QuestionForm/QuestionForm';
 import style from './TestEditForm.module.scss';
 
 type TestInputType = Pick<OneTestBodyT, 'title' | 'maxResult'>;
@@ -89,24 +89,24 @@ export const TestEditForm: FC<Props> = ({
         setValue(key, testData.test[key]);
       }
 
-      setQuestions(
-        testData.test.content.map(el => ({
-          correctAnswer: el.correctAnswer,
-          question: el.question,
-          wrongAnswer1: el.answers[0],
-          wrongAnswer2: el.answers[1],
-          wrongAnswer3: el.answers[2] || '',
-          wrongAnswer4: el.answers[3] || '',
-          wrongAnswer5: el.answers[4] || '',
-        })),
-      );
+      // setQuestions(
+      //   testData.test.content.map(el => ({
+      //     correctAnswer: el.correctAnswer,
+      //     question: el.question,
+      //     wrongAnswer1: el.answers[0],
+      //     wrongAnswer2: el.answers[1],
+      //     wrongAnswer3: el.answers[2] || '',
+      //     wrongAnswer4: el.answers[3] || '',
+      //     wrongAnswer5: el.answers[4] || '',
+      //   })),
+      // );
     }
   }, [testData]);
 
   const onSubmit = handleSubmit(async ({ maxResult, title }) => {
     const newTestPayload: TestPayloadT = {
       title,
-      status: 'active',
+      status: StatusTypes.active,
       maxResult,
       content: questions.map(({ question, correctAnswer, ...wrongAnswers }) => ({
         correctAnswer,
@@ -178,7 +178,7 @@ export const TestEditForm: FC<Props> = ({
         </div>
       </form>
       <BasicModal visibility={isShowTestModal} changeVisibility={setIsShowTestModal}>
-        <QuestionForm getQuestionFormData={getQuestionFormData} />
+        {/* <QuestionForm getQuestionFormData={getQuestionFormData} /> */}
       </BasicModal>
     </div>
   );

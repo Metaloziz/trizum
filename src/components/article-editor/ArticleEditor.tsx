@@ -1,4 +1,5 @@
 import { AppRoutes } from 'app/enums/AppRoutes';
+import { StatusTypes } from 'app/enums/StatusTypes';
 import articlesStore from 'app/stores/articlesStore';
 import testsStore from 'app/stores/testsStore';
 import { ArticlePayloadT } from 'app/types/ArticlePayloadT';
@@ -24,7 +25,7 @@ export const ArticleEditor = observer(() => {
   const testOptions = convertTestOptions(tests);
 
   useEffect(() => {
-    setSearchParams({ per_page: 1000 });
+    setSearchParams({ per_page: 1000, status: StatusTypes.active });
     setDefaultIsSuccessPost();
     setTests();
   }, []);
