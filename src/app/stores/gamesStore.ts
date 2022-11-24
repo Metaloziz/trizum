@@ -165,7 +165,7 @@ class GamesStore {
     try {
       let preset;
       if (appStore.role !== Roles.Student) {
-        const zxc = this.newPresets.items.find(el => el.id === presetName);
+        const zxc = this.newPresets.items.find(el => el.name === presetName);
         if (zxc) {
           preset = { gameCode: zxc.name, gameId: zxc.id };
         }
