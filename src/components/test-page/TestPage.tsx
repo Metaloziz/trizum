@@ -1,11 +1,7 @@
-import { FC, useState } from 'react';
-
-import { observer } from 'mobx-react-lite';
-import { useNavigate } from 'react-router-dom';
-
-import styles from './TestPage.module.scss';
-
 import { AppRoutes } from 'app/enums/AppRoutes';
+import { Roles } from 'app/enums/Roles';
+import { StatusTypes } from 'app/enums/StatusTypes';
+import appStore from 'app/stores/appStore';
 import articlesStore from 'app/stores/articlesStore';
 import testsStore from 'app/stores/testsStore';
 import resultIcon from 'assets/svgs/result-icon.svg';
@@ -14,6 +10,11 @@ import { LoadingIndicator } from 'components/franchising-page/ui/LoadingIndicato
 import Image from 'components/image/Image';
 import Stepper from 'components/step/stepper/Stepper';
 import { MixedAnswers } from 'components/test-page/MixedAnswers/MixedAnswers';
+import { observer } from 'mobx-react-lite';
+import { FC, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+
+import styles from './TestPage.module.scss';
 
 const defaultRadioButtonValue = 'null';
 
@@ -29,8 +30,9 @@ const TestPage: FC = observer(() => {
     setCurrentQuestion,
   } = testsStore;
 
+  const { articleId } = useParams<'articleId'>();
   const { article } = articlesStore;
-
+  const { role } = appStore;
   const navigate = useNavigate();
 
   const [currentRadioValue, setCurrentRadioValue] = useState(defaultRadioButtonValue);
@@ -54,12 +56,14 @@ const TestPage: FC = observer(() => {
 
     const newActiveStep = activeStep + 1;
 
-    const newQuestion = questions.find(element => element.id === newActiveStep);
+    const newQuestion = questions.find(({ id }) => id === newActiveStep);
 
     if (newQuestion) {
       setCurrentQuestion(newQuestion);
     } else {
-      postResult({ articleId: article!.id, result });
+      if (articleId && article?.status === StatusTypes.active && role !== Roles.Admin) {
+        postResult({ articleId, result });
+      }
       onEndTest();
     }
 
@@ -72,6 +76,7 @@ const TestPage: FC = observer(() => {
       <div>
         <h2>{getTitleTest}</h2>
       </div>
+
       <div className={styles.choiceWrap}>
         <div className={styles.endTest}>
           <Button onClick={onEndTest}>Закончить тест</Button>
@@ -80,13 +85,16 @@ const TestPage: FC = observer(() => {
           <Stepper countStep={questions.length} activeStepCount={activeStep} />
         </div>
       </div>
+
       <div className={styles.question}>
         <div className={styles.resultImg}>
           <Image src={resultIcon} width="406px" height="426px" alt="Images" />
         </div>
+
         <div className={styles.textQuestion}>
           <h3> Вопрос {currentQuestion.id}</h3>
           <p>{currentQuestion.question}</p>
+
           <div className={styles.answerChoice}>
             <MixedAnswers
               mixedAnswer={currentQuestion.answers}
@@ -94,6 +102,7 @@ const TestPage: FC = observer(() => {
               currentRadioValue={currentRadioValue}
             />
           </div>
+
           <div>
             <Button onClick={nextStep}>Ответить</Button>
           </div>

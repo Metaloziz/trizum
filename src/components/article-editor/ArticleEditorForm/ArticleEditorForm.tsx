@@ -242,7 +242,11 @@ export const ArticleEditorForm = (props: ArticleEditorFormProps): ReactElement =
                 control={control}
               />
 
-              <ResultMessage successPost={successPost} onClick={onReadTheoryClick} />
+              <ResultMessage
+                successPost={successPost}
+                onClick={onReadTheoryClick}
+                titleButton=" Посмотреть статью"
+              />
 
               <div className={styles.newsBtn}>
                 <Button onClick={onSubmit} disabled={isSubmitSuccessful}>

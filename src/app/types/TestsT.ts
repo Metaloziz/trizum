@@ -1,6 +1,6 @@
+import { StatusTypes } from 'app/enums/StatusTypes';
 import { IdType } from 'app/types/IdType';
 import { TimeZoneType } from 'app/types/TimeZoneType';
-import { StatusT } from 'app/types/StatusT';
 
 export class TestContentT {
   question = '';
@@ -15,7 +15,7 @@ export type ContentIDT = TestContentT & IdType;
 export type PreviewTestT = {
   id: string;
   title: string;
-  status: StatusT;
+  status: StatusTypes;
   createdAt: TimeZoneType;
 };
 
@@ -31,7 +31,7 @@ export class OneTestBodyT {
 
   title = '';
 
-  status: StatusT = 'active';
+  status: StatusTypes = StatusTypes.active;
 
   createdAt = new TimeZoneType();
 
@@ -40,7 +40,9 @@ export class OneTestBodyT {
   maxResult = 100;
 }
 
-export type TestPayloadT = Pick<OneTestBodyT, 'title' | 'content' | 'maxResult' | 'status'>;
+export type TestPayloadT = Pick<OneTestBodyT, 'title' | 'content' | 'maxResult' | 'status'> & {
+  id?: string;
+};
 
 export type OneTestT = {
   test: OneTestBodyT;

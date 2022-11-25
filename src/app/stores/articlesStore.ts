@@ -115,19 +115,21 @@ class ArticlesStore {
       const roles: Nullable<string[]> = getArticleRolesArray(result);
 
       runInAction(() => {
-        const articleDescription = findDescription(content);
-        const newContent = deleteDescription(content);
+        if (title) {
+          const articleDescription = findDescription(content);
+          const newContent = deleteDescription(content);
 
-        this.defaultValues = {
-          title,
-          roles,
-          status,
-          content: newContent,
-          description: articleDescription,
-          testId: test ? test.id : null,
-        };
+          this.defaultValues = {
+            title,
+            roles,
+            status,
+            content: newContent,
+            description: articleDescription,
+            testId: test ? test.id : null,
+          };
 
-        this.article = { ...result, description: articleDescription, content: newContent };
+          this.article = { ...result, description: articleDescription, content: newContent };
+        }
       });
     }, this);
   };
