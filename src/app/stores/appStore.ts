@@ -37,6 +37,8 @@ class AppStore {
 
   currentWork?: WorkWithIdFromLoadme;
 
+  currentWorkArr?: WorkWithIdFromLoadme[];
+
   hwDate?: string;
   /* fields student only */
 
@@ -142,11 +144,15 @@ class AppStore {
   setGameIdsWithCodes = (user: EmptyUser) => {
     this.allGameIdsWithCodes = getGameForStudent(user.groups);
 
-    const classType = user.groups.find(el => el.group.type === 'class' && el.status === 'active');
+    const classTypeObject = user.groups.find(
+      el => el.group.type === 'class' && el.status === 'active',
+    );
+
+    this.currentWorkArr = classTypeObject?.group.course.works;
 
     const schedule = this.getSchedule;
 
-    if (classType && schedule && schedule.length) {
+    if (classTypeObject && schedule && schedule.length) {
       // TODO: добавить нахождение нужного урока по дате
 
       [this.currentGameIds] = this.allGameIdsWithCodes;
@@ -158,7 +164,7 @@ class AppStore {
         const index = schedule.findIndex(el => el.date === lesson.date && lesson.from === el.from);
 
         if (index !== -1) {
-          const currentWork = classType.group.course.works.find(
+          const currentWork = classTypeObject.group.course.works.find(
             el => el.index === index - ONE_DIFFERENCE_INDEX,
           );
 

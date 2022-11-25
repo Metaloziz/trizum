@@ -6,6 +6,7 @@ import { GameProps, PlaySendResultT, PresetsGameSettings, ResultsNewT } from 'ap
 import { Option } from 'components/select-mui/CustomSelect';
 import { DEFAULT_GAME_SETTINGS } from 'constants/games';
 import { getPresetArrOptions } from 'constants/presetArr';
+import { toJS } from 'mobx';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { convertGroupOptions } from 'utils/convertGroupOptions';
@@ -76,6 +77,7 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
 
   const setPreset = async (data: string) => {
     stopGame();
+    console.log('setPreset', toJS(data));
     await getPreset(data);
   };
 
