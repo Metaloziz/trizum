@@ -105,8 +105,7 @@ export const TestFormEditor = (props: Props): ReactElement => {
   };
 
   const menu = filterSelectMenu(defaultValues.status, STATUS_MENU);
-  const disabledField =
-    defaultValues.status === StatusTypes.removal || defaultValues.status === StatusTypes.archive;
+  const disabledField = defaultValues.status !== StatusTypes.draft;
 
   return (
     <>
@@ -130,7 +129,7 @@ export const TestFormEditor = (props: Props): ReactElement => {
                     onChange={event => onChange(convertEmptyStringToNull(event))}
                     value={convertNullToEmptyString(value!)}
                     ref={ref}
-                    disabled={disabledField}
+                    disabled={disabledField || !!successPost}
                   />
                 )}
                 control={control}
@@ -154,7 +153,7 @@ export const TestFormEditor = (props: Props): ReactElement => {
                     }}
                     value={String(value)}
                     ref={ref}
-                    disabled={disabledField}
+                    disabled={disabledField || !!successPost}
                   />
                 )}
                 control={control}
@@ -170,10 +169,11 @@ export const TestFormEditor = (props: Props): ReactElement => {
                     value={value}
                     sx={{ backgroundColor: 'white' }}
                     onChange={onChange}
-                    title="Уровень"
+                    title="Статус"
                     options={menu}
                     error={errors.status?.message}
                     ref={ref}
+                    disabled={!!successPost}
                   />
                 )}
                 control={control}
@@ -204,7 +204,7 @@ export const TestFormEditor = (props: Props): ReactElement => {
                       size="large"
                       onClick={() => openQuestionForm(index)}
                       color="primary"
-                      disabled={disabledField}
+                      disabled={disabledField || !!successPost}
                     >
                       <EditIcon fontSize="large" />
                     </IconButton>
@@ -213,7 +213,7 @@ export const TestFormEditor = (props: Props): ReactElement => {
                       size="large"
                       onClick={() => remove(index)}
                       color="error"
-                      disabled={disabledField}
+                      disabled={disabledField || !!successPost}
                     >
                       <DeleteIcon fontSize="large" />
                     </IconButton>
@@ -227,7 +227,7 @@ export const TestFormEditor = (props: Props): ReactElement => {
             </Grid>
 
             <Grid item xs={12} sm={12}>
-              <Button disabled={disabledField} onClick={() => openQuestionForm()}>
+              <Button disabled={disabledField || !!successPost} onClick={() => openQuestionForm()}>
                 Добавить вопрос
               </Button>
             </Grid>

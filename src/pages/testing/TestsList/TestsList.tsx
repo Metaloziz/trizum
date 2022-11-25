@@ -21,7 +21,7 @@ export const TestsList = observer(() => {
 
   const onPageChange = (event: ChangeEvent<unknown>, newCurrentPage: number) => {
     setCurrentPage(newCurrentPage);
-    setSearchParams({ page: newCurrentPage - 1, status: undefined });
+    setSearchParams({ page: newCurrentPage - 1 });
     setTests();
   };
 

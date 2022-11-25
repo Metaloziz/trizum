@@ -8,6 +8,7 @@ import { FIRST_ARRAY_ITEM, MAX_TEST_RESULT } from 'constants/constants';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { addIdElements } from 'utils/addIdElements';
 import { executeError } from 'utils/executeError';
+import { mixElements } from 'utils/mixElements';
 
 export type TestSearchParams = Partial<{
   status?: Nullable<StatusT>;
@@ -77,9 +78,14 @@ class TestsStore {
       runInAction(() => {
         if (test) {
           this.currentTest = result;
-
-          const newQuestion = addIdElements(result.test.content);
           this.defaultValues = test;
+          const mixedAnswers = test.content.map(({ question, answers, correctAnswer }) => ({
+            question,
+            correctAnswer,
+            answers: mixElements([...answers], correctAnswer),
+          }));
+
+          const newQuestion = addIdElements(mixedAnswers);
 
           this.questions = newQuestion;
           this.currentQuestion = newQuestion[FIRST_ARRAY_ITEM];

@@ -2,11 +2,11 @@ import OlympiadsListPage from 'components/olympiads-list-page/OlympiadsListPage'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { Article } from 'pages/article/Article';
 import BlogEditor from 'pages/blog/blog-editor/BlogEditor';
+import { Testing } from 'pages/testing/Testing';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import DefaultLayout from 'components/layout/default/DefaultLayout';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import LoginWithSMS from 'pages/login/LoginWithSMS/LoginWithSMS';
-import { TestsList } from 'pages/testing/TestsList/TestsList';
 import { SecondaryRoutes } from 'app/enums/SecondaryRoutes';
 import Franchising from 'pages/franchising/Franchising';
 import Statistic from 'pages/statistic/Statistic';
@@ -32,6 +32,7 @@ import './App.css';
 
 import HomeWorkStatistics from './components/HomeWorkStatistics/HomeWorkStatistics';
 import { EditTest } from 'pages/testing/edit/EditTest';
+import Custom404 from 'pages/404.page';
 
 const App = observer(() => (
   <LocalizationProvider dateAdapter={AdapterMoment}>
@@ -74,12 +75,13 @@ const App = observer(() => (
           <Route path={AppRoutes.Statistic} element={<Statistic />} />
 
           <Route path={AppRoutes.Testing}>
-            <Route path="" element={<TestsList />} />
-            <Route path={SecondaryRoutes.CurrentElement} element={<Test />} />
+            <Route path="" element={<Testing />} />
+            <Route path=":testId/:articleId" element={<Test />} />
             <Route path={SecondaryRoutes.Result} element={<Result />} />
             <Route path={AppRoutes.TestEditor}>
               <Route path=":id" element={<EditTest />} />
             </Route>
+            <Route path="*" element={<Custom404 />} />
           </Route>
           <Route path={AppRoutes.UserInfo} element={<UserInfo />} />
           <Route path={AppRoutes.Users} element={<Users />} />

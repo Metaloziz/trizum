@@ -2,6 +2,7 @@ import { AppRoutes } from 'app/enums/AppRoutes';
 import { Roles } from 'app/enums/Roles';
 import appStore from 'app/stores/appStore';
 import testsStore from 'app/stores/testsStore';
+import { LoadingIndicator } from 'components/franchising-page/ui/LoadingIndicator';
 import { TestEditor } from 'components/test-editor/TestEditor';
 import { observer } from 'mobx-react-lite';
 import Custom404 from 'pages/404.page';
@@ -32,6 +33,10 @@ export const EditTest = observer((): ReactElement => {
     setDefaultValues(null);
     setDefaultValues();
     setCurrentTestToNull();
+  }
+
+  if (isLoading) {
+    return <LoadingIndicator />;
   }
 
   if (!currentTest && !isLoading && id !== 'new-test') {
