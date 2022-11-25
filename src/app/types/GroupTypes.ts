@@ -112,6 +112,14 @@ export class ResponseOneGroup {
   };
 }
 
+export class NewHomeWorkT {
+  start: string = '';
+
+  end: string = '';
+
+  index: number = 0;
+}
+
 export class LessonT {
   id: string;
 
@@ -149,7 +157,7 @@ export type CreateGroup = {
   level: LevelGroupT;
   courseId: string;
   status: StatusT;
-  schedule?: ScheduleT[];
+  schedule?: { classWorks: ScheduleT[]; homeWorks: any[] };
 };
 export type CreateGroupForServer = {
   dateSince: string;

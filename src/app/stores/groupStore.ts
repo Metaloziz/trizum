@@ -228,7 +228,7 @@ class GroupStore {
       franchiseId: franchiseId || this.modalFields.franchiseId,
       dateSince: moment(this.modalFields.dateSince).format(DateTime.DdMmYyyy),
       dateUntil: moment(this.modalFields.dateUntil).format(DateTime.DdMmYyyy),
-      schedule,
+      schedule: { classWorks: schedule, homeWorks: [] },
     });
     this.cleanModalValues();
     this.closeModal();

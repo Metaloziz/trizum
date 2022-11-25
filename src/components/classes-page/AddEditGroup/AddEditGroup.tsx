@@ -169,7 +169,7 @@ const AddEditGroup: FC = observer(() => {
               onChange={({ target: { value } }) => {
                 const course = groupStore.courses.find(el => el.id === value);
                 course &&
-                  (groupStore.schedule = groupStore.setEmptyScheduleItems(course.worksCount + 1));
+                  (groupStore.schedule = groupStore.setEmptyScheduleItems(course.worksCount));
                 modalFields.courseId = value;
               }}
               value={modalFields.courseId}

@@ -32,7 +32,15 @@ const Lessons: FC = observer(() => {
                 onChange={({ currentTarget: { value } }) => changeLesson(el.id, 'name', value)}
               />
             </Grid>
-            <Grid sx={{ justifyContent: 'space-between', paddingTop: 2, paddingLeft: 2 }} container>
+            <Grid
+              sx={{
+                justifyContent: 'space-between',
+                paddingTop: 2,
+                paddingLeft: 2,
+                gap: 4,
+              }}
+              container
+            >
               <DatePicker
                 value={el.date}
                 onChange={e => e && changeLesson(el.id, 'date', new Date(e))}
@@ -51,6 +59,31 @@ const Lessons: FC = observer(() => {
                 onChange={e => e && changeLesson(el.id, 'to', new Date(e))}
                 renderInput={e => <TextField {...e} />}
               />
+
+              <Grid
+                sx={{
+                  paddingTop: 2,
+                  gap: 4,
+                }}
+                container
+              >
+                <DatePicker
+                  label="Время начала домашней работы"
+                  value={schedule[index].to}
+                  onChange={e => e && changeLesson(el.id, 'start', new Date(e))}
+                  renderInput={e => (
+                    <TextField {...e} onKeyDown={event => event.preventDefault()} />
+                  )}
+                />
+                <DatePicker
+                  label="Время окончания домашней работы"
+                  value={schedule[index].to}
+                  onChange={e => e && changeLesson(el.id, 'end', new Date(e))}
+                  renderInput={e => (
+                    <TextField {...e} onKeyDown={event => event.preventDefault()} />
+                  )}
+                />
+              </Grid>
             </Grid>
           </>
         ))}
