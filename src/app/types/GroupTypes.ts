@@ -2,6 +2,7 @@ import { DateTime } from 'app/enums/DateTime';
 import { GroupLevels } from 'app/enums/GroupLevels';
 import { GroupTypes } from 'app/enums/GroupTypes';
 import { EmptyUser } from 'app/stores/emptyUser';
+import { ScheduleHomeWorksType } from 'app/stores/groupStore';
 import { FranchiseT } from 'app/types/FranchiseTypes';
 import { GamePresetFromLoadme } from 'app/types/LoadMeTypes';
 import { Nullable } from 'app/types/Nullable';
@@ -112,14 +113,6 @@ export class ResponseOneGroup {
   };
 }
 
-export class NewHomeWorkT {
-  start: string = '';
-
-  end: string = '';
-
-  index: number = 0;
-}
-
 export class LessonT {
   id: string;
 
@@ -157,7 +150,7 @@ export type CreateGroup = {
   level: LevelGroupT;
   courseId: string;
   status: StatusT;
-  schedule?: { classWorks: ScheduleT[]; homeWorks: any[] };
+  schedule?: { classWorks: ScheduleT[]; homeWorks: ScheduleHomeWorksType[] };
 };
 export type CreateGroupForServer = {
   dateSince: string;

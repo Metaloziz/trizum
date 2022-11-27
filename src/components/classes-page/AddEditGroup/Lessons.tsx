@@ -6,13 +6,13 @@ import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react';
 
 const Lessons: FC = observer(() => {
-  const { schedule, changeLesson } = groupStore;
+  const { schedule, changeLesson, scheduleHomeWorks, changeScheduleHomeWork } = groupStore;
 
   return (
     <>
       {!!schedule.length &&
         schedule.map((el, index) => (
-          <>
+          <div key={Math.random()}>
             <Typography
               sx={{
                 paddingLeft: 2,
@@ -69,23 +69,23 @@ const Lessons: FC = observer(() => {
               >
                 <DatePicker
                   label="Время начала домашней работы"
-                  value={schedule[index].to}
-                  onChange={e => e && changeLesson(el.id, 'start', new Date(e))}
+                  value={scheduleHomeWorks[index]?.start}
+                  onChange={e => e && changeScheduleHomeWork({ index, start: new Date(e) })}
                   renderInput={e => (
                     <TextField {...e} onKeyDown={event => event.preventDefault()} />
                   )}
                 />
                 <DatePicker
                   label="Время окончания домашней работы"
-                  value={schedule[index].to}
-                  onChange={e => e && changeLesson(el.id, 'end', new Date(e))}
+                  value={scheduleHomeWorks[index]?.end}
+                  onChange={e => e && changeScheduleHomeWork({ index, end: new Date(e) })}
                   renderInput={e => (
                     <TextField {...e} onKeyDown={event => event.preventDefault()} />
                   )}
                 />
               </Grid>
             </Grid>
-          </>
+          </div>
         ))}
     </>
   );
