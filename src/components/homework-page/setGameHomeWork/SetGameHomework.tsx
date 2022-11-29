@@ -2,9 +2,10 @@ import { FormControl, Grid, InputLabel, Select } from '@mui/material';
 import gamesStore from 'app/stores/gamesStore';
 import Button from 'components/button/Button';
 import { Dialog } from 'components/franchising-page/ui/Dialog';
+import { GameList, GameIdentifiers } from 'games';
+import { toJS } from 'mobx';
 import React, { FC, useState } from 'react';
 import { getOptionMui } from 'utils/getOption';
-import { GameList, GameIdentifiers } from '../../../games';
 import { ErrorMessage } from './ErrorMessage/ErrorMessage';
 import styles from './setGameHomework.module.scss';
 
@@ -33,6 +34,8 @@ export const SetGameHomework: FC<SetGameHomeworkPropsT> = ({
   const gamesOptions = Object.keys(GameIdentifiers).map(key =>
     getOptionMui(key, GameList[key].name),
   );
+
+  console.log('actualPresets', toJS(actualPresets));
 
   const presetOptions = actualPresets.map(pr => getOptionMui(pr.name, pr.name));
 

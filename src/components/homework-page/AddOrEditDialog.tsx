@@ -22,6 +22,7 @@ import gamesStore from 'app/stores/gamesStore';
 
 import Button from 'components/button/Button';
 import { SetGameHomework } from 'components/homework-page/setGameHomeWork/SetGameHomework';
+import { toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import { useState } from 'react';
 import { getOptionMui } from 'utils/getOption';
@@ -159,15 +160,19 @@ export const AddOrEditDialog = observer(() => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {store.presetsThisWork ? (
-                  (store.presetsThisWork || []).map(preset => (
-                    <PresetElement
-                      key={Math.random()}
-                      nameGamePreset={getNameGamePreset(preset)}
-                      namePreset={getNamePreset(preset)}
-                      onClick={() => deleteOnePreset(preset)}
-                    />
-                  ))
+                {store.presetsThisWork.length ? (
+                  (store.presetsThisWork || []).map(preset => {
+                    console.log('presetsThisWork', toJS(store.presetsThisWork));
+
+                    return (
+                      <PresetElement
+                        key={Math.random()}
+                        nameGamePreset={getNameGamePreset(preset)}
+                        namePreset={getNamePreset(preset)}
+                        onClick={() => deleteOnePreset(preset)}
+                      />
+                    );
+                  })
                 ) : (
                   <TableRow>
                     <TableCell colSpan={3}>Данные отсутствуют...</TableCell>

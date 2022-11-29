@@ -7,7 +7,7 @@ export const getClassTypeGroups = (data: Group[]): ScheduleT[] => {
   const newArr: ScheduleT[] = [];
 
   draft.forEach(el => {
-    newArr.push(...el.group.schedule);
+    newArr.push(...el.group.schedule.classworks);
   });
 
   return newArr;

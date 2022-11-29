@@ -2,6 +2,7 @@ import { SelectChangeEvent } from '@mui/material';
 import { OptionT } from 'app/types/OptionT';
 import Button from 'components/button/Button';
 import CustomSelect from 'components/select-mui/CustomSelect';
+import { toJS } from 'mobx';
 import styles from 'pages/game/Game.module.scss';
 import React, { FC } from 'react';
 
@@ -22,6 +23,8 @@ export const SelectBlock: FC<SelectBlockPropsT> = props => {
     stopGame && stopGame();
     setPreset(data.target.value);
   };
+
+  console.log('presetId', toJS(presetId));
 
   return (
     <div style={{ width: `${width}px` }} className={styles.wrapGameBlock_header}>

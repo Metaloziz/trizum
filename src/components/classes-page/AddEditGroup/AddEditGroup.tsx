@@ -86,6 +86,11 @@ const AddEditGroup: FC = observer(() => {
 
   const courseLabel = `Курс: ${GroupLevels[modalFields.level]}`;
 
+  const setSchedule = (count: number) => {
+    groupStore.schedule = groupStore.setEmptyScheduleItems(count);
+    groupStore.scheduleHomeWorks = groupStore.setEmptyScheduleHomeWorksItems(count);
+  };
+
   return (
     <BasicModal
       fullWidth
@@ -168,8 +173,7 @@ const AddEditGroup: FC = observer(() => {
               fullWidth
               onChange={({ target: { value } }) => {
                 const course = groupStore.courses.find(el => el.id === value);
-                course &&
-                  (groupStore.schedule = groupStore.setEmptyScheduleItems(course.worksCount + 1));
+                course && setSchedule(course.worksCount);
                 modalFields.courseId = value;
               }}
               value={modalFields.courseId}
