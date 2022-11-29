@@ -9,6 +9,7 @@ import { OlympiadPreviewText } from 'components/card-student/card-student-for-us
 import CustomImageWrapper from 'components/custom-image-wrapper/CustomImageWrapper';
 import Image from 'components/image/Image';
 import Setting from 'components/setting/Setting';
+import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useEffect, useState } from 'react';
 import { dateNow } from 'utils/dateNow';
@@ -29,6 +30,8 @@ const CardStudentForStudent: FC = observer(() => {
   const [showModal, setShowModal] = useState(false);
 
   const group = getActiveClassGroup(user);
+
+  console.log('getSchedule', toJS(getSchedule));
 
   useEffect(() => {
     const currentLessonDate = getNearestLessonObject(getSchedule, dateNow());

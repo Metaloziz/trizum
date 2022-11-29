@@ -6,7 +6,7 @@ import { ScheduleHomeWorksType } from 'app/stores/groupStore';
 import { FranchiseT } from 'app/types/FranchiseTypes';
 import { GamePresetFromLoadme } from 'app/types/LoadMeTypes';
 import { Nullable } from 'app/types/Nullable';
-import { ScheduleT } from 'app/types/ScheduleT';
+import { ScheduleT, ScheduleObjectType } from 'app/types/ScheduleT';
 import { StatusT } from 'app/types/StatusT';
 
 import { TimeZoneType } from 'app/types/TimeZoneType';
@@ -150,7 +150,7 @@ export type CreateGroup = {
   level: LevelGroupT;
   courseId: string;
   status: StatusT;
-  schedule?: { classWorks: ScheduleT[]; homeWorks: ScheduleHomeWorksType[] };
+  schedule?: ScheduleObjectType;
 };
 export type CreateGroupForServer = {
   dateSince: string;

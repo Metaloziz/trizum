@@ -1,3 +1,4 @@
+import { ScheduleHomeWorksType } from 'app/stores/groupStore';
 import { Group, WorkWithIdFromLoadme, ScheduleFromLoadme } from 'app/types/LoadMeTypes';
 
 export const getWorksAndSchedule = (groups: Group[]) => {
@@ -6,11 +7,11 @@ export const getWorksAndSchedule = (groups: Group[]) => {
   );
 
   let works: WorkWithIdFromLoadme[] = [];
-  let schedule: ScheduleFromLoadme[] = [];
+  let schedule: ScheduleHomeWorksType[] = [];
 
   if (currentGroup) {
-    works = currentGroup.group.course.works;
-    schedule = currentGroup.group.schedule;
+    works = currentGroup.group.course.works ?? [];
+    schedule = currentGroup.group.schedule.homeworks ?? [];
   }
 
   return { works, schedule };

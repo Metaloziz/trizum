@@ -241,7 +241,7 @@ class GroupStore {
       franchiseId: franchiseId || this.modalFields.franchiseId,
       dateSince: moment(this.modalFields.dateSince).format(DateTime.DdMmYyyy),
       dateUntil: moment(this.modalFields.dateUntil).format(DateTime.DdMmYyyy),
-      schedule: { classWorks: schedule, homeWorks: this.scheduleHomeWorks },
+      schedule: { classworks: schedule, homeworks: this.scheduleHomeWorks },
     });
     this.cleanModalValues();
     this.closeModal();

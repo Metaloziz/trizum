@@ -6,7 +6,7 @@ import usersStore from 'app/stores/usersStore';
 import { GameIdWithCode } from 'app/types/GameTypes';
 import { WorkWithIdFromLoadme } from 'app/types/LoadMeTypes';
 import { ONE_DIFFERENCE_INDEX } from 'constants/constants';
-import { makeAutoObservable, runInAction } from 'mobx';
+import { makeAutoObservable, runInAction, toJS } from 'mobx';
 import { LoginInfo } from 'pages/login/Login';
 import { dateNow } from 'utils/dateNow';
 import { execute } from 'utils/execute';
@@ -164,9 +164,7 @@ class AppStore {
         const index = schedule.findIndex(el => el.date === lesson.date && lesson.from === el.from);
 
         if (index !== -1) {
-          const currentWork = classTypeObject.group.course.works.find(
-            el => el.index === index - ONE_DIFFERENCE_INDEX,
-          );
+          const currentWork = classTypeObject.group.course.works.find(el => el.index === index);
 
           if (currentWork) {
             this.currentWork = currentWork;
@@ -206,11 +204,11 @@ class AppStore {
   }
 
   get getSchedule() {
-    const result = getActiveClassGroup(this.user);
+    const result = getActiveClassGroup(this.user)?.group?.schedule?.classworks;
 
-    if (!result) return [];
+    if (result === undefined) return [];
 
-    return result.group.schedule;
+    return result;
   }
 }
 

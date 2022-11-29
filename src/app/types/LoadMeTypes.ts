@@ -1,6 +1,7 @@
 import { GameT, ResultsNewT } from 'app/types/GameTypes';
 import { GroupT } from 'app/types/GroupTypes';
 import { Nullable } from 'app/types/Nullable';
+import { ScheduleObjectType } from 'app/types/ScheduleT';
 import { StatusT } from 'app/types/StatusT';
 import { TimeZoneType } from 'app/types/TimeZoneType';
 
@@ -93,7 +94,7 @@ export type Group = {
       };
       works: WorkWithIdFromLoadme[];
     };
-    schedule: ScheduleFromLoadme[];
+    schedule: ScheduleObjectType;
     level: string;
     type: string;
     status: string;
