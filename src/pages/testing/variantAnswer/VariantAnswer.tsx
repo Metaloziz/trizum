@@ -22,6 +22,6 @@ export const VariantAnswer: FC<VariantAnswerPropsType> = ({
       onChange={onChange}
       checked={currentRadioValue === value}
     />
-    <label htmlFor="inputChoice1">{value}</label>
+    <label htmlFor={value}>{value}</label>
   </div>
 );

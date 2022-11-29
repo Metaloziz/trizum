@@ -1,22 +1,17 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { IconButton } from '@mui/material';
-
 import { AppRoutes } from 'app/enums/AppRoutes';
 import { Roles } from 'app/enums/Roles';
-import { SecondaryRoutes } from 'app/enums/SecondaryRoutes';
 import { StatusTypes } from 'app/enums/StatusTypes';
 import appStore from 'app/stores/appStore';
 import articlesStore from 'app/stores/articlesStore';
-import testsStore from 'app/stores/testsStore';
 import Button from 'components/button/Button';
 import Image from 'components/image/Image';
-
 import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { whoCanUseIt } from 'utils/whoCanUseIt';
-
 import styles from './BlogItem.module.scss';
 
 interface Props {
@@ -31,13 +26,11 @@ interface Props {
 const BlogItem: FC<Props> = observer(({ title, imgSrc = '', description, id, testId, status }) => {
   const { role } = appStore;
   const { getCurrentArticle, deleteArticle } = articlesStore;
-  const { setOneTest } = testsStore;
 
   const navigate = useNavigate();
 
   const onTestClick = () => {
-    setOneTest(testId);
-    navigate(`${AppRoutes.Testing}/${SecondaryRoutes.CurrentElement}`);
+    navigate(`${AppRoutes.Testing}/${testId}/${id}`);
   };
 
   const onReadTheoryClick = (): void => {

@@ -29,7 +29,15 @@ const ROLES_OPTIONS = [
 ];
 
 const SCHEMA = yup.object().shape({
-  title: yup.string().required('Обязательно поле'),
+  title: yup
+    .string()
+    .required('Обязательно поле')
+    .max(250, 'Максимум 250 символов')
+    .matches(
+      /^[a-zA-Zа-яёА-ЯЁ0-9 \-,./()"]+$/,
+      'Допускаются символы латинские или кириллицы, числа, пробелы, двойные кавычки и знаки «-», «,», «.» , «/», «(», «)»',
+    )
+    .nullable(),
   description: yup.string(),
   testId: yup.string().nullable(),
   roles: yup.array(yup.string()).notRequired().nullable(),
@@ -234,7 +242,11 @@ export const ArticleEditorForm = (props: ArticleEditorFormProps): ReactElement =
                 control={control}
               />
 
-              <ResultMessage successPost={successPost} onClick={onReadTheoryClick} />
+              <ResultMessage
+                successPost={successPost}
+                onClick={onReadTheoryClick}
+                titleButton=" Посмотреть статью"
+              />
 
               <div className={styles.newsBtn}>
                 <Button onClick={onSubmit} disabled={isSubmitSuccessful}>

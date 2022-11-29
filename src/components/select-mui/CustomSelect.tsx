@@ -22,7 +22,7 @@ interface Props {
   className?: string;
   title?: string;
   error?: string;
-  value: string;
+  value?: string;
   defaultValue?: Option;
   size?: OverridableStringUnion<'small' | 'medium', FormControlPropsSizeOverrides>;
   disabled?: boolean;

@@ -21,6 +21,7 @@ export const StudentMain: FC = observer(() => {
 
   console.log('currentGameIds', toJS(currentGameIds));
   console.log('works', toJS(works));
+  console.log('schedule', toJS(schedule));
   console.log('user', toJS(user));
 
   return (

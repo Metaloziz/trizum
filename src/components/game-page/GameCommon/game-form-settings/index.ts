@@ -9,4 +9,5 @@ export { GameDifferenceFormSettings } from './GameDifferenceFormSettings';
 export { SilhouettesFormSettings } from './SilhouettesFormSettings';
 export { SteamEngineFormSettings } from './SteamEngineFormSettings';
 export { FrazesFormSettings } from './FrazesFormSettings';
+export { BullsAndCowsSettings } from './BullsAndCowsSettings';
 export type { GamesFormSettingsType } from './game-form-types';

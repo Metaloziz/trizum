@@ -51,5 +51,11 @@ export const DEFAULT_GAME_SETTINGS: { [key: string]: Partial<PresetsGameSettings
     timeComplete: 10,
     speed: 2000,
   },
+  bullsCows: {
+    timeComplete: 60,
+    levelMaxCompleted: 5,
+    errorAacceptable: 10,
+    digitMax: 4,
+  },
   mental: {},
 };

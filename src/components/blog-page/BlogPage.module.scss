@@ -1,12 +1,16 @@
 .container {
   max-width: 100%;
   margin: 33px 50px 20px 15px;
+
+
   @media(max-width: 1280px) {
     margin-right: 20px;
   }
+
   @media(max-width: 1280px) {
     margin: 33px 20px 20px 15px;
   }
+
   @media(max-width: 700px) {
     margin: 33px 15px 10px 15px;
   }
@@ -28,10 +32,19 @@
   padding: 33px 20px 20px 20px;
   box-sizing: border-box;
 }
-.buttonsBox{
+
+.buttonsBox {
   margin-bottom: 25px;
   display: flex;
+  flex-wrap: wrap;
+
 }
-.buttonArticle{
+
+.buttonArticle {
   margin-right: 15px;
+
+  &:not(:last-child) {
+    margin-bottom: 10px;
+  }
+
 }

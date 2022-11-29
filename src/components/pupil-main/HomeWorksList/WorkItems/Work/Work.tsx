@@ -1,15 +1,27 @@
+import { ScheduleHomeWorksType } from 'app/stores/groupStore';
 import { WorkWithIdFromLoadme, ScheduleFromLoadme } from 'app/types/LoadMeTypes';
 import style from 'components/pupil-main/HomeWorksList/HomeWorksList.module.scss';
 import { GamePresetData } from 'components/pupil-main/HomeWorksList/WorkItems/GamePresetData/GamePresetData';
+import { toJS } from 'mobx';
 import { FC } from 'react';
 
 type Props = {
   work: WorkWithIdFromLoadme | undefined;
-  lesson: ScheduleFromLoadme | undefined;
+  homeWorkTime: ScheduleHomeWorksType | undefined;
 };
 
-export const Work: FC<Props> = ({ work, lesson }) => {
-  if (work && lesson) {
+export const Work: FC<Props> = ({ work, homeWorkTime }) => {
+  console.log('homeWorkTime', toJS(homeWorkTime));
+
+  const start = new Date(homeWorkTime?.start || '').toLocaleDateString('ru-RU', {
+    timeZone: 'Europe/Moscow',
+  });
+
+  const end = new Date(homeWorkTime?.end || '').toLocaleDateString('ru-RU', {
+    timeZone: 'Europe/Moscow',
+  });
+
+  if (work) {
     return (
       <div key={work.id} className={style.item}>
         <div className={style.body}>
@@ -25,15 +37,9 @@ export const Work: FC<Props> = ({ work, lesson }) => {
           </div>
         </div>
         <div className={style.lesson}>
-          <div>
-            Урок: <p>{lesson.name}</p>
-          </div>
-          <div>
-            <div>Дата:</div>
-            <div>
-              {lesson.date} в {lesson.from}
-            </div>
-          </div>
+          <div>Время на выполнение:</div>
+          <div>{start}</div>
+          <div>{end}</div>
         </div>
       </div>
     );

@@ -6,7 +6,7 @@ import usersStore from 'app/stores/usersStore';
 import { GameIdWithCode } from 'app/types/GameTypes';
 import { WorkWithIdFromLoadme } from 'app/types/LoadMeTypes';
 import { ONE_DIFFERENCE_INDEX } from 'constants/constants';
-import { makeAutoObservable, runInAction } from 'mobx';
+import { makeAutoObservable, runInAction, toJS } from 'mobx';
 import { LoginInfo } from 'pages/login/Login';
 import { dateNow } from 'utils/dateNow';
 import { execute } from 'utils/execute';
@@ -36,6 +36,8 @@ class AppStore {
   currentGameIds: GameIdWithCode[] = [];
 
   currentWork?: WorkWithIdFromLoadme;
+
+  currentWorkArr?: WorkWithIdFromLoadme[];
 
   hwDate?: string;
   /* fields student only */
@@ -142,11 +144,15 @@ class AppStore {
   setGameIdsWithCodes = (user: EmptyUser) => {
     this.allGameIdsWithCodes = getGameForStudent(user.groups);
 
-    const classType = user.groups.find(el => el.group.type === 'class' && el.status === 'active');
+    const classTypeObject = user.groups.find(
+      el => el.group.type === 'class' && el.status === 'active',
+    );
+
+    this.currentWorkArr = classTypeObject?.group.course.works;
 
     const schedule = this.getSchedule;
 
-    if (classType && schedule && schedule.length) {
+    if (classTypeObject && schedule && schedule.length) {
       // TODO: добавить нахождение нужного урока по дате
 
       [this.currentGameIds] = this.allGameIdsWithCodes;
@@ -158,9 +164,7 @@ class AppStore {
         const index = schedule.findIndex(el => el.date === lesson.date && lesson.from === el.from);
 
         if (index !== -1) {
-          const currentWork = classType.group.course.works.find(
-            el => el.index === index - ONE_DIFFERENCE_INDEX,
-          );
+          const currentWork = classTypeObject.group.course.works.find(el => el.index === index);
 
           if (currentWork) {
             this.currentWork = currentWork;
@@ -200,11 +204,11 @@ class AppStore {
   }
 
   get getSchedule() {
-    const result = getActiveClassGroup(this.user);
+    const result = getActiveClassGroup(this.user)?.group?.schedule?.classworks;
 
-    if (!result) return [];
+    if (result === undefined) return [];
 
-    return result.group.schedule;
+    return result;
   }
 }
 

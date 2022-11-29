@@ -79,6 +79,16 @@ export type OneGamePresent = {
   usedInWorks: any[];
 };
 
+export class PlayResultsSearchParams {
+  user_id: string = '';
+
+  created_since: string = '';
+
+  created_until: string = '';
+
+  per_page: number = 1;
+}
+
 export type GamePresetsResponseT = {
   items: Omit<GamePresetT, 'settings'>[];
   perPage: number;
@@ -100,9 +110,10 @@ export type PlayResultT = {
     timezone: string;
   };
   type: string;
+  // todo нужна доработка типов
 };
 export type PlayResultsResponseT = {
-  item: PlayResultT[];
+  items: PlayResultT[];
   page: number;
   perPage: number;
   total: number;

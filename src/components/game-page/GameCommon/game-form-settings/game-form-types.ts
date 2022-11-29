@@ -128,6 +128,15 @@ export type FrazesGameSettingsType = {
 
 export type FrazesFormType = BaseGameSettingsType & FrazesGameSettingsType;
 
+export type BullsAndCowsSettingsType = {
+  timeComplete: number;
+  levelMaxCompleted: number;
+  errorAacceptable: number;
+  digitMax: number;
+};
+
+export type BullsAndCowsFormType = BaseGameSettingsType & BullsAndCowsSettingsType;
+
 export type GamesFormSettingsType = BaseGameSettingsType &
   (
     | ShiftVerticalFormType
@@ -139,4 +148,5 @@ export type GamesFormSettingsType = BaseGameSettingsType &
     | SteamEngineFormType
     | GameDifferenceFormType
     | FrazesFormType
+    | BullsAndCowsFormType
   );

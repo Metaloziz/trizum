@@ -1,11 +1,8 @@
 import { Roles } from 'app/enums/Roles';
 import React, { ChangeEvent, FunctionComponent, useEffect, useState } from 'react';
-
 import { observer } from 'mobx-react-lite';
 import { useNavigate } from 'react-router-dom';
-
 import styles from './BlogPage.module.scss';
-
 import { AppRoutes } from 'app/enums/AppRoutes';
 import articlesStore from 'app/stores/articlesStore';
 import Button from 'components/button/Button';
@@ -38,7 +35,11 @@ const BlogPage: FunctionComponent = observer(() => {
   };
 
   const onClickAddTest = () => {
-    navigate(`${AppRoutes.Testing}/${SecondaryRoutes.AddTest}`);
+    navigate(`${AppRoutes.TestEditor}/new-test`);
+  };
+
+  const onClickListTest = () => {
+    navigate(`${AppRoutes.Testing}`);
   };
 
   return (
@@ -48,8 +49,13 @@ const BlogPage: FunctionComponent = observer(() => {
           <div className={styles.buttonArticle}>
             <Button onClick={onClickAddPost}>Добавить статью</Button>
           </div>
-          <div>
+
+          <div className={styles.buttonArticle}>
             <Button onClick={onClickAddTest}>Добавить тест</Button>
+          </div>
+
+          <div className={styles.buttonArticle}>
+            <Button onClick={onClickListTest}>К списку тестов</Button>
           </div>
         </div>
       )}

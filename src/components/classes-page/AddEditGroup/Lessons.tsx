@@ -6,13 +6,13 @@ import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react';
 
 const Lessons: FC = observer(() => {
-  const { schedule, changeLesson } = groupStore;
+  const { schedule, changeLesson, scheduleHomeWorks, changeScheduleHomeWork } = groupStore;
 
   return (
     <>
       {!!schedule.length &&
         schedule.map((el, index) => (
-          <>
+          <div key={Math.random()}>
             <Typography
               sx={{
                 paddingLeft: 2,
@@ -32,7 +32,15 @@ const Lessons: FC = observer(() => {
                 onChange={({ currentTarget: { value } }) => changeLesson(el.id, 'name', value)}
               />
             </Grid>
-            <Grid sx={{ justifyContent: 'space-between', paddingTop: 2, paddingLeft: 2 }} container>
+            <Grid
+              sx={{
+                justifyContent: 'space-between',
+                paddingTop: 2,
+                paddingLeft: 2,
+                gap: 4,
+              }}
+              container
+            >
               <DatePicker
                 value={el.date}
                 onChange={e => e && changeLesson(el.id, 'date', new Date(e))}
@@ -51,8 +59,33 @@ const Lessons: FC = observer(() => {
                 onChange={e => e && changeLesson(el.id, 'to', new Date(e))}
                 renderInput={e => <TextField {...e} />}
               />
+
+              <Grid
+                sx={{
+                  paddingTop: 2,
+                  gap: 4,
+                }}
+                container
+              >
+                <DatePicker
+                  label="Время начала домашней работы"
+                  value={scheduleHomeWorks[index]?.start}
+                  onChange={e => e && changeScheduleHomeWork({ index, start: new Date(e) })}
+                  renderInput={e => (
+                    <TextField {...e} onKeyDown={event => event.preventDefault()} />
+                  )}
+                />
+                <DatePicker
+                  label="Время окончания домашней работы"
+                  value={scheduleHomeWorks[index]?.end}
+                  onChange={e => e && changeScheduleHomeWork({ index, end: new Date(e) })}
+                  renderInput={e => (
+                    <TextField {...e} onKeyDown={event => event.preventDefault()} />
+                  )}
+                />
+              </Grid>
             </Grid>
-          </>
+          </div>
         ))}
     </>
   );

@@ -12,7 +12,9 @@ import {
   PlayResultsResponseT,
   PlaySendResultT,
   PresetsGameSettings,
+  PlayResultsSearchParams,
 } from 'app/types/GameTypes';
+import { SearchGameParamsType } from 'app/types/SearchGameParamsType';
 import { PresetT } from 'app/types/WorkTypes';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { getActiveClassGroup } from 'utils/getActiveClassGroup';
@@ -79,6 +81,8 @@ class GamesStore {
     usedInWorks: [],
   };
 
+  playResultsSearchParams = new PlayResultsSearchParams();
+
   game: GameT = {
     code: '',
     type: '',
@@ -89,7 +93,12 @@ class GamesStore {
 
   games: GamesT = [];
 
-  playResults: PlayResultsResponseT = {} as PlayResultsResponseT;
+  playResults: PlayResultsResponseT = {
+    items: [],
+    page: 0,
+    perPage: 0,
+    total: 0,
+  };
 
   isCurrentGameView: boolean = false;
 
@@ -100,6 +109,8 @@ class GamesStore {
     workGamePresetId: '',
     courseWorkId: '',
   };
+
+  isLoading: boolean = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -128,7 +139,7 @@ class GamesStore {
     }
   };
 
-  getPresets = async (searchPresetParams?: Partial<SearchParamsType>) => {
+  getPresets = async (searchPresetParams?: Partial<SearchParamsType & SearchGameParamsType>) => {
     try {
       const params = removeEmptyFields(searchPresetParams || {});
       params.per_page = 1000; // todo hardcode
@@ -155,13 +166,13 @@ class GamesStore {
     try {
       let preset;
       if (appStore.role !== Roles.Student) {
-        const zxc = this.newPresets.items.find(el => el.name === presetName);
+        const zxc = this.newPresets.items.find(el => el.id === presetName);
         if (zxc) {
           preset = { gameCode: zxc.name, gameId: zxc.id };
         }
       }
       if (appStore.role === Roles.Student) {
-        const zxc = appStore.currentGameIds.find(el => el.gameCode === presetName);
+        const zxc = appStore.currentGameIds.find(el => el.gameId === presetName);
         if (zxc) {
           preset = zxc;
         }
@@ -172,7 +183,8 @@ class GamesStore {
           this.gamePreset = res;
           this.gamePreset.gamePreset.settings = res.gamePreset.settings;
         });
-      } else {
+      }
+      if (presetName === 'newSample') {
         this.gamePreset = {
           gamePreset: {
             id: '',
@@ -198,20 +210,24 @@ class GamesStore {
   createPresets = async (params: EditOrCreatePresetParamsT) => {
     params.timeMax = 3600;
     await gamesService.createPresetGame(params);
-    await this.getPresets();
+    await this.getPresets({ game_code: this.game.code });
     this.filterPresets(this.game.code);
   };
 
   editPreset = async (params: EditOrCreatePresetParamsT) => {
     params.timeMax = 3600;
-    await gamesService.editPresetGame(this.gamePreset.gamePreset.id, params);
-    await this.getPresets();
+    const res = await gamesService.editPresetGame(this.gamePreset.gamePreset.id, params);
+    runInAction(() => {
+      this.gamePreset.gamePreset = res;
+      this.gamePreset.gamePreset.settings = res.settings;
+    });
+    await this.getPresets({ game_code: this.game.code });
     this.filterPresets(this.game.code);
   };
 
   deletePreset = async (id: string) => {
     await gamesService.deletePreset(id);
-    await this.getPresets();
+    await this.getPresets({ game_code: this.game.code });
     this.filterPresets(this.game.code);
   };
 
@@ -221,7 +237,9 @@ class GamesStore {
 
   getPlayResults = async () => {
     try {
-      const res = await gamesService.getPlayResults();
+      const params = removeEmptyFields(this.playResultsSearchParams);
+
+      const res = await gamesService.getPlayResults(params);
       runInAction(() => {
         this.playResults = res;
       });
@@ -248,8 +266,16 @@ class GamesStore {
     };
   };
 
+  setPlayResultsSearchParams = (params: Partial<PlayResultsSearchParams>) => {
+    this.playResultsSearchParams = { ...this.playResultsSearchParams, ...params };
+  };
+
   setActiveWork = (params: IdentificationParamsType) => {
     this.identificationParams = params;
+  };
+
+  setIsLoading = (isLoading: boolean) => {
+    this.isLoading = isLoading;
   };
 }
 

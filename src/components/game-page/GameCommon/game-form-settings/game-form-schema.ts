@@ -5,7 +5,11 @@ export const GAME_SCHEMA = yup.object().shape({
     .string()
     .required('Обязательное поле')
     .min(1, 'Минимум 1 символ')
-    .max(50, 'Максимум 50 символо'),
+    .max(30, 'Максимум 30 символо')
+    .matches(
+      /^[a-zA-Zа-яёА-ЯЁ0-9 -]+$/,
+      'Допускаются символы латинские или кириллицы, числа, пробелы, знак «-»',
+    ),
   level: yup.string().required('Обязательное поле'),
   status: yup.string().required('Обязательное поле'),
   description: yup.string().notRequired().nullable(),
@@ -320,3 +324,31 @@ export const FRAZES_SCHEMA = yup.object().shape({
 });
 
 export const FRAZES_FORM_SCHEMA = GAME_SCHEMA.concat(FRAZES_SCHEMA);
+
+export const BULLS_AND_COWS_SCHEMA = yup.object().shape({
+  timeComplete: yup
+    .number()
+    .notRequired()
+    .min(5, 'Минимум 5 секунд')
+    .max(3600, 'Максимум 3600 секунд')
+    .nullable(),
+  levelMaxCompleted: yup
+    .number()
+    .notRequired()
+    .min(1, 'Минимум 1 уровень')
+    .max(99, 'Максимум 99 уровней')
+    .nullable(),
+  errorAacceptable: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 ошибок')
+    .max(99, 'Максимум 99 ошибок')
+    .nullable(),
+  digitMax: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 цифра для угадывания')
+    .max(10, 'Максимум 10 цифр для угадывания'),
+});
+
+export const BULLS_AND_COWS_FORM_SCHEMA = GAME_SCHEMA.concat(BULLS_AND_COWS_SCHEMA);

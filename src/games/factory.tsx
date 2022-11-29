@@ -25,6 +25,10 @@ import {
   Component as DifferenceComponent,
 } from './games/difference';
 import { PropsDefault as FrazesPropsDefault, Component as FrazesComponent } from './games/frazes';
+import {
+  PropsDefault as BullsCowsPropsDefault,
+  Component as BullsCowsComponent,
+} from './games/bullsCows';
 
 export const GameIdentifiers = {
   shulte: 'shulte',
@@ -39,6 +43,7 @@ export const GameIdentifiers = {
   argus: 'argus',
   frazes: 'frazes',
   difference: 'difference',
+  bullsAndCows: 'bullsAndCows',
 };
 
 export const GameList = {
@@ -101,6 +106,11 @@ export const GameList = {
     name: 'Фразоскоп',
     component: FrazesComponent,
     props: FrazesPropsDefault,
+  },
+  [GameIdentifiers.bullsAndCows]: {
+    name: 'Быки и коровы',
+    component: BullsCowsComponent,
+    props: BullsCowsPropsDefault,
   },
 };
 

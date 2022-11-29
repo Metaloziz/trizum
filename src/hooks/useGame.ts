@@ -6,6 +6,7 @@ import { GameProps, PlaySendResultT, PresetsGameSettings, ResultsNewT } from 'ap
 import { Option } from 'components/select-mui/CustomSelect';
 import { DEFAULT_GAME_SETTINGS } from 'constants/games';
 import { getPresetArrOptions } from 'constants/presetArr';
+import { toJS } from 'mobx';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { convertGroupOptions } from 'utils/convertGroupOptions';
@@ -17,10 +18,19 @@ type useGameProps = GameProps & {
 };
 
 export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) => {
-  const { role, user } = appStore;
-  const { groups, getGroups } = groupStore;
-  const { deletePreset, getPreset, getPresets, getGame, game, sendResults, identificationParams } =
-    gamesStore;
+  const { role } = appStore;
+  const { groups } = groupStore;
+  const {
+    deletePreset,
+    getPreset,
+    getPresets,
+    getGame,
+    game,
+    sendResults,
+    identificationParams,
+    setIsLoading,
+    isLoading,
+  } = gamesStore;
 
   const [refs, setRef] = useState<any>(null);
   const [started, setStarted] = useState(false);
@@ -65,9 +75,10 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
     }
   };
 
-  const setPreset = async (data: Option) => {
+  const setPreset = async (data: string) => {
     stopGame();
-    await getPreset(data.value);
+    console.log('setPreset', toJS(data));
+    await getPreset(data);
   };
 
   // const toggleModal = (value: boolean) => setIsModalOpen(value);
@@ -119,15 +130,17 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
   };
 
   const requestPresets = async () => {
+    setIsLoading(true);
     if (role !== Roles.Student) {
-      await getGroups();
-      await getPresets();
+      // await getGroups();
+      await getPresets({ game_code: gameName });
     }
     await getGame(gameName);
 
     if (role === Roles.Student) {
       // getPreset()
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -168,5 +181,6 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
     onEnd,
     onRef,
     stopGame,
+    isLoading,
   };
 };

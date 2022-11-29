@@ -19,6 +19,7 @@ import Argus from '../../assets/images/game/argus.png';
 import Fireflies from '../../assets/images/game/firelines.png';
 import Difference from '../../assets/images/game/difference.png';
 import Frazes from '../../assets/images/game/frazes.png';
+import BullsCows from '../../assets/images/game/bullsCows.png';
 
 import { Factory } from '../../games';
 
@@ -84,7 +85,12 @@ const Games = [
     title: 'Фразоскоп',
     name: 'frazes',
     prevImg: Frazes,
-  }
+  },
+  {
+    title: 'Быки и коровы',
+    name: 'bullsAndCows',
+    prevImg: BullsCows,
+  },
 ];
 
 class Game extends Component<any, any> {
@@ -107,7 +113,7 @@ class Game extends Component<any, any> {
   }
 
   componentDidMount() {
-    gamesStore.getPresets();
+    // gamesStore.getPresets();
     gamesStore.getGames();
   }
 
@@ -137,7 +143,7 @@ class Game extends Component<any, any> {
         gameResult: result,
       },
       async () => {
-        console.log("on end --- game ---", result)
+        console.log('on end --- game ---', result);
         await gamesStore.sendResults({
           userGroupId: '1ed25e67-b3ef-6bc2-9492-95bc14986080',
           courseWorkId: '1ed25e4d-c767-6336-80f6-5d295491aaa1',

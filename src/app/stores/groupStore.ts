@@ -21,7 +21,7 @@ import {
 } from 'app/types/GroupTypes';
 import { ResponseUserT } from 'app/types/UserTypes';
 import { AxiosError } from 'axios';
-import { makeAutoObservable, runInAction } from 'mobx';
+import { makeAutoObservable, runInAction, toJS } from 'mobx';
 import moment from 'moment';
 import { findElement } from 'utils/findIndexElement';
 import { getNextMonth } from 'utils/getNextMonth';
@@ -32,6 +32,14 @@ import {
 } from 'utils/scheduleItemToServerMapper';
 import { GroupStatusValue } from '../enums/GroupStatus';
 import { GroupStatusTypes } from '../types/GroupStatusTypes';
+
+export class ScheduleHomeWorksType {
+  start: Date = new Date();
+
+  end: Date = new Date();
+
+  index: number = 0;
+}
 
 class GroupStore {
   groups: ResponseGroups[] = [];
@@ -90,6 +98,8 @@ class GroupStore {
   queryFieldsOlympiads = { ...this.queryDefaultValuesOlympiads };
 
   schedule: LessonT[] = [];
+
+  scheduleHomeWorks: ScheduleHomeWorksType[] = [];
 
   franchise: FranchiseT[] = [new FranchiseT()];
 
@@ -202,6 +212,9 @@ class GroupStore {
           .fill(1)
           .map((el, index) => new LessonT(index));
 
+  setEmptyScheduleHomeWorksItems = (count: number) =>
+    count === 0 ? [] : Array(count).fill(new ScheduleHomeWorksType());
+
   getOneGroup = async (id: string) =>
     this.execute(async () => {
       const r = await groupsService.getOneGroup(id);
@@ -228,7 +241,7 @@ class GroupStore {
       franchiseId: franchiseId || this.modalFields.franchiseId,
       dateSince: moment(this.modalFields.dateSince).format(DateTime.DdMmYyyy),
       dateUntil: moment(this.modalFields.dateUntil).format(DateTime.DdMmYyyy),
-      schedule,
+      schedule: { classworks: schedule, homeworks: this.scheduleHomeWorks },
     });
     this.cleanModalValues();
     this.closeModal();
@@ -337,6 +350,13 @@ class GroupStore {
     this.schedule = [];
     this.selectedGroup = new ResponseOneGroup();
     this.isModalOpen = false;
+  };
+
+  changeScheduleHomeWork = (newHomeWorkData: Partial<ScheduleHomeWorksType>) => {
+    console.log('changeScheduleHomeWork', toJS(newHomeWorkData));
+    this.scheduleHomeWorks = this.scheduleHomeWorks.map(homeWork =>
+      homeWork.index === newHomeWorkData.index ? { ...homeWork, ...newHomeWorkData } : homeWork,
+    );
   };
 
   get filteredCourses() {

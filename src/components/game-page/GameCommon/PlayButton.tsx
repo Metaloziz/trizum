@@ -2,12 +2,13 @@ import styles from 'pages/game/Game.module.scss';
 import React, { FC } from 'react';
 
 type PropsT = {
-  onStart: () => void;
+  onStart?: () => void;
+  isDisable?: boolean;
 };
-export const PlayButton: FC<PropsT> = ({ onStart }) => (
+export const PlayButton: FC<PropsT> = ({ onStart, isDisable }) => (
   <div>
     <div className={styles.playButtonBackground}>
-      <div className={styles.playButton} onClick={onStart}>
+      <div className={styles.playButton} onClick={!isDisable ? onStart : undefined}>
         <svg
           width="73"
           height="75"
@@ -17,7 +18,7 @@ export const PlayButton: FC<PropsT> = ({ onStart }) => (
         >
           <path
             d="M69.1339 45.1447C74.1346 41.2753 74.1346 33.7256 69.1339 29.8562C54.0212 18.1626 37.1458 8.94567 19.1393 2.55042L15.8497 1.38209C9.55633 -0.853088 2.90883 3.40491 2.05684 9.90133C-0.323633 28.0524 -0.323633 46.9485 2.05684 65.0996C2.90882 71.596 9.55632 75.854 15.8497 73.6188L19.1392 72.4505C37.1458 66.0553 54.0212 56.8383 69.1339 45.1447Z"
-            fill="url(#paint0_linear_13605_11225)"
+            fill={isDisable ? 'grey' : 'url(#paint0_linear_13605_11225)'}
           />
           <defs>
             <linearGradient

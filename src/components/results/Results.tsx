@@ -1,5 +1,7 @@
+import { TextField } from '@mui/material';
+import { DesktopDatePicker } from '@mui/x-date-pickers';
 import appStore from 'app/stores/appStore';
-import usersStore from 'app/stores/usersStore';
+import gamesStore from 'app/stores/gamesStore';
 import {
   ArcElement,
   CategoryScale,
@@ -19,22 +21,16 @@ import {
   Title,
   Tooltip,
 } from 'chart.js';
-import BlueButton from 'components/atoms/GameResultItem/BlueButton';
 import UserCard from 'components/atoms/userCard';
-import Button from 'components/button/Button';
-import CalendarResults from 'components/molecules/CalendarResults';
-import ResultTable from 'components/molecules/ResultTable';
-import SelectResults from 'components/molecules/SelectResults/SelectResults';
-import { config } from 'components/results/mockData/Config';
-import { gamesAr, options, ResultsView, gamesArr } from 'components/results/mockData/mockData';
+import { LineContainer } from 'components/results/LineContainer/LineContainer';
 import Tablet from 'components/tablet/Tablet';
+import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
-import React, { FC, useState } from 'react';
-import { Line } from 'react-chartjs-2';
-import { SingleValue } from 'react-select';
+import moment from 'moment';
+import { Moment } from 'moment/moment';
+import React, { FC, useState, useEffect } from 'react';
 
 // ResultTable
-
 import styles from './Results.module.scss';
 
 Chart.register(
@@ -62,138 +58,75 @@ export type ValueLabelT = {
 };
 
 const Results: FC = observer(() => {
+  const { user, fullUserName } = appStore;
+  const { playResults, getPlayResults, setPlayResultsSearchParams } = gamesStore;
 
+  const [createdSince, setCreatedSince] = useState<Moment | null>(null);
+  const [createdUntil, setCreatedUntil] = useState<Moment | null>(moment());
 
-  const [selectedGames, setSelectedGames] = useState<ValueLabelT[]>([]);
-  const [view, setView] = useState(ResultsView.Table);
-  const [selectValue, setSelectValue] = useState<SingleValue<ValueLabelT>>();
-
-  const mockSelectData: ValueLabelT[] = [{ value: 'value', label: 'label' }];
-
-  const onGameNameClick = (selectedGame: ValueLabelT) => {
-    if (selectedGame.value === 'total' && !selectedGames.includes(selectedGame)) {
-      setSelectedGames([selectedGame]);
-      return;
-    }
-    if (selectedGame.value !== 'total' && selectedGames.find(el => el.value === 'total')) {
-      const newGames = selectedGames.filter(game => game.value !== 'total');
-      setSelectedGames([...newGames, selectedGame]);
-      return;
-    }
-    if (selectedGames.includes(selectedGame)) {
-      setSelectedGames(selectedGames.filter(elem => elem.value !== selectedGame.value));
-    } else {
-      setSelectedGames([...selectedGames, selectedGame]);
-    }
+  const handleChangeCreatedSince = (newValue: Moment | null) => {
+    setCreatedSince(newValue);
   };
 
-  const onChangeSelect = (value: SingleValue<ValueLabelT>) => {
-    setSelectValue(value);
+  const handleChangeCreatedUntil = (newValue: Moment | null) => {
+    setCreatedUntil(newValue);
   };
 
-  const onViewChangeClick = (value: ResultsView) => {
-    if (view === value) {
-      // true
-    } else {
-      setView(value);
-    }
+  const start = createdSince?.format('DD.MM.YYYY');
+  const end = createdUntil?.format('DD.MM.YYYY');
+
+  console.log('user', toJS(user));
+
+  const getData = () => {
+    setPlayResultsSearchParams({
+      user_id: user.id,
+      per_page: 1000,
+      created_since: start,
+      created_until: end,
+    });
+    getPlayResults();
   };
+
+  useEffect(getData, [createdSince, createdUntil]);
 
   return (
     <div className={styles.container}>
-      {/* <div className={styles.back}> */}
-      {/* <button type="button" className={styles.buttonArrow}> */}
-      {/*  <Image src={buttonImage} alt="arrow" width={26} height={13} /> */}
-      {/* </button> */}
-      {/* <span>На предыдущую страницу</span> */}
-      {/* </div> */}
       <div className={styles.main}>
         <Tablet>
           <div className={styles.blockTop}>
             <div className={styles.user}>
-              <UserCard city="Москва" status="Ученик" fullName="Днепровская А.А." />
+              <UserCard city={user.city ?? ''} status="Ученик" fullName={fullUserName} />
             </div>
             <div className={styles.filters}>
-              <div className={styles.badges}>
-                {/* <FilterItem title=" Те, что окрашены в красный цвет" /> */}
-                {/* <FilterItem title=" Те, что окрашены в красный цвет" /> */}
-                {/* <FilterItem title=" Те, что окрашены в красный цвет" /> */}
-              </div>
-              {/* <SelectResults */}
-              {/*  options={options} */}
-              {/*  onChange={onChangeSelect} */}
-              {/*  className={styles.filters_select} */}
-              {/* /> */}
+              <div className={styles.badges} />
             </div>
           </div>
 
           {/* график */}
 
-          <Line className={styles.canvas} {...config} />
+          <LineContainer playResults={playResults} />
 
           {/* график */}
 
           <div className={styles.buttons}>
-            <div className={styles.buttonsView}>
-              <BlueButton
-                title="Таблица"
-                onClick={() => onViewChangeClick(ResultsView.Table)}
-                isActive={view === ResultsView.Table}
-                type="small"
-              />
-              <BlueButton
-                title="График"
-                isActive={view === ResultsView.Chart}
-                onClick={() => onViewChangeClick(ResultsView.Chart)}
-                type="small"
-              />
-            </div>
-            <div className={styles.buttonsColumn}>
-              <div className={styles.gamesSelect}>
-                <div className={styles.gamesSelect_items}>
-                  {gamesAr.map(game => (
-                    <BlueButton
-                      key={game.value}
-                      title={game.label}
-                      onClick={() => onGameNameClick(game)}
-                      isActive={selectedGames.includes(game)}
-                    />
-                  ))}
-                  <SelectResults
-                    // TODO: мультивыбор
-                    options={gamesArr}
-                    minWidth="150px"
-                    onChange={onChangeSelect}
-                    className={styles.gamesSelect_select}
-                  />
-                </div>
-                <Button variant="primary" size="thin">
-                  Найти
-                </Button>
-              </div>
-              <div className={styles.gamesFields}>
-                <CalendarResults value="" onChange={() => console.log('asd')} />
-                <CalendarResults value="" onChange={() => console.log('asd')} />
-                <SelectResults
-                  options={mockSelectData}
-                  minWidth="150px"
-                  onChange={onChangeSelect}
-                  className={styles.gamesSelect_select}
-                />
-                <SelectResults
-                  options={mockSelectData}
-                  minWidth="150px"
-                  onChange={onChangeSelect}
-                  className={styles.gamesSelect_select}
-                />
-                <SelectResults
-                  options={mockSelectData}
-                  minWidth="150px"
-                  onChange={onChangeSelect}
-                  className={styles.gamesSelect_select}
-                />
-              </div>
-            </div>
+            <DesktopDatePicker
+              label="От"
+              inputFormat="DD/MM/YYYY"
+              value={createdSince}
+              onChange={handleChangeCreatedSince}
+              renderInput={params => (
+                <TextField {...params} onKeyDown={event => event.preventDefault()} fullWidth />
+              )}
+            />
+            <DesktopDatePicker
+              label="По"
+              inputFormat="DD/MM/YYYY"
+              value={createdUntil}
+              onChange={handleChangeCreatedUntil}
+              renderInput={params => (
+                <TextField {...params} onKeyDown={event => event.preventDefault()} fullWidth />
+              )}
+            />
           </div>
         </Tablet>
       </div>
