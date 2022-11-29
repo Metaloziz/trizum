@@ -213,7 +213,11 @@ class GroupStore {
           .map((el, index) => new LessonT(index));
 
   setEmptyScheduleHomeWorksItems = (count: number) =>
-    count === 0 ? [] : Array(count).fill(new ScheduleHomeWorksType());
+    count === 0
+      ? []
+      : Array(count)
+          .fill(new ScheduleHomeWorksType())
+          .map((el, index) => ({ ...el, index }));
 
   getOneGroup = async (id: string) =>
     this.execute(async () => {
@@ -350,6 +354,7 @@ class GroupStore {
     this.schedule = [];
     this.selectedGroup = new ResponseOneGroup();
     this.isModalOpen = false;
+    this.scheduleHomeWorks = [];
   };
 
   changeScheduleHomeWork = (newHomeWorkData: Partial<ScheduleHomeWorksType>) => {

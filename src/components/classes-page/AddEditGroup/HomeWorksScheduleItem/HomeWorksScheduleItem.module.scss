@@ -16,14 +16,14 @@
     letter-spacing: 0.0075em;
   }
 
-  div {
+  .body {
     display: flex;
     align-items: center;
     flex-direction: column;
     gap: 20px;
 
-    div {
-
+    .date {
+      display: flex;
       flex-direction: row;
       gap: 20px;
     }

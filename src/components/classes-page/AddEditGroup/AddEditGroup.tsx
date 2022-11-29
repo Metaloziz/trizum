@@ -146,7 +146,6 @@ const AddEditGroup: FC = observer(() => {
             </Select>
           </FormControl>
         </Grid>
-
         {!isFranchiseRole && (
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
@@ -163,7 +162,6 @@ const AddEditGroup: FC = observer(() => {
             </FormControl>
           </Grid>
         )}
-
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth>
             <InputLabel id="course">{courseLabel}</InputLabel>
@@ -212,10 +210,10 @@ const AddEditGroup: FC = observer(() => {
           />
         </Grid>
 
-        {/* lessons */}
         <Grid item>
           <Lessons />
         </Grid>
+
         <Grid item sx={{ width: '100%' }}>
           <HomeWorksScheduleItem />
         </Grid>
