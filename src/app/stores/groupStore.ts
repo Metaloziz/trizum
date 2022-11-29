@@ -223,9 +223,11 @@ class GroupStore {
     this.execute(async () => {
       const r = await groupsService.getOneGroup(id);
       runInAction(() => {
+        console.log('responce', toJS(r));
         this.selectedGroup = r;
-        if (r.schedule && r.schedule.length) {
-          this.schedule = r.schedule.map(el => scheduleItemToUIMapper(el));
+        if (r.schedule.classworks && r.schedule.homeworks) {
+          this.schedule = r.schedule.classworks.map(el => scheduleItemToUIMapper(el));
+          this.scheduleHomeWorks = r.schedule.homeworks;
         } else {
           this.schedule = this.setEmptyScheduleItems(r.course.worksCount);
         }
@@ -263,7 +265,7 @@ class GroupStore {
             ...this.modalFields,
             dateSince: moment(this.modalFields.dateSince).format(DateTime.DdMmYyyy),
             dateUntil: moment(this.modalFields.dateUntil).format(DateTime.DdMmYyyy),
-            schedule,
+            schedule: { classworks: schedule, homeworks: this.scheduleHomeWorks },
           },
           this.selectedGroup.id,
         );
@@ -344,6 +346,7 @@ class GroupStore {
           dateUntil: new Date(r.endedAt.date),
           status: (r.status as GroupStatusTypes) || '',
         };
+
         // this.schedule = r.schedule
       }
     }

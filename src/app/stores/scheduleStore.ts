@@ -99,9 +99,12 @@ class GroupStore {
     this.execute(async () => {
       const currentGroup = await groupsService.getOneGroup(groupId);
 
-      currentGroup.schedule[lessonIndex] = schedule;
+      currentGroup.schedule.classworks[lessonIndex] = schedule;
 
-      await groupsService.editGroup({ schedule: [...currentGroup.schedule] }, currentGroup.id);
+      await groupsService.editGroup(
+        { schedule: [...currentGroup.schedule.classworks] },
+        currentGroup.id,
+      );
       await this.getGroups();
     });
     // }

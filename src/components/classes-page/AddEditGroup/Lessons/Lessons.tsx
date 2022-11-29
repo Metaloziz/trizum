@@ -28,7 +28,7 @@ const Lessons: FC = observer(() => {
         <div className={style.container}>
           <span>Расписание уроков</span>
           {schedule.map((el, index) => (
-            <Grid key={Math.random()} sx={{ alignItems: 'center', width: '100%' }} container>
+            <Grid key={el.id} sx={{ alignItems: 'center', width: '100%' }} container>
               <Typography
                 sx={{
                   paddingLeft: 2,
@@ -41,7 +41,7 @@ const Lessons: FC = observer(() => {
               >
                 Урок №{index + 1}
               </Typography>
-              <Grid item xs={12} key={el.id} sx={{ margin: '2' }}>
+              <Grid item xs={12} sx={{ margin: '2' }}>
                 <TextField
                   fullWidth
                   label="Название урока"
@@ -62,6 +62,7 @@ const Lessons: FC = observer(() => {
                   value={el.date}
                   onChange={e => e && changeLesson(el.id, 'date', new Date(e))}
                   label="Дата урока"
+                  defaultCalendarMonth="1"
                   renderInput={e => <TextField {...e} />}
                 />
                 <TimePicker
