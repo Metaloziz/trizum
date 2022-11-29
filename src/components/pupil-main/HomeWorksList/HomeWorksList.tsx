@@ -1,31 +1,33 @@
 import { Roles } from 'app/enums/Roles';
+import appStore from 'app/stores/appStore';
 import { ScheduleHomeWorksType } from 'app/stores/groupStore';
-import { WorkWithIdFromLoadme, ScheduleFromLoadme } from 'app/types/LoadMeTypes';
+import { WorkWithIdFromLoadme } from 'app/types/LoadMeTypes';
 import classNames from 'classnames';
 import Panel from 'components/panel/Panel';
-import { getLessonIndex } from 'components/pupil-main/helper/getLessonIndex';
 import { Switcher } from 'components/pupil-main/HomeWorksList/WorkItems/Switcher/Switcher';
 import { Work } from 'components/pupil-main/HomeWorksList/WorkItems/Work/Work';
 import { WorkItems } from 'components/pupil-main/HomeWorksList/WorkItems/WorkItems';
-import { ONE_DIFFERENCE_INDEX } from 'constants/constants';
 import { toJS } from 'mobx';
 import { FC, useState, useEffect } from 'react';
+import { getNewNearestHomeWork } from 'utils/getNewNearestHomeWork';
 import { whoCanUseIt } from 'utils/whoCanUseIt';
 import style from './HomeWorksList.module.scss';
 
 type Props = {
   works: WorkWithIdFromLoadme[];
   schedule: ScheduleHomeWorksType[];
+  setGameIdsWithCodes2: typeof appStore.setGameIdsWithCodesByHomeWorkIndex;
 };
 
-export const HomeWorksList: FC<Props> = ({ works, schedule }) => {
+export const HomeWorksList: FC<Props> = ({ works, schedule, setGameIdsWithCodes2 }) => {
   const [isListView, setIsListView] = useState(false);
-  // const [lessonIndex, setLessonIndex] = useState(0);
+  const [lessonIndex, setLessonIndex] = useState(0);
 
-  // useEffect(() => {
-  //   const index = getLessonIndex(schedule);
-  //   setLessonIndex(index);
-  // }, [schedule]);
+  useEffect(() => {
+    const index = getNewNearestHomeWork(schedule);
+    setLessonIndex(index);
+    setGameIdsWithCodes2(index);
+  }, [schedule]);
 
   console.log('schedule', toJS(schedule));
 
@@ -44,8 +46,7 @@ export const HomeWorksList: FC<Props> = ({ works, schedule }) => {
           {isListView ? (
             <WorkItems works={works} schedule={schedule} />
           ) : (
-            <div />
-            // <Work work={works[lessonIndex]} lesson={schedule[lessonIndex]} />
+            <Work work={works[lessonIndex]} homeWorkTime={schedule[lessonIndex]} />
           )}
         </>
       ) : (

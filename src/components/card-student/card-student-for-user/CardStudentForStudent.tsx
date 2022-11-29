@@ -31,8 +31,6 @@ const CardStudentForStudent: FC = observer(() => {
 
   const group = getActiveClassGroup(user);
 
-  console.log('getSchedule', toJS(getSchedule));
-
   useEffect(() => {
     const currentLessonDate = getNearestLessonObject(getSchedule, dateNow());
     if (currentLessonDate) {
