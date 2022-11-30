@@ -1,19 +1,38 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Image } from 'react-native';
 
+import { Game, GameResult } from '../../common/types';
+import { Fraze, VirtualKeyboard } from './components';
+
 import Timer from '../../components/timerRevert';
 import TimerAll from '../../components/timer';
 import StartTimer from '../../components/startTimer';
 
-import { Game, GameResult } from '../../common/types';
-
-import { Fraze, VirtualKeyboard } from './components';
+import { DictionaryFraze, DictionaryType, Props } from './types';
 
 const imageBackground = require('./assets/background.png');
 
 const START_TIMER = 3;
 
-export default class extends Component<any, any> implements Game {
+type GameStatisticItem = {
+  result: boolean;
+  gameEngineLevel: DictionaryType;
+};
+
+interface State {
+  started: boolean;
+  success: number;
+  errors: number;
+  level: number;
+  words: DictionaryFraze[];
+  userWord: string;
+  wordsFull: boolean;
+  visibleWord: boolean;
+  gameEngineLevel: DictionaryType;
+  gameStatistic: GameStatisticItem[];
+}
+
+export default class extends Component<Props, State> implements Game {
   timer: any;
   timerAll: any;
 
@@ -26,14 +45,16 @@ export default class extends Component<any, any> implements Game {
       errors: 0,
       level: 0,
       words: [],
+      gameEngineLevel: 'normal',
       userWord: '',
       wordsFull: false,
       visibleWord: true,
+      gameStatistic: [],
     };
   }
 
   componentDidMount() {
-    const { onRef = () => {}, speed } = this.props;
+    const { onRef = () => {} } = this.props;
 
     onRef(this);
   }
@@ -58,6 +79,8 @@ export default class extends Component<any, any> implements Game {
       success: 0,
       errors: 0,
       visibleWord: true,
+      gameStatistic: [],
+      gameEngineLevel: 'normal',
     });
   };
 
@@ -78,9 +101,8 @@ export default class extends Component<any, any> implements Game {
   };
 
   startLogic = () => {
-    const { wordsFull, words, speed } = this.props;
-    console.log(this.props);
-    this.setState({ wordsFull, words, speed });
+    const { wordsFull, words } = this.props;
+    this.setState({ wordsFull, words });
     this.setVisible(false, true);
   };
 
@@ -91,12 +113,14 @@ export default class extends Component<any, any> implements Game {
   private end = (status = 'win') => {
     const { onEnd = () => {} } = this.props;
 
+    const {success, errors} = this.state;
+
     const time = this.timerAll?.getValue();
 
     const result: GameResult = {
       result: status == 'win' ? 'win' : 'lose',
-      success: this.state.success,
-      failed: this.state.errors,
+      success,
+      failed: errors,
       time: time,
     };
 
@@ -105,28 +129,92 @@ export default class extends Component<any, any> implements Game {
     this.stop();
   };
 
+  upgradeEngineLevel = (currentEngineLevel: DictionaryType) =>
+    currentEngineLevel === 'normal' ? 'hard' : currentEngineLevel === 'easy' ? 'normal' : 'easy';
+
+  downgradeEngineLevel = (currentEngineLevel: DictionaryType) =>
+    currentEngineLevel === 'normal' ? 'easy' : currentEngineLevel === 'hard' ? 'normal' : 'hard';
+
+  gameEngine = (result: boolean) => {
+    const {
+      level: currentLevel,
+      gameStatistic: currentGameStatistic,
+      gameEngineLevel: currentGameEngineLevel,
+      words,
+    } = this.state;
+    const { changeLevelDictionary, errorLevel } = this.props;
+
+    const gameStatistic = [
+      ...currentGameStatistic,
+      { result, gameEngineLevel: currentGameEngineLevel },
+    ];
+
+    let gameEngineLevel: DictionaryType = currentGameEngineLevel;
+
+    const results = [...currentGameStatistic.map(({ result }) => result), result];
+
+    const lastLevelsResult = results.slice(-changeLevelDictionary);
+
+    let success = 0;
+    let errors = 0;
+
+    lastLevelsResult.forEach(result => {
+      if (result) {
+        errors = 0;
+        success++;
+      } else {
+        success = 0;
+        errors++;
+      }
+    });
+
+    const counterCurrentLevel = gameStatistic
+      .slice(-changeLevelDictionary)
+      .filter(({ gameEngineLevel }) => gameEngineLevel === currentGameEngineLevel);
+
+    const isLastLevel = words.length - 1 === currentLevel;
+
+    if (success === changeLevelDictionary) {
+      if (currentGameEngineLevel !== 'hard') {
+        if (counterCurrentLevel.length === changeLevelDictionary) {
+          gameEngineLevel = this.upgradeEngineLevel(currentGameEngineLevel);
+        }
+      }
+    }
+
+    if (errors === errorLevel) {
+      if (currentGameEngineLevel !== 'easy') {
+        gameEngineLevel = this.downgradeEngineLevel(currentGameEngineLevel);
+      }
+    }
+
+    this.setState({
+      gameStatistic,
+      gameEngineLevel,
+      level: isLastLevel ? currentLevel : currentLevel + 1,
+    });
+  };
+
   onResult = (result: boolean) => {
     const { errorAacceptable } = this.props;
-    const { words } = this.state;
-    const level = this.state.level + 1;
+    const { words, level } = this.state;
     const success = this.state.success + (result ? 1 : 0);
     const errors = this.state.errors + (result ? 0 : 1);
 
-    if (!(errors >= errorAacceptable) && level < words.length) {
+    this.gameEngine(result);
+
+    if (!(errors >= errorAacceptable) && level + 1 < words.length) {
       this.setVisible(false);
     }
 
     this.setState(
-      (prev: any) => ({ ...prev, level, success, errors, userWord: '', visibleWord: true }),
+      (prev) => ({ ...prev, success, errors, userWord: '', visibleWord: true }),
       () => {
         if (errors >= errorAacceptable) {
           return this.end('lose');
         }
 
-        if (success >= words.length) {
-          return this.end('win');
-        }
-        if (words.length === level) {
+        if (success >= words.length || level === words.length - 1) {
           return this.end('win');
         }
       },
@@ -134,7 +222,7 @@ export default class extends Component<any, any> implements Game {
   };
 
   updateUserWord = (char: string) =>
-    this.setState((prev: any) => ({ ...prev, userWord: prev.userWord + char }));
+    this.setState((prev) => ({ ...prev, userWord: prev.userWord + char }));
 
   backSpace = () => {
     const { userWord } = this.state;
@@ -144,21 +232,32 @@ export default class extends Component<any, any> implements Game {
   setVisible = (visibleWord: boolean, init = false) => {
     const { speed } = this.props;
     const timer = init ? START_TIMER * 1000 : START_TIMER;
-    console.log('set visible ---', { visibleWord, init, timer });
-    setTimeout(() => this.setState({ visibleWord }), speed + timer);
+
+    setTimeout(() => this.setState({ visibleWord: visibleWord }), speed + timer);
   };
 
   renderInner = () => {
-    const { level = 0 } = this.state;
-
     const { width, timeComplete, words } = this.props;
+
+    const {
+      level = 0,
+      gameEngineLevel,
+      userWord,
+      errors,
+      wordsFull,
+      visibleWord,
+      gameStatistic,
+    } = this.state;
 
     const levels = [];
 
     for (let i = 0; i < words.length; i++) {
+      const result = gameStatistic[i];
       levels.push(
         <View key={`level-${i}`} style={styles.level}>
-          {i <= level && <View style={styles.levelInner} />}
+          {i <= level && result && result.result === true && <View style={styles.levelSuccess} />}
+          {i <= level && result && result.result === false && <View style={styles.levelError} />}
+          {i <= level && !result && <View style={styles.levelInner} />}
         </View>,
       );
     }
@@ -185,7 +284,7 @@ export default class extends Component<any, any> implements Game {
                   }}
                 />
               )}
-              renderTime={(time: any) => {
+              renderTime={(time: number) => {
                 let progress = ((timeComplete - time) / timeComplete) * 100;
 
                 if (progress > 100) {
@@ -208,12 +307,13 @@ export default class extends Component<any, any> implements Game {
         <View style={styles.сontent}>
           <Fraze
             words={this.state.words}
-            userWord={this.state.userWord}
-            level={this.state.level}
+            userWord={userWord}
+            level={level}
             onResult={this.onResult}
-            visibleWord={this.state.visibleWord}
-            wordsFull={this.state.wordsFull}
-            errors={this.state.errors}
+            visibleWord={visibleWord}
+            wordsFull={wordsFull}
+            errors={errors}
+            gameEngineLevel={gameEngineLevel}
           />
           <VirtualKeyboard
             onKeyPress={this.updateUserWord}
@@ -221,7 +321,7 @@ export default class extends Component<any, any> implements Game {
             visibleWord={this.state.visibleWord}
           />
         </View>
-        <TimerAll ref={(ref: any) => (this.timerAll = ref)} />
+        <TimerAll ref={(ref) => (this.timerAll = ref)} />
       </View>
     );
   };
@@ -297,11 +397,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  levelInner: {
-    backgroundColor: '#7F28D9',
+  levelStatistic: {
     width: 20,
     height: 20,
     borderRadius: 10,
+  },
+  levelInner: {
+    backgroundColor: '#7F28D9',
+  },
+  levelSuccess: {
+    backgroundColor: 'green',
+  },
+  levelError: {
+    backgroundColor: 'red',
   },
   сontent: {
     flex: 1,

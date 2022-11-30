@@ -1,5 +1,6 @@
 import { StatusTypes } from 'app/enums/StatusTypes';
 import { Nullable } from 'app/types/Nullable';
+import { DictionaryFraze } from 'games/games/frazes/types';
 
 export type GameT = {
   code: string;
@@ -30,7 +31,7 @@ export type PresetsGameSettings = {
   area: boolean;
   gage: GageType[];
   wordsFull: boolean;
-  words: string[];
+  words: DictionaryFraze[];
 };
 
 export type EditOrCreatePresetParamsT = {

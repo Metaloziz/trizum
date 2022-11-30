@@ -1,5 +1,6 @@
 import { GageType, GamePresetT } from 'app/types/GameTypes';
 import { Nullable } from 'app/types/Nullable';
+import { DictionaryFraze } from 'games/games/frazes/types';
 
 export type FormSettingsType = {
   onFormSubmit: (value: GamesFormSettingsType) => void;
@@ -110,7 +111,9 @@ export type FrazesGameSettingsType = {
   timeComplete: number;
   speed: number;
   wordsFull: boolean;
-  words: string[];
+  errorLevel: number;
+  changeLevelDictionary: number;
+  words: DictionaryFraze[];
 };
 
 export type FrazesFormType = BaseGameSettingsType & FrazesGameSettingsType;

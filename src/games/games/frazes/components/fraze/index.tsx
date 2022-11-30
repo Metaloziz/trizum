@@ -1,35 +1,34 @@
 import React, { FC, useEffect} from 'react';
 import { View, StyleSheet, Text, ImageBackground } from 'react-native';
+import { DictionaryFraze } from '../../types';
 
 const frazesBackground = require('../../assets/frazesBackground.png');
 
 interface Props {
   userWord: string;
-  words: string[];
+  words: DictionaryFraze[];
   onResult: (result: boolean) => void;
   level: number;
   visibleWord: boolean;
   wordsFull: boolean;
   errors: number;
+  gameEngineLevel: "easy" | "normal" | "hard"
 }
 
-export const Fraze: FC<Props> = ({ userWord, words, level, visibleWord, wordsFull, onResult, errors }) => {
+export const Fraze: FC<Props> = ({ userWord, words, level, visibleWord, wordsFull, gameEngineLevel, onResult, errors }) => {
 
   const checkWord = () => {
     return userWord.split('').filter((userChar, index) => {
-      const wordsChar = words[level][index].toUpperCase();
+      const wordsChar = words[level][gameEngineLevel][index].toUpperCase();
       return userChar === wordsChar;
     });
   };
 
   const handleUserWord = () => {
-    const charCount = userWord.length;
-    const secretWord = words[level];
     const result = checkWord();
-    console.log('handle user word ---', { result, charCount, secretWord, userWord });
     
     if (wordsFull) {
-      if (result.length === words[level].length) {
+      if (result.length === words[level][gameEngineLevel].length) {
         return onResult(true);
       }
       if(userWord.length > result.length) {
@@ -53,18 +52,24 @@ export const Fraze: FC<Props> = ({ userWord, words, level, visibleWord, wordsFul
     }
   }, [visibleWord, userWord]);
 
+  const getLabelEngineLevel = () => {
+    if(gameEngineLevel === "hard") return "Сложный"
+    if(gameEngineLevel === "normal") return "Нормальный"
+    return "Легкий"
+  }
+
   return (
     <View style={styles.root}>
-      <View style={styles.errorWrap}>
-
-      <Text style={styles.errorLabel}>Количество ошибок: {errors}</Text>
+      <View style={styles.statisticWrap}>
+      <Text style={styles.statisticLabel}>Уровень сложности: {getLabelEngineLevel()}</Text>
+      <Text style={styles.statisticLabel}>Количество ошибок: {errors}</Text>
       </View>
       <ImageBackground
         source={frazesBackground}
         resizeMode="contain"
         style={styles.frazeBackground}
       >
-        <Text style={styles.wordLabel}>{visibleWord ? words[level] : userWord}</Text>
+        <Text style={styles.wordLabel}>{visibleWord ? words[level][gameEngineLevel] : userWord}</Text>
       </ImageBackground>
     </View>
   );
@@ -74,10 +79,13 @@ const styles = StyleSheet.create({
   root: {
     minHeight: 170,
   },
-  errorWrap: {
-    alignItems: "flex-end"
+  statisticWrap: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center"
   },
-  errorLabel: {
+  statisticLabel: {
     fontSize: 15,
     fontWeight: "600"
   },
