@@ -31,6 +31,10 @@ export type PresetsGameSettings = {
   gage: GageType[];
   wordsFull: boolean;
   words: string[];
+  levelChangeEngine: number;
+  errorLevel: number;
+  percentUpgradeTime: number;
+  percentDowngradeTime: number;
 };
 
 export type EditOrCreatePresetParamsT = {

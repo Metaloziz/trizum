@@ -21,6 +21,10 @@ export type ShiftVerticalGameSettingsType = {
   elementsTotal: number;
   groupsCount: number;
   blinksCount: number;
+  levelChangeEngine: number;
+  errorLevel: number;
+  percentUpgradeTime: number;
+  percentDowngradeTime: number;
 };
 
 export type ShiftVerticalFormType = BaseGameSettingsType & ShiftVerticalGameSettingsType;

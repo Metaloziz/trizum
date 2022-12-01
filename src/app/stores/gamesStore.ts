@@ -61,6 +61,10 @@ class GamesStore {
     gage: [{ id: 1, area: true, speed: 1 }],
     wordsFull: false,
     words: [],
+    levelChangeEngine: 2,
+    errorLevel: 2,
+    percentUpgradeTime: 10,
+    percentDowngradeTime: 10,
   };
 
   gamePreset: OneGamePresent = {
