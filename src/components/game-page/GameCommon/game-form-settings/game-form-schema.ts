@@ -170,6 +170,18 @@ export const SILHOUETTES_SCHEMA = yup.object().shape({
     .required('Обязательное поле')
     .min(1, 'Минимум 1 фигур')
     .max(10, 'Максимум 10 фигур'),
+  perSuccessLevel: yup.number().required('Обязательное поле').min(1, 'Минимум 1 уровень'),
+  maxErrorLevel: yup.number().required('Обязательное поле').min(1, 'Минимум 1 уровень'),
+  upgrade: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 блик')
+    .max(10, 'Максимум 10 бликов'),
+  downgrade: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 блик')
+    .max(10, 'Максимум 10 бликов'),
 });
 
 export const SILHOUETTES_FORM_SCHEMA = GAME_SCHEMA.concat(SILHOUETTES_SCHEMA);

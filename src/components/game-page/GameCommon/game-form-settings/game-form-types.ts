@@ -15,6 +15,13 @@ export type BaseGameSettingsType = {
   description?: Nullable<string>;
 };
 
+export type BaseGameWithEngineType = {
+  perSuccessLevel: number;
+  maxErrorLevel: number;
+  upgrade: number;
+  downgrade: number;
+};
+
 export type ShiftVerticalGameSettingsType = {
   timeComplete?: Nullable<number>;
   cycleTime: Nullable<number>;
@@ -59,7 +66,9 @@ export type MemoryRhythmGameSettingsType = {
   sound: number;
 };
 
-export type MemoryRhythmFormType = BaseGameSettingsType & MemoryRhythmGameSettingsType;
+export type MemoryRhythmFormType = BaseGameSettingsType &
+  BaseGameWithEngineType &
+  MemoryRhythmGameSettingsType;
 
 export type ArgusGameSettingsType = {
   timeComplete: number;

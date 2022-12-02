@@ -31,6 +31,10 @@ export type PresetsGameSettings = {
   gage: GageType[];
   wordsFull: boolean;
   words: string[];
+  perSuccessLevel: number;
+  maxErrorLevel: number;
+  upgrade: number;
+  downgrade: number;
 };
 
 export type EditOrCreatePresetParamsT = {
