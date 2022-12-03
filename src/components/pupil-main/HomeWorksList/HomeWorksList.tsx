@@ -30,6 +30,7 @@ export const HomeWorksList: FC<Props> = ({ works, schedule, setGameIdsWithCodes2
   }, [schedule]);
 
   console.log('schedule', toJS(schedule));
+  console.log('lessonIndex', toJS(lessonIndex));
 
   return (
     <div className={classNames(style.container)}>
