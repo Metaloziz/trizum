@@ -223,7 +223,7 @@ class GroupStore {
     this.execute(async () => {
       const r = await groupsService.getOneGroup(id);
       runInAction(() => {
-        console.log('responce', toJS(r));
+        console.log('responcegetOneGroup', toJS(r));
         this.selectedGroup = r;
         if (r.schedule.classworks && r.schedule.homeworks) {
           this.schedule = r.schedule.classworks.map(el => scheduleItemToUIMapper(el));
