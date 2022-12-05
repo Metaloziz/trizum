@@ -25,7 +25,7 @@ export const teacherLinks = [
 export const franchiseeAdminLinks = [
   Links.Index,
   Links.Classes,
-  Links.Statistic,
+  // Links.Statistic,
   // Links.Homework,
   Links.Users,
   Links.Games,

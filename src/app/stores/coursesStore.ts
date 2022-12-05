@@ -1,6 +1,7 @@
 import coursesService from 'app/services/coursesService';
 import { CoursePayloadType } from 'app/types/CoursePayloadType';
 import { ShortCourseType } from 'app/types/CourseTypes';
+import { NewWorkType } from 'app/types/NewWorkType';
 import { Nullable } from 'app/types/Nullable';
 import { runInAction, observable, makeObservable } from 'mobx';
 import { execute } from 'utils/execute';
@@ -22,6 +23,12 @@ class CoursesStore extends StoreBase {
 
   isDialogOpen: boolean = false;
 
+  // for ClassesMethodistPage
+
+  currentHomework = new NewWorkType();
+
+  // for ClassesMethodistPage
+
   private searchCoursesParams = new SearchCoursesParamsType();
 
   constructor() {
@@ -32,6 +39,7 @@ class CoursesStore extends StoreBase {
       isDialogOpen: observable,
       courses: observable,
       currentCourse: observable,
+      currentHomework: observable,
     });
   }
 
@@ -52,12 +60,12 @@ class CoursesStore extends StoreBase {
 
   getCoursesOlimp = async () => {
     await this.execute(async () => {
-      const {items} = await coursesService.getCoursesOlimp();
+      const { items } = await coursesService.getCoursesOlimp();
       runInAction(() => {
         this.courses = items;
       });
     });
-  }
+  };
 
   getCurrentCourse = async (courseId: string) => {
     await this.execute(async () => {
@@ -133,6 +141,14 @@ class CoursesStore extends StoreBase {
 
   setSearchCoursesParams = (params: Partial<SearchCoursesParamsType>) => {
     this.searchCoursesParams = { ...this.searchCoursesParams, ...params };
+  };
+
+  setCurrentHomeWork = (workIndex: number) => {
+    const result = this.currentCourse?.works?.find(workItem => workItem.index === workIndex);
+
+    if (result) {
+      this.currentHomework = result;
+    }
   };
 
   get validateSchema() {

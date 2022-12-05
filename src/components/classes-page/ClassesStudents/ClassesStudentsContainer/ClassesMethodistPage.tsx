@@ -1,60 +1,63 @@
+import { Alert } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import coursesStore from 'app/stores/coursesStore';
 import groupStore from 'app/stores/groupStore';
-import { NewWorkType } from 'app/types/NewWorkType';
 import CardStudent from 'components/card-student/CardStudent';
 import { GroupsButtons } from 'components/classes-page/ClassesStudents/ClassesStudentsContainer/GroupsButtons/GroupsButtons';
 import { HomeWorkDescription } from 'components/classes-page/homework-description/HomeWorkDescription';
+import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useEffect, useState, ChangeEvent } from 'react';
 import styles from '../../ClassesMainPage.module.scss';
 
 export const ClassesMethodistPage: FC = observer(() => {
-  const { getCurrentCourse, currentCourse } = coursesStore;
+  const { getCurrentCourse, currentCourse, setCurrentHomeWork, currentHomework } = coursesStore;
   const { getOneGroup, selectedGroup, groups, getGroups, nullableSelectedGroup, setQueryFields } =
     groupStore;
 
+  console.log('selectedGroup', toJS(selectedGroup));
+  console.log('currentCourse', toJS(currentCourse));
+
   const [workIndex, setWorkIndex] = useState(1);
 
-  const [currentHomework, setCurrentHomework] = useState(new NewWorkType());
+  console.log('workIndex', toJS(workIndex));
+
+  const isShowStudentList = !!selectedGroup?.users?.length;
 
   const getCurrentHomeWork = async () => {
+    setWorkIndex(1);
     await getCurrentCourse(selectedGroup.course.id);
-
-    if (currentCourse?.works) {
-      const work = currentCourse?.works[workIndex - 1]; // выбор первой в
-      // массиве домашки
-
-      setCurrentHomework(work);
-    }
+    await setCurrentHomeWork(0);
   };
 
   const onChangeWorkIndex = (event: ChangeEvent<unknown>, newWorkIndex: number) => {
+    console.log('newWorkIndex', toJS(newWorkIndex));
     setWorkIndex(newWorkIndex);
-    getCurrentHomeWork();
   };
 
+  // переключение по домашкам
   useEffect(() => {
-    setQueryFields({ perPage: 100 });
+    setCurrentHomeWork(workIndex - 1);
+  }, [workIndex]);
+
+  // переключение по группам
+  useEffect(() => {
+    getCurrentHomeWork();
+  }, [selectedGroup]);
+
+  // получение всех групп
+  useEffect(() => {
+    setQueryFields({ perPage: 1000 });
     getGroups();
     return () => {
       nullableSelectedGroup();
     };
   }, []);
 
-  useEffect(() => {
-    setWorkIndex(1);
-    getCurrentHomeWork();
-  }, [selectedGroup]);
-
-  if (!groups?.length) {
-    return <h2>Нету данных</h2>;
-  }
-
   return (
     <div className={styles.wrapper}>
       <div className={styles.pagination}>
-        <div>Номер урока:</div>
+        <div>Номер домашнего задания:</div>
         <Pagination
           count={Math.ceil(currentCourse?.works?.length || 1)}
           color="primary"
@@ -71,13 +74,19 @@ export const ClassesMethodistPage: FC = observer(() => {
 
         <HomeWorkDescription currentHomework={currentHomework} />
 
-        {!!selectedGroup?.users?.length && (
-          <div className={styles.blockCardStudents}>
-            {selectedGroup &&
-              !!selectedGroup.users.length &&
-              selectedGroup.users.map(user => <CardStudent key={user.user.id} user={user.user} />)}
-          </div>
-        )}
+        <div className={styles.blockCardStudents}>
+          {isShowStudentList ? (
+            <>
+              {selectedGroup.users.map(user => (
+                <CardStudent key={user.user.id} user={user.user} />
+              ))}
+            </>
+          ) : (
+            <Alert severity="info">
+              <h2>нету студентов</h2>
+            </Alert>
+          )}
+        </div>
       </div>
     </div>
   );
