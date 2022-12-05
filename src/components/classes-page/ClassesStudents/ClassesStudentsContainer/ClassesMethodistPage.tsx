@@ -1,9 +1,9 @@
-import { Alert } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
+import appStore from 'app/stores/appStore';
 import coursesStore from 'app/stores/coursesStore';
 import groupStore from 'app/stores/groupStore';
-import CardStudent from 'components/card-student/CardStudent';
 import { GroupsButtons } from 'components/classes-page/ClassesStudents/ClassesStudentsContainer/GroupsButtons/GroupsButtons';
+import { UsersList } from 'components/classes-page/ClassesStudents/ClassesStudentsContainer/UsersList/UsersList';
 import { HomeWorkDescription } from 'components/classes-page/homework-description/HomeWorkDescription';
 import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
@@ -15,14 +15,12 @@ export const ClassesMethodistPage: FC = observer(() => {
   const { getOneGroup, selectedGroup, groups, getGroups, nullableSelectedGroup, setQueryFields } =
     groupStore;
 
+  const { setSelectedUserId } = appStore;
+
   console.log('selectedGroup', toJS(selectedGroup));
   console.log('currentCourse', toJS(currentCourse));
 
   const [workIndex, setWorkIndex] = useState(1);
-
-  console.log('workIndex', toJS(workIndex));
-
-  const isShowStudentList = !!selectedGroup?.users?.length;
 
   const getCurrentHomeWork = async () => {
     setWorkIndex(1);
@@ -31,7 +29,6 @@ export const ClassesMethodistPage: FC = observer(() => {
   };
 
   const onChangeWorkIndex = (event: ChangeEvent<unknown>, newWorkIndex: number) => {
-    console.log('newWorkIndex', toJS(newWorkIndex));
     setWorkIndex(newWorkIndex);
   };
 
@@ -73,20 +70,7 @@ export const ClassesMethodistPage: FC = observer(() => {
         </div>
 
         <HomeWorkDescription currentHomework={currentHomework} />
-
-        <div className={styles.blockCardStudents}>
-          {isShowStudentList ? (
-            <>
-              {selectedGroup.users.map(user => (
-                <CardStudent key={user.user.id} user={user.user} />
-              ))}
-            </>
-          ) : (
-            <Alert severity="info">
-              <h2>нету студентов</h2>
-            </Alert>
-          )}
-        </div>
+        <UsersList users={selectedGroup.users} setSelectedUserId={setSelectedUserId} />
       </div>
     </div>
   );

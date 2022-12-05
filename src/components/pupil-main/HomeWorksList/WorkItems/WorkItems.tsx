@@ -1,7 +1,6 @@
-import { ScheduleHomeWorksType } from 'app/stores/groupStore';
-import { WorkWithIdFromLoadme, ScheduleFromLoadme } from 'app/types/LoadMeTypes';
+import { WorkWithIdFromLoadme } from 'app/types/LoadMeTypes';
+import { ScheduleHomeWorksType } from 'app/types/scheduleHomeWorksType';
 import { Work } from 'components/pupil-main/HomeWorksList/WorkItems/Work/Work';
-import { ONE_DIFFERENCE_INDEX } from 'constants/constants';
 import { FC } from 'react';
 
 type Props = {

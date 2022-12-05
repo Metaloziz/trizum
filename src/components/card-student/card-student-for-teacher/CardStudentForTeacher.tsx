@@ -6,6 +6,7 @@ import CardStudentTitle from 'components/card-student/card-student-title/CardStu
 import CustomImageWrapper from 'components/custom-image-wrapper/CustomImageWrapper';
 import Image from 'components/image/Image';
 import { BASE_URL } from 'constants/constants';
+import { toJS } from 'mobx';
 import Avatar from 'public/img/avatarDefault.png';
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -14,17 +15,29 @@ import { AppRoutes } from 'app/enums/AppRoutes';
 
 import styles from './CardStudentForTeacher.module.scss';
 
-interface Props {
+type Props = {
   user: EmptyUser;
-}
+  setSelectedUserId?: (userId: string) => void;
+};
 
-const CardStudentForTeacher: FC<Props> = props => {
-  const { user } = props;
+const CardStudentForTeacher: FC<Props> = ({ user, setSelectedUserId }) => {
+  console.log('user', toJS(user));
 
   const navigate = useNavigate();
 
   const redirectToHomeWork = () => {
     navigate(`${AppRoutes.Classes}/${user.id}`);
+  };
+
+  const redirectToStatistic = () => {
+    navigate(`${AppRoutes.Statistic}`);
+  };
+
+  const setCurrentUserId = () => {
+    if (setSelectedUserId) {
+      setSelectedUserId(user.id);
+      redirectToStatistic();
+    }
   };
 
   const fullName = `${user.middleName} ${user.firstName} ${user.lastName}`.trim();
@@ -66,7 +79,7 @@ const CardStudentForTeacher: FC<Props> = props => {
 
           <div className={styles.btnBlock}>
             <Button onClick={redirectToHomeWork}>Посмотреть Д/З</Button>
-            <Button>Статистика</Button>
+            <Button onClick={setCurrentUserId}>Статистика</Button>
           </div>
         </div>
       </div>

@@ -13,13 +13,13 @@ import { FC } from 'react';
 import { personalRecordsArr } from 'utils/personalRecordsArr';
 
 export const StudentMain: FC = observer(() => {
-  const { user, currentGameIds, setGameIdsWithCodesByHomeWorkIndex } = appStore;
+  const { user, setGameIdsWithCodesByHomeWorkIndex } = appStore;
 
   const { works, schedule } = getWorksAndSchedule(user.groups);
 
   const recordsArr = personalRecordsArr(user.personalRecord);
 
-  console.log('currentGameIds', toJS(currentGameIds));
+  // console.log('currentGameIds', toJS(currentGameIds));
   console.log('works', toJS(works));
   console.log('schedule', toJS(schedule));
   console.log('user', toJS(user));
@@ -36,7 +36,7 @@ export const StudentMain: FC = observer(() => {
           schedule={schedule}
           setGameIdsWithCodes2={setGameIdsWithCodesByHomeWorkIndex}
         />
-        <KeepPlaying actualGames={currentGameIds} className={styles.keepPlaying} games={games} />
+        <KeepPlaying className={styles.keepPlaying} games={games} />
       </div>
     </main>
   );

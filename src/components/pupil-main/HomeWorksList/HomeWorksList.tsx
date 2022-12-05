@@ -1,7 +1,7 @@
 import { Roles } from 'app/enums/Roles';
 import appStore from 'app/stores/appStore';
-import { ScheduleHomeWorksType } from 'app/stores/groupStore';
 import { WorkWithIdFromLoadme } from 'app/types/LoadMeTypes';
+import { ScheduleHomeWorksType } from 'app/types/scheduleHomeWorksType';
 import classNames from 'classnames';
 import Panel from 'components/panel/Panel';
 import { Switcher } from 'components/pupil-main/HomeWorksList/WorkItems/Switcher/Switcher';

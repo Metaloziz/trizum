@@ -58,7 +58,7 @@ export type ValueLabelT = {
 };
 
 const Results: FC = observer(() => {
-  const { user, fullUserName } = appStore;
+  const { user, fullUserName, selectedUserId } = appStore;
   const { playResults, getPlayResults, setPlayResultsSearchParams } = gamesStore;
 
   const [createdSince, setCreatedSince] = useState<Moment | null>(null);
@@ -73,16 +73,16 @@ const Results: FC = observer(() => {
   };
 
   const start = createdSince?.format('DD.MM.YYYY');
-  const end = createdUntil?.format('DD.MM.YYYY');
+  // const end = createdUntil?.format('DD.MM.YYYY');
 
   console.log('user', toJS(user));
 
   const getData = () => {
     setPlayResultsSearchParams({
-      user_id: user.id,
+      user_id: selectedUserId ?? user.id,
       per_page: 1000,
       created_since: start,
-      created_until: end,
+      // created_until: end,
     });
     getPlayResults();
   };

@@ -1,6 +1,7 @@
 import { DateTime } from 'app/enums/DateTime';
 import { GroupLevels } from 'app/enums/GroupLevels';
 import { GroupTypes } from 'app/enums/GroupTypes';
+import { UserGroupStatus } from 'app/enums/UserGroupStatus';
 import { EmptyUser } from 'app/stores/emptyUser';
 import { FranchiseT } from 'app/types/FranchiseTypes';
 import { GamePresetFromLoadme } from 'app/types/LoadMeTypes';
@@ -69,11 +70,15 @@ export class ResponseOneGroupCourse {
   works: WorksT[] = [];
 }
 
-export type UsersDataT = {
-  id: string;
-  stats: StatusT[];
-  user: EmptyUser;
-};
+export class UsersDataT {
+  id: string = '';
+
+  stats: StatusT[] = [];
+
+  status: UserGroupStatus = UserGroupStatus.active;
+
+  user = new EmptyUser();
+}
 
 export class ResponseOneGroup {
   id: string = '';
@@ -98,7 +103,7 @@ export class ResponseOneGroup {
 
   course = new ResponseOneGroupCourse();
 
-  users: UsersDataT[] = [{ id: '', user: new EmptyUser(), stats: ['draft'] }];
+  users = [new UsersDataT()];
 
   schedule: ScheduleObjectType = { classworks: [], homeworks: [] };
 

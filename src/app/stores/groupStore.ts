@@ -19,6 +19,7 @@ import {
   ResponseOneGroup,
   Schedule,
 } from 'app/types/GroupTypes';
+import { ScheduleHomeWorksType } from 'app/types/scheduleHomeWorksType';
 import { ResponseUserT } from 'app/types/UserTypes';
 import { AxiosError } from 'axios';
 import { makeAutoObservable, runInAction, toJS } from 'mobx';
@@ -32,14 +33,6 @@ import {
 } from 'utils/scheduleItemToServerMapper';
 import { GroupStatusValue } from '../enums/GroupStatus';
 import { GroupStatusTypes } from '../types/GroupStatusTypes';
-
-export class ScheduleHomeWorksType {
-  start: Date = new Date();
-
-  end: Date = new Date();
-
-  index: number = 0;
-}
 
 class GroupStore {
   groups: ResponseGroups[] = [];
@@ -346,8 +339,6 @@ class GroupStore {
           dateUntil: new Date(r.endedAt.date),
           status: (r.status as GroupStatusTypes) || '',
         };
-
-        // this.schedule = r.schedule
       }
     }
     this.isModalOpen = true;

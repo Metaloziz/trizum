@@ -1,4 +1,4 @@
-import { ScheduleHomeWorksType } from 'app/stores/groupStore';
+import { ScheduleHomeWorksType } from 'app/types/scheduleHomeWorksType';
 
 export type ScheduleT = {
   name: string;

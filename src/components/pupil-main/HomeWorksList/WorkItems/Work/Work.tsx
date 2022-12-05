@@ -1,9 +1,10 @@
-import { ScheduleHomeWorksType } from 'app/stores/groupStore';
-import { WorkWithIdFromLoadme, ScheduleFromLoadme } from 'app/types/LoadMeTypes';
+import { WorkWithIdFromLoadme } from 'app/types/LoadMeTypes';
+import { ScheduleHomeWorksType } from 'app/types/scheduleHomeWorksType';
 import style from 'components/pupil-main/HomeWorksList/HomeWorksList.module.scss';
 import { GamePresetData } from 'components/pupil-main/HomeWorksList/WorkItems/GamePresetData/GamePresetData';
 import { toJS } from 'mobx';
 import { FC } from 'react';
+import { getLocalDateEuropeRegion } from 'utils/getLocalDateEuropeRegion';
 
 type Props = {
   work: WorkWithIdFromLoadme | undefined;
@@ -13,13 +14,9 @@ type Props = {
 export const Work: FC<Props> = ({ work, homeWorkTime }) => {
   console.log('homeWorkTime', toJS(homeWorkTime));
 
-  const start = new Date(homeWorkTime?.start || '').toLocaleDateString('ru-RU', {
-    timeZone: 'Europe/Moscow',
-  });
+  const start = getLocalDateEuropeRegion(homeWorkTime?.start);
 
-  const end = new Date(homeWorkTime?.end || '').toLocaleDateString('ru-RU', {
-    timeZone: 'Europe/Moscow',
-  });
+  const end = getLocalDateEuropeRegion(homeWorkTime?.end);
 
   if (work) {
     return (

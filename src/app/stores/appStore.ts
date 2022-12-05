@@ -39,6 +39,8 @@ class AppStore {
   currentWorkArr?: WorkWithIdFromLoadme[];
 
   hwDate?: string;
+
+  selectedUserId: string | null = null;
   /* fields student only */
 
   constructor() {
@@ -186,6 +188,10 @@ class AppStore {
     this.isLoggedIn = false;
     this.error = '';
     this.loginError = '';
+  };
+
+  setSelectedUserId = (userId: string) => {
+    this.selectedUserId = userId;
   };
 
   get teacherName() {

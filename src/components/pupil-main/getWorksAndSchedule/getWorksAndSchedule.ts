@@ -1,5 +1,5 @@
-import { ScheduleHomeWorksType } from 'app/stores/groupStore';
-import { Group, WorkWithIdFromLoadme, ScheduleFromLoadme } from 'app/types/LoadMeTypes';
+import { Group, WorkWithIdFromLoadme } from 'app/types/LoadMeTypes';
+import { ScheduleHomeWorksType } from 'app/types/scheduleHomeWorksType';
 
 export const getWorksAndSchedule = (groups: Group[]) => {
   const currentGroup = groups.find(
