@@ -9,7 +9,6 @@ import {
   tariffError,
   groupError,
 } from 'components/users-page/student-page-franchisee-modal-add-user/utils/errorObjects';
-import { isStudentTeacherEducation } from 'components/users-page/student-page-franchisee-modal-add-user/utils/isStudentTeacherEducation';
 import { Dispatch, SetStateAction } from 'react';
 import { removeKeysWithSameValues } from 'utils/removeKeysWithSameValues';
 import { setErrorFormMessage } from 'utils/setErrorFormMessage';
@@ -43,7 +42,7 @@ export const action = async (
       setError('tariff', tariffError);
       return;
     }
-    if (isStudentTeacherEducation(role) && !groupId) {
+    if (role === Roles.Student && !groupId) {
       setError('group', groupError);
       return;
     }
@@ -72,7 +71,7 @@ export const action = async (
       setErrorFormMessage(response, setError);
       return;
     }
-    if (response && isStudentTeacherEducation(role)) {
+    if (response && role === Roles.Student) {
       await addUserGroup({ userId: response.id, groupId });
     }
   }

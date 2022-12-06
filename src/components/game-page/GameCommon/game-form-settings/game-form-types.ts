@@ -1,5 +1,7 @@
+import { IArea } from '@bmunozg/react-image-area';
 import { GageType, GamePresetT } from 'app/types/GameTypes';
 import { Nullable } from 'app/types/Nullable';
+import { Point } from 'games/games/difference/types';
 
 export type FormSettingsType = {
   onFormSubmit: (value: GamesFormSettingsType) => void;
@@ -102,9 +104,20 @@ export type SteamEngineGameSettingsType = {
 
 export type SteamEngineFormType = BaseGameSettingsType & SteamEngineGameSettingsType;
 
+export type DifferenceGameImage = {
+  id: string;
+  path: string;
+};
+
+export type DifferenceGameLevel = {
+  images: DifferenceGameImage[];
+  differences: { areas: IArea[]; points: Point[] };
+};
+
 export type GameDifferenceSettingsType = {
   timeComplete: number;
   errorAacceptable: number;
+  differenceGameLevels: DifferenceGameLevel[];
 };
 
 export type GameDifferenceFormType = BaseGameSettingsType & GameDifferenceSettingsType;
