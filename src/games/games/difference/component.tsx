@@ -1,5 +1,5 @@
-import React, { Component, createRef } from 'react';
-import { StyleSheet, Image, View, TouchableOpacity, Text, LayoutChangeEvent } from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, Image, View, TouchableOpacity, Text, ImageSourcePropType } from 'react-native';
 
 import { Game, GameResult } from '../../common/types';
 import StartTimer from '../../components/startTimer';
@@ -7,139 +7,81 @@ import Timer from '../../components/timerRevert';
 import TimerAll from '../../components/timer';
 
 import _ from 'lodash';
+import { DifferenceGameLevel } from 'components/game-page/GameCommon/game-form-settings/game-form-types';
+import { UserPoints } from './UserPoints';
+import { Counter } from './Counter';
+import { Area, Point } from './types';
+import { defaultPoints } from './assets/points';
 
 const imageOne = require('./assets/difference-image-default-one.jpg');
 const imageTwo = require('./assets/difference-image-default-two.jpg');
 
 const START_TIMER = 3;
 
-type Point = {
-  x: number;
-  y: number;
+type ImageSize = {
+  size: Area[];
 };
 
-type Area = {
-  width: number;
-  height: number;
-};
-
-const mockPointDifference = [
-  { x: 185, y: 60 },
-  { x: 208, y: 60 },
-  { x: 185, y: 81 },
-  { x: 208, y: 81 },
-  { x: 120, y: 65 },
-  { x: 128, y: 65 },
-  { x: 120, y: 77 },
-  { x: 128, y: 77 },
-  { x: 509, y: 4 },
-  { x: 533, y: 4 },
-  { x: 533, y: 31 },
-  { x: 509, y: 31 },
-  { x: 498, y: 353 },
-  { x: 506, y: 353 },
-  { x: 506, y: 366 },
-  { x: 498, y: 366 },
+const defaultGameLevels = [
+  {
+    differences: { areas: [], points: defaultPoints},
+    images: [{ path: imageOne }, { path: imageTwo }],
+  },
 ];
 
-export default class extends Component<any, any> implements Game {
+interface DifferenceState {
+  started: boolean;
+  errors: number;
+  success: number;
+  actions: number;
+  levels: number;
+  gameLevels: DifferenceGameLevel[];
+  findingPoints: Record<number, Point[]>;
+  imageSizes: ImageSize[];
+  gameArea: Area;
+  gameView: Record<number, Record<number, Area>>;
+  ratio: Area;
+}
+
+export default class extends Component<any, DifferenceState> implements Game {
   timer: any;
   timerAll: any;
-  gameArea: any;
 
   constructor(props: any) {
     super(props);
-
-    this.gameArea = createRef();
 
     this.state = {
       started: false,
       errors: 0,
       success: 0,
       actions: 0,
-      images: [],
-      initPoints: mockPointDifference,
-      points: mockPointDifference,
-      findPoints: {},
-      ratio: {
-        width: 0,
-        heigth: 0,
-      },
-      area: {
-        width: 0,
-        height: 0,
-        image: {
-          first: {
-            width: 0,
-            height: 0,
-          },
-          second: {
-            width: 0,
-            height: 0,
-          },
-        },
-        renderView: {
-          first: {
-            width: 0,
-            height: 0,
-          },
-          second: {
-            width: 0,
-            height: 0,
-          },
-        },
-      },
+      levels: 0,
+      gameLevels: [],
+      findingPoints: {},
+      imageSizes: [],
+      gameArea: { width: 0, height: 0 },
+      gameView: {},
+      ratio: { width: 0, height: 0 },
     };
   }
 
   componentDidMount() {
     const { onRef = () => {} } = this.props;
     onRef(this);
-    Image.getSize(imageOne, (width, height) =>
-      this.setSizeDimensions('image', 'first', { width, height }),
-    );
-    Image.getSize(imageTwo, (width, height) =>
-      this.setSizeDimensions('image', 'second', { width, height }),
-    );
   }
 
-  componentDidUpdate(prevProps: any, prevState: any) {
-    if (Object.keys(this.state.findPoints).length === this.state.points.length / 4) {
-      return this.end();
-    }
-    if (this.state.actions === this.props.errorAacceptable) {
-      return this.end('lose');
-    }
-  }
-
-  setStarted = (status: boolean) => {
+  setStarted = (status: boolean) =>
     this.setState({
       started: status,
     });
-  };
 
   setFindPoint = (pointIndex: number, points: Point[]) => {
     return this.setState((prev: any) => ({
-      findPoints: {
-        ...prev.findPoints,
+      findingPoints: {
+        ...prev.findingPoints,
         [pointIndex]: points,
       },
     }));
-  };
-
-  setInitPoinst = () => {
-    console.log('init points');
-    return this.setState((prev: any) => ({ ...prev, points: prev.initPoints }));
-  };
-
-  setSizeDimensions = (type: string, countImage: 'first' | 'second', { width, height }: Area) => {
-    this.setState((prev: any) => ({
-      ...prev,
-      area: { ...prev.area, [type]: { ...prev.area[type], [countImage]: { width, height } } },
-    }));
-    if (countImage === 'first') {
-      this.setRatio({ width, height });
-    }
   };
 
   public resume = () => {
@@ -155,49 +97,25 @@ export default class extends Component<any, any> implements Game {
 
   public stop = () => {
     this.setStarted(false);
-    this.setState((prev: any) => ({
-      ...prev,
-      findPoints: {},
-      actions: 0,
-    }));
-    this.setInitPoinst();
+    this.setState({ levels: 0, success: 0, actions: 0, findingPoints: {} });
   };
 
   private reset = (cb: any) => {
     this.setState(
       {
         started: false,
-        images: [],
       },
       cb,
     );
   };
 
   onNext = () => {
-    // this.startLogic();
+    this.startLogic();
   };
 
-  startLogic = () => {};
-
-  onWin = () => {
-    const { success, onEnd } = this.props;
-
-    const timer: any = this.timerAll;
-    const time = timer?.getValue();
-
-    const successPoint = Object.keys(this.state.findPoints).length;
-
-    const result: GameResult = {
-      result: 'win',
-      success: successPoint,
-      failed: 0,
-      finished: true,
-      time: time,
-    };
-
-    onEnd(result);
-
-    return this.stop();
+  startLogic = () => {
+    const { differenceGameLevels = defaultGameLevels } = this.props;
+    this.calcDimensions(differenceGameLevels);
   };
 
   onEnd = () => {
@@ -206,20 +124,71 @@ export default class extends Component<any, any> implements Game {
 
   private end = (status = 'win') => {
     const { onEnd = () => {} } = this.props;
+    const { success, errors } = this.state;
 
     const timer: any = this.timerAll;
     const time = timer?.getValue();
 
     const result: GameResult = {
       result: status == 'win' ? 'win' : 'lose',
-      success: Object.keys(this.state.findPoints).length,
-      failed: this.state.errors,
+      success,
+      failed: errors,
       time: time,
+      finished: status === 'win' ? true: false,
     };
 
     onEnd(result);
 
     this.stop();
+  };
+
+  onResult = (result: boolean) => {
+    const { errorAacceptable } = this.props;
+    const { levels: currentLevel, gameLevels, findingPoints: currentFindingPoints } = this.state;
+    const countDifference = gameLevels[currentLevel].differences.points.length / 4;
+    const isLastLevel = gameLevels.length - (currentLevel + 1) === 0;
+
+    const success = this.state.success + (result ? 1 : 0);
+    const errors = this.state.errors + (result ? 0 : 1);
+    const levels = currentLevel + (result && success === countDifference && !isLastLevel ? 1 : 0);
+    const levelSuccess = Object.keys(currentFindingPoints).length + (result ? 1 : 0);
+
+    this.setState(
+      prev => ({ ...prev, success, errors, levels }),
+      () => {
+        if (errors >= errorAacceptable) {
+          return this.end('lose');
+        }
+
+        console.log({ isLastLevel, countDifference, success, currentFindingPoints, levelSuccess });
+
+        if (!isLastLevel && levelSuccess === countDifference) {
+          this.setState({ findingPoints: {} });
+        }
+
+        if (isLastLevel && levelSuccess === countDifference) {
+          return this.end('win');
+        }
+      },
+    );
+  };
+
+  calcDimensions = (gameLevels: DifferenceGameLevel[]) => {
+    const imageSizes: ImageSize[] = [];
+
+    gameLevels.forEach(levels => {
+      const sizes: Area[] = [];
+
+      levels.images.forEach(({ path }) => {
+        Image.getSize(path, (width, height) => {
+          sizes.push({ width, height });
+        });
+      });
+
+      imageSizes.push({ size: sizes });
+    });
+
+    this.setState({ gameLevels, imageSizes });
   };
 
   incrimentActions = () =>
@@ -242,15 +211,27 @@ export default class extends Component<any, any> implements Game {
   };
 
   loopingPoints = ({ x, y }: Point) => {
+    const { gameLevels, levels, ratio } = this.state;
     const E = { x, y };
 
-    for (let index = 0; index < this.state.points.length; index += 4) {
-      const [A, B, C, D] = this.state.points.slice(index, index + 4);
+    const points = gameLevels[levels].differences.points.map(({ x, y }) => ({
+      x: Math.round(x / ratio.width),
+      y: Math.round(y / ratio.width),
+    }));
+
+    let finding = false;
+
+    for (let index = 0; index < points.length; index += 4) {
+      const [A, B, C, D] = points.slice(index, index + 4);
       const isFinding = this.calcInArea(A, B, C, D, E);
+
       if (isFinding) {
         this.setFindPoint(index, [A, B, C, D]);
+        finding = true;
       }
     }
+
+    this.onResult(finding);
   };
 
   onHandleClick = (event: any) => {
@@ -261,17 +242,21 @@ export default class extends Component<any, any> implements Game {
     this.loopingPoints({ x, y });
   };
 
-  setArea = (width: number, height: number) => {
-    this.setState((prev: any) => ({ ...prev, area: { ...prev.area, width, height } }));
-  };
+  setGameArea = (width: number, height: number) => this.setState({ gameArea: { width, height } });
 
-  setSizeRenderView = (event: LayoutChangeEvent, countImage: 'first' | 'second') => {
-    const {
-      nativeEvent: {
-        layout: { width, height },
+  setDimensionsForGameView = (
+    level: number,
+    numberImage: number,
+    width: number,
+    height: number,
+  ) => {
+    this.setState(prevState => ({
+      ...prevState,
+      gameView: {
+        ...prevState.gameView,
+        [level]: { ...prevState.gameView[level], [numberImage]: { width, height } },
       },
-    } = event;
-    this.setSizeDimensions('renderView', countImage, { width, height });
+    }));
   };
 
   calcRatio = (areaImage: Area, areaView: Area) => ({
@@ -279,31 +264,30 @@ export default class extends Component<any, any> implements Game {
     height: areaImage.height / areaView.height,
   });
 
-  setRatio = (renderView: Area) => {
-    const {
-      started,
-      area: { image },
-    } = this.state;
+  setRatio = (levelNumber: number, width: number, height: number) => {
+    const { started, imageSizes } = this.state;
+    const imageSize = imageSizes[levelNumber].size[0];
 
-    const ratio = this.calcRatio(image.first, renderView);
+    const ratio = this.calcRatio(imageSize, { width, height });
 
     if (started && isFinite(ratio.width) && isFinite(ratio.height)) {
-      console.log('set ratio ---', { started, image, renderView, ratio });
-      this.setState((prev: any) => ({
-        ...prev,
-        points: prev.points.map((point: Point) => ({
-          x: Math.round(point.x / ratio.width),
-          y: Math.round(point.y / ratio.width),
-        })),
-      }));
+      this.setState({ ratio });
     }
   };
 
-  calcTouchArea = (countArea: 'first' | 'second') => {
-    return (
-      this.state.area.image[countArea].width /
-      (this.state.area.image[countArea].height / this.state.area.renderView[countArea].height)
-    );
+  calcTouchArea = (
+    levels: number,
+    numberImage: number,
+    gameView: Record<number, Record<number, Area>>,
+  ) => {
+    if (Object.keys(gameView).length > 0) {
+      const { imageSizes } = this.state;
+      const { width: imageWidth, height: imageHeight } = imageSizes[levels].size[numberImage];
+      const { height } = gameView[0][numberImage];
+
+      return imageWidth / (imageHeight / height);
+    }
+    return 0;
   };
 
   calcDifferenceArea = (points: Point[]) => {
@@ -316,11 +300,11 @@ export default class extends Component<any, any> implements Game {
     };
   };
 
-  calcCountDifference = () => this.state.points.length / 4;
-  calcCountFindDifference = () => Object.keys(this.state.findPoints).length;
-
   renderInner = () => {
     const { width, timeComplete } = this.props;
+    const { levels, gameLevels, findingPoints, gameView } = this.state;
+
+    console.log({timeComplete})
 
     return (
       <View
@@ -329,80 +313,56 @@ export default class extends Component<any, any> implements Game {
           ...styles.wrapLevels,
         }}
       >
-        <View style={styles.counterWrapper}>
-          <Text>
-            Найдено отличий {this.calcCountFindDifference()}/{this.calcCountDifference()}
-          </Text>
-        </View>
-        <View style={{ ...styles.differenceImage, width: this.calcTouchArea('first') }}>
-          <View style={styles.pointsWrap}>
-            <View style={styles.pointsArea}>
-              {Object.values(this.state.findPoints).map((value: any) => {
-                const [A, B, C, D] = value;
-                console.log({ A, B, C, D });
-                return (
-                  <View
-                    // key={`${A},${B},${C},${D}`}
-                    style={{
-                      ...styles.differenceArea,
-                      ...this.calcDifferenceArea([A, B, C, D]),
-                    }}
-                  />
-                );
-              })}
-            </View>
-          </View>
+        <Counter findingPoints={findingPoints} gameLevel={gameLevels[levels]} />
+        <View style={{ ...styles.differenceImage, width: this.calcTouchArea(levels, 0, gameView) }}>
+          <UserPoints findingPoints={findingPoints} />
           <TouchableOpacity
             style={[
               styles.touchArea,
               styles.touchAreaFirst,
               {
-                width: this.calcTouchArea('first'),
+                width: this.calcTouchArea(levels, 0, gameView),
               },
             ]}
             onPress={({ nativeEvent }) => this.onHandleClick(nativeEvent)}
             activeOpacity={1}
           >
             <Image
-              source={imageOne}
+              source={gameLevels[levels].images[0].path as ImageSourcePropType}
               style={styles.image}
               resizeMode="contain"
-              onLayout={event => this.setSizeRenderView(event, 'first')}
+              onLayout={({
+                nativeEvent: {
+                  layout: { width, height },
+                },
+              }) => {
+                this.setRatio(levels, width, height);
+                this.setDimensionsForGameView(levels, 0, width, height);
+              }}
             />
           </TouchableOpacity>
         </View>
-        <View style={{ ...styles.differenceImage, width: this.calcTouchArea('second') }}>
-          <View style={styles.pointsWrap}>
-            <View style={styles.pointsArea}>
-              {Object.values(this.state.findPoints).map((value: any) => {
-                const [A, B, C, D] = value;
-                return (
-                  <View
-                    // key={`${A},${B},${C},${D}`}
-                    style={{
-                      ...styles.differenceArea,
-                      ...this.calcDifferenceArea([A, B, C, D]),
-                    }}
-                  />
-                );
-              })}
-            </View>
-          </View>
+        <View style={{ ...styles.differenceImage, width: this.calcTouchArea(levels, 0, gameView) }}>
+          <UserPoints findingPoints={findingPoints} />
           <TouchableOpacity
             style={[
               styles.touchArea,
               {
-                width: this.calcTouchArea('second'),
+                width: this.calcTouchArea(levels, 0, gameView),
               },
             ]}
             onPress={({ nativeEvent }) => this.onHandleClick(nativeEvent)}
             activeOpacity={1}
           >
             <Image
-              source={imageTwo}
+              source={gameLevels[levels].images[1].path as ImageSourcePropType}
               style={styles.image}
               resizeMode="contain"
-              onLayout={event => this.setSizeRenderView(event, 'second')}
+              onLayout={({
+                nativeEvent: {
+                  layout: { width, height },
+                },
+              }) => this.setDimensionsForGameView(levels, 1, width, height)}
             />
           </TouchableOpacity>
         </View>
@@ -421,8 +381,8 @@ export default class extends Component<any, any> implements Game {
                   }}
                 />
               )}
-              renderTime={(t: any) => {
-                let progress = ((timeComplete - t) / timeComplete) * 100;
+              renderTime={(time: number) => {
+                let progress = ((timeComplete - time) / timeComplete) * 100;
 
                 if (progress > 100) {
                   progress = 100;
@@ -454,13 +414,16 @@ export default class extends Component<any, any> implements Game {
 
   render() {
     const { started } = this.state;
-
     const { width } = this.props;
+
     return (
       <View
         style={{ ...styles.wrap, width: width }}
-        ref={this.gameArea}
-        onLayout={({ nativeEvent: { layout } }) => this.setArea(layout.width, layout.height)}
+        onLayout={({
+          nativeEvent: {
+            layout: { width, height },
+          },
+        }) => this.setGameArea(width, height)}
       >
         {started && <StartTimer time={START_TIMER} renderComponent={this.renderInner} />}
       </View>
@@ -486,28 +449,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     overflow: 'hidden',
   },
-  counterWrapper: {
-    alignItems: 'center',
-    marginBottom: 10,
-  },
   differenceImage: {
     flex: 1,
     marginHorizontal: 'auto',
     position: 'relative',
-  },
-  pointsWrap: {
-    position: 'absolute',
-    zIndex: 9999,
-  },
-  pointsArea: {
-    flex: 1,
-    position: 'relative',
-  },
-  differenceArea: {
-    position: 'absolute',
-    zIndex: 1,
-    borderColor: 'red',
-    borderWidth: 1,
   },
   touchArea: {
     flex: 1,
@@ -531,18 +476,5 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
-  },
-  imageFirst: {
-    marginBottom: 20,
-  },
-  differencePointView: {
-    position: 'absolute',
-    zIndex: 9999,
-  },
-  differencePoint: {
-    position: 'absolute',
-    zIndex: 1,
-    borderColor: 'red',
-    borderWidth: 1,
   },
 });

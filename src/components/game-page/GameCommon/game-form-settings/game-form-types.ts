@@ -1,6 +1,8 @@
+import { IArea } from '@bmunozg/react-image-area';
 import { GageType, GamePresetT } from 'app/types/GameTypes';
 import { Nullable } from 'app/types/Nullable';
-import { DictionaryFraze } from 'games/games/frazes/types';
+import { Point } from 'games/games/difference/types';
+import { FrazesDictionary } from 'games/games/frazes/types';
 
 export type FormSettingsType = {
   onFormSubmit: (value: GamesFormSettingsType) => void;
@@ -99,9 +101,20 @@ export type SteamEngineGameSettingsType = {
 
 export type SteamEngineFormType = BaseGameSettingsType & SteamEngineGameSettingsType;
 
+export type DifferenceGameImage = {
+  id: string;
+  path: string;
+};
+
+export type DifferenceGameLevel = {
+  images: DifferenceGameImage[];
+  differences: { areas: IArea[]; points: Point[] };
+};
+
 export type GameDifferenceSettingsType = {
   timeComplete: number;
   errorAacceptable: number;
+  differenceGameLevels: DifferenceGameLevel[];
 };
 
 export type GameDifferenceFormType = BaseGameSettingsType & GameDifferenceSettingsType;
@@ -113,7 +126,7 @@ export type FrazesGameSettingsType = {
   wordsFull: boolean;
   errorLevel: number;
   changeLevelDictionary: number;
-  words: DictionaryFraze[];
+  words: FrazesDictionary[];
 };
 
 export type FrazesFormType = BaseGameSettingsType & FrazesGameSettingsType;

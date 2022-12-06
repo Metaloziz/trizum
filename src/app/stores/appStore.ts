@@ -5,8 +5,7 @@ import { EmptyUser } from 'app/stores/emptyUser';
 import usersStore from 'app/stores/usersStore';
 import { GameIdWithCode } from 'app/types/GameTypes';
 import { WorkWithIdFromLoadme } from 'app/types/LoadMeTypes';
-import { ONE_DIFFERENCE_INDEX } from 'constants/constants';
-import { makeAutoObservable, runInAction, toJS } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { LoginInfo } from 'pages/login/Login';
 import { dateNow } from 'utils/dateNow';
 import { execute } from 'utils/execute';
@@ -172,6 +171,12 @@ class AppStore {
         }
       }
     }
+  };
+
+  setGameIdsWithCodesByHomeWorkIndex = (index: number) => {
+    const classTypeObject = getActiveClassGroup(this.user);
+
+    this.currentWork = classTypeObject?.group.course.works[index];
   };
 
   /* actions student only */

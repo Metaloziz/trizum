@@ -213,15 +213,21 @@ class GroupStore {
           .map((el, index) => new LessonT(index));
 
   setEmptyScheduleHomeWorksItems = (count: number) =>
-    count === 0 ? [] : Array(count).fill(new ScheduleHomeWorksType());
+    count === 0
+      ? []
+      : Array(count)
+          .fill(new ScheduleHomeWorksType())
+          .map((el, index) => ({ ...el, index }));
 
   getOneGroup = async (id: string) =>
     this.execute(async () => {
       const r = await groupsService.getOneGroup(id);
       runInAction(() => {
+        console.log('responcegetOneGroup', toJS(r));
         this.selectedGroup = r;
-        if (r.schedule && r.schedule.length) {
-          this.schedule = r.schedule.map(el => scheduleItemToUIMapper(el));
+        if (r.schedule.classworks && r.schedule.homeworks) {
+          this.schedule = r.schedule.classworks.map(el => scheduleItemToUIMapper(el));
+          this.scheduleHomeWorks = r.schedule.homeworks;
         } else {
           this.schedule = this.setEmptyScheduleItems(r.course.worksCount);
         }
@@ -259,7 +265,7 @@ class GroupStore {
             ...this.modalFields,
             dateSince: moment(this.modalFields.dateSince).format(DateTime.DdMmYyyy),
             dateUntil: moment(this.modalFields.dateUntil).format(DateTime.DdMmYyyy),
-            schedule,
+            schedule: { classworks: schedule, homeworks: this.scheduleHomeWorks },
           },
           this.selectedGroup.id,
         );
@@ -340,6 +346,7 @@ class GroupStore {
           dateUntil: new Date(r.endedAt.date),
           status: (r.status as GroupStatusTypes) || '',
         };
+
         // this.schedule = r.schedule
       }
     }
@@ -350,6 +357,7 @@ class GroupStore {
     this.schedule = [];
     this.selectedGroup = new ResponseOneGroup();
     this.isModalOpen = false;
+    this.scheduleHomeWorks = [];
   };
 
   changeScheduleHomeWork = (newHomeWorkData: Partial<ScheduleHomeWorksType>) => {

@@ -61,6 +61,7 @@ class GamesStore {
     gage: [{ id: 1, area: true, speed: 1 }],
     wordsFull: false,
     words: [],
+    differenceGameLevels: [],
   };
 
   gamePreset: OneGamePresent = {
