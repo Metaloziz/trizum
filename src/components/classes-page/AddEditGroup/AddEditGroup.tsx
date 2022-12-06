@@ -7,7 +7,8 @@ import appStore from 'app/stores/appStore';
 import groupStore from 'app/stores/groupStore';
 import BasicModal from 'components/basic-modal/BasicModal';
 import Button from 'components/button/Button';
-import Lessons from 'components/classes-page/AddEditGroup/Lessons';
+import { HomeWorksScheduleItem } from 'components/classes-page/AddEditGroup/HomeWorksScheduleItem/HomeWorksScheduleItem';
+import Lessons from 'components/classes-page/AddEditGroup/Lessons/Lessons';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useEffect, useState } from 'react';
 import { getOptionMui } from 'utils/getOption';
@@ -87,7 +88,7 @@ const AddEditGroup: FC = observer(() => {
   const courseLabel = `Курс: ${GroupLevels[modalFields.level]}`;
 
   const setSchedule = (count: number) => {
-    groupStore.schedule = groupStore.setEmptyScheduleItems(count);
+    groupStore.schedule = groupStore.setEmptyScheduleItems(1);
     groupStore.scheduleHomeWorks = groupStore.setEmptyScheduleHomeWorksItems(count);
   };
 
@@ -145,7 +146,6 @@ const AddEditGroup: FC = observer(() => {
             </Select>
           </FormControl>
         </Grid>
-
         {!isFranchiseRole && (
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
@@ -162,7 +162,6 @@ const AddEditGroup: FC = observer(() => {
             </FormControl>
           </Grid>
         )}
-
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth>
             <InputLabel id="course">{courseLabel}</InputLabel>
@@ -211,8 +210,13 @@ const AddEditGroup: FC = observer(() => {
           />
         </Grid>
 
-        {/* lessons */}
-        <Lessons />
+        <Grid item>
+          <Lessons />
+        </Grid>
+
+        <Grid item sx={{ width: '100%' }}>
+          <HomeWorksScheduleItem />
+        </Grid>
 
         <Grid
           item

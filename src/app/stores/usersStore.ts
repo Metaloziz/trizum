@@ -202,7 +202,7 @@ class UsersStore {
 
       this.teacherName = `${lastName} ${firstName} ${middleName}`;
 
-      const lesson = getNearestLessonObject(schedule, dateNow());
+      const lesson = getNearestLessonObject(schedule.classworks, dateNow());
 
       if (lesson) {
         this.theNextLessonDate = `${lesson.date} в ${lesson.from}. ${lesson.name}`;

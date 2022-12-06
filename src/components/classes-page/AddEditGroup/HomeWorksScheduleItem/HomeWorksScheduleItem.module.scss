@@ -1,0 +1,32 @@
+.container {
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-top: #00b8d9 2px solid;
+  width: 100%;
+
+  span {
+    align-self: flex-start;
+    margin-top: 10px;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 500;
+    font-size: 1.25rem;
+    line-height: 1.6;
+    letter-spacing: 0.0075em;
+  }
+
+  .body {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+
+    .date {
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+    }
+  }
+
+}

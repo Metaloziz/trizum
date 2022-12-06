@@ -13,7 +13,7 @@ import { FC } from 'react';
 import { personalRecordsArr } from 'utils/personalRecordsArr';
 
 export const StudentMain: FC = observer(() => {
-  const { user, currentGameIds } = appStore;
+  const { user, currentGameIds, setGameIdsWithCodesByHomeWorkIndex } = appStore;
 
   const { works, schedule } = getWorksAndSchedule(user.groups);
 
@@ -31,7 +31,11 @@ export const StudentMain: FC = observer(() => {
         <WeeklyGrowth records={recordsArr} className={styles.weeklyGrowth} />
       </div>
       <div className={styles.rowHw}>
-        <HomeWorksList works={works} schedule={schedule} />
+        <HomeWorksList
+          works={works}
+          schedule={schedule}
+          setGameIdsWithCodes2={setGameIdsWithCodesByHomeWorkIndex}
+        />
         <KeepPlaying actualGames={currentGameIds} className={styles.keepPlaying} games={games} />
       </div>
     </main>

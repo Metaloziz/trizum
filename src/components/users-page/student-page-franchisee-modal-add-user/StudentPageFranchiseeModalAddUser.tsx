@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, FormControl, Grid, TextField } from '@mui/material';
+import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -62,7 +63,7 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
     const groupOptions = convertGroupOptions(groups);
     const tariffsOptions = convertTariffOptions(tariffs);
 
-    const [isParentShown, setIsParentShown] = useState(false);
+    const [isParentShow, setIsParentShow] = useState(false);
     const [studentId, setStudentId] = useState('');
     const [selectedRole, setSelectedRole] = useState<Roles>();
     const [currentFranchiseId, setCurrentFranchiseId] = useState<string>('');
@@ -89,8 +90,6 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
       group: findActiveClassGroup(currentUser?.groups)?.groupId || '',
       password: currentUser?.password || '', // не обязателен при редактировании
     };
-
-    const isFranchiseRole = role === Roles.Franchisee || role === Roles.FranchiseeAdmin;
 
     const schema = yup.object().shape(
       {
@@ -151,11 +150,23 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
                 .email('Введите валидный email')
                 .matches(regExp, 'Введите валидный email')
                 .required('Обязательное поле'),
-        franchise: currentUser
-          ? yup.string().notRequired()
-          : isMethodistTutor(selectedRole) && !isFranchiseRole
-          ? yup.string().required('Обязательное поле')
-          : yup.string().notRequired(),
+
+        franchise: yup.string().when('role', (value, rule: yup.StringSchema) => {
+          if (currentUser) return rule.notRequired();
+
+          let result: yup.StringSchema = rule.notRequired();
+
+          if (!isMethodistTutor(selectedRole)) {
+            result = rule.required('Обязательное поле');
+          }
+
+          return result;
+        }),
+        // franchise: currentUser
+        //   ? yup.string().notRequired()
+        //   : isMethodistTutor(selectedRole) && !isFranchiseRole
+        //   ? yup.string().required('Обязательное поле')
+        //   : yup.string().notRequired(),
         tariff:
           selectedRole === Roles.Student
             ? yup.string().required('Обязательное поле')
@@ -189,6 +200,9 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
       defaultValues,
     });
 
+    console.log('errors', toJS(errors));
+    console.log('selectedRole', toJS(selectedRole));
+
     const onSubmit = handleSubmit(async values => {
       console.log(values.franchise);
       const newUserData: RequestRegister = {
@@ -216,7 +230,7 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
         onCloseModal,
         reset,
         setStudentId,
-        setIsParentShown,
+        setIsParentShow,
         values.role,
         values.franchise,
         values.tariff,
@@ -231,7 +245,7 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
 
     useEffect(() => {
       if (selectedRole !== Roles.Student) {
-        setIsParentShown(false);
+        setIsParentShow(false);
       }
 
       if (isStudentTeacherEducation(selectedRole)) {
@@ -244,6 +258,7 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
 
       resetField('franchise');
     }, [selectedRole]);
+
     return (
       <>
         <form onSubmit={onSubmit}>
@@ -299,7 +314,7 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
                   control={control}
                 />
               </Grid>
-              {isStudentCreated(isParentShown, studentId) && (
+              {isStudentCreated(isParentShow, studentId) && (
                 <>
                   <Grid item xs={12} sm={6}>
                     <Controller
@@ -339,29 +354,27 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
                           control={control}
                         />
                       </Grid>
-                      {isMethodistTutor(selectedRole) &&
-                        !isFranchiseRole &&
-                        !Boolean(selectedRole === Roles.TeacherEducation) && (
-                          <Grid item xs={12} sm={6}>
-                            <Controller
-                              name="franchise"
-                              render={({ field }) => (
-                                <CustomSelect
-                                  {...field}
-                                  onChange={e => {
-                                    field.onChange(e);
-                                    getCurrentGroups(e.target.value);
-                                    setCurrentFranchiseId(e.target.value);
-                                  }}
-                                  title="Франшиза"
-                                  options={franchiseOptions}
-                                  error={errors.franchise?.message}
-                                />
-                              )}
-                              control={control}
-                            />
-                          </Grid>
-                        )}
+                      {!isMethodistTutor(selectedRole) && (
+                        <Grid item xs={12} sm={6}>
+                          <Controller
+                            name="franchise"
+                            render={({ field }) => (
+                              <CustomSelect
+                                {...field}
+                                onChange={e => {
+                                  field.onChange(e);
+                                  getCurrentGroups(e.target.value);
+                                  setCurrentFranchiseId(e.target.value);
+                                }}
+                                title="Франшиза"
+                                options={franchiseOptions}
+                                error={errors.franchise?.message}
+                              />
+                            )}
+                            control={control}
+                          />
+                        </Grid>
+                      )}
                     </>
                   )}
 
@@ -379,46 +392,6 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
                               title="Тариф"
                               options={tariffsOptions}
                               error={errors?.tariff?.message?.toString()}
-                            />
-                          )}
-                          control={control}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <Controller
-                          name="group"
-                          render={({ field }) => (
-                            <CustomSelect
-                              {...field}
-                              onChange={e => {
-                                field.onChange(e);
-                              }}
-                              title="Группа"
-                              options={groupOptions}
-                              error={errors.group?.message}
-                            />
-                          )}
-                          control={control}
-                        />
-                      </Grid>
-                    </>
-                  )}
-                  {selectedRole === Roles.TeacherEducation && currentUser?.id && (
-                    <>
-                      <Grid item xs={12} sm={6}>
-                        <Controller
-                          name="franchise"
-                          render={({ field }) => (
-                            <CustomSelect
-                              {...field}
-                              onChange={e => {
-                                field.onChange(e);
-                                getCurrentGroups(e.target.value);
-                                setCurrentFranchiseId(e.target.value);
-                              }}
-                              title="Франшиза"
-                              options={franchiseOptions}
-                              error={errors.franchise?.message}
                             />
                           )}
                           control={control}
@@ -576,7 +549,7 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
         </form>
         <div>
           {/* редактирование родителей */}
-          {currentUser?.parents && !isParentShown && !studentId && (
+          {currentUser?.parents && !isParentShow && !studentId && (
             <StudentParentsFormContainer
               franchiseId={currentFranchiseId}
               studentId={currentUser.id ? currentUser.id : ''}
@@ -585,7 +558,7 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
             />
           )}
           {/* создание родителей */}
-          {isParentShown && studentId && (
+          {isParentShow && studentId && (
             <StudentParentsFormContainer
               franchiseId={currentFranchiseId}
               studentId={studentId}
