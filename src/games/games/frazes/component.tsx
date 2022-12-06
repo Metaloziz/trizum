@@ -8,7 +8,7 @@ import Timer from '../../components/timerRevert';
 import TimerAll from '../../components/timer';
 import StartTimer from '../../components/startTimer';
 
-import { DictionaryFraze, DictionaryType, Props } from './types';
+import { FrazesDictionary, DictionaryType, Props } from './types';
 
 const imageBackground = require('./assets/background.png');
 
@@ -24,7 +24,7 @@ interface State {
   success: number;
   errors: number;
   level: number;
-  words: DictionaryFraze[];
+  words: FrazesDictionary[];
   userWord: string;
   wordsFull: boolean;
   visibleWord: boolean;
@@ -113,7 +113,7 @@ export default class extends Component<Props, State> implements Game {
   private end = (status = 'win') => {
     const { onEnd = () => {} } = this.props;
 
-    const {success, errors} = this.state;
+    const { success, errors } = this.state;
 
     const time = this.timerAll?.getValue();
 
@@ -208,7 +208,7 @@ export default class extends Component<Props, State> implements Game {
     }
 
     this.setState(
-      (prev) => ({ ...prev, success, errors, userWord: '', visibleWord: true }),
+      prev => ({ ...prev, success, errors, userWord: '', visibleWord: true }),
       () => {
         if (errors >= errorAacceptable) {
           return this.end('lose');
@@ -222,7 +222,7 @@ export default class extends Component<Props, State> implements Game {
   };
 
   updateUserWord = (char: string) =>
-    this.setState((prev) => ({ ...prev, userWord: prev.userWord + char }));
+    this.setState(prev => ({ ...prev, userWord: prev.userWord + char }));
 
   backSpace = () => {
     const { userWord } = this.state;
@@ -255,9 +255,15 @@ export default class extends Component<Props, State> implements Game {
       const result = gameStatistic[i];
       levels.push(
         <View key={`level-${i}`} style={styles.level}>
-          {i <= level && result && result.result === true && <View style={styles.levelSuccess} />}
-          {i <= level && result && result.result === false && <View style={styles.levelError} />}
-          {i <= level && !result && <View style={styles.levelInner} />}
+          {i <= level && result && result.result === true && (
+            <View style={{ ...styles.levelStatistic, ...styles.levelSuccess }} />
+          )}
+          {i <= level && result && result.result === false && (
+            <View style={{ ...styles.levelStatistic, ...styles.levelError }} />
+          )}
+          {i <= level && !result && (
+            <View style={{ ...styles.levelStatistic, ...styles.levelInner }} />
+          )}
         </View>,
       );
     }
@@ -321,7 +327,7 @@ export default class extends Component<Props, State> implements Game {
             visibleWord={this.state.visibleWord}
           />
         </View>
-        <TimerAll ref={(ref) => (this.timerAll = ref)} />
+        <TimerAll ref={ref => (this.timerAll = ref)} />
       </View>
     );
   };

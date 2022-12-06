@@ -1,12 +1,12 @@
 import React, { FC, useEffect} from 'react';
 import { View, StyleSheet, Text, ImageBackground } from 'react-native';
-import { DictionaryFraze } from '../../types';
+import { FrazesDictionary } from '../../types';
 
 const frazesBackground = require('../../assets/frazesBackground.png');
 
 interface Props {
   userWord: string;
-  words: DictionaryFraze[];
+  words: FrazesDictionary[];
   onResult: (result: boolean) => void;
   level: number;
   visibleWord: boolean;

@@ -7,14 +7,14 @@ export interface Props extends GameProps {
   timeComplete: number; // Время на прохождение
   speed: number; // Время на которое появляются слова в милисекундах
   wordsFull: boolean; // Писать слова полностью или две буквы
-  words: DictionaryFraze[]; // Cлова
+  words: FrazesDictionary[]; // Cлова
   changeLevelDictionary: number; // Кол-во уровней когда менять словарь
   errorLevel: number; // Кол-во ошибок на уровне
   onEnd?(result?: GameResult): void;
   onRef?: any;
 }
 
-export type DictionaryFraze = {
+export type FrazesDictionary = {
   easy: string,
   normal: string,
   hard: string
