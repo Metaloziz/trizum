@@ -1,16 +1,19 @@
 import { NewWorkType } from 'app/types/NewWorkType';
+import { ScheduleHomeWorksType } from 'app/types/scheduleHomeWorksType';
 import starGame from 'assets/svgs/star.svg';
 import Image from 'components/image/Image';
 import Panel from 'components/panel/Panel';
 import React, { FC } from 'react';
+import { getLocalDateEuropeRegion } from 'utils/getLocalDateEuropeRegion';
 
 import style from './HomeWorkDescription.module.scss';
 
 type Props = {
+  homeWorkDate: ScheduleHomeWorksType;
   currentHomework?: NewWorkType;
 };
 
-export const HomeWorkDescription: FC<Props> = ({ currentHomework }) => {
+export const HomeWorkDescription: FC<Props> = ({ currentHomework, homeWorkDate }) => {
   const games = currentHomework?.work?.gamePresets;
 
   return (
@@ -19,6 +22,9 @@ export const HomeWorkDescription: FC<Props> = ({ currentHomework }) => {
         <Panel>
           <p>Название: {currentHomework?.work?.title}</p>
         </Panel>
+
+        <div>Дата начала: {getLocalDateEuropeRegion(homeWorkDate?.start)} </div>
+        <div>Дата окончания: {getLocalDateEuropeRegion(homeWorkDate?.end)} </div>
       </div>
       <div className={style.games}>
         {games &&
