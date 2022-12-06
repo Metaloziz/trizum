@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 
 import Timer from '../../../components/timerRevert';
 import TimerAll from '../../../components/timer';
@@ -77,8 +77,8 @@ export default class extends Component<Props & ComponentProps, State> {
   };
 
   onLevelEnd = () => {
-    const { elementsTotal = 2, errorLevel, levelChangeEngine } = this.props;
-    const { active = 0, levelStatistic: currentlevelStatistic } = this.state;
+    const { elementsTotal = 2 } = this.props;
+    const { active = 0 } = this.state;
 
     if (active == elementsTotal - 1) {
       this.onEnd();
@@ -91,19 +91,19 @@ export default class extends Component<Props & ComponentProps, State> {
 
   onResult = (result: 'success' | 'failed') => {
     this.result[result] += 1;
+    this.triggerEngine(result === 'success');
+  };
 
-    const { levelChangeEngine, errorLevel, percentUpgradeTime, percentDowngradeTime } = this.props;
+  private triggerEngine = (result: boolean) => {
+    const { perSuccessLevel, maxErrorLevel, upgrade, downgrade } = this.props;
 
     const { levelStatistic: currentlevelStatistic, cycleTime: currentCycleTime } = this.state;
 
-    const levelStatistic = [
-      ...currentlevelStatistic,
-      { result: result === 'success', time: currentCycleTime },
-    ];
+    const levelStatistic = [...currentlevelStatistic, { result: result, time: currentCycleTime }];
 
     let cycleTime: number = currentCycleTime;
 
-    const lastLevels = levelStatistic.slice(-levelChangeEngine);
+    const lastLevels = levelStatistic.slice(-perSuccessLevel);
 
     let success = 0;
     let errors = 0;
@@ -118,21 +118,19 @@ export default class extends Component<Props & ComponentProps, State> {
       }
     });
 
-    const counterCurrentTimer = levelStatistic
-      .slice(-levelChangeEngine)
-      .filter(({ time }) => time === cycleTime);
+    const counterCurrentTimer = lastLevels.filter(({ time }) => time === cycleTime);
 
-      if (success === levelChangeEngine) {
-        if (counterCurrentTimer.length === levelChangeEngine && currentCycleTime > 0) {
-          cycleTime -= (cycleTime * percentDowngradeTime) / 100;
-        }
+    if (success === perSuccessLevel) {
+      if (counterCurrentTimer.length === perSuccessLevel && currentCycleTime > 0) {
+        cycleTime -= (cycleTime * downgrade) / 100;
       }
-  
-      if (errors === errorLevel) {
-        cycleTime += ((cycleTime * percentUpgradeTime) / 100);
-      }
+    }
 
-      this.setState({ levelStatistic, cycleTime });
+    if (errors === maxErrorLevel) {
+      cycleTime += (cycleTime * upgrade) / 100;
+    }
+
+    this.setState({ levelStatistic, cycleTime });
   };
 
   render() {

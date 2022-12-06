@@ -27,10 +27,10 @@ const DEFAULT_VALUES: ShiftVerticalFormType = {
   elementsTotal: 2,
   groupsCount: 2,
   timeComplete: undefined,
-  levelChangeEngine: 2,
-  errorLevel: 2,
-  percentUpgradeTime: 10,
-  percentDowngradeTime: 5,
+  perSuccessLevel: 2,
+  maxErrorLevel: 2,
+  upgrade: 10,
+  downgrade: 5,
 };
 
 export const ShiftVerticalFormSettings = (props: FormSettingsType): ReactElement => {
@@ -43,10 +43,10 @@ export const ShiftVerticalFormSettings = (props: FormSettingsType): ReactElement
     groupsCount,
     timeComplete,
     description,
-    levelChangeEngine,
-    errorLevel,
-    percentUpgradeTime,
-    percentDowngradeTime,
+    perSuccessLevel,
+    maxErrorLevel,
+    upgrade,
+    downgrade,
   } = settings[0];
 
   const defaultValues: ShiftVerticalFormType =
@@ -62,10 +62,10 @@ export const ShiftVerticalFormSettings = (props: FormSettingsType): ReactElement
           groupsCount,
           timeComplete,
           description,
-          levelChangeEngine,
-          errorLevel,
-          percentUpgradeTime,
-          percentDowngradeTime
+          perSuccessLevel,
+          maxErrorLevel,
+          upgrade,
+          downgrade,
         } as ShiftVerticalFormType);
 
   const methods = useForm<ShiftVerticalFormType>({
@@ -73,8 +73,6 @@ export const ShiftVerticalFormSettings = (props: FormSettingsType): ReactElement
     defaultValues,
     mode: 'onBlur',
   });
-
-  console.log({ defaultValues, id });
 
   const {
     handleSubmit,
@@ -192,7 +190,7 @@ export const ShiftVerticalFormSettings = (props: FormSettingsType): ReactElement
           </Grid>
           <Grid item xs={12} sm={3}>
             <Controller
-              name="levelChangeEngine"
+              name="perSuccessLevel"
               render={({ field: { value, onChange, ref } }) => (
                 <TextFieldCustom
                   type="text"
@@ -200,7 +198,7 @@ export const ShiftVerticalFormSettings = (props: FormSettingsType): ReactElement
                   size="small"
                   fullWidth
                   inputProps={{ type: 'number' }}
-                  error={errors.levelChangeEngine?.message}
+                  error={errors.perSuccessLevel?.message}
                   onChange={event => onChange(convertEmptyStringToNull(event))}
                   value={convertNullToEmptyString(value!)}
                   ref={ref}
@@ -211,7 +209,7 @@ export const ShiftVerticalFormSettings = (props: FormSettingsType): ReactElement
           </Grid>
           <Grid item xs={12} sm={3}>
             <Controller
-              name="errorLevel"
+              name="maxErrorLevel"
               render={({ field: { value, onChange, ref } }) => (
                 <TextFieldCustom
                   type="text"
@@ -219,7 +217,7 @@ export const ShiftVerticalFormSettings = (props: FormSettingsType): ReactElement
                   size="small"
                   fullWidth
                   inputProps={{ type: 'number' }}
-                  error={errors.errorLevel?.message}
+                  error={errors.maxErrorLevel?.message}
                   onChange={event => onChange(convertEmptyStringToNull(event))}
                   value={convertNullToEmptyString(value!)}
                   ref={ref}
@@ -230,7 +228,7 @@ export const ShiftVerticalFormSettings = (props: FormSettingsType): ReactElement
           </Grid>
           <Grid item xs={12} sm={3}>
             <Controller
-              name="percentUpgradeTime"
+              name="upgrade"
               render={({ field: { value, onChange, ref } }) => (
                 <TextFieldCustom
                   type="text"
@@ -238,7 +236,7 @@ export const ShiftVerticalFormSettings = (props: FormSettingsType): ReactElement
                   size="small"
                   fullWidth
                   inputProps={{ type: 'number' }}
-                  error={errors.percentUpgradeTime?.message}
+                  error={errors.upgrade?.message}
                   onChange={event => onChange(convertEmptyStringToNull(event))}
                   value={convertNullToEmptyString(value!)}
                   ref={ref}
@@ -249,7 +247,7 @@ export const ShiftVerticalFormSettings = (props: FormSettingsType): ReactElement
           </Grid>
           <Grid item xs={12} sm={3}>
             <Controller
-              name="percentDowngradeTime"
+              name="downgrade"
               render={({ field: { value, onChange, ref } }) => (
                 <TextFieldCustom
                   type="text"
@@ -257,7 +255,7 @@ export const ShiftVerticalFormSettings = (props: FormSettingsType): ReactElement
                   size="small"
                   fullWidth
                   inputProps={{ type: 'number' }}
-                  error={errors.percentDowngradeTime?.message}
+                  error={errors.downgrade?.message}
                   onChange={event => onChange(convertEmptyStringToNull(event))}
                   value={convertNullToEmptyString(value!)}
                   ref={ref}

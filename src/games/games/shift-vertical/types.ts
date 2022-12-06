@@ -6,11 +6,10 @@ export interface Props extends GameProps {
   elementsTotal?: number;
   groupsCount?: number;
   blinksCount?: number;
-  percentUpgradeTime: number;
-  percentDowngradeTime: number;
-  levelChangeEngine: number;
-  errorLevel: number;
-
+  perSuccessLevel: number;
+  maxErrorLevel: number;
+  upgrade: number;
+  downgrade: number;
   onEnd?(result?: GameResult): void;
   onRef: any;
 }
@@ -22,10 +21,10 @@ const PropsDefault : Props = {
   elementsTotal: 2,
   groupsCount: 2,
   blinksCount: 2,
-  percentUpgradeTime: 10,
-  percentDowngradeTime: 5,
-  levelChangeEngine: 2,
-  errorLevel: 2,
+  perSuccessLevel: 2,
+  maxErrorLevel: 2,
+  upgrade: 10,
+  downgrade: 5,
   onRef: () => {}
 };
 
