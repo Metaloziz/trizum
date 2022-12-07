@@ -1,4 +1,4 @@
-import { TextField } from '@mui/material';
+import { TextField, Button } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import appStore from 'app/stores/appStore';
@@ -7,17 +7,25 @@ import groupStore from 'app/stores/groupStore';
 import { GroupsButtons } from 'components/classes-page/ClassesStudents/ClassesStudentsContainer/GroupsButtons/GroupsButtons';
 import { UsersList } from 'components/classes-page/ClassesStudents/ClassesStudentsContainer/UsersList/UsersList';
 import { HomeWorkDescription } from 'components/classes-page/homework-description/HomeWorkDescription';
-import dayjs, { Dayjs } from 'dayjs';
+import { Dayjs } from 'dayjs';
 import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useEffect, useState, ChangeEvent } from 'react';
-import { getLocalDateEuropeRegion } from 'utils/getLocalDateEuropeRegion';
 import styles from '../../ClassesMainPage.module.scss';
 
 export const ClassesMethodistPage: FC = observer(() => {
   const { getCurrentCourse, currentCourse, setCurrentHomeWork, currentHomework } = coursesStore;
-  const { getOneGroup, selectedGroup, groups, getGroups, nullableSelectedGroup, setQueryFields } =
-    groupStore;
+  const {
+    getOneGroup,
+    selectedGroup,
+    groups,
+    getGroups,
+    nullableSelectedGroup,
+    setQueryFields,
+    setFilteredWHomeByDates,
+    filteredHomeWork,
+    resetFilteredHomeWorkByDates,
+  } = groupStore;
 
   const { setSelectedUserId } = appStore;
 
@@ -27,37 +35,16 @@ export const ClassesMethodistPage: FC = observer(() => {
   console.log('currentCourse', toJS(currentCourse));
 
   const [workIndex, setWorkIndex] = useState(1);
-  const [date, setDate] = useState<Dayjs | null>(dayjs());
-  const [filteredSchedule, setFilteredSchedule] = useState(selectedGroup.schedule.homeworks);
 
-  console.log('filteredSchedule', toJS(filteredSchedule));
-  console.log('date', toJS(date?.format('DD/MM/YYYY')));
+  const [startDate, setStartDate] = useState<Dayjs | null>(null);
+  const [endDate, setEndDate] = useState<Dayjs | null>(null);
 
-  // const [filteredHomeWork, setValue] = useState(1);
-
-  useEffect(() => {
-    setFilteredSchedule(selectedGroup.schedule.homeworks);
-  }, [selectedGroup]);
-
-  const getCurrentHomeWork = async () => {
-    setWorkIndex(1);
-    await getCurrentCourse(selectedGroup.course.id);
-    await setCurrentHomeWork(0);
-  };
-
-  const onChangeWorkIndex = (event: ChangeEvent<unknown>, newWorkIndex: number) => {
-    setWorkIndex(newWorkIndex);
-  };
+  const isDisableFilter = !(!!startDate && !!endDate);
 
   // переключение по домашкам
   useEffect(() => {
     setCurrentHomeWork(workIndex - 1);
   }, [workIndex]);
-
-  // переключение по группам
-  useEffect(() => {
-    getCurrentHomeWork();
-  }, [selectedGroup]);
 
   // получение всех групп
   useEffect(() => {
@@ -68,22 +55,67 @@ export const ClassesMethodistPage: FC = observer(() => {
     };
   }, []);
 
+  const getCurrentHomeWork = async () => {
+    setWorkIndex(1);
+    await getCurrentCourse(selectedGroup.course.id);
+    await setCurrentHomeWork(0);
+  };
+
+  const onChangeWorkIndex = (event: ChangeEvent<unknown>, newWorkIndex: number) => {
+    console.log('newWorkIndex', toJS(newWorkIndex));
+    console.log('event', toJS(event));
+
+    setWorkIndex(newWorkIndex);
+  };
+
+  const resetDate = () => {
+    setStartDate(null);
+    setEndDate(null);
+    resetFilteredHomeWorkByDates();
+    setWorkIndex(1);
+    setCurrentHomeWork(workIndex - 1);
+  };
+
+  const setFilter = () => {
+    if (startDate && endDate) {
+      setFilteredWHomeByDates(startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD'));
+      setWorkIndex(1);
+      setCurrentHomeWork(workIndex - 1);
+    }
+  };
+
+  // переключение по группам
+  useEffect(() => {
+    getCurrentHomeWork();
+    resetDate();
+  }, [selectedGroup]);
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.pagination}>
         <DatePicker
-          views={['year', 'month']}
-          label="год и месяц"
-          value={date}
+          label="С"
+          value={startDate}
           onChange={newValue => {
-            setDate(newValue);
-            console.log('newValue', toJS(newValue?.toDate()));
+            setStartDate(newValue);
           }}
-          renderInput={params => <TextField {...params} helperText={null} />}
+          renderInput={params => <TextField {...params} />}
         />
+        <DatePicker
+          label="По"
+          value={endDate}
+          onChange={newValue => {
+            setEndDate(newValue);
+          }}
+          renderInput={params => <TextField {...params} />}
+        />
+        <Button onClick={setFilter} disabled={isDisableFilter}>
+          применить
+        </Button>
+        <Button onClick={resetDate}>сбросить</Button>
         <div>Номер домашнего задания:</div>
         <Pagination
-          count={Math.ceil(filteredSchedule?.length || 1)}
+          count={Math.ceil(filteredHomeWork?.length || 1)}
           color="primary"
           size="small"
           page={workIndex}

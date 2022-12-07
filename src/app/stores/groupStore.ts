@@ -25,6 +25,8 @@ import { AxiosError } from 'axios';
 import { makeAutoObservable, runInAction, toJS } from 'mobx';
 import moment from 'moment';
 import { findElement } from 'utils/findIndexElement';
+import { getIsBetweenDate } from 'utils/getIsBetweenDate';
+import { getLocalDateEuropeRegion } from 'utils/getLocalDateEuropeRegion';
 import { getNextMonth } from 'utils/getNextMonth';
 import { removeEmptyFields } from 'utils/removeEmptyFields';
 import {
@@ -92,7 +94,9 @@ class GroupStore {
 
   schedule: LessonT[] = [];
 
-  scheduleHomeWorks: ScheduleHomeWorksType[] = [];
+  scheduleHomeWorks = [new ScheduleHomeWorksType()];
+
+  filteredHomeWork = [new ScheduleHomeWorksType()];
 
   franchise: FranchiseT[] = [new FranchiseT()];
 
@@ -221,6 +225,7 @@ class GroupStore {
         if (r.schedule.classworks && r.schedule.homeworks) {
           this.schedule = r.schedule.classworks.map(el => scheduleItemToUIMapper(el));
           this.scheduleHomeWorks = r.schedule.homeworks;
+          this.filteredHomeWork = r.schedule.homeworks;
         } else {
           this.schedule = this.setEmptyScheduleItems(r.course.worksCount);
         }
@@ -356,6 +361,24 @@ class GroupStore {
     this.scheduleHomeWorks = this.scheduleHomeWorks.map(homeWork =>
       homeWork.index === newHomeWorkData.index ? { ...homeWork, ...newHomeWorkData } : homeWork,
     );
+  };
+
+  setFilteredWHomeByDates = (start: string, end: string) => {
+    this.filteredHomeWork = this.selectedGroup.schedule.homeworks.filter(el => {
+      const convertDate = getLocalDateEuropeRegion(el.start).split('.').reverse().join('-');
+
+      console.log('setFilteredWHomeByDates', toJS([start, end, convertDate]));
+
+      const result = getIsBetweenDate(convertDate, start, end);
+      console.log('result2', toJS(result));
+      return result;
+    });
+
+    console.log('filteredHomeWork', toJS(this.filteredHomeWork));
+  };
+
+  resetFilteredHomeWorkByDates = () => {
+    this.filteredHomeWork = this.scheduleHomeWorks;
   };
 
   get filteredCourses() {

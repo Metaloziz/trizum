@@ -1,4 +1,5 @@
 import coursesService from 'app/services/coursesService';
+import groupStore from 'app/stores/groupStore';
 import { CoursePayloadType } from 'app/types/CoursePayloadType';
 import { ShortCourseType } from 'app/types/CourseTypes';
 import { NewWorkType } from 'app/types/NewWorkType';
@@ -144,7 +145,10 @@ class CoursesStore extends StoreBase {
   };
 
   setCurrentHomeWork = (workIndex: number) => {
-    const result = this.currentCourse?.works?.find(workItem => workItem.index === workIndex);
+    const newIndex = groupStore.filteredHomeWork[workIndex].index;
+
+    // need to change on the filtered works
+    const result = this.currentCourse?.works?.find(workItem => workItem.index === newIndex);
 
     if (result) {
       this.currentHomework = result;
