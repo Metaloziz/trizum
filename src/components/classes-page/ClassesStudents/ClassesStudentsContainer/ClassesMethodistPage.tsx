@@ -1,16 +1,15 @@
-import { TextField, Button } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import appStore from 'app/stores/appStore';
 import coursesStore from 'app/stores/coursesStore';
 import groupStore from 'app/stores/groupStore';
 import { GroupsButtons } from 'components/classes-page/ClassesStudents/ClassesStudentsContainer/GroupsButtons/GroupsButtons';
+import { HomeWorkFilter } from 'components/classes-page/ClassesStudents/ClassesStudentsContainer/HomeWorkFilter/HomeWorkFilter';
 import { UsersList } from 'components/classes-page/ClassesStudents/ClassesStudentsContainer/UsersList/UsersList';
 import { HomeWorkDescription } from 'components/classes-page/homework-description/HomeWorkDescription';
 import { Dayjs } from 'dayjs';
 import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
-import React, { FC, useEffect, useState, ChangeEvent } from 'react';
+import React, { useEffect, useState, ChangeEvent, FC } from 'react';
 import styles from '../../ClassesMainPage.module.scss';
 
 export const ClassesMethodistPage: FC = observer(() => {
@@ -39,7 +38,11 @@ export const ClassesMethodistPage: FC = observer(() => {
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
 
-  const isDisableFilter = !(!!startDate && !!endDate);
+  const getCurrentHomeWork = async () => {
+    setWorkIndex(1);
+    await getCurrentCourse(selectedGroup.course.id);
+    await setCurrentHomeWork(0);
+  };
 
   // переключение по домашкам
   useEffect(() => {
@@ -50,16 +53,11 @@ export const ClassesMethodistPage: FC = observer(() => {
   useEffect(() => {
     setQueryFields({ perPage: 1000 });
     getGroups();
+    // getCurrentHomeWork();
     return () => {
       nullableSelectedGroup();
     };
   }, []);
-
-  const getCurrentHomeWork = async () => {
-    setWorkIndex(1);
-    await getCurrentCourse(selectedGroup.course.id);
-    await setCurrentHomeWork(0);
-  };
 
   const onChangeWorkIndex = (event: ChangeEvent<unknown>, newWorkIndex: number) => {
     console.log('newWorkIndex', toJS(newWorkIndex));
@@ -76,14 +74,6 @@ export const ClassesMethodistPage: FC = observer(() => {
     setCurrentHomeWork(workIndex - 1);
   };
 
-  const setFilter = () => {
-    if (startDate && endDate) {
-      setFilteredWHomeByDates(startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD'));
-      setWorkIndex(1);
-      setCurrentHomeWork(workIndex - 1);
-    }
-  };
-
   // переключение по группам
   useEffect(() => {
     getCurrentHomeWork();
@@ -93,35 +83,28 @@ export const ClassesMethodistPage: FC = observer(() => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.pagination}>
-        <DatePicker
-          label="С"
-          value={startDate}
-          onChange={newValue => {
-            setStartDate(newValue);
-          }}
-          renderInput={params => <TextField {...params} />}
+        <HomeWorkFilter
+          startDate={startDate}
+          endDate={endDate}
+          setStartDate={setStartDate}
+          setEndDate={setEndDate}
+          workIndex={workIndex}
+          setWorkIndex={setWorkIndex}
+          setCurrentHomeWork={setCurrentHomeWork}
+          setFilteredWHomeByDates={setFilteredWHomeByDates}
+          resetDate={resetDate}
         />
-        <DatePicker
-          label="По"
-          value={endDate}
-          onChange={newValue => {
-            setEndDate(newValue);
-          }}
-          renderInput={params => <TextField {...params} />}
-        />
-        <Button onClick={setFilter} disabled={isDisableFilter}>
-          применить
-        </Button>
-        <Button onClick={resetDate}>сбросить</Button>
-        <div>Номер домашнего задания:</div>
-        <Pagination
-          count={Math.ceil(filteredHomeWork?.length || 1)}
-          color="primary"
-          size="small"
-          page={workIndex}
-          boundaryCount={1}
-          onChange={onChangeWorkIndex}
-        />
+        <div className={styles.buttons}>
+          <div>Номер домашнего задания:</div>
+          <Pagination
+            count={Math.ceil(filteredHomeWork?.length || 1)}
+            color="primary"
+            size="small"
+            page={workIndex}
+            boundaryCount={1}
+            onChange={onChangeWorkIndex}
+          />
+        </div>
       </div>
       <div className={styles.row}>
         <div className={styles.tabs}>

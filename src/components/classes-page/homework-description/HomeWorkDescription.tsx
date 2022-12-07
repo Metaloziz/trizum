@@ -3,18 +3,31 @@ import { ScheduleHomeWorksType } from 'app/types/scheduleHomeWorksType';
 import starGame from 'assets/svgs/star.svg';
 import Image from 'components/image/Image';
 import Panel from 'components/panel/Panel';
+import { toJS } from 'mobx';
 import React, { FC } from 'react';
 import { getLocalDateEuropeRegion } from 'utils/getLocalDateEuropeRegion';
 
 import style from './HomeWorkDescription.module.scss';
 
 type Props = {
-  homeWorkDate: ScheduleHomeWorksType;
+  homeWorkDate?: ScheduleHomeWorksType;
   currentHomework?: NewWorkType;
 };
 
 export const HomeWorkDescription: FC<Props> = ({ currentHomework, homeWorkDate }) => {
   const games = currentHomework?.work?.gamePresets;
+
+  console.log('homeWorkDate', toJS(homeWorkDate));
+
+  if (homeWorkDate === undefined) {
+    return (
+      <div className={style.blockGames}>
+        <Panel>
+          <p>Выберите группу</p>
+        </Panel>
+      </div>
+    );
+  }
 
   return (
     <div className={style.blockGames}>

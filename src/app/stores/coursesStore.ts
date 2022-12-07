@@ -145,9 +145,8 @@ class CoursesStore extends StoreBase {
   };
 
   setCurrentHomeWork = (workIndex: number) => {
-    const newIndex = groupStore.filteredHomeWork[workIndex].index;
+    const newIndex = groupStore.filteredHomeWork[workIndex]?.index;
 
-    // need to change on the filtered works
     const result = this.currentCourse?.works?.find(workItem => workItem.index === newIndex);
 
     if (result) {
