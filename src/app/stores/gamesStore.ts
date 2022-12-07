@@ -231,6 +231,27 @@ class GamesStore {
     this.filterPresets(this.game.code);
   };
 
+  copyPreset = async (id: string) => {
+    const zxc = this.newPresets.items.find(el => el.id === id);
+    if (zxc) {
+      const res = await gamesService.getPreset(zxc.id);
+      runInAction(() => {
+        this.gamePreset = {
+          gamePreset: {
+            id: '',
+            name: '',
+            game: res.gamePreset.game,
+            status: 'copiyed' as StatusTypes,
+            level: res.gamePreset.level,
+            timeMax: res.gamePreset.timeMax,
+            settings: res.gamePreset.settings,
+          },
+          usedInWorks: [],
+        };
+      });
+    }
+  };
+
   sendResults = async (params: PlaySendResultT) => {
     await gamesService.sendPlayResults(params);
   };

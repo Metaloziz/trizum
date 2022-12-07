@@ -10,7 +10,7 @@ import {
 } from 'components/game-page/GameCommon/game-form-settings/game-form-types';
 import CustomSelect from 'components/select-mui/CustomSelect';
 import TextFieldCustom from 'components/text-field-mui/TextFieldCustom';
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { convertEmptyStringToNull, convertNullToEmptyString } from 'utils/convertTextFieldUtils';
 import { BaseFormGameSettings } from './BaseFormGameSettings';
@@ -26,13 +26,13 @@ const DEFAULT_VALUES: MemoryRhythmFormType = {
 };
 
 export const MemoryRhythmFormSettings = (props: FormSettingsType): ReactElement => {
-  const { usedInWorks, gamePreset, onFormSubmit, deletedPreset } = props;
+  const { usedInWorks, gamePreset, onFormSubmit, deletedPreset, createCopy } = props;
   const { settings, status, id, level, name } = gamePreset;
   const { levelMaxCompleted, timeComplete, description, blinksCount, digitMax, sound } =
     settings[0];
 
   const defaultValues: MemoryRhythmFormType =
-    id === ''
+    id === '' && status !== 'copiyed'
       ? DEFAULT_VALUES
       : ({
           name,
@@ -56,11 +56,18 @@ export const MemoryRhythmFormSettings = (props: FormSettingsType): ReactElement 
     handleSubmit,
     control,
     formState: { errors },
+    reset,
   } = methods;
 
   const onSubmit = handleSubmit(values => {
     onFormSubmit(values);
   });
+
+  useEffect(() => {
+    if (status === 'copiyed') {
+      reset({ ...defaultValues, status: 'draft' });
+    }
+  }, [status]);
 
   return (
     <FormProvider {...methods}>
@@ -70,6 +77,7 @@ export const MemoryRhythmFormSettings = (props: FormSettingsType): ReactElement 
           deletedPreset={deletedPreset}
           usedInWorks={usedInWorks}
           status={status}
+          createCopy={createCopy}
         >
           <Grid item xs={12} sm={6}>
             <Controller

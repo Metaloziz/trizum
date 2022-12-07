@@ -239,7 +239,7 @@ const LevelTabs: FC<TabsProps> = ({
 };
 
 export const GameDifferenceFormSettings = (props: FormSettingsType): ReactElement => {
-  const { usedInWorks, gamePreset, onFormSubmit, deletedPreset } = props;
+  const { usedInWorks, gamePreset, onFormSubmit, deletedPreset, createCopy } = props;
   const { settings, status, id, level, name } = gamePreset;
   const { timeComplete, description, errorAacceptable, differenceGameLevels } = settings[0];
 
@@ -249,7 +249,7 @@ export const GameDifferenceFormSettings = (props: FormSettingsType): ReactElemen
   );
 
   const defaultValues: GameDifferenceFormType =
-    id === ''
+    id === '' && status !== 'copiyed'
       ? DEFAULT_VALUES
       : ({
           name,
@@ -272,6 +272,7 @@ export const GameDifferenceFormSettings = (props: FormSettingsType): ReactElemen
     control,
     formState: { errors },
     getValues,
+    reset,
   } = methods;
 
   const validateDifferencePoint = () => {
@@ -380,6 +381,12 @@ export const GameDifferenceFormSettings = (props: FormSettingsType): ReactElemen
     });
   }, []);
 
+  useEffect(() => {
+    if (status === 'copiyed') {
+      reset({ ...defaultValues, status: 'draft' });
+    }
+  }, [status]);
+
   return (
     <FormProvider {...methods}>
       <form onSubmit={onSubmit}>
@@ -388,6 +395,7 @@ export const GameDifferenceFormSettings = (props: FormSettingsType): ReactElemen
           deletedPreset={deletedPreset}
           usedInWorks={usedInWorks}
           status={status}
+          createCopy={createCopy}
         >
           <Grid item xs={12} sm={6}>
             <Controller

@@ -13,7 +13,7 @@ import styles from 'components/game-page/GameCommon/GameModal/gameModal.module.s
 import { CustomMultiSelect } from 'components/multiSelect/CustomMultiSelect';
 import CustomSelect from 'components/select-mui/CustomSelect';
 import TextFieldCustom from 'components/text-field-mui/TextFieldCustom';
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { convertArrayToNull, convertNullToArray } from 'utils/convertNull';
 import { convertEmptyStringToNull, convertNullToEmptyString } from 'utils/convertTextFieldUtils';
@@ -43,12 +43,12 @@ const DEFAULT_VALUES: ShulteFormType = {
 };
 
 export const ShulteFormSettings = (props: FormSettingsType): ReactElement => {
-  const { usedInWorks, gamePreset, onFormSubmit, deletedPreset } = props;
+  const { usedInWorks, gamePreset, onFormSubmit, deletedPreset, createCopy } = props;
   const { settings, status, id, level, name } = gamePreset;
   const { elementsTotal, colorsMap, timeComplete, description, digitMin } = settings[0];
 
   const defaultValues: ShulteFormType =
-    id === ''
+    id === '' && status !== 'copiyed'
       ? DEFAULT_VALUES
       : ({
           name,
@@ -71,11 +71,18 @@ export const ShulteFormSettings = (props: FormSettingsType): ReactElement => {
     handleSubmit,
     control,
     formState: { errors },
+    reset,
   } = methods;
 
   const onSubmit = handleSubmit(values => {
     onFormSubmit(values);
   });
+
+  useEffect(() => {
+    if (status === 'copiyed') {
+      reset({ ...defaultValues, status: 'draft' });
+    }
+  }, [status]);
 
   return (
     <FormProvider {...methods}>
@@ -85,6 +92,7 @@ export const ShulteFormSettings = (props: FormSettingsType): ReactElement => {
           deletedPreset={deletedPreset}
           usedInWorks={usedInWorks}
           status={status}
+          createCopy={createCopy}
         >
           <Grid item xs={12} sm={6}>
             <Controller
