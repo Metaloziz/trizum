@@ -36,8 +36,12 @@ export const HomeWorkDescription: FC<Props> = ({ currentHomework, homeWorkDate }
           <p>Название: {currentHomework?.work?.title}</p>
         </Panel>
 
-        <div>Дата начала: {getLocalDateEuropeRegion(homeWorkDate?.start)} </div>
-        <div>Дата окончания: {getLocalDateEuropeRegion(homeWorkDate?.end)} </div>
+        <div className={style.date}>
+          <div>
+            Дата: {getLocalDateEuropeRegion(homeWorkDate?.start)} -{' '}
+            {getLocalDateEuropeRegion(homeWorkDate?.end)}
+          </div>
+        </div>
       </div>
       <div className={style.games}>
         {games &&

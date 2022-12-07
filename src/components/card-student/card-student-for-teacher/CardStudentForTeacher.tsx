@@ -83,9 +83,9 @@ const CardStudentForTeacher: FC<Props> = ({ user, setSelectedUserId }) => {
           </div>
         </div>
       </div>
-      <CustomImageWrapper className={styles.flag} variant="none">
-        <Image src={iconFlag} width="33" height="33" alt="Flag" />
-      </CustomImageWrapper>
+      {/* <CustomImageWrapper className={styles.flag} variant="none"> */}
+      {/*  <Image src={iconFlag} width="33" height="33" alt="Flag" /> */}
+      {/* </CustomImageWrapper> */}
     </div>
   );
 };
