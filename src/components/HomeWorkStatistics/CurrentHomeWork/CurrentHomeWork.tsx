@@ -1,69 +1,48 @@
-import React from 'react';
-import appStore from '../../../app/stores/appStore';
+import coursesStore from 'app/stores/coursesStore';
+import gamesStore from 'app/stores/gamesStore';
+import { PlayResultForDisplayType } from 'app/types/PlayResultForDisplayType';
+import { StatisticsItemProps } from 'app/types/StatisticsItemProps';
+import { observer } from 'mobx-react-lite';
+import { useState, useEffect } from 'react';
 import CardStudentForCheckHomeWork from '../../card-student/card-student-for-user/CardStudentForCheckHomeWork';
 import Homework from '../../homework/Homework';
-import {
-  StatisticsItemProps,
-  colorThemeStatistic,
-} from '../../olympiad-page/components/statistics-list/statistics-list/statistics-item/StatisticsItem';
+import { colorThemeStatistic } from '../../olympiad-page/components/statistics-list/statistics-list/statistics-item/StatisticsItem';
 import StatisticsList from '../../olympiad-page/components/statistics-list/statistics-list/StatisticsList';
 import styles from './OlympiadPage.module.scss';
 
-export const mock: StatisticsItemProps[] = [
-  {
-    id: 1,
-    itemTitle: 'Игра по математике',
-    minutesLeft: 10,
-    minutesTotal: 50,
-    percentCompleted: 50,
-    colorTheme: colorThemeStatistic.blue,
-  },
-  {
-    id: 2,
-    itemTitle: 'Игра по физике',
-    minutesLeft: 10,
-    minutesTotal: 50,
-    percentCompleted: 50,
-    colorTheme: colorThemeStatistic.aquamarine,
-  },
-  {
-    id: 3,
-    itemTitle: 'Игра по биологии',
-    minutesLeft: 10,
-    minutesTotal: 50,
-    percentCompleted: 50,
-    colorTheme: colorThemeStatistic.gradientViolet,
-  },
-];
+export const CurrentHomeWork = observer(() => {
+  const { currentHomework } = coursesStore;
+  const { playResults } = gamesStore;
 
-export const desc = {
-  needToDo: 'нужно развить свои ментальные навыки',
-  minutesLeft: 50,
-  tips: [
-    {
-      text: 'cконцентрируйтесь и обратите взор внутрь себя, найдите своё место силы',
-      id: +new Date().toDateString(),
-    },
-    {
-      text: 'прочитай мысли своего соседа',
-      id: +new Date().toDateString(),
-    },
-    {
-      text: 'загляни в будущее',
-      id: +new Date().toDateString(),
-    },
-  ],
-};
+  const [convertPlayResult, setConvertPlayResult] = useState([new StatisticsItemProps()]);
 
-export const CurrentHomeWork = () => {
-  const { user } = appStore;
+  useEffect(() => {
+    const draftPlayResult: PlayResultForDisplayType = {};
+
+    playResults.items.forEach(result => {
+      draftPlayResult[result.workGamePreset] = {
+        id: result.id,
+        colorTheme: colorThemeStatistic.blue, // todo need random
+        gameTitle: result.gameCode,
+        presetTitle: result.gamePreset,
+        minutesLeft: (draftPlayResult[result.workGamePreset]?.minutesLeft ?? 0) + result.time,
+        minutesTotal: result.timeMax,
+        percentCompleted: 100,
+      };
+    });
+
+    const newPlayResult = Object.keys(draftPlayResult).map(key => draftPlayResult[key]);
+
+    setConvertPlayResult(newPlayResult);
+  }, [playResults]);
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <CardStudentForCheckHomeWork />
-        <Homework gameTitle="олимпиада по ментальной силе" description={desc} id={1} />
+        <Homework title={currentHomework.work.title} text={currentHomework.work.text} />
       </div>
-      <StatisticsList statisticsList={mock} />
+      <StatisticsList statisticsList={convertPlayResult} />
     </div>
   );
-};
+});

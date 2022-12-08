@@ -2,6 +2,8 @@ import { Roles } from 'app/enums/Roles';
 import { StatusTypes } from 'app/enums/StatusTypes';
 
 import gamesService from 'app/services/gamesService';
+import appStore from 'app/stores/appStore';
+import coursesStore from 'app/stores/coursesStore';
 import {
   EditOrCreatePresetParamsT,
   GamePresetsResponseT,
@@ -16,13 +18,12 @@ import {
 } from 'app/types/GameTypes';
 import { SearchGameParamsType } from 'app/types/SearchGameParamsType';
 import { PresetT } from 'app/types/WorkTypes';
+import { TIME_MAX } from 'constants/constants';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { getActiveClassGroup } from 'utils/getActiveClassGroup';
 import { removeEmptyFields } from 'utils/removeEmptyFields';
 import { throwErrorMessage } from 'utils/throwErrorMessage';
 import { SearchParamsType } from '../types/SearchParamsType';
-import appStore from 'app/stores/appStore';
-import { TIME_MAX } from 'constants/constants';
 
 type IdentificationParamsType = Pick<
   PlaySendResultT,
@@ -293,6 +294,14 @@ class GamesStore {
 
   setPlayResultsSearchParams = (params: Partial<PlayResultsSearchParams>) => {
     this.playResultsSearchParams = { ...this.playResultsSearchParams, ...params };
+  };
+
+  getPlayResultForCurrentHomeWork = (userId: string) => {
+    const workId = coursesStore.currentHomework.work.id;
+
+    this.setPlayResultsSearchParams({ user_id: userId, work_id: workId });
+    this.getPlayResults();
+    this.setPlayResultsSearchParams(new PlayResultsSearchParams());
   };
 
   setActiveWork = (params: IdentificationParamsType) => {

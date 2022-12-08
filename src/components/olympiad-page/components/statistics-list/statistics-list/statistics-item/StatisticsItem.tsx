@@ -1,26 +1,19 @@
+import { StatisticsItemProps } from 'app/types/StatisticsItemProps';
+import cn from 'classnames';
+import Image from 'components/image/Image';
+import CustomDoughnut from 'components/olympiad-page/components/custom-doughnut/custom-doughnut/CustomDoughnut';
+import ProgressLine from 'components/olympiad-page/components/progress-line/ProgressLine';
+import { GameList } from 'games';
 import { FC, useState } from 'react';
 
 import play from '../../../../../../assets/svgs/play.svg';
-import cn from 'classnames';
 import styles from './StatisticsItem.module.scss';
-import CustomDoughnut from 'components/olympiad-page/components/custom-doughnut/custom-doughnut/CustomDoughnut';
-import ProgressLine from 'components/olympiad-page/components/progress-line/ProgressLine';
-import Image from 'components/image/Image';
 
 export enum colorThemeStatistic {
   aquamarine = 'aquamarine',
   gradientViolet = 'gradientViolet',
   gradientBlueDarker = 'gradientBlueDarker',
   blue = 'blue',
-}
-
-export interface StatisticsItemProps {
-  id: number;
-  itemTitle: string;
-  minutesLeft: number;
-  minutesTotal: number;
-  percentCompleted: number;
-  colorTheme: colorThemeStatistic;
 }
 
 const barData = [
@@ -34,12 +27,12 @@ const barDataNew = [
 ];
 
 const StatisticsItem: FC<StatisticsItemProps> = ({
-  itemTitle,
+  gameTitle,
   minutesLeft,
   colorTheme,
   percentCompleted,
   minutesTotal,
-  id,
+  presetTitle,
 }) => {
   const [isShow, setShow] = useState(false);
 
@@ -53,11 +46,14 @@ const StatisticsItem: FC<StatisticsItemProps> = ({
         <button type="button" onClick={toggleShow}>
           <Image src={play} alt="play" />
         </button>
-        <span className={styles.title}>{itemTitle}</span>
+        <div className={styles.description}>
+          <span className={styles.title}>{GameList[gameTitle]?.name}</span>
+          <span>настройка: {presetTitle}</span>
+        </div>
         <span className={styles.minutesLeft}>
           {`${minutesLeft} / `}
           <span>{minutesTotal}</span>
-          <span>минут</span>
+          <span>секунд</span>
         </span>
       </div>
       {isShow && (

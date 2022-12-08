@@ -1,9 +1,10 @@
+import { StatisticsItemProps } from 'app/types/StatisticsItemProps';
 import { FC } from 'react';
 
 import cn from 'classnames';
 
 import styles from './StatisticsList.module.scss';
-import StatisticsItem, { StatisticsItemProps } from './statistics-item/StatisticsItem';
+import StatisticsItem from './statistics-item/StatisticsItem';
 
 type StatisticsListProps = {
   className?: string;
@@ -13,13 +14,14 @@ type StatisticsListProps = {
 const StatisticsList: FC<StatisticsListProps> = ({ className, statisticsList }) => (
   <div className={cn(styles.containerChoice, className)}>
     {statisticsList.map(
-      ({ percentCompleted, id, minutesLeft, colorTheme, itemTitle, minutesTotal }) => (
+      ({ percentCompleted, id, minutesLeft, colorTheme, gameTitle, minutesTotal, presetTitle }) => (
         <StatisticsItem
-          itemTitle={itemTitle}
+          gameTitle={gameTitle}
           colorTheme={colorTheme}
           percentCompleted={percentCompleted}
           minutesLeft={minutesLeft}
           minutesTotal={minutesTotal}
+          presetTitle={presetTitle}
           key={id}
           id={id}
         />

@@ -1,13 +1,16 @@
 import { StatusTypes } from 'app/enums/StatusTypes';
 import { Nullable } from 'app/types/Nullable';
+import { TimeZoneType } from 'app/types/TimeZoneType';
 import { DifferenceGameLevel } from 'components/game-page/GameCommon/game-form-settings/game-form-types';
 import { FrazesDictionary } from 'games/games/frazes/types';
 
-export type GameT = {
-  code: string;
-  name: string;
-  type: string;
-};
+export class GameT {
+  code: string = '';
+
+  name: string = '';
+
+  type: string = '';
+}
 
 export type GamesT = Omit<GameT, 'code'>[];
 export type SoundT = 0 | 1 | undefined;
@@ -87,11 +90,21 @@ export type OneGamePresent = {
 export class PlayResultsSearchParams {
   user_id: string = '';
 
+  game_preset_id: string = '';
+
+  group_id: string = '';
+
+  game_code: string = '';
+
   created_since: string = '';
 
   created_until: string = '';
 
-  per_page: number = 1;
+  page: string = '';
+
+  work_id: string = '';
+
+  per_page: number = 1000;
 }
 
 export type GamePresetsResponseT = {
@@ -106,16 +119,17 @@ export type PlayResultT = {
   playerId: string;
   userGroup: string;
   workGamePreset: string;
+  gamePreset: string;
   gameCode: string;
   time: number;
   timeMax: number;
-  createdAt: {
-    date: string;
-    timezone_type: number;
-    timezone: string;
-  };
+  createdAt: TimeZoneType;
   type: string;
-  // todo нужна доработка типов
+  levelMinCompleted: number;
+  levelMaxCompleted: number;
+  success: number;
+  failed: number;
+  finished: boolean;
 };
 export type PlayResultsResponseT = {
   items: PlayResultT[];

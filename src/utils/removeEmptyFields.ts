@@ -10,7 +10,7 @@ export const removeEmptyFields = (obj: any) => {
       result[key] = obj[key];
     }
 
-    if (key === 'page') {
+    if (key === 'page' && obj[key]) {
       result[key] = obj[key];
     }
 

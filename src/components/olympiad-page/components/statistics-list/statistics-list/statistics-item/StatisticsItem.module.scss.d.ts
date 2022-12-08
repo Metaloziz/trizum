@@ -8,3 +8,4 @@ export const gradientBlueDarker: string;
 export const gradientViolet: string;
 export const minutesLeft: string;
 export const title: string;
+export const description: string;

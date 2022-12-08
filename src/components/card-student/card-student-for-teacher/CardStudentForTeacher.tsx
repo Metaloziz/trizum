@@ -1,6 +1,6 @@
+import { AppRoutes } from 'app/enums/AppRoutes';
 import { EmptyUser } from 'app/stores/emptyUser';
-
-import iconFlag from 'assets/svgs/flag.svg';
+import gamesStore from 'app/stores/gamesStore';
 import Button from 'components/button/Button';
 import CardStudentTitle from 'components/card-student/card-student-title/CardStudentTitle';
 import CustomImageWrapper from 'components/custom-image-wrapper/CustomImageWrapper';
@@ -11,7 +11,6 @@ import Avatar from 'public/img/avatarDefault.png';
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getRuBirthdayDate } from 'utils/getRuBirthdayDate';
-import { AppRoutes } from 'app/enums/AppRoutes';
 
 import styles from './CardStudentForTeacher.module.scss';
 
@@ -21,12 +20,15 @@ type Props = {
 };
 
 const CardStudentForTeacher: FC<Props> = ({ user, setSelectedUserId }) => {
+  const { getPlayResultForCurrentHomeWork } = gamesStore;
+
   console.log('user', toJS(user));
 
   const navigate = useNavigate();
 
   const redirectToHomeWork = () => {
     navigate(`${AppRoutes.Classes}/${user.id}`);
+    getPlayResultForCurrentHomeWork(user.id);
   };
 
   const redirectToStatistic = () => {
