@@ -17,6 +17,13 @@ export type BaseGameSettingsType = {
   description?: Nullable<string>;
 };
 
+export type BaseGameWithEngineType = {
+  perSuccessLevel: number;
+  maxErrorLevel: number;
+  upgrade: number;
+  downgrade: number;
+};
+
 export type ShiftVerticalGameSettingsType = {
   timeComplete?: Nullable<number>;
   cycleTime: Nullable<number>;
@@ -98,7 +105,9 @@ export type SteamEngineGameSettingsType = {
   gage: GageType[];
 };
 
-export type SteamEngineFormType = BaseGameSettingsType & SteamEngineGameSettingsType;
+export type SteamEngineFormType = BaseGameSettingsType &
+  BaseGameWithEngineType &
+  SteamEngineGameSettingsType;
 
 export type DifferenceGameImage = {
   id: string;

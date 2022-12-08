@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, TouchableOpacity, StyleSheet, Text, Image } from 'react-native';
-import { Props } from './types';
+import { LevelStatistic, PropGage, Props } from './types';
 
 import { Game, GameResult } from '../../common/types';
 
@@ -8,27 +8,35 @@ import StartTimer from '../../components/startTimer';
 import Timer from '../../components/timerRevert';
 
 import SteamItem from './components/item';
+import { toJS } from 'mobx';
 
 const START_TIMER = 3;
 
 const imageBackground = require('./assets/background.png');
 const imageDot = require('./assets/dot.png');
 
-export default class extends Component<any, any> implements Game {
+interface State {
+  started: boolean;
+  score: number;
+  gameGage: PropGage[];
+  levelStatistic: LevelStatistic[];
+}
 
-  constructor(props : any) {
+export default class extends Component<Props, State> implements Game {
+  timer: any;
+  constructor(props: any) {
     super(props);
 
     this.state = {
-      started : false,
-      score : 0
+      started: false,
+      score: 0,
+      gameGage: [],
+      levelStatistic: [],
     };
   }
 
   componentDidMount() {
-    const {
-      onRef = () => {}
-    } = this.props;
+    const { onRef = () => {} } = this.props;
 
     onRef(this);
 
@@ -38,35 +46,36 @@ export default class extends Component<any, any> implements Game {
 
   public resume = () => {
     this.setState({
-      started : true
+      started: true,
     });
-  }
+  };
 
   public start = () => {
     this.reset(() => {
       this.onNext();
       this.resume();
     });
-  }
+  };
 
   public stop = () => {
     this.setState({
-      started : false,
-      score : 0
+      started: false,
+      score: 0,
     });
-  }
+  };
 
-  private reset = (cb : any) => {
-    this.setState({
-      started : false,
-      score : 0
-    }, cb);
-  }
+  private reset = (cb: any) => {
+    this.setState(
+      {
+        started: false,
+        score: 0,
+      },
+      cb,
+    );
+  };
 
-  onScore = (scoreAdd : number) => {
-    const {
-      score = 0
-    } = this.state;
+  onScore = (scoreAdd: number) => {
+    const { score = 0 } = this.state;
 
     const {
       errorAacceptable = 1,
@@ -76,8 +85,9 @@ export default class extends Component<any, any> implements Game {
     } = this.props;
 
     const addSum = scoreAdd > 0 ? 1 : -errorAacceptable;
-
-    if(addSum > 0) {
+    
+    
+    if (addSum > 0) {
       onFeedbackSuccess();
     } else {
       onFeedbackError();
@@ -85,305 +95,283 @@ export default class extends Component<any, any> implements Game {
 
     let scoreSet = score + addSum;
 
-    if(scoreSet < 0) {
+    if (scoreSet < 0) {
       scoreSet = 0;
     }
 
-    if(scoreSet >= elementsTotal) {
+    if (scoreSet >= elementsTotal) {
       this.onWin();
     }
 
+    this.engineTrigger(scoreAdd > 0);
+
     this.setState({
-      score : scoreSet
+      score: scoreSet,
     });
-  }
+  };
+
+  private engineTrigger = (result: boolean) => {
+    const { perSuccessLevel, maxErrorLevel, upgrade, downgrade } = this.props;
+    const { levelStatistic: currentLevelStatistic, gameGage: currentGameGage } = this.state;
+
+    let speedGages = currentGameGage.map(({ speed }) => speed);
+
+    const levelStatistic = [...currentLevelStatistic, { result, gage: currentGameGage }];
+
+    const lastLevels = levelStatistic.slice(-perSuccessLevel);
+
+    let succes = 0;
+    let errors = 0;
+
+    lastLevels.forEach(({ result }) => {
+      if (result) {
+        errors = 0;
+        succes++;
+      } else {
+        succes = 0;
+        errors++;
+      }
+    });
+
+    const countCurrentSpeed = lastLevels.filter(({ gage }) =>
+      gage.filter(({ speed }, index) => speed === currentGameGage[index].speed),
+    );
+
+    if (succes) {
+      if (countCurrentSpeed.length === perSuccessLevel) {
+        speedGages = speedGages.map(speed => (speed -= (speed * downgrade) / 100));
+      }
+    }
+
+    if (errors === maxErrorLevel && speedGages.filter(speed => speed > 0).length > 0) {
+      speedGages = speedGages.map(speed => (speed += (speed * upgrade) / 100));
+    }
+
+    const gameGage = currentGameGage.map(({ area }, index) => ({ area, speed: speedGages[index] }));
+
+    this.setState({ levelStatistic, gameGage });
+  };
 
   onNext = () => {
-    setTimeout(() => {
-      this.startLogic();
-    }, (START_TIMER + 1) * 1000);
-  }
+    this.startLogic();
+  };
 
-  public getConfig = () => {
-    return [
-      {
-        name : 'timeComplete',
-        type : 'select',
-        title : 'Время на прохождение уровня',
-        option : [30, 60, 120, 180].map(a => ({
-          title : `${a} сек`,
-          value : a
-        })),
-        value : 30
-      },
-      {
-        name : 'elementsTotal',
-        type : 'select',
-        title : 'Количество правильных попаданий по манометру',
-        option : [5, 10, 20, 30].map(a => ({
-          title : `${a} раз`,
-          value : a
-        })),
-        value : 5
-      },
-      {
-        name : 'errorAacceptable',
-        type : 'select',
-        title : 'Штраф за ошибку',
-        option : [1, 2, 3].map(a => ({
-          title : `-${a}`,
-          value : a
-        })),
-        value : 1
-      },
-    ];
-  }
-
-  public prepareConfig = (result : any) => {
-    return {
-      timeComplete : parseInt(result.timeComplete),
-      elementsTotal : parseInt(result.elementsTotal),
-      errorAacceptable : parseInt(result.errorAacceptable),
-    };
-  }
-
-  startLogic = () => {}
+  startLogic = () => {
+    const { gage } = this.props;
+    this.setState({ gameGage: gage, levelStatistic: [] });
+  };
 
   onWin = () => {
-    const {
-      onEnd = () => {}
-    } = this.props;
+    const { onEnd = () => {} } = this.props;
+    const { score } = this.state;
 
-    const result : GameResult = {
-      result : 'win'
+    const time = this.timer.getValue();
+
+    const result: GameResult = {
+      result: 'win',
+      time,
+      success: score,
     };
 
     onEnd(result);
 
     this.stop();
-  }
+  };
 
   onEnd = () => {
-    const {
-      onEnd = () => {}
-    } = this.props;
+    const { onEnd = () => {}, timeComplete } = this.props;
 
-    const result : GameResult = {
-      result : 'lose'
+    const { score } = this.state;
+
+    const result: GameResult = {
+      result: 'lose',
+      time: timeComplete,
+      success: score,
     };
 
     onEnd(result);
 
     this.stop();
-  }
+  };
 
   renderInner = () => {
-    const {
-      width,
-      timeComplete,
-      elementsTotal,
-      gage = []
-    } = this.props;
+    const { width, timeComplete, elementsTotal } = this.props;
+    const { gameGage } = this.state;
 
-    const {
-      score = 0
-    } = this.state;
+    const { score = 0 } = this.state;
 
     let scoreProgress = (score / elementsTotal) * 100;
 
-    if(scoreProgress < 0) {
+    if (scoreProgress < 0) {
       scoreProgress = 0;
     }
-    if(scoreProgress > 100) {
+    if (scoreProgress > 100) {
       scoreProgress = 100;
     }
 
-    const steamArray : any[] = [];
+    const steamArray: any[] = [];
 
-
-    gage.map((a : any, i : any) => {
-      steamArray.push(<View
-        key={`steam-${i}`}
-        style={styles.wrapItem}
-      >
-        <SteamItem
-          speed={a.speed}
-          area={a.area}
-          onScore={this.onScore}
-        />
-      </View>);
+    gameGage.map(({ speed, area }, index) => {
+      steamArray.push(
+        <View key={`steam-${index}`} style={styles.wrapItem}>
+          <SteamItem speed={speed} area={area} onScore={this.onScore} />
+        </View>,
+      );
     });
 
-    return <View
-      style={{
-        ...styles.inner,
-        minHeight : width
-      }}
-    >
-      <Image
-        source={imageBackground}
-        style={styles.background}
-      />
-      <View style={styles.wrapTop}>
-        <View style={styles.progressTime}>
-          <Timer
-            ref='timer'
-            time={timeComplete}
-            onEnd={this.onEnd}
-            renderComponent={() => <View
-              style={{
-                ...styles.progressTimeInner,
-                width : `100%`
+    return (
+      <View
+        style={{
+          ...styles.inner,
+          minHeight: width,
+        }}
+      >
+        <Image source={imageBackground} style={styles.background} />
+        <View style={styles.wrapTop}>
+          <View style={styles.progressTime}>
+            <Timer
+              ref={ref => (this.timer = ref)}
+              time={timeComplete}
+              onEnd={this.onEnd}
+              renderComponent={() => (
+                <View
+                  style={{
+                    ...styles.progressTimeInner,
+                    width: `100%`,
+                  }}
+                />
+              )}
+              renderTime={(time: number) => {
+                let progress = ((timeComplete - time) / timeComplete) * 100;
+
+                if (progress > 100) {
+                  progress = 100;
+                }
+
+                return (
+                  <View
+                    style={{
+                      ...styles.progressTimeInner,
+                      width: `${progress}%`,
+                    }}
+                  />
+                );
               }}
-            />}
-            renderTime={(t : any) => {
-              let progress = ((timeComplete - t) / timeComplete) * 100;
-
-              if(progress > 100) {
-                progress = 100;
-              }
-
-              return <View
-                style={{
-                  ...styles.progressTimeInner,
-                  width : `${progress}%`
-                }}
-              />
-            }}
-          />
+            />
+          </View>
+          <View style={styles.wrapScore}>
+            <View
+              style={{
+                ...styles.progressScore,
+                width: `${scoreProgress}%`,
+              }}
+            />
+          </View>
         </View>
-        <View style={styles.wrapScore}>
-          <View
-            style={{
-              ...styles.progressScore,
-              width : `${scoreProgress}%`
-            }}
-          />
+        <View style={styles.wrapperItems}>
+          <Image source={imageDot} style={[styles.dot, styles.dotLeft, styles.dotTop]} />
+          <Image source={imageDot} style={[styles.dot, styles.dotRight, styles.dotTop]} />
+          <Image source={imageDot} style={[styles.dot, styles.dotLeft, styles.dotBottom]} />
+          <Image source={imageDot} style={[styles.dot, styles.dotRight, styles.dotBottom]} />
+          <View style={styles.wrapItems}>{steamArray}</View>
         </View>
       </View>
-      <View style={styles.wrapperItems}>
-        <Image
-          source={imageDot}
-          style={[styles.dot, styles.dotLeft, styles.dotTop]}
-        />
-        <Image
-          source={imageDot}
-          style={[styles.dot, styles.dotRight, styles.dotTop]}
-        />
-        <Image
-          source={imageDot}
-          style={[styles.dot, styles.dotLeft, styles.dotBottom]}
-        />
-        <Image
-          source={imageDot}
-          style={[styles.dot, styles.dotRight, styles.dotBottom]}
-        />
-        <View style={styles.wrapItems}>
-          {steamArray}
-        </View>
-      </View>
-    </View>;
-  }
+    );
+  };
 
   render() {
-    const {
-      started
-    } = this.state;
+    const { started } = this.state;
 
-    const {
-      width
-    } = this.props;
+    const { width } = this.props;
 
-    return <View
-      style={{
-        ...styles.wrap,
-        width : width
-      }}
-    >
-      {started && <StartTimer
-        time={START_TIMER}
-        renderComponent={this.renderInner}
-      />}
-    </View>;
+    return (
+      <View
+        style={{
+          ...styles.wrap,
+          width: width,
+        }}
+      >
+        {started && <StartTimer time={START_TIMER} renderComponent={this.renderInner} />}
+      </View>
+    );
   }
-
 }
 
 const styles = StyleSheet.create({
-  wrapItem : {
-    margin : 8
+  wrapItem: {
+    margin: 8,
   },
-  wrapperItems : {
-    flex : 1,
-    justifyContent : 'center',
-    marginVertical : 12
+  wrapperItems: {
+    flex: 1,
+    justifyContent: 'center',
+    marginVertical: 12,
   },
-  wrapItems : {
-    flexDirection : 'row',
-    alignItems : 'center',
-    justifyContent : 'center',
-    flexWrap : 'wrap',
+  wrapItems: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
   },
-  wrap : {
-    marginTop : 12,
-    marginBottom : 12,
-    borderRadius : 8,
-    overflow : 'hidden'
+  wrap: {
+    marginTop: 12,
+    marginBottom: 12,
+    borderRadius: 8,
+    overflow: 'hidden',
   },
-  inner : {
-    flex : 1,
+  inner: {
+    flex: 1,
   },
-  background : {
-    position : 'absolute',
-    top : 0,
-    left : 0,
-    width : '100%',
-    height : '100%',
-    resizeMode : 'cover'
+  background: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
   },
-  wrapTop : {
-    marginHorizontal : 12,
-    marginTop : 12
+  wrapTop: {
+    marginHorizontal: 12,
+    marginTop: 12,
   },
-  wrapScore : {
-    height : 6,
-    backgroundColor : '#E6EEF8',
-    borderRadius : 3,
-    overflow : 'hidden',
-    marginTop : 12
+  wrapScore: {
+    height: 6,
+    backgroundColor: '#E6EEF8',
+    borderRadius: 3,
+    overflow: 'hidden',
+    marginTop: 12,
   },
-  progressTime : {
-    height : 6,
-    backgroundColor : '#E6EEF8',
-    borderRadius : 3,
-    overflow : 'hidden'
+  progressTime: {
+    height: 6,
+    backgroundColor: '#E6EEF8',
+    borderRadius: 3,
+    overflow: 'hidden',
   },
-  progressTimeInner : {
-    height : '100%',
-    backgroundColor : '#2E8DFD',
-    borderRadius : 2,
+  progressTimeInner: {
+    height: '100%',
+    backgroundColor: '#2E8DFD',
+    borderRadius: 2,
   },
-  progressScore : {
-    height : '100%',
-    backgroundColor : '#FF4633',
-    borderRadius : 2,
+  progressScore: {
+    height: '100%',
+    backgroundColor: '#FF4633',
+    borderRadius: 2,
   },
-  dot : {
-    position : 'absolute',
-    width : 30,
-    height : 30,
-    resizeMode : 'contain'
+  dot: {
+    position: 'absolute',
+    width: 30,
+    height: 30,
+    resizeMode: 'contain',
   },
-  dotLeft : {
-    left : 4,
+  dotLeft: {
+    left: 4,
   },
-  dotRight : {
-    right : 4,
+  dotRight: {
+    right: 4,
   },
-  dotTop : {
-    top : 4,
+  dotTop: {
+    top: 4,
   },
-  dotBottom : {
-    bottom : 0,
+  dotBottom: {
+    bottom: 0,
   },
 });

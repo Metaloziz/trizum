@@ -33,6 +33,10 @@ export type PresetsGameSettings = {
   wordsFull: boolean;
   words: string[];
   differenceGameLevels: DifferenceGameLevel[];
+  perSuccessLevel: number;
+  maxErrorLevel: number;
+  upgrade: number;
+  downgrade: number;
 };
 
 export type EditOrCreatePresetParamsT = {
