@@ -14,7 +14,6 @@ export default class extends Component<any, any> {
 
   timer : any;
   correctCount : number;
-  inTick : number;
 
   constructor(props : any) {
     super(props);
@@ -26,9 +25,6 @@ export default class extends Component<any, any> {
 
     this.timer = false;
 
-    const distance = 360 / (speed/1000); // Общее кол-во градусов в секунду
-
-    this.inTick = ((distance / 1000) * tick)*2; // Кол-во градусов в один кадр
 
     let start = range[0] + ((range[1] - range[0])/2) + 180;
 
@@ -75,12 +71,17 @@ export default class extends Component<any, any> {
       angle
     } = this.state;
 
+    
     const {
       range,
-      onScore
+      onScore,
+      speed
     } = this.props;
 
-    let setAngle = angle + this.inTick;
+    const distance = 360 / (speed/1000); // Общее кол-во градусов в секунду
+    const inTick = ((distance / 1000) * tick)*2; // Кол-во градусов в один кадр
+    
+    let setAngle = angle + inTick;
     let inRange = false;
 
     if(setAngle > 360) {

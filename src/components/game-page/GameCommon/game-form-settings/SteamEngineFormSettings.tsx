@@ -23,12 +23,26 @@ const DEFAULT_VALUES: SteamEngineFormType = {
   elementsTotal: 5,
   errorAacceptable: 1,
   gage: [{ id: 1, area: true, speed: 1 }],
+  perSuccessLevel: 1,
+  maxErrorLevel: 1,
+  upgrade: 10,
+  downgrade: 20,
 };
 
 export const SteamEngineFormSettings = (props: FormSettingsType): ReactElement => {
   const { usedInWorks, gamePreset, onFormSubmit, deletedPreset, createCopy } = props;
   const { settings, status, id, level, name } = gamePreset;
-  const { elementsTotal, timeComplete, description, gage, errorAacceptable } = settings[0];
+  const {
+    elementsTotal,
+    timeComplete,
+    description,
+    gage,
+    errorAacceptable,
+    perSuccessLevel,
+    maxErrorLevel,
+    upgrade,
+    downgrade,
+  } = settings[0];
 
   const defaultValues: SteamEngineFormType =
     id === '' && status !== 'copiyed'
@@ -42,6 +56,10 @@ export const SteamEngineFormSettings = (props: FormSettingsType): ReactElement =
           elementsTotal,
           errorAacceptable,
           gage,
+          perSuccessLevel,
+          maxErrorLevel,
+          upgrade,
+          downgrade,
         } as SteamEngineFormType);
 
   const methods = useForm<SteamEngineFormType>({
@@ -210,6 +228,83 @@ export const SteamEngineFormSettings = (props: FormSettingsType): ReactElement =
               </Grid>
             </Grid>
           ))}
+
+          <Grid item xs={12} sm={3}>
+            <Controller
+              name="perSuccessLevel"
+              render={({ field: { value, onChange, ref } }) => (
+                <TextFieldCustom
+                  type="text"
+                  label="Кол-во нажатий для увеличения скорости"
+                  size="small"
+                  fullWidth
+                  inputProps={{ type: 'number' }}
+                  error={errors.perSuccessLevel?.message}
+                  onChange={event => onChange(convertEmptyStringToNull(event))}
+                  value={convertNullToEmptyString(value!)}
+                  ref={ref}
+                />
+              )}
+              control={control}
+            />
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <Controller
+              name="maxErrorLevel"
+              render={({ field: { value, onChange, ref } }) => (
+                <TextFieldCustom
+                  type="text"
+                  label="Кол-во нажатий для уменьшения скорости"
+                  size="small"
+                  fullWidth
+                  inputProps={{ type: 'number' }}
+                  error={errors.maxErrorLevel?.message}
+                  onChange={event => onChange(convertEmptyStringToNull(event))}
+                  value={convertNullToEmptyString(value!)}
+                  ref={ref}
+                />
+              )}
+              control={control}
+            />
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <Controller
+              name="upgrade"
+              render={({ field: { value, onChange, ref } }) => (
+                <TextFieldCustom
+                  type="text"
+                  label="Процент увеличения скорости манометров"
+                  size="small"
+                  fullWidth
+                  inputProps={{ type: 'number' }}
+                  error={errors.upgrade?.message}
+                  onChange={event => onChange(convertEmptyStringToNull(event))}
+                  value={convertNullToEmptyString(value!)}
+                  ref={ref}
+                />
+              )}
+              control={control}
+            />
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <Controller
+              name="downgrade"
+              render={({ field: { value, onChange, ref } }) => (
+                <TextFieldCustom
+                  type="text"
+                  label="Процент уменьшения скорости манометров"
+                  size="small"
+                  fullWidth
+                  inputProps={{ type: 'number' }}
+                  error={errors.downgrade?.message}
+                  onChange={event => onChange(convertEmptyStringToNull(event))}
+                  value={convertNullToEmptyString(value!)}
+                  ref={ref}
+                />
+              )}
+              control={control}
+            />
+          </Grid>
         </BaseFormGameSettings>
       </form>
     </FormProvider>

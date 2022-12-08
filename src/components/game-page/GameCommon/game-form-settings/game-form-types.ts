@@ -113,7 +113,9 @@ export type SteamEngineGameSettingsType = {
   gage: GageType[];
 };
 
-export type SteamEngineFormType = BaseGameSettingsType & SteamEngineGameSettingsType;
+export type SteamEngineFormType = BaseGameSettingsType &
+  BaseGameWithEngineType &
+  SteamEngineGameSettingsType;
 
 export type DifferenceGameImage = {
   id: string;

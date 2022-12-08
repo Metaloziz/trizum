@@ -6,11 +6,21 @@ export interface PropGage {
 }
 
 export interface Props extends GameProps {
-  timeComplete?: number; // Время на уровень
-  elementsTotal?: number; // Всего успехов
-  errorAacceptable?: number; // Штраф за ошибку
-  gage?: PropGage[];
+  timeComplete: number; // Время на уровень
+  elementsTotal: number; // Всего успехов
+  errorAacceptable: number; // Штраф за ошибку
+  gage: PropGage[];
   onEnd?(result?: GameResult): void;
+  onRef: any;
+  perSuccessLevel: number,
+  maxErrorLevel: number,
+  upgrade: number,
+  downgrade: number,
+}
+
+export interface LevelStatistic {
+  gage: PropGage[],
+  result: boolean;
 }
 
 const PropsDefault : Props = {
@@ -27,7 +37,12 @@ const PropsDefault : Props = {
       area : false,
       speed : 4000
     }
-  ]
+  ],
+  onRef: () => {},
+  perSuccessLevel: 1,
+  maxErrorLevel: 1,
+  upgrade: 10,
+  downgrade: 20
 };
 
 export {
