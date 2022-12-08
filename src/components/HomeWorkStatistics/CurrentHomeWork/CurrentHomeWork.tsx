@@ -4,9 +4,9 @@ import { PlayResultForDisplayType } from 'app/types/PlayResultForDisplayType';
 import { StatisticsItemProps } from 'app/types/StatisticsItemProps';
 import { observer } from 'mobx-react-lite';
 import { useState, useEffect } from 'react';
+import { getRandomColor } from 'utils/getRandomColor';
 import CardStudentForCheckHomeWork from '../../card-student/card-student-for-user/CardStudentForCheckHomeWork';
 import Homework from '../../homework/Homework';
-import { colorThemeStatistic } from '../../olympiad-page/components/statistics-list/statistics-list/statistics-item/StatisticsItem';
 import StatisticsList from '../../olympiad-page/components/statistics-list/statistics-list/StatisticsList';
 import styles from './OlympiadPage.module.scss';
 
@@ -22,7 +22,7 @@ export const CurrentHomeWork = observer(() => {
     playResults.items.forEach(result => {
       draftPlayResult[result.workGamePreset] = {
         id: result.id,
-        colorTheme: colorThemeStatistic.blue, // todo need random
+        colorTheme: getRandomColor(),
         gameTitle: result.gameCode,
         presetTitle: result.gamePreset,
         minutesLeft: (draftPlayResult[result.workGamePreset]?.minutesLeft ?? 0) + result.time,
