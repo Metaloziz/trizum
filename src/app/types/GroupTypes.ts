@@ -1,6 +1,7 @@
 import { DateTime } from 'app/enums/DateTime';
 import { GroupLevels } from 'app/enums/GroupLevels';
 import { GroupTypes } from 'app/enums/GroupTypes';
+import { StatusTypes } from 'app/enums/StatusTypes';
 import { EmptyUser } from 'app/stores/emptyUser';
 import { FranchiseT } from 'app/types/FranchiseTypes';
 import { GamePresetFromLoadme } from 'app/types/LoadMeTypes';
@@ -20,15 +21,17 @@ export type ResponseGroups = {
   id: string;
   name: string;
   type: Nullable<string>;
-  status: Nullable<string>;
+  status: Nullable<StatusTypes>;
   level: LevelGroupT;
   startedAt: TimeZoneType;
   endedAt: TimeZoneType;
   createdAt: TimeZoneType;
   franchise: FranchiseWTF;
-  course: string;
+  course: { id: string; title: string };
   teacherId: TeacherIdWTF;
   schedule: Schedule[];
+  onlyGroup: { id: string; name: string };
+  description?: string;
 };
 
 export type WorkT = {
@@ -75,16 +78,18 @@ export type UsersDataT = {
   user: EmptyUser;
 };
 
+export type OnlyGroupType = { id: string; name: string };
+
 export class ResponseOneGroup {
   id: string = '';
 
-  stats: any[] = [];
+  // stats: any[] = [];
 
   name: string = '';
 
   type: GroupT = 'blocks';
 
-  status: StatusT = 'draft';
+  status: StatusTypes = StatusTypes.draft;
 
   level: LevelGroupT = 'easy';
 
@@ -96,13 +101,13 @@ export class ResponseOneGroup {
 
   franchise = new FranchiseT();
 
-  course = new ResponseOneGroupCourse();
+  course: { id: string; title: string } = { id: '', title: '' };
 
   users: UsersDataT[] = [{ id: '', user: new EmptyUser(), stats: ['draft'] }];
 
   schedule: ScheduleObjectType = { classworks: [], homeworks: [] };
 
-  onlyGroup?: [] | null = null;
+  onlyGroup?: Nullable<OnlyGroupType> = null;
 
   teacherId = {
     id: '',
@@ -110,6 +115,8 @@ export class ResponseOneGroup {
     middleName: '',
     lastName: '',
   };
+
+  description?: string;
 }
 
 export class LessonT {
@@ -143,17 +150,19 @@ export type LevelGroupT = keyof typeof GroupLevels;
 
 export type CreateGroup = {
   name: string;
-  franchiseId: string;
+  franchiseId?: string;
   type: GroupT;
-  teacherId: string;
+  teacherId?: string;
   level: LevelGroupT;
   courseId: string;
-  status: StatusT;
+  status: StatusTypes;
   schedule?: ScheduleObjectType;
+  description?: string;
+  forGroupId?: Nullable<string>;
 };
 export type CreateGroupForServer = {
-  dateSince: string;
-  dateUntil: string;
+  dateSince: string | Date;
+  dateUntil?: string | Date;
 } & CreateGroup;
 
 export type CreateGroupFroUI = {

@@ -1,14 +1,4 @@
-import React, { FC, useState } from 'react';
-
-import styles from './NameOliypiad.module.scss';
-
-import BasicModal from 'components/basic-modal/BasicModal';
-import Button from 'components/button/Button';
-import { OlympiadForm } from 'components/olympiad-page/components/OlympiadForm/OlympiadForm';
-import groupStore from '../../app/stores/groupStore';
-
-import { getOptionMui } from '../../utils/getOption';
-
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   Accordion,
   AccordionActions,
@@ -23,13 +13,19 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { GroupLevels } from '../../app/enums/GroupLevels';
+import { GroupLevels } from 'app/enums/GroupLevels';
+import Button from 'components/button/Button';
 import { observer } from 'mobx-react-lite';
+import React, { FC, useState } from 'react';
+import { getOptionMui } from 'utils/getOption';
+import groupStore from 'app/stores/groupStore';
+
+import styles from './NameOliypiad.module.scss';
 
 type Props = {
   isEditRole: boolean;
+  addOlympiad: () => void;
 };
 
 const levelOptionsNames = Object.values(GroupLevels);
@@ -37,13 +33,12 @@ const levelOptions = Object.keys(GroupLevels).map((el, idx) =>
   getOptionMui(el.toLowerCase(), levelOptionsNames[idx]),
 );
 
-const NameOlympiad: FC<Props> = observer(({ isEditRole }) => {
-  const [showModal, setShowModal] = useState<boolean>(false);
+const NameOlympiad: FC<Props> = observer(({ isEditRole, addOlympiad }) => {
   const { queryFieldsOlympiads, clearOlympiadQueryFields, getOlympiadGroups } = groupStore;
 
-  const searchHandler = () => {
+  const searchHandler = async () => {
     queryFieldsOlympiads.page = 0;
-    getOlympiadGroups();
+    await getOlympiadGroups();
   };
 
   const resetHandler = () => {
@@ -122,13 +117,9 @@ const NameOlympiad: FC<Props> = observer(({ isEditRole }) => {
             <Button onClick={resetHandler}>Сбросить</Button>
             {isEditRole && (
               <div className={styles.addOlympiad}>
-                <Button onClick={() => setShowModal(true)}>Добавить</Button>
+                <Button onClick={addOlympiad}>Добавить</Button>
               </div>
             )}
-
-            <BasicModal visibility={showModal} changeVisibility={setShowModal}>
-              <OlympiadForm setShowModal={setShowModal} />
-            </BasicModal>
           </Stack>
         </AccordionActions>
       </Accordion>

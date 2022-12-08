@@ -1,284 +1,308 @@
-import Button from 'components/button/Button';
-import React, { FC, useEffect, useState } from 'react';
-import TextField from '@mui/material/TextField';
-
-import style from './OlympiadForm.module.scss';
-import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import { REG_NAME } from 'constants/regExp';
+import { Grid } from '@mui/material';
+import TextField from '@mui/material/TextField';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { GroupLevels } from 'app/enums/GroupLevels';
+import { ShortCourseType } from 'app/types/CourseTypes';
+import { ResponseGroups } from 'app/types/GroupTypes';
+import { Nullable } from 'app/types/Nullable';
+import { OlympiadFormType } from 'app/types/OlympiadPayloadType';
+import { FranchisingViewModel } from 'app/viewModels/FranchisingViewModel';
+import BasicModal from 'components/basic-modal/BasicModal';
+import Button from 'components/button/Button';
+import CustomSelect from 'components/select-mui/CustomSelect';
+import TextFieldCustom from 'components/text-field-mui/TextFieldCustom';
 import { MAX_NAMES_LENGTH, MIN_NAMES_LENGTH } from 'constants/constants';
-import franchiseeStore from 'app/stores/franchiseeStore';
-import { convertFranchiseeOptions } from 'utils/convertFranchiseeOptions';
-import { observer } from 'mobx-react-lite';
-import coursesStore from 'app/stores/coursesStore';
+import { REG_NAME } from 'constants/regExp';
+import { STATUS_MENU } from 'constants/selectMenu';
+import React, { FC, useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { convertCourseOptions } from 'utils/convertCourseOptions';
 import { convertEnumOptions } from 'utils/convertEnumOptions';
-import groupsService from 'app/services/groupsService';
-import { OlympiadPayloadType } from 'app/types/OlympiadPayloadType';
-import groupStore from 'app/stores/groupStore';
+import { convertFranchiseeOptions } from 'utils/convertFranchiseeOptions';
 import { convertGroupOptions } from 'utils/convertGroupOptions';
-import { getAllOptionsMUI } from 'utils/getOption';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { GroupStatusTypes } from 'app/types/GroupStatusTypes';
-import { ResponseGroups } from 'app/types/GroupTypes';
-import { GroupLevels } from 'app/enums/GroupLevels';
-import { GroupStatus } from 'app/enums/GroupStatus';
-import { convertServerDateToUTCString } from 'utils/convertServerDateToUTCString';
+import { convertEmptyStringToNull, convertNullToEmptyString } from 'utils/convertTextFieldUtils';
+import { filterSelectMenu } from 'utils/filterSelectMenu';
+import * as yup from 'yup';
 
-type UseFormAddType = Omit<OlympiadPayloadType, 'type'> & { status?: GroupStatusTypes };
+import style from './OlympiadForm.module.scss';
+
+const SCHEMA = yup.object().shape({
+  name: yup
+    .string()
+    .required('Обязательное поле')
+    .matches(REG_NAME, 'допустима только кириллица')
+    .max(MAX_NAMES_LENGTH, `максимальная длинна ${MAX_NAMES_LENGTH} символов`)
+    .min(MIN_NAMES_LENGTH, `минимальная длинна ${MIN_NAMES_LENGTH} символа`),
+  dateSince: yup.date().required('Обязательное поле').nullable(),
+  dateStart: yup.date().notRequired().nullable(),
+  franchiseId: yup.string().notRequired().nullable(),
+  courseId: yup.string().required('Обязательное поле').nullable(),
+  forGroupId: yup.string().when('franchiseId', franchiseId => {
+    if (franchiseId !== null) {
+      return yup.string().required('Обязательное поле');
+    }
+    return yup.string().notRequired();
+  }),
+  level: yup.string().required('Обязательное поле').nullable(),
+  status: yup.string().notRequired(),
+  description: yup.string().notRequired(),
+});
 
 type Props = {
   setShowModal: (value: boolean) => void;
-  group?: ResponseGroups;
-  mode?: 'edite' | 'add';
+  defaultValues: OlympiadFormType;
+  title: string;
+  franchise: FranchisingViewModel[];
+  onSubmitForm: (value: OlympiadFormType) => void;
+  courses: Nullable<ShortCourseType[]>;
+  groups: ResponseGroups[];
+  getGroups: (franchiseId: string) => void;
 };
 
-export const OlympiadForm: FC<Props> = observer(({ setShowModal, mode = 'add', group }) => {
-  const IS_ADD_MODE = mode === 'add';
-
-  const title = <h2>{IS_ADD_MODE ? 'Добавление' : 'Редактирование'} олимпиады</h2>;
-
-  const { franchise } = franchiseeStore;
-  const { courses } = coursesStore;
-  const { groups, getGroups } = groupStore;
-
+export const OlympiadForm: FC<Props> = ({
+  setShowModal,
+  defaultValues,
+  onSubmitForm,
+  title,
+  franchise,
+  courses,
+  groups,
+  getGroups,
+}) => {
   const franchiseOptions = convertFranchiseeOptions(franchise);
   const courseOptions = convertCourseOptions(courses);
-  const levelOptions = convertEnumOptions(GroupLevels);
   const groupsOptions = convertGroupOptions(groups);
-  const statusOptions = convertEnumOptions(GroupStatus);
-
-  const [errorMessage, setErrorMessage] = useState('');
-  const [dateSince, setDateSince] = useState<string | null>(null);
-  const [dateUntil, setDateUntil] = useState<string | null>(null);
-
-  const schema = yup.object().shape({
-    name: yup
-      .string()
-      .required('Обязательное поле')
-      .matches(REG_NAME, 'допустима только кириллица')
-      .max(MAX_NAMES_LENGTH, `максимальная длинна ${MAX_NAMES_LENGTH} символов`)
-      .min(MIN_NAMES_LENGTH, `минимальная длинна ${MIN_NAMES_LENGTH} символа`),
-    dateSince: yup.string().required('Обязательное поле'),
-    dateUntil: yup.string().required('Обязательное поле'),
-    franchiseId: IS_ADD_MODE
-      ? yup.string().required('Обязательное поле')
-      : yup.string().notRequired(),
-    courseId: IS_ADD_MODE ? yup.string().required('Обязательное поле') : yup.string().notRequired(),
-    forGroupId: IS_ADD_MODE
-      ? yup.string().required('Обязательное поле')
-      : yup.string().notRequired(),
-    level: yup.string().required('Обязательное поле'),
-    status: IS_ADD_MODE ? yup.string().notRequired() : yup.string().required('Обязательное поле'),
-  });
+  const levelOptions = convertEnumOptions(GroupLevels);
+  const menu = filterSelectMenu(defaultValues.status, STATUS_MENU);
 
   const {
     handleSubmit,
-    clearErrors,
     setValue,
     watch,
     resetField,
     register,
+    control,
     formState: { errors },
-  } = useForm<UseFormAddType>({ resolver: yupResolver(schema) });
+  } = useForm<OlympiadFormType>({ resolver: yupResolver(SCHEMA), defaultValues });
 
   const FRANCHISE_ID = watch('franchiseId');
 
   const onSubmit = handleSubmit(async values => {
-    if (IS_ADD_MODE) {
-      const response = await groupsService.addOlympiadGroup({ ...values, type: 'olympiad' });
-
-      if (response?.error) {
-        setErrorMessage(response.error);
-      } else {
-        setShowModal(false);
-      }
-      return;
-    }
-
-    if (group) {
-      const response = await groupsService.editGroup(values, group.id);
-
-      if (response?.error) {
-        setErrorMessage(response.error);
-      } else {
-        setShowModal(false);
-      }
-    }
+    onSubmitForm(values);
   });
 
   useEffect(() => {
-    if (group) {
-      const startDate = convertServerDateToUTCString(group.startedAt.date);
-
-      setDateSince(startDate);
-      setValue('dateSince', startDate, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
-
-      const endDate = convertServerDateToUTCString(group.endedAt.date);
-
-      setDateUntil(endDate);
-      setValue('dateUntil', endDate, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
-    }
-  }, [group]);
-
-  useEffect(() => {
     if (FRANCHISE_ID) {
-      const result = getGroups({ franchiseId: FRANCHISE_ID, type: 'class' });
+      getGroups(FRANCHISE_ID);
       resetField('forGroupId');
+    }
+    if (FRANCHISE_ID === '') {
+      setValue('franchiseId', '');
+      setValue('forGroupId', '');
     }
   }, [FRANCHISE_ID]);
 
   return (
-    <form>
+    <BasicModal visibility changeVisibility={setShowModal}>
       <div className={style.modalOlympiad}>
-        {title}
-        <div className={style.modalName}>
-          <TextField
-            {...register('name')}
-            helperText={errors.name?.message}
-            defaultValue={group?.name || ''}
-            error={!!errors?.name}
-            label="Название олимпиады"
-            style={{ width: '100%' }}
-          />
-        </div>
-
-        <div className={style.modalSelect}>
-          <div>
-            <div className={style.selectBlock}>
-              <DateTimePicker
-                value={dateSince}
-                onChange={newValue => {
-                  setDateSince(newValue);
-                  clearErrors('dateSince');
-                  if (newValue) {
-                    setValue('dateSince', newValue, { shouldValidate: true, shouldDirty: true });
-                  }
-                }}
-                renderInput={params => (
-                  <TextField
-                    {...register('dateSince')}
-                    {...params}
-                    label="Дата начала"
-                    error={!!errors?.dateSince}
-                    helperText={errors.dateSince?.message}
+        <h2>{title}</h2>
+        <form>
+          <Grid direction="row" container spacing={2} marginTop={1} marginBottom={2}>
+            <Grid item xs={12} sm={12}>
+              <Controller
+                name="name"
+                render={({ field: { value, onChange, ref } }) => (
+                  <TextFieldCustom
+                    type="text"
+                    label="Название олимпиады"
+                    size="small"
+                    fullWidth
+                    error={errors.name?.message}
+                    onChange={event => onChange(convertEmptyStringToNull(event))}
+                    value={convertNullToEmptyString(value!)}
+                    ref={ref}
                   />
                 )}
+                control={control}
               />
-            </div>
-            {IS_ADD_MODE && (
-              <>
-                <div className={style.selectBlock}>
-                  <TextField
-                    {...register('franchiseId')}
-                    label="Франшиза"
-                    select
-                    defaultValue=""
-                    helperText={errors.franchiseId?.message}
-                    error={!!errors?.franchiseId}
-                  >
-                    {getAllOptionsMUI(franchiseOptions)}
-                  </TextField>
-                </div>
+            </Grid>
 
-                <div className={style.selectBlock}>
-                  <TextField
-                    {...register('courseId')}
-                    select
-                    label="Курс"
-                    defaultValue=""
-                    helperText={errors.courseId?.message}
-                    error={!!errors?.courseId}
-                  >
-                    {getAllOptionsMUI(courseOptions)}
-                  </TextField>
-                </div>
-              </>
-            )}
-
-            {!IS_ADD_MODE && (
-              <>
-                <div className={style.selectBlock}>
-                  <TextField
-                    {...register('status')}
-                    label="Статус"
-                    select
-                    defaultValue={group?.status || ''}
-                    helperText={errors.status?.message}
-                    error={!!errors?.status}
-                  >
-                    {getAllOptionsMUI(statusOptions)}
-                  </TextField>
-                </div>
-              </>
-            )}
-          </div>
-
-          <div>
-            <div className={style.selectBlock}>
-              <DateTimePicker
-                value={dateUntil}
-                onChange={newValue => {
-                  setDateUntil(newValue);
-                  clearErrors('dateUntil');
-                  if (newValue) {
-                    setValue('dateUntil', newValue, { shouldValidate: true, shouldDirty: true });
-                  }
-                }}
-                renderInput={params => (
-                  <TextField
-                    {...register('dateUntil')}
-                    {...params}
-                    label="Дата окончания"
-                    error={!!errors?.dateUntil}
-                    helperText={errors.dateUntil?.message}
+            <Grid item xs={12} sm={6}>
+              <Controller
+                name="dateSince"
+                render={({ field: { value, onChange, ref } }) => (
+                  <DateTimePicker
+                    value={value}
+                    onChange={onChange}
+                    ref={ref}
+                    renderInput={params => (
+                      <TextField
+                        {...register('dateSince')}
+                        {...params}
+                        label="Дата анонса"
+                        size="small"
+                        fullWidth
+                        error={!!errors?.dateSince}
+                        helperText={errors.dateSince?.message}
+                      />
+                    )}
                   />
                 )}
+                control={control}
               />
-            </div>
+            </Grid>
 
-            <div className={style.selectBlock}>
-              <TextField
-                {...register('level')}
-                select
-                label="Уровень"
-                defaultValue={group?.level || ''}
-                helperText={errors.level?.message}
-                error={!!errors?.level}
-              >
-                {getAllOptionsMUI(levelOptions)}
-              </TextField>
-            </div>
-            {IS_ADD_MODE && (
-              <div className={style.selectBlock}>
-                <TextField
-                  {...register('forGroupId')}
-                  select
-                  label="Группа"
-                  defaultValue=""
-                  helperText={errors.forGroupId?.message}
-                  error={!!errors?.forGroupId}
-                  disabled={!groups.length}
-                >
-                  {getAllOptionsMUI(groupsOptions)}
-                </TextField>
-              </div>
-            )}
-          </div>
-        </div>
+            <Grid item xs={12} sm={6}>
+              <Controller
+                name="dateStart"
+                render={({ field: { value, onChange, ref } }) => (
+                  <DateTimePicker
+                    value={value || ''}
+                    onChange={onChange}
+                    ref={ref}
+                    renderInput={params => (
+                      <TextField
+                        {...register('dateStart')}
+                        {...params}
+                        label="Дата старта"
+                        size="small"
+                        fullWidth
+                        error={!!errors?.dateStart}
+                        helperText={errors.dateStart?.message}
+                      />
+                    )}
+                  />
+                )}
+                control={control}
+              />
+            </Grid>
 
-        <h4 className={style.error}>{errorMessage}</h4>
-        <div className={style.saveBtn}>
-          <Button onClick={onSubmit}>Сохранить</Button>
-        </div>
+            <Grid item xs={12} sm={6}>
+              <Controller
+                name="status"
+                render={({ field: { onChange, value, ref } }) => (
+                  <CustomSelect
+                    size="small"
+                    value={value}
+                    sx={{ backgroundColor: 'white' }}
+                    onChange={onChange}
+                    title="Статус"
+                    options={menu}
+                    error={errors.status?.message}
+                    ref={ref}
+                  />
+                )}
+                control={control}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <Controller
+                name="level"
+                render={({ field: { onChange, value, ref } }) => (
+                  <CustomSelect
+                    size="small"
+                    value={value || ''}
+                    sx={{ backgroundColor: 'white' }}
+                    onChange={onChange}
+                    title="Уровень"
+                    options={levelOptions}
+                    error={errors.level?.message}
+                    ref={ref}
+                  />
+                )}
+                control={control}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Controller
+                name="courseId"
+                render={({ field: { onChange, value, ref } }) => (
+                  <CustomSelect
+                    size="small"
+                    value={value || ''}
+                    sx={{ backgroundColor: 'white' }}
+                    onChange={onChange}
+                    title="Курс"
+                    options={courseOptions}
+                    error={errors.courseId?.message}
+                    ref={ref}
+                    disabled={!!defaultValues.id}
+                  />
+                )}
+                control={control}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <Controller
+                name="franchiseId"
+                render={({ field: { value, onChange, ref } }) => (
+                  <CustomSelect
+                    size="small"
+                    value={value || ''}
+                    sx={{ backgroundColor: 'white' }}
+                    onChange={onChange}
+                    title="Франшиза"
+                    options={franchiseOptions}
+                    error={errors.franchiseId?.message}
+                    ref={ref}
+                    disabled={!!defaultValues.id}
+                  />
+                )}
+                control={control}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <Controller
+                name="forGroupId"
+                render={({ field: { value, onChange, ref } }) => (
+                  <CustomSelect
+                    size="small"
+                    value={value || ''}
+                    sx={{ backgroundColor: 'white' }}
+                    onChange={onChange}
+                    title="Группа"
+                    options={groupsOptions}
+                    error={errors.forGroupId?.message}
+                    ref={ref}
+                    disabled={!FRANCHISE_ID || !!defaultValues.id}
+                  />
+                )}
+                control={control}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={12}>
+              <Controller
+                name="description"
+                render={({ field: { value, onChange, ref } }) => (
+                  <TextFieldCustom
+                    type="text"
+                    label="Описание"
+                    size="small"
+                    fullWidth
+                    multiline
+                    rows={5}
+                    error={errors.description?.message}
+                    onChange={event => onChange(convertEmptyStringToNull(event))}
+                    value={convertNullToEmptyString(value!)}
+                    ref={ref}
+                  />
+                )}
+                control={control}
+              />
+            </Grid>
+
+            {/* <h4 className={style.error}>{errorMessage}</h4> */}
+            <div className={style.saveBtn}>
+              <Button onClick={onSubmit}>Сохранить</Button>
+            </div>
+          </Grid>
+        </form>
       </div>
-    </form>
+    </BasicModal>
   );
-});
+};

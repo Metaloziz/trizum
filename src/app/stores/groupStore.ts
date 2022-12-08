@@ -1,5 +1,6 @@
 import { DateTime } from 'app/enums/DateTime';
 import { Roles } from 'app/enums/Roles';
+import { StatusTypes } from 'app/enums/StatusTypes';
 import coursesService from 'app/services/coursesService';
 import franchiseService from 'app/services/franchiseService';
 import groupsService from 'app/services/groupsService';
@@ -19,12 +20,15 @@ import {
   ResponseOneGroup,
   Schedule,
 } from 'app/types/GroupTypes';
+import { Nullable } from 'app/types/Nullable';
+import { OlympiadFormType } from 'app/types/OlympiadPayloadType';
 import { ResponseUserT } from 'app/types/UserTypes';
 import { AxiosError } from 'axios';
 import { makeAutoObservable, runInAction, toJS } from 'mobx';
 import moment from 'moment';
 import { findElement } from 'utils/findIndexElement';
 import { getNextMonth } from 'utils/getNextMonth';
+import { convertFormToCreateOlympiad } from 'utils/olympiadUtils/convertFormToCreateOlympiad';
 import { removeEmptyFields } from 'utils/removeEmptyFields';
 import {
   scheduleItemToServerMapper,
@@ -43,6 +47,8 @@ export class ScheduleHomeWorksType {
 
 class GroupStore {
   groups: ResponseGroups[] = [];
+
+  groupsForSelect: ResponseGroups[] = [];
 
   page = 0;
 
@@ -110,6 +116,21 @@ class GroupStore {
   isLoad = false;
 
   isModalOpen = false;
+
+  defaultValuesOlympiad: Nullable<OlympiadFormType> = null;
+
+  private newOlympiad: OlympiadFormType = {
+    name: '',
+    description: '',
+    dateSince: null,
+    courseId: '',
+    type: 'olympiad',
+    level: null,
+    schedule: { homeworks: [] },
+    dateStart: null,
+    franchiseId: null,
+    status: StatusTypes.active,
+  };
 
   constructor() {
     makeAutoObservable(this);
@@ -229,6 +250,7 @@ class GroupStore {
           this.schedule = r.schedule.classworks.map(el => scheduleItemToUIMapper(el));
           this.scheduleHomeWorks = r.schedule.homeworks;
         } else {
+          // @ts-ignore
           this.schedule = this.setEmptyScheduleItems(r.course.worksCount);
         }
       });
@@ -365,6 +387,75 @@ class GroupStore {
     this.scheduleHomeWorks = this.scheduleHomeWorks.map(homeWork =>
       homeWork.index === newHomeWorkData.index ? { ...homeWork, ...newHomeWorkData } : homeWork,
     );
+  };
+
+  setDefaultValuesOlympiad = (defaultValues: Nullable<OlympiadFormType> = this.newOlympiad) => {
+    this.defaultValuesOlympiad = defaultValues;
+  };
+
+  setCurrentOlympiad = async (groupId: string) => {
+    const {
+      course,
+      onlyGroup,
+      startedAt,
+      status,
+      level,
+      name,
+      franchise,
+      description,
+      schedule,
+      id,
+    } = await groupsService.getOneGroup(groupId);
+
+    // если старый тип расписания
+    if (Array.isArray(schedule)) {
+      schedule.homeworks = schedule;
+    }
+
+    const form: OlympiadFormType = {
+      id,
+      name,
+      level,
+      status: status!,
+      dateSince: new Date(startedAt.date),
+      dateStart: schedule.homeworks[0] ? new Date(schedule.homeworks[0].start) : null,
+      forGroupId: onlyGroup?.id,
+      franchiseId: franchise?.id,
+      description,
+      courseId: course.id,
+      schedule,
+    };
+
+    this.setDefaultValuesOlympiad(form);
+  };
+
+  addOlympiadGroup = async (values: OlympiadFormType) => {
+    await this.execute(async () => {
+      const { course } = await coursesService.getCurrentCourse(values.courseId);
+      await groupsService.addGroup(convertFormToCreateOlympiad(values, course.works!));
+
+      await this.getOlympiadGroups();
+    });
+  };
+
+  editOlympiadGroup = async (values: OlympiadFormType, id: string) => {
+    await this.execute(async () => {
+      const { course } = await coursesService.getCurrentCourse(values.courseId);
+
+      await groupsService.editGroup(convertFormToCreateOlympiad(values, course.works!), id);
+
+      await this.getOlympiadGroups();
+    });
+  };
+
+  getGroupsForSelect = async (paramsData?: GroupParamsForServer) => {
+    await this.execute(async () => {
+      const { items } = await groupsService.getGroups({ ...paramsData, perPage: 1000 });
+
+      runInAction(() => {
+        this.groupsForSelect = items;
+      });
+    });
   };
 
   get filteredCourses() {
