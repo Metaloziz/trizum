@@ -7,6 +7,15 @@ export interface Props extends GameProps {
   speed?: number; // Скорость движения
   levelMaxCompleted?: number; // Кол-во уровней
   onEnd?(result?: GameResult): void;
+  perSuccessLevel: number,
+  maxErrorLevel: number,
+  upgrade: number,
+  downgrade: number,
+}
+
+export interface LevelStatistic {
+  speed: number,
+  result: boolean;
 }
 
 const PropsDefault : Props = {
@@ -15,7 +24,11 @@ const PropsDefault : Props = {
   digitMax : 10,
   speed : 64,
   levelMaxCompleted : 1,
-  timeComplete : 10
+  timeComplete : 10,
+  perSuccessLevel: 1,
+  maxErrorLevel: 1,
+  upgrade: 10,
+  downgrade: 20,
 };
 
 export {

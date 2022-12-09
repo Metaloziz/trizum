@@ -170,6 +170,18 @@ export const SILHOUETTES_SCHEMA = yup.object().shape({
     .required('Обязательное поле')
     .min(1, 'Минимум 1 фигур')
     .max(10, 'Максимум 10 фигур'),
+  perSuccessLevel: yup.number().required('Обязательное поле').min(1, 'Минимум 1 уровень'),
+  maxErrorLevel: yup.number().required('Обязательное поле').min(1, 'Минимум 1 уровень'),
+  upgrade: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 блик')
+    .max(10, 'Максимум 10 бликов'),
+  downgrade: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 блик')
+    .max(10, 'Максимум 10 бликов'),
 });
 
 export const SILHOUETTES_FORM_SCHEMA = GAME_SCHEMA.concat(SILHOUETTES_SCHEMA);
@@ -277,6 +289,18 @@ export const STEAM_ENGINE_SCHEMA = yup.object().shape({
     .min(1, 'Минимум 1 ошибок')
     .max(99, 'Максимум 99 ошибок')
     .nullable(),
+  upgrade: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 процент')
+    .max(100, 'Максимум 100 процентов')
+    .nullable(),
+  downgrade: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 процент')
+    .max(100, 'Максимум 100 процентов')
+    .nullable(),
 });
 
 export const STEAM_ENGINE_FORM_SCHEMA = GAME_SCHEMA.concat(STEAM_ENGINE_SCHEMA);
@@ -318,9 +342,28 @@ export const FRAZES_SCHEMA = yup.object().shape({
     .nullable(),
   wordsFull: yup.boolean().notRequired(),
   words: yup
-    .array(yup.string().notOneOf([''], 'Обязательное поле').nullable())
+    .array()
+    .of(
+      yup.object({
+        easy: yup.string().nullable().required('Обязательное поле'),
+        normal: yup.string().nullable().required('Обязательное поле'),
+        hard: yup.string().nullable().required('Обязательное поле'),
+      }),
+    )
     .min(1, 'Минимум 1 слово')
     .required('Заполнить'),
+  changeLevelDictionary: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Миниму 1 уровень')
+    .max(3, 'Максимум 5 уровней')
+    .nullable(),
+  errorLevel: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Миниму 1 ошибка')
+    .max(5, 'Максимум 5 ошибок')
+    .nullable(),
 });
 
 export const FRAZES_FORM_SCHEMA = GAME_SCHEMA.concat(FRAZES_SCHEMA);

@@ -62,6 +62,10 @@ class GamesStore {
     wordsFull: false,
     words: [],
     differenceGameLevels: [],
+    perSuccessLevel: 2,
+    maxErrorLevel: 1,
+    upgrade: 1,
+    downgrade: 1,
   };
 
   gamePreset: OneGamePresent = {
