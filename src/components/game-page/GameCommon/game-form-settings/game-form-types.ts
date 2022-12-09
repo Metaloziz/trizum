@@ -2,6 +2,7 @@ import { IArea } from '@bmunozg/react-image-area';
 import { GageType, GamePresetT } from 'app/types/GameTypes';
 import { Nullable } from 'app/types/Nullable';
 import { Point } from 'games/games/difference/types';
+import { FrazesDictionary } from 'games/games/frazes/types';
 
 export type FormSettingsType = {
   onFormSubmit: (value: GamesFormSettingsType) => void;
@@ -123,7 +124,9 @@ export type FrazesGameSettingsType = {
   timeComplete: number;
   speed: number;
   wordsFull: boolean;
-  words: string[];
+  errorLevel: number;
+  changeLevelDictionary: number;
+  words: FrazesDictionary[];
 };
 
 export type FrazesFormType = BaseGameSettingsType & FrazesGameSettingsType;

@@ -1,6 +1,7 @@
 import { StatusTypes } from 'app/enums/StatusTypes';
 import { Nullable } from 'app/types/Nullable';
 import { DifferenceGameLevel } from 'components/game-page/GameCommon/game-form-settings/game-form-types';
+import { FrazesDictionary } from 'games/games/frazes/types';
 
 export type GameT = {
   code: string;
@@ -31,7 +32,7 @@ export type PresetsGameSettings = {
   area: boolean;
   gage: GageType[];
   wordsFull: boolean;
-  words: string[];
+  words: FrazesDictionary[];
   differenceGameLevels: DifferenceGameLevel[];
 };
 

@@ -318,9 +318,28 @@ export const FRAZES_SCHEMA = yup.object().shape({
     .nullable(),
   wordsFull: yup.boolean().notRequired(),
   words: yup
-    .array(yup.string().notOneOf([''], 'Обязательное поле').nullable())
+    .array()
+    .of(
+      yup.object({
+        easy: yup.string().nullable().required('Обязательное поле'),
+        normal: yup.string().nullable().required('Обязательное поле'),
+        hard: yup.string().nullable().required('Обязательное поле'),
+      }),
+    )
     .min(1, 'Минимум 1 слово')
     .required('Заполнить'),
+  changeLevelDictionary: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Миниму 1 уровень')
+    .max(3, 'Максимум 5 уровней')
+    .nullable(),
+  errorLevel: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Миниму 1 ошибка')
+    .max(5, 'Максимум 5 ошибок')
+    .nullable(),
 });
 
 export const FRAZES_FORM_SCHEMA = GAME_SCHEMA.concat(FRAZES_SCHEMA);
