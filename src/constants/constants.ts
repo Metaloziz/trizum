@@ -17,7 +17,4 @@ export const MAX_VARIANTS_ANSWERS_TEST = 6;
 export const MIN_QUESTIONS_TEST = 2;
 export const MIN_VARIANTS_ANSWER_COUNT = 2;
 
-// Домашняя работа может быть только между двумя уроками, количество уроков
-// всегда больше на один
-export const ONE_DIFFERENCE_INDEX = 1;
 export const TIME_MAX = 3600;
