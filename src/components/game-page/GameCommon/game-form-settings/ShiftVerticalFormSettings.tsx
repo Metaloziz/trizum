@@ -1,5 +1,9 @@
+import React, { ReactElement } from 'react';
+
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
+
 import {
   BASE_DEFAULT_VALUES,
   TEN_DIGIT_MENU,
@@ -10,11 +14,11 @@ import {
 } from 'components/game-page/GameCommon/game-form-settings/game-form-types';
 import CustomSelect from 'components/select-mui/CustomSelect';
 import TextFieldCustom from 'components/text-field-mui/TextFieldCustom';
-import React, { ReactElement } from 'react';
-import { Controller, FormProvider, useForm } from 'react-hook-form';
-import { convertEmptyStringToNull, convertNullToEmptyString } from 'utils/convertTextFieldUtils';
-import { BaseFormGameSettings } from './BaseFormGameSettings';
+
 import { SHIFT_VERTICAL_FORM_SCHEMA } from './game-form-schema';
+import { BaseFormGameSettings } from './BaseFormGameSettings';
+
+import { convertEmptyStringToNull, convertNullToEmptyString } from 'utils/convertTextFieldUtils';
 
 const DEFAULT_VALUES: ShiftVerticalFormType = {
   ...BASE_DEFAULT_VALUES,
@@ -23,13 +27,27 @@ const DEFAULT_VALUES: ShiftVerticalFormType = {
   elementsTotal: 2,
   groupsCount: 2,
   timeComplete: undefined,
+  perSuccessLevel: 2,
+  maxErrorLevel: 2,
+  upgrade: 10,
+  downgrade: 5,
 };
 
 export const ShiftVerticalFormSettings = (props: FormSettingsType): ReactElement => {
   const { usedInWorks, gamePreset, onFormSubmit, deletedPreset } = props;
   const { settings, status, id, level, name } = gamePreset;
-  const { blinksCount, cycleTime, elementsTotal, groupsCount, timeComplete, description } =
-    settings[0];
+  const {
+    blinksCount,
+    cycleTime,
+    elementsTotal,
+    groupsCount,
+    timeComplete,
+    description,
+    perSuccessLevel,
+    maxErrorLevel,
+    upgrade,
+    downgrade,
+  } = settings[0];
 
   const defaultValues: ShiftVerticalFormType =
     id === ''
@@ -44,6 +62,10 @@ export const ShiftVerticalFormSettings = (props: FormSettingsType): ReactElement
           groupsCount,
           timeComplete,
           description,
+          perSuccessLevel,
+          maxErrorLevel,
+          upgrade,
+          downgrade,
         } as ShiftVerticalFormType);
 
   const methods = useForm<ShiftVerticalFormType>({
@@ -51,6 +73,7 @@ export const ShiftVerticalFormSettings = (props: FormSettingsType): ReactElement
     defaultValues,
     mode: 'onBlur',
   });
+
   const {
     handleSubmit,
     control,
@@ -159,6 +182,82 @@ export const ShiftVerticalFormSettings = (props: FormSettingsType): ReactElement
                   title="Кол-во форм для игры"
                   options={TEN_DIGIT_MENU}
                   error={errors.blinksCount?.message}
+                  ref={ref}
+                />
+              )}
+              control={control}
+            />
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <Controller
+              name="perSuccessLevel"
+              render={({ field: { value, onChange, ref } }) => (
+                <TextFieldCustom
+                  type="text"
+                  label="Кол-во уровней для смены режима"
+                  size="small"
+                  fullWidth
+                  inputProps={{ type: 'number' }}
+                  error={errors.perSuccessLevel?.message}
+                  onChange={event => onChange(convertEmptyStringToNull(event))}
+                  value={convertNullToEmptyString(value!)}
+                  ref={ref}
+                />
+              )}
+              control={control}
+            />
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <Controller
+              name="maxErrorLevel"
+              render={({ field: { value, onChange, ref } }) => (
+                <TextFieldCustom
+                  type="text"
+                  label="Кол-во ошибок для уровня"
+                  size="small"
+                  fullWidth
+                  inputProps={{ type: 'number' }}
+                  error={errors.maxErrorLevel?.message}
+                  onChange={event => onChange(convertEmptyStringToNull(event))}
+                  value={convertNullToEmptyString(value!)}
+                  ref={ref}
+                />
+              )}
+              control={control}
+            />
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <Controller
+              name="upgrade"
+              render={({ field: { value, onChange, ref } }) => (
+                <TextFieldCustom
+                  type="text"
+                  label="Процент увеличения времени на запоминание"
+                  size="small"
+                  fullWidth
+                  inputProps={{ type: 'number' }}
+                  error={errors.upgrade?.message}
+                  onChange={event => onChange(convertEmptyStringToNull(event))}
+                  value={convertNullToEmptyString(value!)}
+                  ref={ref}
+                />
+              )}
+              control={control}
+            />
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <Controller
+              name="downgrade"
+              render={({ field: { value, onChange, ref } }) => (
+                <TextFieldCustom
+                  type="text"
+                  label="Процент уменьшения времени на запоминание"
+                  size="small"
+                  fullWidth
+                  inputProps={{ type: 'number' }}
+                  error={errors.downgrade?.message}
+                  onChange={event => onChange(convertEmptyStringToNull(event))}
+                  value={convertNullToEmptyString(value!)}
                   ref={ref}
                 />
               )}

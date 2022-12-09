@@ -34,6 +34,10 @@ export type PresetsGameSettings = {
   wordsFull: boolean;
   words: FrazesDictionary[];
   differenceGameLevels: DifferenceGameLevel[];
+  perSuccessLevel: number;
+  maxErrorLevel: number;
+  upgrade: number;
+  downgrade: number;
 };
 
 export type EditOrCreatePresetParamsT = {

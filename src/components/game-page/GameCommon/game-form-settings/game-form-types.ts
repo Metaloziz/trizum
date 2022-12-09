@@ -18,6 +18,13 @@ export type BaseGameSettingsType = {
   description?: Nullable<string>;
 };
 
+export type BaseGameWithEngineType = {
+  perSuccessLevel: number;
+  maxErrorLevel: number;
+  upgrade: number;
+  downgrade: number;
+};
+
 export type ShiftVerticalGameSettingsType = {
   timeComplete?: Nullable<number>;
   cycleTime: Nullable<number>;
@@ -26,7 +33,9 @@ export type ShiftVerticalGameSettingsType = {
   blinksCount: number;
 };
 
-export type ShiftVerticalFormType = BaseGameSettingsType & ShiftVerticalGameSettingsType;
+export type ShiftVerticalFormType = BaseGameSettingsType &
+  BaseGameWithEngineType &
+  ShiftVerticalGameSettingsType;
 
 export type ShulteGameSettingsType = {
   timeComplete?: Nullable<number>;
