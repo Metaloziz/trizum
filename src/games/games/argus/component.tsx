@@ -86,7 +86,7 @@ export default class extends Component<Props, State> implements Game {
 
   startLogic = () => {
     const { speed } = this.props;
-    this.setState({ gameSpeed: speed });
+    this.setState({ gameSpeed: speed, levelStatistic: [] });
   };
 
   onEnd = () => {
@@ -112,9 +112,9 @@ export default class extends Component<Props, State> implements Game {
   };
 
   private engineTrigger = (result: boolean) => {
-    const { levelStatistic: currentLevelStatistic } = this.state;
+    const { levelStatistic: currentLevelStatistic, gameSpeed: currentSpeed } = this.state;
 
-    const { speed: currentSpeed, perSuccessLevel, maxErrorLevel } = this.props;
+    const { perSuccessLevel, maxErrorLevel, upgrade } = this.props;
 
     let gameSpeed = currentSpeed;
 
@@ -124,12 +124,15 @@ export default class extends Component<Props, State> implements Game {
 
     const counterCurrentSpeed = lastLevels.filter(({ speed }) => speed === currentSpeed);
 
-    if(counterCurrentSpeed.length && lastLevels.length) {
-      // gameSpeed += 
-      console.log("UPDATE TIME !!!!")
+    if (perSuccessLevel === counterCurrentSpeed.length) {
+      const { length: errors } = levelStatistic.filter(({ result }) => !result);
+      if (errors >= maxErrorLevel) {
+        gameSpeed += (gameSpeed * upgrade) / 100;
+      }
+      if (errors < maxErrorLevel) {
+        gameSpeed -= (gameSpeed * upgrade) / 100;
+      }
     }
-
-    // if()
 
     this.setState({ levelStatistic, gameSpeed });
   };
@@ -175,9 +178,9 @@ export default class extends Component<Props, State> implements Game {
   };
 
   renderInner = () => {
-    const { level = 0, success = 0 } = this.state;
+    const { level = 0, success = 0, gameSpeed } = this.state;
 
-    const { width, elementsTotal, timeComplete, speed } = this.props;
+    const { width, elementsTotal, timeComplete } = this.props;
 
     const levels = [];
 
@@ -231,7 +234,12 @@ export default class extends Component<Props, State> implements Game {
           </View>
         )}
         <View style={styles.wrapLevels}>{levels}</View>
-        <LevelView key={`level-${level}`} onResult={this.onResult} speed={speed} width={width} />
+        <LevelView
+          key={`level-${level}`}
+          onResult={this.onResult}
+          speed={gameSpeed}
+          width={width}
+        />
         <TimerAll
           ref={(ref: any) => (this.timerAll = ref)}
           renderTime={(time: number) => <Text style={styles.timer}>{time} сек</Text>}

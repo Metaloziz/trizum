@@ -74,7 +74,6 @@ export const ArgusFormSettings = (props: FormSettingsType): ReactElement => {
   } = methods;
 
   const onSubmit = handleSubmit(values => {
-    console.log("onSubmit ---", {values})
     onFormSubmit(values);
   });
 
