@@ -2,12 +2,14 @@ import { IArea } from '@bmunozg/react-image-area';
 import { GageType, GamePresetT } from 'app/types/GameTypes';
 import { Nullable } from 'app/types/Nullable';
 import { Point } from 'games/games/difference/types';
+import { FrazesDictionary } from 'games/games/frazes/types';
 
 export type FormSettingsType = {
   onFormSubmit: (value: GamesFormSettingsType) => void;
   usedInWorks: any[];
   gamePreset: GamePresetT;
   deletedPreset: () => void;
+  createCopy: () => void;
 };
 
 export type BaseGameSettingsType = {
@@ -15,6 +17,13 @@ export type BaseGameSettingsType = {
   level: string;
   status: string;
   description?: Nullable<string>;
+};
+
+export type BaseGameWithEngineType = {
+  perSuccessLevel: number;
+  maxErrorLevel: number;
+  upgrade: number;
+  downgrade: number;
 };
 
 export type ShiftVerticalGameSettingsType = {
@@ -25,7 +34,9 @@ export type ShiftVerticalGameSettingsType = {
   blinksCount: number;
 };
 
-export type ShiftVerticalFormType = BaseGameSettingsType & ShiftVerticalGameSettingsType;
+export type ShiftVerticalFormType = BaseGameSettingsType &
+  BaseGameWithEngineType &
+  ShiftVerticalGameSettingsType;
 
 export type ShulteGameSettingsType = {
   timeComplete?: Nullable<number>;
@@ -61,7 +72,9 @@ export type MemoryRhythmGameSettingsType = {
   sound: number;
 };
 
-export type MemoryRhythmFormType = BaseGameSettingsType & MemoryRhythmGameSettingsType;
+export type MemoryRhythmFormType = BaseGameSettingsType &
+  BaseGameWithEngineType &
+  MemoryRhythmGameSettingsType;
 
 export type ArgusGameSettingsType = {
   timeComplete: number;
@@ -81,7 +94,9 @@ export type FirefliesGameSettingsType = {
   speed?: Nullable<number>;
 };
 
-export type FirefliesFormType = BaseGameSettingsType & FirefliesGameSettingsType;
+export type FirefliesFormType = BaseGameSettingsType &
+  BaseGameWithEngineType &
+  FirefliesGameSettingsType;
 
 export type SilhouettesGameSettingsType = {
   timeComplete: number;
@@ -123,7 +138,9 @@ export type FrazesGameSettingsType = {
   timeComplete: number;
   speed: number;
   wordsFull: boolean;
-  words: string[];
+  errorLevel: number;
+  changeLevelDictionary: number;
+  words: FrazesDictionary[];
 };
 
 export type FrazesFormType = BaseGameSettingsType & FrazesGameSettingsType;

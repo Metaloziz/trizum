@@ -10,7 +10,7 @@ import {
 } from 'components/game-page/GameCommon/game-form-settings/game-form-types';
 import CustomSelect from 'components/select-mui/CustomSelect';
 import TextFieldCustom from 'components/text-field-mui/TextFieldCustom';
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { convertEmptyStringToNull, convertNullToEmptyString } from 'utils/convertTextFieldUtils';
 import { ChangeGage } from 'utils/gameUtils/changeGage';
@@ -26,12 +26,12 @@ const DEFAULT_VALUES: SteamEngineFormType = {
 };
 
 export const SteamEngineFormSettings = (props: FormSettingsType): ReactElement => {
-  const { usedInWorks, gamePreset, onFormSubmit, deletedPreset } = props;
+  const { usedInWorks, gamePreset, onFormSubmit, deletedPreset, createCopy } = props;
   const { settings, status, id, level, name } = gamePreset;
   const { elementsTotal, timeComplete, description, gage, errorAacceptable } = settings[0];
 
   const defaultValues: SteamEngineFormType =
-    id === ''
+    id === '' && status !== 'copiyed'
       ? DEFAULT_VALUES
       : ({
           name,
@@ -55,6 +55,7 @@ export const SteamEngineFormSettings = (props: FormSettingsType): ReactElement =
     control,
     formState: { errors },
     getValues,
+    reset,
   } = methods;
 
   const [countGage, setCountGage] = useState(getValues('gage'));
@@ -62,6 +63,12 @@ export const SteamEngineFormSettings = (props: FormSettingsType): ReactElement =
   const onSubmit = handleSubmit(values => {
     onFormSubmit(values);
   });
+
+  useEffect(() => {
+    if (status === 'copiyed') {
+      reset({ ...defaultValues, status: 'draft' });
+    }
+  }, [status]);
 
   return (
     <FormProvider {...methods}>
@@ -71,6 +78,7 @@ export const SteamEngineFormSettings = (props: FormSettingsType): ReactElement =
           deletedPreset={deletedPreset}
           usedInWorks={usedInWorks}
           status={status}
+          createCopy={createCopy}
         >
           <Grid item xs={12} sm={6}>
             <Controller

@@ -62,6 +62,10 @@ class GamesStore {
     wordsFull: false,
     words: [],
     differenceGameLevels: [],
+    perSuccessLevel: 2,
+    maxErrorLevel: 1,
+    upgrade: 1,
+    downgrade: 1,
   };
 
   gamePreset: OneGamePresent = {
@@ -229,6 +233,27 @@ class GamesStore {
     await gamesService.deletePreset(id);
     await this.getPresets({ game_code: this.game.code });
     this.filterPresets(this.game.code);
+  };
+
+  copyPreset = async (id: string) => {
+    const zxc = this.newPresets.items.find(el => el.id === id);
+    if (zxc) {
+      const res = await gamesService.getPreset(zxc.id);
+      runInAction(() => {
+        this.gamePreset = {
+          gamePreset: {
+            id: '',
+            name: '',
+            game: res.gamePreset.game,
+            status: 'copiyed' as StatusTypes,
+            level: res.gamePreset.level,
+            timeMax: res.gamePreset.timeMax,
+            settings: res.gamePreset.settings,
+          },
+          usedInWorks: [],
+        };
+      });
+    }
   };
 
   sendResults = async (params: PlaySendResultT) => {

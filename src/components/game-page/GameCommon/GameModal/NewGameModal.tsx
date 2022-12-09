@@ -1,6 +1,11 @@
+import React, { FC, FunctionComponent } from 'react';
+import { observer } from 'mobx-react-lite';
 import { DialogContent } from '@mui/material';
+
 import gamesStore from 'app/stores/gamesStore';
+
 import { EditOrCreatePresetParamsT } from 'app/types/GameTypes';
+
 import { DialogTitle } from 'components/franchising-page/ui/Dialog';
 import {
   ArgusFormSettings,
@@ -19,9 +24,8 @@ import {
 } from 'components/game-page/GameCommon/game-form-settings/';
 import { FormSettingsType } from 'components/game-page/GameCommon/game-form-settings/game-form-types';
 import { Dialog } from 'components/rate/ui/Dialog';
+
 import { GameIdentifiers } from 'games';
-import { observer } from 'mobx-react-lite';
-import React, { FC, FunctionComponent } from 'react';
 
 const GAMES_MODAL_SETTINGS: { [key: string]: FunctionComponent<FormSettingsType> } = {
   [GameIdentifiers.shulte]: ShulteFormSettings,
@@ -46,7 +50,7 @@ type PropsT = {
 
 export const NewGameModal: FC<PropsT> = observer(props => {
   const { open, onClose, deletePreset } = props;
-  const { createPresets, gamePreset, editPreset, game } = gamesStore;
+  const { createPresets, gamePreset, editPreset, copyPreset, game } = gamesStore;
 
   const closeModal = () => {
     onClose(false);
@@ -78,6 +82,12 @@ export const NewGameModal: FC<PropsT> = observer(props => {
     }
   };
 
+  const createCopyPreset = () => {
+    if (gamePreset.gamePreset.id) {
+      copyPreset(gamePreset.gamePreset.id);
+    }
+  };
+
   const GameComponent = GAMES_MODAL_SETTINGS[game.code];
 
   return (
@@ -89,6 +99,7 @@ export const NewGameModal: FC<PropsT> = observer(props => {
           deletedPreset={deletedPreset}
           usedInWorks={gamePreset.usedInWorks}
           onFormSubmit={onSubmit}
+          createCopy={createCopyPreset}
         />
       </DialogContent>
     </Dialog>

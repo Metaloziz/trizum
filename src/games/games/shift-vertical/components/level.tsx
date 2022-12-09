@@ -174,7 +174,7 @@ export default class extends Component<any, any> {
         <View>
           <TimerButton
             onPress={this.onColor}
-            cycleTime={cycleTime/1000}
+            cycleTime={cycleTime}
           />
         </View>
       </View>;

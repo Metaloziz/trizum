@@ -3,7 +3,7 @@ import { View, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { rand } from '../../../common/utils';
 
 const fps = 60;
-const tick = 1000/fps;
+const tick = 1000 / fps;
 
 const ITEM_WIDTH = 29;
 const ITEM_HEIGHT = 25;
@@ -13,19 +13,31 @@ const ITEM_DIRECTION_COUNT = 50;
 
 const imageItem = require('../assets/item.png');
 
-export default class extends Component<any, any> {
+interface Props {
+  speed: number;
+  width: number;
+  height: number;
+  flight: boolean;
+  onPress: () => void;
+  type: string;
+  ended: boolean;
+}
 
-  timer : any;
-  direction : any;
-  directionCount : any;
-  tickTime : any;
+interface State {
+  color: boolean | string;
+  position: number[];
+}
 
-  constructor(props : any) {
+export default class extends Component<Props, State> {
+  timer: any;
+  direction: any;
+  directionCount: any;
+  tickTime: any;
+
+  constructor(props: any) {
     super(props);
 
-    const {
-      speed
-    } = props;
+    const { speed } = props;
 
     this.timer = false;
     this.direction = '';
@@ -34,42 +46,36 @@ export default class extends Component<any, any> {
     this.tickTime = speed;
 
     this.state = {
-      color : false,
-      position : this.generateStart()
+      color: false,
+      position: this.generateStart(),
     };
   }
 
   generateStart = () => {
-    const {
-      width,
-      height
-    } = this.props;
+    const { width, height } = this.props;
 
     const x = rand(0, width - ITEM_WIDTH);
     const y = rand(0, height - ITEM_HEIGHT);
 
     return [x, y];
-  }
+  };
 
-  inLayout = (x : number, y : number) => {
-    const {
-      width,
-      height
-    } = this.props;
+  inLayout = (x: number, y: number) => {
+    const { width, height } = this.props;
 
     const availableWidth = width - ITEM_WIDTH;
     const availableHeight = height - ITEM_HEIGHT;
 
-    if(x < 0 || x > availableWidth) {
+    if (x < 0 || x > availableWidth) {
       return false;
     }
 
-    if(y < 0 || y > availableHeight) {
+    if (y < 0 || y > availableHeight) {
       return false;
     }
 
     return true;
-  }
+  };
 
   componentWillUnmount() {
     this.clear();
@@ -81,21 +87,17 @@ export default class extends Component<any, any> {
 
   start = () => {
     this.tick();
-  }
+  };
 
   onTick = () => {
-    const {
-      flight = true
-    } = this.props;
+    const { flight = true } = this.props;
 
-    if(!flight) {
+    if (!flight) {
       this.tick();
       return;
     }
 
-    const {
-      position
-    } = this.state;
+    const { position } = this.state;
 
     const canLeft = this.inLayout(position[0] - ITEM_STEP, position[1]);
     const canRight = this.inLayout(position[0] + ITEM_STEP, position[1]);
@@ -105,63 +107,63 @@ export default class extends Component<any, any> {
     const variants = [];
     const setPosition = position.slice();
 
-    if(canLeft) {
+    if (canLeft) {
       variants.push('left');
     }
-    if(canRight) {
+    if (canRight) {
       variants.push('right');
     }
-    if(canTop) {
+    if (canTop) {
       variants.push('top');
     }
-    if(canBottom) {
+    if (canBottom) {
       variants.push('bottom');
     }
 
     let direction = variants[rand(0, variants.length - 1)];
 
-    if(this.direction != '' && !!variants.find(a => a == this.direction)) {
+    if (this.direction != '' && !!variants.find(a => a == this.direction)) {
       direction = this.direction;
       this.directionCount--;
 
       const canDirectionAnother = [''];
 
-      if(this.direction == 'top' || this.direction == 'bottom') {
-        if(canLeft) {
+      if (this.direction == 'top' || this.direction == 'bottom') {
+        if (canLeft) {
           canDirectionAnother.push('left');
         }
 
-        if(canRight) {
+        if (canRight) {
           canDirectionAnother.push('right');
         }
       } else {
-        if(canLeft) {
+        if (canLeft) {
           canDirectionAnother.push('top');
         }
 
-        if(canRight) {
+        if (canRight) {
           canDirectionAnother.push('bottom');
         }
       }
 
       const tempDir = canDirectionAnother[rand(0, canDirectionAnother.length - 1)];
 
-      switch(tempDir) {
+      switch (tempDir) {
         case 'left':
           setPosition[0] -= ITEM_STEP;
-        break;
+          break;
         case 'right':
           setPosition[0] += ITEM_STEP;
-        break;
+          break;
         case 'top':
           setPosition[1] -= ITEM_STEP;
-        break;
+          break;
         case 'bottom':
           setPosition[1] += ITEM_STEP;
-        break;
+          break;
       }
 
-      if(this.directionCount <= 0) {
+      if (this.directionCount <= 0) {
         this.direction = '';
       }
     } else {
@@ -169,126 +171,118 @@ export default class extends Component<any, any> {
       this.directionCount = ITEM_DIRECTION_COUNT;
     }
 
-    switch(direction) {
+    switch (direction) {
       case 'left':
         setPosition[0] -= ITEM_STEP;
-      break;
+        break;
       case 'right':
         setPosition[0] += ITEM_STEP;
-      break;
+        break;
       case 'top':
         setPosition[1] -= ITEM_STEP;
-      break;
+        break;
       case 'bottom':
         setPosition[1] += ITEM_STEP;
-      break;
+        break;
     }
 
-    this.setState({
-      position : setPosition
-    }, () => {
-      this.tick();
-    });
-  }
+    this.setState(
+      {
+        position: setPosition,
+      },
+      () => {
+        this.tick();
+      },
+    );
+  };
 
   tick = () => {
     this.timer = setTimeout(() => {
       this.onTick();
     }, this.tickTime);
-  }
+  };
 
   clear = () => {
-    if(this.timer) {
+    if (this.timer) {
       clearTimeout(this.timer);
     }
-  }
+  };
 
   onPress = () => {
-    const {
-      onPress
-    } = this.props;
+    const { onPress } = this.props;
 
     this.activateColor(() => {
       onPress();
     });
-  }
+  };
 
-  activateColor = (cb : any) => {
-    const {
-      flight = true
-    } = this.props;
+  activateColor = (cb: any) => {
+    const { flight = true } = this.props;
 
-    if(flight) {
+    if (flight) {
       return;
     }
 
-    this.setState({
-      color : this.getColor()
-    }, () => {
-      cb();
-    });
-  }
+    this.setState(
+      {
+        color: this.getColor(),
+      },
+      () => {
+        cb();
+      },
+    );
+  };
 
   getColor = () => {
-    const {
-      type = 'win'
-    } = this.props;
+    const { type = 'win' } = this.props;
 
     return type == 'win' ? '#0f0' : '#f00';
-  }
+  };
 
   render() {
-    const {
-      onPress,
-      ended = false
-    } = this.props;
-    const {
-      color = false,
-      position = []
-    } = this.state;
+    const { onPress, ended = false } = this.props;
+    const { color = false, position = [] } = this.state;
 
-    const setColor = ended ? this.getColor() : (!!color ? color : 'transparent');
+    const setColor = ended ? this.getColor() : !!color ? color : 'transparent';
 
-    return <>
-      <View
-        style={{
-          position : 'absolute',
-          width : 30,
-          height : 30,
-          left : position[0] - 2,
-          top : position[1] - 4,
-          backgroundColor : setColor,
-          borderRadius : 15
-        }}
-      />
-      <TouchableOpacity
-        style={{
-          width : ITEM_WIDTH,
-          height : ITEM_HEIGHT,
-          left : position[0],
-          top : position[1],
-          ...styles.item
-        }}
-        activeOpacity={0.8}
-        onPress={this.onPress}
-      >
-        <Image
-          source={imageItem}
-          style={styles.image}
+    return (
+      <>
+        <View
+          style={{
+            position: 'absolute',
+            width: 30,
+            height: 30,
+            left: position[0] - 2,
+            top: position[1] - 4,
+            backgroundColor: setColor as string,
+            borderRadius: 15,
+          }}
         />
-      </TouchableOpacity>
-    </>;
+        <TouchableOpacity
+          style={{
+            width: ITEM_WIDTH,
+            height: ITEM_HEIGHT,
+            left: position[0],
+            top: position[1],
+            ...styles.item,
+          }}
+          activeOpacity={0.8}
+          onPress={this.onPress}
+        >
+          <Image source={imageItem} style={styles.image} />
+        </TouchableOpacity>
+      </>
+    );
   }
-
 }
 
 const styles = StyleSheet.create({
-  item : {
-    position : 'absolute',
+  item: {
+    position: 'absolute',
   },
-  image : {
-    width : '100%',
-    height : '100%',
-    resizeMode : 'contain'
-  }
+  image: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
+  },
 });

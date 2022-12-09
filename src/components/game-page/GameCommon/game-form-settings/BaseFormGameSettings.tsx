@@ -1,13 +1,19 @@
+import React, { FC, ReactNode } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
 import { Grid, Stack } from '@mui/material';
+
 import { StatusTypes } from 'app/enums/StatusTypes';
 import Button from 'components/button/Button';
-import { BaseGameSettingsType } from 'components/game-page/GameCommon/game-form-settings/game-form-types';
+import {
+  BaseGameSettingsType,
+  GamesFormSettingsType,
+} from 'components/game-page/GameCommon/game-form-settings/game-form-types';
 import styles from 'components/game-page/GameCommon/GameModal/gameModal.module.scss';
 import CustomSelect from 'components/select-mui/CustomSelect';
 import TextFieldCustom from 'components/text-field-mui/TextFieldCustom';
+
 import { GROUP_LEVEL_MENU, STATUS_MENU } from 'constants/selectMenu';
-import React, { ReactElement, ReactNode } from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
+
 import { convertEmptyStringToNull, convertNullToEmptyString } from 'utils/convertTextFieldUtils';
 
 type BaseFormGameSettingsType = {
@@ -15,11 +21,18 @@ type BaseFormGameSettingsType = {
   usedInWorks: any[];
   status: StatusTypes;
   deletedPreset: () => void;
+  createCopy: () => void;
   gameName: string;
 };
 
-export const BaseFormGameSettings = (props: BaseFormGameSettingsType): ReactElement => {
-  const { usedInWorks, children, status, deletedPreset, gameName } = props;
+export const BaseFormGameSettings: FC<BaseFormGameSettingsType> = ({
+  usedInWorks,
+  children,
+  status,
+  deletedPreset,
+  createCopy,
+  gameName,
+}) => {
   const {
     control,
     formState: { errors },
@@ -83,7 +96,6 @@ export const BaseFormGameSettings = (props: BaseFormGameSettingsType): ReactElem
                   control={control}
                 />
               </Grid>
-
               {children}
             </Grid>
           </div>
@@ -124,8 +136,16 @@ export const BaseFormGameSettings = (props: BaseFormGameSettingsType): ReactElem
             Удалить настройки
           </Button>
         </div>
-        <div className={styles.btnBlock_btn}>
+        <div className={styles.btnBlock_submit}>
           {status === 'active' && <span>Нельзя изменять активные настройки</span>}
+          {status && status !== 'copiyed' && (
+            <div className={styles.btnAddCopyBlock}>
+              <Button variant="addExel" size="small" onClick={createCopy}>
+                Создать копию
+              </Button>
+            </div>
+          )}
+
           <Button type="submit" disabled={status === 'active'}>
             Сохранить
           </Button>

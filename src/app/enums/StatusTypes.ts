@@ -3,6 +3,7 @@ export enum StatusTypes {
   active = 'active',
   removal = 'removal',
   archive = 'archive',
+  copiyed = 'copiyed',
 }
 
 export enum StatusEnum {
@@ -10,6 +11,7 @@ export enum StatusEnum {
   active = 'Активный',
   removal = 'На удаление',
   archive = 'Архивный',
+  copiyed = 'Скопированный',
 }
 
 // for add homework

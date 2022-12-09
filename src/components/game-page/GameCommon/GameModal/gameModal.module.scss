@@ -110,6 +110,11 @@
   display: flex;
   justify-content: space-between;
 
+  &_submit {
+    display: flex;
+    align-items: center;
+  }
+
   &_btn {
     display: flex;
     flex-direction: column;
@@ -123,6 +128,10 @@
       margin-top: 5px;
     }
   }
+}
+
+.btnAddCopyBlock {
+  margin: 0 20px;
 }
 
 
