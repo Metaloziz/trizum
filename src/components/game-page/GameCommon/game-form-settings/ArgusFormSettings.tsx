@@ -21,13 +21,26 @@ const DEFAULT_VALUES: ArgusFormType = {
   errorAacceptable: 2,
   digitMax: 3,
   speed: 2000,
+  perSuccessLevel: 1,
+  maxErrorLevel: 1,
+  upgrade: 30,
+  downgrade: 0,
 };
 
 export const ArgusFormSettings = (props: FormSettingsType): ReactElement => {
   const { usedInWorks, gamePreset, onFormSubmit, deletedPreset, createCopy } = props;
   const { settings, status, id, level, name } = gamePreset;
-  const { elementsTotal, timeComplete, description, errorAacceptable, digitMax, speed } =
-    settings[0];
+  const {
+    elementsTotal,
+    timeComplete,
+    description,
+    errorAacceptable,
+    digitMax,
+    speed,
+    perSuccessLevel,
+    maxErrorLevel,
+    upgrade,
+  } = settings[0];
 
   const defaultValues: ArgusFormType =
     id === ''
@@ -42,6 +55,9 @@ export const ArgusFormSettings = (props: FormSettingsType): ReactElement => {
           errorAacceptable,
           digitMax,
           speed,
+          perSuccessLevel,
+          maxErrorLevel,
+          upgrade,
         } as ArgusFormType);
 
   const methods = useForm<ArgusFormType>({
@@ -58,6 +74,7 @@ export const ArgusFormSettings = (props: FormSettingsType): ReactElement => {
   } = methods;
 
   const onSubmit = handleSubmit(values => {
+    console.log("onSubmit ---", {values})
     onFormSubmit(values);
   });
 
@@ -178,7 +195,7 @@ export const ArgusFormSettings = (props: FormSettingsType): ReactElement => {
           </Grid>
           <Grid item xs={12} sm={4}>
             <Controller
-              name="speed"
+              name="perSuccessLevel"
               render={({ field: { value, onChange, ref } }) => (
                 <TextFieldCustom
                   type="text"
@@ -186,7 +203,7 @@ export const ArgusFormSettings = (props: FormSettingsType): ReactElement => {
                   size="small"
                   fullWidth
                   inputProps={{ type: 'number' }}
-                  error={errors.speed?.message}
+                  error={errors.perSuccessLevel?.message}
                   onChange={event => onChange(convertEmptyStringToNull(event))}
                   value={convertNullToEmptyString(value!)}
                   ref={ref}
@@ -197,7 +214,7 @@ export const ArgusFormSettings = (props: FormSettingsType): ReactElement => {
           </Grid>
           <Grid item xs={12} sm={4}>
             <Controller
-              name="speed"
+              name="maxErrorLevel"
               render={({ field: { value, onChange, ref } }) => (
                 <TextFieldCustom
                   type="text"
@@ -205,7 +222,7 @@ export const ArgusFormSettings = (props: FormSettingsType): ReactElement => {
                   size="small"
                   fullWidth
                   inputProps={{ type: 'number' }}
-                  error={errors.speed?.message}
+                  error={errors.maxErrorLevel?.message}
                   onChange={event => onChange(convertEmptyStringToNull(event))}
                   value={convertNullToEmptyString(value!)}
                   ref={ref}
@@ -216,7 +233,7 @@ export const ArgusFormSettings = (props: FormSettingsType): ReactElement => {
           </Grid>
           <Grid item xs={12} sm={4}>
             <Controller
-              name="speed"
+              name="upgrade"
               render={({ field: { value, onChange, ref } }) => (
                 <TextFieldCustom
                   type="text"
@@ -224,7 +241,7 @@ export const ArgusFormSettings = (props: FormSettingsType): ReactElement => {
                   size="small"
                   fullWidth
                   inputProps={{ type: 'number' }}
-                  error={errors.speed?.message}
+                  error={errors.upgrade?.message}
                   onChange={event => onChange(convertEmptyStringToNull(event))}
                   value={convertNullToEmptyString(value!)}
                   ref={ref}
