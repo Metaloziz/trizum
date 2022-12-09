@@ -84,7 +84,7 @@ export type ArgusGameSettingsType = {
   speed: number;
 };
 
-export type ArgusFormType = BaseGameSettingsType & ArgusGameSettingsType;
+export type ArgusFormType = BaseGameSettingsType & BaseGameWithEngineType & ArgusGameSettingsType;
 
 export type FirefliesGameSettingsType = {
   timeComplete: number;

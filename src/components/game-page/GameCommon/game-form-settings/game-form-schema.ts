@@ -214,6 +214,13 @@ export const ARGUS_SCHEMA = yup.object().shape({
     .required('Обязательное поле')
     .min(1, 'Минимум 1 милисекунда')
     .max(10000, 'Максимум 10 000 милисекунд'),
+  perSuccessLevel: yup.number().required('Обязательное поле'),
+  maxErrorLevel: yup.number().required('Обязательное поле'),
+  upgrade: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 процент')
+    .max(100, 'Максимум 100 процентов'),
 });
 
 export const ARGUS_FORM_SCHEMA = GAME_SCHEMA.concat(ARGUS_SCHEMA);
@@ -247,8 +254,7 @@ export const FIREFLIES_SCHEMA = yup.object().shape({
     .number()
     .notRequired()
     .min(1, 'Минимум 1 милисекунда')
-    .max(99000, 'Максимум 99 000 милисекунд')
-    .nullable(),
+    .max(99000, 'Максимум 99 000 милисекунд'),
 });
 
 export const FIREFLIES_FORM_SCHEMA = GAME_SCHEMA.concat(FIREFLIES_SCHEMA);
