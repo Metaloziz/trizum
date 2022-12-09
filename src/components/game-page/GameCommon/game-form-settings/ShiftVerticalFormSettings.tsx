@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
@@ -14,7 +14,6 @@ import {
 } from 'components/game-page/GameCommon/game-form-settings/game-form-types';
 import CustomSelect from 'components/select-mui/CustomSelect';
 import TextFieldCustom from 'components/text-field-mui/TextFieldCustom';
-
 import { SHIFT_VERTICAL_FORM_SCHEMA } from './game-form-schema';
 import { BaseFormGameSettings } from './BaseFormGameSettings';
 
@@ -34,7 +33,7 @@ const DEFAULT_VALUES: ShiftVerticalFormType = {
 };
 
 export const ShiftVerticalFormSettings = (props: FormSettingsType): ReactElement => {
-  const { usedInWorks, gamePreset, onFormSubmit, deletedPreset } = props;
+  const { usedInWorks, gamePreset, onFormSubmit, deletedPreset, createCopy } = props;
   const { settings, status, id, level, name } = gamePreset;
   const {
     blinksCount,
@@ -50,7 +49,7 @@ export const ShiftVerticalFormSettings = (props: FormSettingsType): ReactElement
   } = settings[0];
 
   const defaultValues: ShiftVerticalFormType =
-    id === ''
+    id === '' && status !== 'copiyed'
       ? DEFAULT_VALUES
       : ({
           name,
@@ -78,11 +77,18 @@ export const ShiftVerticalFormSettings = (props: FormSettingsType): ReactElement
     handleSubmit,
     control,
     formState: { errors },
+    reset,
   } = methods;
 
   const onSubmit = handleSubmit(values => {
     onFormSubmit(values);
   });
+
+  useEffect(() => {
+    if (status === 'copiyed') {
+      reset({ ...defaultValues, status: 'draft' });
+    }
+  }, [status]);
 
   return (
     <FormProvider {...methods}>
@@ -92,6 +98,7 @@ export const ShiftVerticalFormSettings = (props: FormSettingsType): ReactElement
           deletedPreset={deletedPreset}
           usedInWorks={usedInWorks}
           status={status}
+          createCopy={createCopy}
         >
           <Grid item xs={12} sm={6}>
             <Controller

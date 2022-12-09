@@ -1,16 +1,18 @@
+import React, { ReactElement, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
+
+import { ARGUS_FORM_SCHEMA } from './game-form-schema';
+
 import { BASE_DEFAULT_VALUES } from 'components/game-page/GameCommon/game-form-settings/constants';
 import {
   ArgusFormType,
   FormSettingsType,
 } from 'components/game-page/GameCommon/game-form-settings/game-form-types';
 import TextFieldCustom from 'components/text-field-mui/TextFieldCustom';
-import React, { ReactElement } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { convertEmptyStringToNull, convertNullToEmptyString } from 'utils/convertTextFieldUtils';
 import { BaseFormGameSettings } from './BaseFormGameSettings';
-import { ARGUS_FORM_SCHEMA } from './game-form-schema';
 
 const DEFAULT_VALUES: ArgusFormType = {
   ...BASE_DEFAULT_VALUES,
@@ -22,7 +24,7 @@ const DEFAULT_VALUES: ArgusFormType = {
 };
 
 export const ArgusFormSettings = (props: FormSettingsType): ReactElement => {
-  const { usedInWorks, gamePreset, onFormSubmit, deletedPreset } = props;
+  const { usedInWorks, gamePreset, onFormSubmit, deletedPreset, createCopy } = props;
   const { settings, status, id, level, name } = gamePreset;
   const { elementsTotal, timeComplete, description, errorAacceptable, digitMax, speed } =
     settings[0];
@@ -52,11 +54,18 @@ export const ArgusFormSettings = (props: FormSettingsType): ReactElement => {
     handleSubmit,
     control,
     formState: { errors },
+    reset,
   } = methods;
 
   const onSubmit = handleSubmit(values => {
     onFormSubmit(values);
   });
+
+  useEffect(() => {
+    if (status === 'copiyed') {
+      reset({ ...defaultValues, status: 'draft' });
+    }
+  }, [status]);
 
   return (
     <FormProvider {...methods}>
@@ -66,6 +75,7 @@ export const ArgusFormSettings = (props: FormSettingsType): ReactElement => {
           deletedPreset={deletedPreset}
           usedInWorks={usedInWorks}
           status={status}
+          createCopy={createCopy}
         >
           <Grid item xs={12} sm={6}>
             <Controller

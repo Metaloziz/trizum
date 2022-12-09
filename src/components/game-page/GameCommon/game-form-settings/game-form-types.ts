@@ -9,6 +9,7 @@ export type FormSettingsType = {
   usedInWorks: any[];
   gamePreset: GamePresetT;
   deletedPreset: () => void;
+  createCopy: () => void;
 };
 
 export type BaseGameSettingsType = {

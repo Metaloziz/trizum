@@ -1,16 +1,20 @@
+import React, { ReactElement, useEffect } from 'react';
+
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
+
+import { BULLS_AND_COWS_FORM_SCHEMA } from './game-form-schema';
+
 import { BASE_DEFAULT_VALUES } from 'components/game-page/GameCommon/game-form-settings/constants';
 import {
   BullsAndCowsFormType,
   FormSettingsType,
 } from 'components/game-page/GameCommon/game-form-settings/game-form-types';
 import TextFieldCustom from 'components/text-field-mui/TextFieldCustom';
-import React, { ReactElement } from 'react';
-import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { convertEmptyStringToNull, convertNullToEmptyString } from 'utils/convertTextFieldUtils';
+
 import { BaseFormGameSettings } from './BaseFormGameSettings';
-import { BULLS_AND_COWS_FORM_SCHEMA } from './game-form-schema';
 
 const DEFAULT_VALUES: BullsAndCowsFormType = {
   ...BASE_DEFAULT_VALUES,
@@ -21,12 +25,12 @@ const DEFAULT_VALUES: BullsAndCowsFormType = {
 };
 
 export const BullsAndCowsSettings = (props: FormSettingsType): ReactElement => {
-  const { usedInWorks, gamePreset, onFormSubmit, deletedPreset } = props;
+  const { usedInWorks, gamePreset, onFormSubmit, deletedPreset, createCopy } = props;
   const { settings, status, id, level, name } = gamePreset;
   const { timeComplete, description, levelMaxCompleted, errorAacceptable, digitMax } = settings[0];
 
   const defaultValues: BullsAndCowsFormType =
-    id === ''
+    id === '' && status !== 'copiyed'
       ? DEFAULT_VALUES
       : ({
           name,
@@ -49,11 +53,18 @@ export const BullsAndCowsSettings = (props: FormSettingsType): ReactElement => {
     handleSubmit,
     control,
     formState: { errors },
+    reset,
   } = methods;
 
   const onSubmit = handleSubmit(values => {
     onFormSubmit(values);
   });
+
+  useEffect(() => {
+    if (status === 'copiyed') {
+      reset({ ...defaultValues, status: 'draft' });
+    }
+  }, [status]);
 
   return (
     <FormProvider {...methods}>
@@ -61,6 +72,7 @@ export const BullsAndCowsSettings = (props: FormSettingsType): ReactElement => {
         <BaseFormGameSettings
           gameName="БЫКИ И КОРОВЫ"
           deletedPreset={deletedPreset}
+          createCopy={createCopy}
           usedInWorks={usedInWorks}
           status={status}
         >

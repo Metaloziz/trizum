@@ -10,7 +10,7 @@ import {
 } from 'components/game-page/GameCommon/game-form-settings/game-form-types';
 import CustomSelect from 'components/select-mui/CustomSelect';
 import TextFieldCustom from 'components/text-field-mui/TextFieldCustom';
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { convertEmptyStringToNull, convertNullToEmptyString } from 'utils/convertTextFieldUtils';
 import { BaseFormGameSettings } from './BaseFormGameSettings';
@@ -25,12 +25,12 @@ const DEFAULT_VALUES: Game2048FormType = {
 };
 
 export const Game2048FormSettings = (props: FormSettingsType): ReactElement => {
-  const { usedInWorks, gamePreset, onFormSubmit, deletedPreset } = props;
+  const { usedInWorks, gamePreset, onFormSubmit, deletedPreset, createCopy } = props;
   const { settings, status, id, level, name } = gamePreset;
   const { digitMax, elementsTotal, groupsCount, timeComplete, description } = settings[0];
 
   const defaultValues: Game2048FormType =
-    id === ''
+    id === '' && status !== 'copiyed'
       ? DEFAULT_VALUES
       : ({
           name,
@@ -52,11 +52,18 @@ export const Game2048FormSettings = (props: FormSettingsType): ReactElement => {
     handleSubmit,
     control,
     formState: { errors },
+    reset,
   } = methods;
 
   const onSubmit = handleSubmit(values => {
     onFormSubmit(values);
   });
+
+  useEffect(() => {
+    if (status === 'copiyed') {
+      reset({ ...defaultValues, status: 'draft' });
+    }
+  }, [status]);
 
   return (
     <FormProvider {...methods}>
@@ -66,6 +73,7 @@ export const Game2048FormSettings = (props: FormSettingsType): ReactElement => {
           deletedPreset={deletedPreset}
           usedInWorks={usedInWorks}
           status={status}
+          createCopy={createCopy}
         >
           <Grid item xs={12} sm={6}>
             <Controller
