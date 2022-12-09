@@ -37,7 +37,7 @@ export const SetGameHomework: FC<SetGameHomeworkPropsT> = ({
 
   console.log('actualPresets', toJS(actualPresets));
 
-  const presetOptions = actualPresets.map(pr => getOptionMui(pr.name, pr.name));
+  const presetOptions = actualPresets.map(pr => getOptionMui(pr.id, pr.name));
 
   const setGame = (value: string) => {
     setGameName(value);
