@@ -71,7 +71,9 @@ export type MemoryRhythmGameSettingsType = {
   sound: number;
 };
 
-export type MemoryRhythmFormType = BaseGameSettingsType & MemoryRhythmGameSettingsType;
+export type MemoryRhythmFormType = BaseGameSettingsType &
+  BaseGameWithEngineType &
+  MemoryRhythmGameSettingsType;
 
 export type ArgusGameSettingsType = {
   timeComplete: number;
