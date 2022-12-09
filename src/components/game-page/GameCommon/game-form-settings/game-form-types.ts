@@ -93,7 +93,9 @@ export type FirefliesGameSettingsType = {
   speed?: Nullable<number>;
 };
 
-export type FirefliesFormType = BaseGameSettingsType & FirefliesGameSettingsType;
+export type FirefliesFormType = BaseGameSettingsType &
+  BaseGameWithEngineType &
+  FirefliesGameSettingsType;
 
 export type SilhouettesGameSettingsType = {
   timeComplete: number;

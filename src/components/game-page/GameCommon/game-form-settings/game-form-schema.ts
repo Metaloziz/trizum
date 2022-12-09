@@ -289,6 +289,18 @@ export const STEAM_ENGINE_SCHEMA = yup.object().shape({
     .min(1, 'Минимум 1 ошибок')
     .max(99, 'Максимум 99 ошибок')
     .nullable(),
+  upgrade: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 процент')
+    .max(100, 'Максимум 100 процентов')
+    .nullable(),
+  downgrade: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 процент')
+    .max(100, 'Максимум 100 процентов')
+    .nullable(),
 });
 
 export const STEAM_ENGINE_FORM_SCHEMA = GAME_SCHEMA.concat(STEAM_ENGINE_SCHEMA);

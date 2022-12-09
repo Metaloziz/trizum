@@ -23,13 +23,27 @@ const DEFAULT_VALUES: FirefliesFormType = {
   levelMaxCompleted: null,
   digitMax: 10,
   speed: null,
+  perSuccessLevel: 1,
+  maxErrorLevel: 1,
+  upgrade: 10,
+  downgrade: 20,
 };
 
 export const FirefliesFormSettings = (props: FormSettingsType): ReactElement => {
   const { usedInWorks, gamePreset, onFormSubmit, deletedPreset } = props;
   const { settings, status, id, level, name } = gamePreset;
-  const { elementsTotal, timeComplete, description, levelMaxCompleted, digitMax, speed } =
-    settings[0];
+  const {
+    elementsTotal,
+    timeComplete,
+    description,
+    levelMaxCompleted,
+    digitMax,
+    speed,
+    perSuccessLevel,
+    maxErrorLevel,
+    upgrade,
+    downgrade,
+  } = settings[0];
 
   const defaultValues: FirefliesFormType =
     id === ''
@@ -44,6 +58,10 @@ export const FirefliesFormSettings = (props: FormSettingsType): ReactElement => 
           levelMaxCompleted,
           digitMax,
           speed,
+          perSuccessLevel,
+          maxErrorLevel,
+          upgrade,
+          downgrade,
         } as FirefliesFormType);
 
   const methods = useForm<FirefliesFormType>({
@@ -160,6 +178,82 @@ export const FirefliesFormSettings = (props: FormSettingsType): ReactElement => 
                   fullWidth
                   inputProps={{ type: 'number' }}
                   error={errors.speed?.message}
+                  onChange={event => onChange(convertEmptyStringToNull(event))}
+                  value={convertNullToEmptyString(value!)}
+                  ref={ref}
+                />
+              )}
+              control={control}
+            />
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <Controller
+              name="perSuccessLevel"
+              render={({ field: { value, onChange, ref } }) => (
+                <TextFieldCustom
+                  type="text"
+                  label="Кол-во уровней для увеличения скорости"
+                  size="small"
+                  fullWidth
+                  inputProps={{ type: 'number' }}
+                  error={errors.perSuccessLevel?.message}
+                  onChange={event => onChange(convertEmptyStringToNull(event))}
+                  value={convertNullToEmptyString(value!)}
+                  ref={ref}
+                />
+              )}
+              control={control}
+            />
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <Controller
+              name="maxErrorLevel"
+              render={({ field: { value, onChange, ref } }) => (
+                <TextFieldCustom
+                  type="text"
+                  label="Кол-во уровней для уменьшения скорости"
+                  size="small"
+                  fullWidth
+                  inputProps={{ type: 'number' }}
+                  error={errors.maxErrorLevel?.message}
+                  onChange={event => onChange(convertEmptyStringToNull(event))}
+                  value={convertNullToEmptyString(value!)}
+                  ref={ref}
+                />
+              )}
+              control={control}
+            />
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <Controller
+              name="upgrade"
+              render={({ field: { value, onChange, ref } }) => (
+                <TextFieldCustom
+                  type="text"
+                  label="Процент увеличения скорости светлячков"
+                  size="small"
+                  fullWidth
+                  inputProps={{ type: 'number' }}
+                  error={errors.upgrade?.message}
+                  onChange={event => onChange(convertEmptyStringToNull(event))}
+                  value={convertNullToEmptyString(value!)}
+                  ref={ref}
+                />
+              )}
+              control={control}
+            />
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <Controller
+              name="downgrade"
+              render={({ field: { value, onChange, ref } }) => (
+                <TextFieldCustom
+                  type="text"
+                  label="Процент уемньшения скорости светлячков"
+                  size="small"
+                  fullWidth
+                  inputProps={{ type: 'number' }}
+                  error={errors.downgrade?.message}
                   onChange={event => onChange(convertEmptyStringToNull(event))}
                   value={convertNullToEmptyString(value!)}
                   ref={ref}
