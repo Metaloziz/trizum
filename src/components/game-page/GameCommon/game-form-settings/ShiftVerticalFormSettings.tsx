@@ -201,7 +201,7 @@ export const ShiftVerticalFormSettings = (props: FormSettingsType): ReactElement
               render={({ field: { value, onChange, ref } }) => (
                 <TextFieldCustom
                   type="text"
-                  label="Кол-во уровней для смены режима"
+                  label="Кол-во угадываний для смены режима"
                   size="small"
                   fullWidth
                   inputProps={{ type: 'number' }}
@@ -220,7 +220,7 @@ export const ShiftVerticalFormSettings = (props: FormSettingsType): ReactElement
               render={({ field: { value, onChange, ref } }) => (
                 <TextFieldCustom
                   type="text"
-                  label="Кол-во ошибок для уровня"
+                  label="Кол-во ошибочных угадываний"
                   size="small"
                   fullWidth
                   inputProps={{ type: 'number' }}
