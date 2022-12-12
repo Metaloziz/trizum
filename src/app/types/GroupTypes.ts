@@ -29,7 +29,7 @@ export type ResponseGroups = {
   franchise: FranchiseWTF;
   course: string;
   teacherId: TeacherIdWTF;
-  schedule: Schedule[];
+  schedule: ScheduleObjectType;
 };
 
 export type WorkT = {
