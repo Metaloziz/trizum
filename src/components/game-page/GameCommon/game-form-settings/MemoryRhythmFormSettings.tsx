@@ -210,7 +210,7 @@ export const MemoryRhythmFormSettings = (props: FormSettingsType): ReactElement 
                   size="small"
                   fullWidth
                   inputProps={{ type: 'number' }}
-                  error={errors.levelMaxCompleted?.message}
+                  error={errors.perSuccessLevel?.message}
                   onChange={event => onChange(convertEmptyStringToNull(event))}
                   value={convertNullToEmptyString(value!)}
                   ref={ref}
@@ -229,7 +229,7 @@ export const MemoryRhythmFormSettings = (props: FormSettingsType): ReactElement 
                   size="small"
                   fullWidth
                   inputProps={{ type: 'number' }}
-                  error={errors.levelMaxCompleted?.message}
+                  error={errors.maxErrorLevel?.message}
                   onChange={event => onChange(convertEmptyStringToNull(event))}
                   value={convertNullToEmptyString(value!)}
                   ref={ref}
@@ -248,7 +248,7 @@ export const MemoryRhythmFormSettings = (props: FormSettingsType): ReactElement 
                   size="small"
                   fullWidth
                   inputProps={{ type: 'number' }}
-                  error={errors.levelMaxCompleted?.message}
+                  error={errors.upgrade?.message}
                   onChange={event => onChange(convertEmptyStringToNull(event))}
                   value={convertNullToEmptyString(value!)}
                   ref={ref}
@@ -267,7 +267,7 @@ export const MemoryRhythmFormSettings = (props: FormSettingsType): ReactElement 
                   size="small"
                   fullWidth
                   inputProps={{ type: 'number' }}
-                  error={errors.levelMaxCompleted?.message}
+                  error={errors.downgrade?.message}
                   onChange={event => onChange(convertEmptyStringToNull(event))}
                   value={convertNullToEmptyString(value!)}
                   ref={ref}

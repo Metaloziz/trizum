@@ -148,6 +148,24 @@ export const MEMORY_RHYTHM_SCHEMA = yup.object().shape({
     .max(99, 'Максимум 99 уровень')
     .nullable(),
   sound: yup.number().required('Обязательное поле'),
+  perSuccessLevel: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 уровень')
+    .nullable(),
+  maxErrorLevel: yup.number().required('Обязательное поле').min(1, 'Минимум 1 уровень').nullable(),
+  upgrade: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 блик')
+    .max(10, 'Максимум 10 бликов')
+    .nullable(),
+  downgrade: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 блик')
+    .max(10, 'Максимум 10 бликов')
+    .nullable(),
 });
 
 export const MEMORY_RHYTHM_FORM_SCHEMA = GAME_SCHEMA.concat(MEMORY_RHYTHM_SCHEMA);
@@ -170,18 +188,6 @@ export const SILHOUETTES_SCHEMA = yup.object().shape({
     .required('Обязательное поле')
     .min(1, 'Минимум 1 фигур')
     .max(10, 'Максимум 10 фигур'),
-  perSuccessLevel: yup.number().required('Обязательное поле').min(1, 'Минимум 1 уровень'),
-  maxErrorLevel: yup.number().required('Обязательное поле').min(1, 'Минимум 1 уровень'),
-  upgrade: yup
-    .number()
-    .required('Обязательное поле')
-    .min(1, 'Минимум 1 блик')
-    .max(10, 'Максимум 10 бликов'),
-  downgrade: yup
-    .number()
-    .required('Обязательное поле')
-    .min(1, 'Минимум 1 блик')
-    .max(10, 'Максимум 10 бликов'),
 });
 
 export const SILHOUETTES_FORM_SCHEMA = GAME_SCHEMA.concat(SILHOUETTES_SCHEMA);
