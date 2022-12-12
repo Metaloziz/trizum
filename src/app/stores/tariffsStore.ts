@@ -1,8 +1,8 @@
-import { makeAutoObservable, runInAction } from 'mobx';
-
 import tariffsService from 'app/services/tafiffService';
+import { FiltersTariffStore } from 'app/types/filtersTariffStore';
 import { TariffsEditOrCreateT, TariffsType } from 'app/types/TariffTypes';
 import { getDateWithoutTime } from 'components/rate-choice/utils';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { throwErrorMessage } from 'utils';
 
 class TariffsStore {
@@ -35,14 +35,7 @@ class TariffsStore {
 
   isDialogOpen: boolean = false;
 
-  filters = {
-    status: 'active',
-    lengthFrom: '',
-    lengthTo: '',
-    dateFrom: '',
-    dateTo: '',
-    input: '',
-  };
+  filters = new FiltersTariffStore();
 
   constructor() {
     makeAutoObservable(this);
@@ -81,7 +74,7 @@ class TariffsStore {
     };
   };
 
-  setFilters = (filter: any) => {
+  setFilters = (filter: FiltersTariffStore) => {
     this.filters = { ...filter };
   };
 

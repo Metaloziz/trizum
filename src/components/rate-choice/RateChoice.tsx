@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import {
   Accordion,
@@ -6,21 +6,17 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
-  FormControl,
   Grid,
-  InputLabel,
-  MenuItem,
-  Select,
   Stack,
   TextField,
   Typography,
 } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Button from 'components/button/Button';
 import { observer } from 'mobx-react-lite';
+import React, { FC, useState } from 'react';
 
 import tariffsStore from '../../app/stores/tariffsStore';
-import Button from 'components/button/Button';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 export const newStatus = [
   { value: 'all', label: 'Все' },
@@ -37,8 +33,8 @@ const RateChoice: FC<RateChoicePropsType> = observer(({ setCurrentPage }) => {
   const { setFilters } = tariffsStore;
   const [lengthFrom, setLengthFrom] = useState('');
   const [lengthTo, setLengthTo] = useState('');
-  const [dateFrom, setDateFrom] = useState(null);
-  const [dateTo, setDateTo] = useState(null);
+  const [dateFrom, setDateFrom] = useState<string | null>(null);
+  const [dateTo, setDateTo] = useState<string | null>(null);
   const [status, setStatus] = useState('active');
   const [input, setInput] = useState('');
   const [isOpenFilters, setIsOpenFilters] = useState(false);
@@ -46,14 +42,28 @@ const RateChoice: FC<RateChoicePropsType> = observer(({ setCurrentPage }) => {
   const searchHandler = () => {
     if (input.length) {
       if (input.length >= 3 && input.length <= 30) {
-        setFilters({ dateFrom, dateTo, status, lengthFrom, lengthTo, input });
+        setFilters({
+          dateFrom: dateFrom ?? '',
+          dateTo: dateTo ?? '',
+          status,
+          lengthFrom,
+          lengthTo,
+          input,
+        });
         setCurrentPage(1);
       } else {
         // eslint-disable-next-line no-alert
         alert('Наименование тарифа должно быть от 3 до 30 символов');
       }
     } else {
-      setFilters({ dateFrom, dateTo, status, lengthFrom, lengthTo, input });
+      setFilters({
+        dateFrom: dateFrom ?? '',
+        dateTo: dateTo ?? '',
+        status,
+        lengthFrom,
+        lengthTo,
+        input,
+      });
       setCurrentPage(1);
     }
   };
@@ -96,26 +106,29 @@ const RateChoice: FC<RateChoicePropsType> = observer(({ setCurrentPage }) => {
                 onChange={({ currentTarget: { value } }) => setInput(value)}
               />
             </Grid>
-            <Grid item xs={12} sm={4}>
-              <FormControl fullWidth>
-                <InputLabel id="select-status">Статус</InputLabel>
-                <Select
-                  onChange={({ target: { value } }) => setStatus(value)}
-                  label="Статус"
-                  id="select-status"
-                  labelId="select-status"
-                  defaultValue="active"
-                  // size="small"
-                  value={status}
-                >
-                  {newStatus.map(m => (
-                    <MenuItem key={m.value} value={m.value}>
-                      {m.label}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
+
+            {/* скрыл из-за бага 329 */}
+
+            {/* <Grid item xs={12} sm={4}> */}
+            {/*  <FormControl fullWidth> */}
+            {/*    <InputLabel id="select-status">Статус</InputLabel> */}
+            {/*    <Select */}
+            {/*      onChange={({ target: { value } }) => setStatus(value)} */}
+            {/*      label="Статус" */}
+            {/*      id="select-status" */}
+            {/*      labelId="select-status" */}
+            {/*      defaultValue="active" */}
+            {/*      // size="small" */}
+            {/*      value={status} */}
+            {/*    > */}
+            {/*      {newStatus.map(m => ( */}
+            {/*        <MenuItem key={m.value} value={m.value}> */}
+            {/*          {m.label} */}
+            {/*        </MenuItem> */}
+            {/*      ))} */}
+            {/*    </Select> */}
+            {/*  </FormControl> */}
+            {/* </Grid> */}
             <Grid
               item
               xs={12}
