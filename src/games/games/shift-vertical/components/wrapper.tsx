@@ -41,11 +41,6 @@ export default class extends Component<Props & ComponentProps, State> {
     };
   }
 
-  componentDidMount(): void {
-    // const { settingsCycleTime } = this.props;
-    // this.setState({ cycleTime: settingsCycleTime });
-  }
-
   reset = () => {
     this.result = {
       result: 'end',
@@ -207,6 +202,7 @@ const styles = StyleSheet.create({
   },
   wrap: {
     flex: 1,
+    paddingHorizontal: 6,
   },
   inner: {
     flex: 1,

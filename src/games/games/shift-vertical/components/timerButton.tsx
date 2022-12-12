@@ -53,7 +53,8 @@ const styles = StyleSheet.create({
   },
   buttonTitle: {
     color: '#fff',
-    fontSize: 14,
+    fontSize: 16,
+    paddingVertical: 8,
   },
   wrapProgress: {
     position: 'absolute',

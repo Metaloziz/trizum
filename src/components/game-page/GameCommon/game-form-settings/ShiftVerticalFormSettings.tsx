@@ -23,11 +23,11 @@ const DEFAULT_VALUES: ShiftVerticalFormType = {
   ...BASE_DEFAULT_VALUES,
   blinksCount: 2,
   cycleTime: 5,
-  elementsTotal: 2,
+  elementsTotal: 3,
   groupsCount: 2,
   timeComplete: undefined,
   perSuccessLevel: 2,
-  maxErrorLevel: 2,
+  maxErrorLevel: 1,
   upgrade: 10,
   downgrade: 5,
 };

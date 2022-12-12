@@ -53,7 +53,8 @@ export const SHIFT_VERTICAL_SCHEMA = yup.object().shape({
       name: 'maxSuccessLevel',
       message: 'Кол-во угадываний для смены режима должно быть меньше уровней',
       test: (value, { parent: { elementsTotal } }) => (value ? elementsTotal > value : true),
-    }),
+    })
+    .nullable(),
   maxErrorLevel: yup
     .number()
     .required('Обязательное поле')
