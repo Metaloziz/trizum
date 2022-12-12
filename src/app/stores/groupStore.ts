@@ -377,6 +377,10 @@ class GroupStore {
       ? this.courses.filter(el => el.level.includes(this.modalFields.level))
       : [];
   }
+
+  get isDisableEditForm() {
+    return !!this.selectedGroup.id && this.modalFields.status !== 'active';
+  }
 }
 
 export default new GroupStore();

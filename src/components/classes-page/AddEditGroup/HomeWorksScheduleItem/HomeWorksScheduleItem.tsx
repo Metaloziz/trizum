@@ -6,7 +6,7 @@ import React, { FC } from 'react';
 import style from './HomeWorksScheduleItem.module.scss';
 
 export const HomeWorksScheduleItem: FC = observer(() => {
-  const { scheduleHomeWorks, changeScheduleHomeWork } = groupStore;
+  const { scheduleHomeWorks, changeScheduleHomeWork, isDisableEditForm } = groupStore;
 
   return (
     <div className={style.container}>
@@ -38,6 +38,7 @@ export const HomeWorksScheduleItem: FC = observer(() => {
                       start: new Date(e),
                     })
                   }
+                  disabled={isDisableEditForm}
                   renderInput={e => (
                     <TextField {...e} onKeyDown={event => event.preventDefault()} />
                   )}
@@ -52,6 +53,7 @@ export const HomeWorksScheduleItem: FC = observer(() => {
                       end: new Date(e),
                     })
                   }
+                  disabled={isDisableEditForm}
                   renderInput={e => (
                     <TextField {...e} onKeyDown={event => event.preventDefault()} />
                   )}
