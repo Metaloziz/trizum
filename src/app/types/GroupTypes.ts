@@ -29,7 +29,7 @@ export type ResponseGroups = {
   franchise: FranchiseWTF;
   course: { id: string; title: string };
   teacherId: TeacherIdWTF;
-  schedule: Schedule[];
+  schedule: ScheduleObjectType;
   onlyGroup: { id: string; name: string };
   description?: string;
 };
@@ -185,6 +185,7 @@ export type ScheduleForUI = {
 
 export type GroupParams = Partial<{
   perPage: number;
+  per_page: number;
   page: number;
   franchiseId: string;
   forGroupId: string;

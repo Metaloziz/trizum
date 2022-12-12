@@ -28,6 +28,7 @@ import { makeAutoObservable, runInAction, toJS } from 'mobx';
 import moment from 'moment';
 import { findElement } from 'utils/findIndexElement';
 import { getNextMonth } from 'utils/getNextMonth';
+import { oldScheduleToNewScheduleType } from 'utils/oldScheduleToNewScheduleType';
 import { convertFormToCreateOlympiad } from 'utils/olympiadUtils/convertFormToCreateOlympiad';
 import { removeEmptyFields } from 'utils/removeEmptyFields';
 import {
@@ -187,11 +188,12 @@ class GroupStore {
           dateUntil,
         },
       );
+
       if (res.items.length && this.selectedGroup?.id) {
         await this.getOneGroup(this.selectedGroup.id);
       }
       runInAction(() => {
-        this.groups = res.items;
+        this.groups = oldScheduleToNewScheduleType(res.items);
         this.page = res.page;
         this.perPage = res.perPage;
         this.total = res.total;
@@ -218,7 +220,7 @@ class GroupStore {
         await this.getOneGroup(this.selectedGroup.id);
       }
       runInAction(() => {
-        this.groups = res.items;
+        this.groups = oldScheduleToNewScheduleType(res.items);
         this.page = res.page;
         this.perPage = res.perPage;
         this.total = res.total;

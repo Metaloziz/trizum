@@ -39,7 +39,7 @@ const SCHEMA = yup.object().shape({
   franchiseId: yup.string().notRequired().nullable(),
   courseId: yup.string().required('Обязательное поле').nullable(),
   forGroupId: yup.string().when('franchiseId', franchiseId => {
-    if (franchiseId !== null) {
+    if (franchiseId) {
       return yup.string().required('Обязательное поле');
     }
     return yup.string().notRequired();

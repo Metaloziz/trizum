@@ -1,14 +1,15 @@
-import { FranchiseWTF, Schedule, ScheduleForUI, TeacherIdWTF } from 'app/types/GroupTypes';
+import { FranchiseWTF, ScheduleForUI, TeacherIdWTF } from 'app/types/GroupTypes';
+import { ScheduleObjectType } from 'app/types/ScheduleT';
 
 export const scheduleMapper = (
-  schedule: Schedule[],
+  schedule: ScheduleObjectType,
   groupName: string,
   groupId: string,
   teacherId: TeacherIdWTF,
   franchise: FranchiseWTF,
 ): ScheduleForUI[] =>
-  schedule.length
-    ? schedule.map((el, idx) => {
+  schedule.classworks.length
+    ? schedule.classworks.map((el, idx) => {
         const dateAr: number[] = el.date.split('.').map(elem => Number(elem));
         const timeStartAr: number[] = el.from.split(':').map(elem => Number(elem));
         const timeEndAr: number[] = el.to.split(':').map(elem => Number(elem));
