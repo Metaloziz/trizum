@@ -246,7 +246,7 @@ class GamesStore {
             id: '',
             name: '',
             game: res.gamePreset.game,
-            status: 'copiyed' as StatusTypes,
+            status: StatusTypes.copiyed,
             level: res.gamePreset.level,
             timeMax: res.gamePreset.timeMax,
             settings: res.gamePreset.settings,

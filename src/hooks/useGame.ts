@@ -157,7 +157,7 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
     } else {
       setSettings(gamePreset.gamePreset.settings[0]);
     }
-  }, [gamePreset]);
+  }, [gamePreset.gamePreset]);
 
   return {
     game,
