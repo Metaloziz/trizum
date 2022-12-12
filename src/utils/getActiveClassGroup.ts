@@ -1,4 +1,4 @@
-import { EmptyUser } from 'app/stores/emptyUser';
+import { EmptyUser } from 'app/types/emptyUser';
 
 export const getActiveClassGroup = (user: EmptyUser) =>
   user?.groups.find(

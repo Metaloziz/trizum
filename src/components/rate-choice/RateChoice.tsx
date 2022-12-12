@@ -7,7 +7,6 @@ import {
   AccordionSummary,
   Box,
   FormControl,
-  FormHelperText,
   Grid,
   InputLabel,
   MenuItem,
@@ -43,6 +42,7 @@ const RateChoice: FC<RateChoicePropsType> = observer(({ setCurrentPage }) => {
   const [status, setStatus] = useState('active');
   const [input, setInput] = useState('');
   const [isOpenFilters, setIsOpenFilters] = useState(false);
+
   const searchHandler = () => {
     if (input.length) {
       if (input.length >= 3 && input.length <= 30) {
@@ -57,6 +57,7 @@ const RateChoice: FC<RateChoicePropsType> = observer(({ setCurrentPage }) => {
       setCurrentPage(1);
     }
   };
+
   const resetHandler = () => {
     setLengthTo('');
     setLengthFrom('');
@@ -107,8 +108,8 @@ const RateChoice: FC<RateChoicePropsType> = observer(({ setCurrentPage }) => {
                   // size="small"
                   value={status}
                 >
-                  {newStatus.map((m, id) => (
-                    <MenuItem key={`${m}${id}`} value={m.value}>
+                  {newStatus.map(m => (
+                    <MenuItem key={m.value} value={m.value}>
                       {m.label}
                     </MenuItem>
                   ))}

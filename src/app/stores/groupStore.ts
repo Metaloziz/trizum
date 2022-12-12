@@ -22,7 +22,7 @@ import {
 import { ScheduleHomeWorksType } from 'app/types/scheduleHomeWorksType';
 import { ResponseUserT } from 'app/types/UserTypes';
 import { AxiosError } from 'axios';
-import { makeAutoObservable, runInAction, toJS } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import moment from 'moment';
 import { findElement } from 'utils/findIndexElement';
 import { getIsBetweenDate } from 'utils/getIsBetweenDate';
@@ -218,19 +218,18 @@ class GroupStore {
 
   getOneGroup = async (id: string) =>
     this.execute(async () => {
-      const r = await groupsService.getOneGroup(id);
+      const response = await groupsService.getOneGroup(id);
       runInAction(() => {
-        console.log('responcegetOneGroup', toJS(r));
-        this.selectedGroup = r;
-        if (r.schedule.classworks && r.schedule.homeworks) {
-          this.schedule = r.schedule.classworks.map(el => scheduleItemToUIMapper(el));
-          this.scheduleHomeWorks = r.schedule.homeworks;
-          this.filteredHomeWork = r.schedule.homeworks;
+        this.selectedGroup = response;
+        if (response.schedule.classworks && response.schedule.homeworks) {
+          this.schedule = response.schedule.classworks.map(el => scheduleItemToUIMapper(el));
+          this.scheduleHomeWorks = response.schedule.homeworks;
+          this.filteredHomeWork = response.schedule.homeworks;
         } else {
-          this.schedule = this.setEmptyScheduleItems(r.course.worksCount);
+          this.schedule = this.setEmptyScheduleItems(response.course.worksCount);
         }
       });
-      return r;
+      return response;
     });
 
   addGroup = async (franchiseId?: string) => {
@@ -331,18 +330,18 @@ class GroupStore {
   openModal = async (id?: string) => {
     if (id) {
       // const r = this.groups.filter(el => el.id === id)[0];
-      const r = await this.getOneGroup(id);
-      if (typeof r === 'object') {
+      const response = await this.getOneGroup(id);
+      if (typeof response === 'object') {
         this.modalFields = {
-          level: (r.level as LevelGroupT) || '',
-          franchiseId: r.franchise.id || '',
-          type: (r.type as GroupT) || '',
-          courseId: r.course.id || '',
-          teacherId: r.teacherId.id,
-          name: r.name,
-          dateSince: new Date(r.startedAt.date),
-          dateUntil: new Date(r.endedAt.date),
-          status: (r.status as GroupStatusTypes) || '',
+          level: (response.level as LevelGroupT) || '',
+          franchiseId: response.franchise.id || '',
+          type: (response.type as GroupT) || '',
+          courseId: response.course.id || '',
+          teacherId: response.teacherId.id,
+          name: response.name,
+          dateSince: new Date(response.startedAt.date),
+          dateUntil: new Date(response.endedAt.date),
+          status: (response.status as GroupStatusTypes) || '',
         };
       }
     }
@@ -357,7 +356,6 @@ class GroupStore {
   };
 
   changeScheduleHomeWork = (newHomeWorkData: Partial<ScheduleHomeWorksType>) => {
-    console.log('changeScheduleHomeWork', toJS(newHomeWorkData));
     this.scheduleHomeWorks = this.scheduleHomeWorks.map(homeWork =>
       homeWork.index === newHomeWorkData.index ? { ...homeWork, ...newHomeWorkData } : homeWork,
     );
@@ -366,15 +364,8 @@ class GroupStore {
   setFilteredWHomeByDates = (start: string, end: string) => {
     this.filteredHomeWork = this.selectedGroup.schedule.homeworks.filter(el => {
       const convertDate = getLocalDateEuropeRegion(el.start).split('.').reverse().join('-');
-
-      console.log('setFilteredWHomeByDates', toJS([start, end, convertDate]));
-
-      const result = getIsBetweenDate(convertDate, start, end);
-      console.log('result2', toJS(result));
-      return result;
+      return getIsBetweenDate(convertDate, start, end);
     });
-
-    console.log('filteredHomeWork', toJS(this.filteredHomeWork));
   };
 
   resetFilteredHomeWorkByDates = () => {
