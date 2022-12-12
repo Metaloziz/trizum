@@ -4,10 +4,7 @@ import { Grid, Stack } from '@mui/material';
 
 import { StatusTypes } from 'app/enums/StatusTypes';
 import Button from 'components/button/Button';
-import {
-  BaseGameSettingsType,
-  GamesFormSettingsType,
-} from 'components/game-page/GameCommon/game-form-settings/game-form-types';
+import { BaseGameSettingsType } from 'components/game-page/GameCommon/game-form-settings/game-form-types';
 import styles from 'components/game-page/GameCommon/GameModal/gameModal.module.scss';
 import CustomSelect from 'components/select-mui/CustomSelect';
 import TextFieldCustom from 'components/text-field-mui/TextFieldCustom';
@@ -15,6 +12,7 @@ import TextFieldCustom from 'components/text-field-mui/TextFieldCustom';
 import { GROUP_LEVEL_MENU, STATUS_MENU } from 'constants/selectMenu';
 
 import { convertEmptyStringToNull, convertNullToEmptyString } from 'utils/convertTextFieldUtils';
+import { filterSelectMenu } from 'utils/filterSelectMenu';
 
 type BaseFormGameSettingsType = {
   children: ReactNode;
@@ -37,6 +35,8 @@ export const BaseFormGameSettings: FC<BaseFormGameSettingsType> = ({
     control,
     formState: { errors },
   } = useFormContext<BaseGameSettingsType>();
+
+  const menu = filterSelectMenu(status, STATUS_MENU);
 
   return (
     <>
@@ -87,8 +87,8 @@ export const BaseFormGameSettings: FC<BaseFormGameSettingsType> = ({
                       size="small"
                       value={value}
                       onChange={onChange}
-                      title="Уровень"
-                      options={STATUS_MENU}
+                      title="Статус"
+                      options={menu}
                       error={errors.status?.message}
                       ref={ref}
                     />
