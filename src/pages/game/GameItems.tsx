@@ -37,7 +37,7 @@ const GAMES: { [key: string]: FunctionComponent<GameContainerProps & any> } = {
 
 const GameItems = observer(() => {
   const { role } = appStore;
-  const { gamePreset, actualPresets } = gamesStore;
+  const { gamePreset, actualPresets, newPresets } = gamesStore;
   const { gameName } = useParams<'gameName'>();
 
   if (gameName) {
@@ -63,6 +63,7 @@ const GameItems = observer(() => {
       navigate,
       stopGame,
       isLoading,
+      changePagePresets,
     } = useGame({ gamePreset, actualPresets, gameName });
 
     if (role === Roles.Unauthorized) {
@@ -94,6 +95,8 @@ const GameItems = observer(() => {
         onRepeat={onRepeat}
         navigate={navigate}
         isLoading={isLoading}
+        presets={newPresets}
+        changePage={changePagePresets}
       >
         <GameInstance width={gameViewSize} onEnd={onEnd} onRef={onRef} {...settings} />
       </GameReturn>

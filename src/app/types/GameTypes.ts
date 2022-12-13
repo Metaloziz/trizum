@@ -1,3 +1,4 @@
+import { GroupsLevelsValue } from 'app/enums/GroupLevels';
 import { StatusTypes } from 'app/enums/StatusTypes';
 import { Nullable } from 'app/types/Nullable';
 import { TimeZoneType } from 'app/types/TimeZoneType';
@@ -77,9 +78,10 @@ export type GamePresetT = {
   name: string;
   game: GameT;
   status: StatusTypes;
-  level: string;
+  level: GroupsLevelsValue;
   timeMax: number;
   settings: Partial<PresetsGameSettings>[];
+  createdAt?: TimeZoneType;
 };
 
 export type OneGamePresent = {

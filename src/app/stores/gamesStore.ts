@@ -1,3 +1,4 @@
+import { GroupsLevelsValue } from 'app/enums/GroupLevels';
 import { Roles } from 'app/enums/Roles';
 import { StatusTypes } from 'app/enums/StatusTypes';
 
@@ -12,9 +13,9 @@ import {
   GameT,
   OneGamePresent,
   PlayResultsResponseT,
+  PlayResultsSearchParams,
   PlaySendResultT,
   PresetsGameSettings,
-  PlayResultsSearchParams,
 } from 'app/types/GameTypes';
 import { SearchGameParamsType } from 'app/types/SearchGameParamsType';
 import { PresetT } from 'app/types/WorkTypes';
@@ -79,7 +80,7 @@ class GamesStore {
         type: '',
       },
       status: '' as StatusTypes,
-      level: 'easy',
+      level: GroupsLevelsValue.easy,
       timeMax: TIME_MAX,
       settings: [{ ...this.defaultSettings }] as PresetsGameSettings[],
     },
@@ -117,6 +118,8 @@ class GamesStore {
 
   isLoading: boolean = false;
 
+  page: number = 0;
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -147,7 +150,7 @@ class GamesStore {
   getPresets = async (searchPresetParams?: Partial<SearchParamsType & SearchGameParamsType>) => {
     try {
       const params = removeEmptyFields(searchPresetParams || {});
-      params.per_page = 1000; // todo hardcode
+      params.page = this.page;
       const res = await gamesService.getPresets(params);
       runInAction(() => {
         this.newPresets = res;
@@ -199,8 +202,8 @@ class GamesStore {
               name: '',
               type: '',
             },
-            status: '' as StatusTypes,
-            level: '',
+            status: StatusTypes.draft as StatusTypes,
+            level: GroupsLevelsValue.easy,
             timeMax: TIME_MAX,
             settings: [{ ...this.defaultSettings }] as PresetsGameSettings[],
           },
@@ -310,6 +313,10 @@ class GamesStore {
 
   setIsLoading = (isLoading: boolean) => {
     this.isLoading = isLoading;
+  };
+
+  changePage = (page: number) => {
+    this.page = page;
   };
 }
 
