@@ -51,12 +51,14 @@ const TestResultPage: FC = observer(() => {
                 />
               </div>
             </div>
-            <div className={styles.recommendations}>
-              <div className={styles.reqPic}>
-                <Image src={exclude} width="34px" height="34px" alt="Exclude" />
+            {result !== currentTest?.test.content.length && (
+              <div className={styles.recommendations}>
+                <div className={styles.reqPic}>
+                  <Image src={exclude} width="34px" height="34px" alt="Exclude" />
+                </div>
+                <ResultMessage />
               </div>
-              <ResultMessage />
-            </div>
+            )}
             <RedirectCurrentPageButton title="К списку статей" rout={AppRoutes.Blog} />
           </div>
         </div>

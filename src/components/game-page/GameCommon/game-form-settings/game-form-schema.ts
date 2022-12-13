@@ -418,7 +418,7 @@ export const FRAZES_SCHEMA = yup.object().shape({
     .number()
     .required('Обязательное поле')
     .min(1, 'Миниму 1 уровень')
-    .max(3, 'Максимум 5 уровней')
+    .max(5, 'Максимум 5 уровней')
     .nullable(),
   errorLevel: yup
     .number()

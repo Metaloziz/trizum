@@ -146,7 +146,7 @@ export const TestFormEditor = (props: Props): ReactElement => {
                     label="Максимальный результат"
                     size="small"
                     fullWidth
-                    error={errors.title?.message}
+                    error={errors.maxResult?.message}
                     inputProps={{ type: 'number' }}
                     onChange={event => {
                       onChange(Number(event.target.value));
