@@ -148,6 +148,40 @@ export const MEMORY_RHYTHM_SCHEMA = yup.object().shape({
     .max(99, 'Максимум 99 уровень')
     .nullable(),
   sound: yup.number().required('Обязательное поле'),
+  perSuccessLevel: yup
+    .number()
+    .min(1, 'Минимум 1 уровень')
+    .max(99, 'Максимум 99 уровней')
+    .test({
+      name: 'maxSuccessLevel',
+      message: 'Кол-во уровней для смены режима должно быть меньше кол-ва уровней',
+      test: (value, { parent: { levelMaxCompleted } }) =>
+        value ? levelMaxCompleted > value : true,
+    })
+    .required('Обязательное поле'),
+  maxErrorLevel: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 ошибка')
+    .max(5, 'Максимум 10 ошибок')
+    .test({
+      name: 'maxErrorLevel',
+      message: 'Кол-во ошибок должно быть меньше кол-ва уровней для пересчета',
+      test: (value, { parent: { perSuccessLevel } }) => (value ? perSuccessLevel > value : true),
+    })
+    .nullable(),
+  upgrade: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 мигание')
+    .max(10, 'Максимум 10 миганий')
+    .nullable(),
+  downgrade: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 мигание')
+    .max(10, 'Максимум 10 миганий')
+    .nullable(),
 });
 
 export const MEMORY_RHYTHM_FORM_SCHEMA = GAME_SCHEMA.concat(MEMORY_RHYTHM_SCHEMA);

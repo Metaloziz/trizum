@@ -20,6 +20,8 @@ import { MEMORY_RHYTHM_FORM_SCHEMA } from './game-form-schema';
 
 import { convertEmptyStringToNull, convertNullToEmptyString } from 'utils/convertTextFieldUtils';
 
+import { balloons } from '../../../../games/games/blinks/types';
+
 const DEFAULT_VALUES: MemoryRhythmFormType = {
   ...BASE_DEFAULT_VALUES,
   timeComplete: 60,
@@ -82,7 +84,7 @@ export const MemoryRhythmFormSettings = (props: FormSettingsType): ReactElement 
   } = methods;
 
   const onSubmit = handleSubmit(values => {
-    onFormSubmit(values);
+    onFormSubmit({ ...values, colorsMap: balloons.slice(0, values.digitMax) });
   });
 
   useEffect(() => {
@@ -206,11 +208,11 @@ export const MemoryRhythmFormSettings = (props: FormSettingsType): ReactElement 
               render={({ field: { value, onChange, ref } }) => (
                 <TextFieldCustom
                   type="text"
-                  label="Кол-во уровней для увеличения бликов"
+                  label="Кол-во уровней для пересчета миганий"
                   size="small"
                   fullWidth
                   inputProps={{ type: 'number' }}
-                  error={errors.levelMaxCompleted?.message}
+                  error={errors.perSuccessLevel?.message}
                   onChange={event => onChange(convertEmptyStringToNull(event))}
                   value={convertNullToEmptyString(value!)}
                   ref={ref}
@@ -225,11 +227,11 @@ export const MemoryRhythmFormSettings = (props: FormSettingsType): ReactElement 
               render={({ field: { value, onChange, ref } }) => (
                 <TextFieldCustom
                   type="text"
-                  label="Кол-во уровней для уменьшения бликов"
+                  label="Кол-во допустимых ошибок"
                   size="small"
                   fullWidth
                   inputProps={{ type: 'number' }}
-                  error={errors.levelMaxCompleted?.message}
+                  error={errors.maxErrorLevel?.message}
                   onChange={event => onChange(convertEmptyStringToNull(event))}
                   value={convertNullToEmptyString(value!)}
                   ref={ref}
@@ -244,11 +246,11 @@ export const MemoryRhythmFormSettings = (props: FormSettingsType): ReactElement 
               render={({ field: { value, onChange, ref } }) => (
                 <TextFieldCustom
                   type="text"
-                  label="Кол-во бликов для увеличения"
+                  label="Кол-во миганий для увеличения"
                   size="small"
                   fullWidth
                   inputProps={{ type: 'number' }}
-                  error={errors.levelMaxCompleted?.message}
+                  error={errors.upgrade?.message}
                   onChange={event => onChange(convertEmptyStringToNull(event))}
                   value={convertNullToEmptyString(value!)}
                   ref={ref}
@@ -263,11 +265,11 @@ export const MemoryRhythmFormSettings = (props: FormSettingsType): ReactElement 
               render={({ field: { value, onChange, ref } }) => (
                 <TextFieldCustom
                   type="text"
-                  label="Кол-во бликов для уменьшения"
+                  label="Кол-во миганий для уменьшения"
                   size="small"
                   fullWidth
                   inputProps={{ type: 'number' }}
-                  error={errors.levelMaxCompleted?.message}
+                  error={errors.downgrade?.message}
                   onChange={event => onChange(convertEmptyStringToNull(event))}
                   value={convertNullToEmptyString(value!)}
                   ref={ref}
