@@ -1,8 +1,9 @@
-import { makeAutoObservable, runInAction } from 'mobx';
-
 import tariffsService from 'app/services/tafiffService';
+import { FiltersTariffStore } from 'app/types/filtersTariffStore';
 import { TariffsEditOrCreateT, TariffsType } from 'app/types/TariffTypes';
 import { getDateWithoutTime } from 'components/rate-choice/utils';
+import { makeAutoObservable, runInAction } from 'mobx';
+import { throwErrorMessage } from 'utils';
 
 class TariffsStore {
   tariff = {
@@ -34,14 +35,7 @@ class TariffsStore {
 
   isDialogOpen: boolean = false;
 
-  filters = {
-    status: 'active',
-    lengthFrom: '',
-    lengthTo: '',
-    dateFrom: '',
-    dateTo: '',
-    input: '',
-  };
+  filters = new FiltersTariffStore();
 
   constructor() {
     makeAutoObservable(this);
@@ -80,7 +74,7 @@ class TariffsStore {
     };
   };
 
-  setFilters = (filter: any) => {
+  setFilters = (filter: FiltersTariffStore) => {
     this.filters = { ...filter };
   };
 
@@ -92,7 +86,7 @@ class TariffsStore {
         await tariffsService.create(options);
       }
     } catch (e) {
-      console.log(e);
+      throwErrorMessage(e);
     }
     this.closeDialog();
     await this.getTariffs();
@@ -106,7 +100,7 @@ class TariffsStore {
       });
       return res;
     } catch (e) {
-      console.warn(e);
+      throwErrorMessage(e);
     }
     return undefined;
   };
@@ -114,10 +108,10 @@ class TariffsStore {
   get filteredTariffs() {
     let data: TariffsType[] = [...this.tariffs];
     if (this.filters.lengthFrom) {
-      data = data.filter(val => +val.newPrice > +this.filters.lengthFrom);
+      data = data.filter(val => +val.newPrice >= +this.filters.lengthFrom);
     }
     if (this.filters.lengthTo) {
-      data = data.filter(val => +val.newPrice < +this.filters.lengthTo);
+      data = data.filter(val => +val.newPrice <= +this.filters.lengthTo);
     }
     if (this.filters.dateFrom) {
       data = data.filter(

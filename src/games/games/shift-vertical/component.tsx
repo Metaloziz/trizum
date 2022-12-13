@@ -49,6 +49,10 @@ export default class extends Component<Props, State> implements Game {
     this.setStarted(true);
   };
 
+  public updateCycleTime = (cycleTime: number) => {
+    this.setState({ cycleTime });
+  };
+
   public stop = () => {
     this.setStarted(false);
   };
@@ -81,7 +85,12 @@ export default class extends Component<Props, State> implements Game {
           <StartTimer
             time={START_TIMER}
             renderComponent={() => (
-              <GameWrapper {...this.props} onEnd={this.end} settingsCycleTime={cycleTime} />
+              <GameWrapper
+                {...this.props}
+                onEnd={this.end}
+                settingsCycleTime={cycleTime}
+                updateCycleTime={this.updateCycleTime}
+              />
             )}
           />
         )}

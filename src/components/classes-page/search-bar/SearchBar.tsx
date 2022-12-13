@@ -25,6 +25,7 @@ import groupStore from 'app/stores/groupStore';
 import Button from 'components/button/Button';
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { getOptionMui } from 'utils/getOption';
 import { statusTypeOptions } from '../../statusTypeOptions';
 
@@ -34,6 +35,12 @@ const SearchBar = observer(() => {
   const [franchiseOptions, setFranchiseOptions] = useState<JSX.Element[]>([]);
   const [courseOptions, setCourseOptions] = useState<JSX.Element[]>([]);
   const [teacherOptions, setTeacherOptions] = useState<JSX.Element[]>([]);
+
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    clearQueryFields();
+  }, [pathname]);
 
   const levelOptionsNames = Object.values(GroupLevels);
   const levelOptions = Object.keys(GroupLevels).map((el, idx) =>
@@ -170,7 +177,7 @@ const SearchBar = observer(() => {
                 renderInput={props => <TextField sx={{ width: '48%' }} {...props} />}
               />
               <DatePicker
-                onChange={(value, keyboardInputValue) => {
+                onChange={value => {
                   value && (queryFields.dateUntil = new Date(value));
                 }}
                 value={queryFields.dateUntil ? queryFields.dateUntil : null}

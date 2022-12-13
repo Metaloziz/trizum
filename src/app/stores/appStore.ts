@@ -1,8 +1,8 @@
 import { Roles } from 'app/enums/Roles';
 import authService from 'app/services/authService';
 import tokenService from 'app/services/tokenService';
-import { EmptyUser } from 'app/stores/emptyUser';
 import usersStore from 'app/stores/usersStore';
+import { EmptyUser } from 'app/types/emptyUser';
 import { GameIdWithCode } from 'app/types/GameTypes';
 import { WorkWithIdFromLoadme } from 'app/types/LoadMeTypes';
 import { makeAutoObservable, runInAction } from 'mobx';

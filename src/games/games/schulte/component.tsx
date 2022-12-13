@@ -377,10 +377,9 @@ const styles = StyleSheet.create({
     fontWeight : 'bold'
   },
   title : {
-    fontSize : 16,
-    lineHeight : 20,
+    fontSize : 18,
     textAlign : 'center',
-    marginBottom : 26
+    marginBottom : 8
   },
   timer : {
     textAlign : 'center',
@@ -395,7 +394,7 @@ const styles = StyleSheet.create({
     overflow : 'hidden',
     marginTop : 0,
     marginHorizontal : 0,
-    marginBottom : 12
+    marginBottom : 22
   },
   progressTimeInner : {
     height : 6,

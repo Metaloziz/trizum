@@ -1,12 +1,11 @@
 import { AppRoutes } from 'app/enums/AppRoutes';
-import { EmptyUser } from 'app/stores/emptyUser';
 import gamesStore from 'app/stores/gamesStore';
+import { EmptyUser } from 'app/types/emptyUser';
 import Button from 'components/button/Button';
 import CardStudentTitle from 'components/card-student/card-student-title/CardStudentTitle';
 import CustomImageWrapper from 'components/custom-image-wrapper/CustomImageWrapper';
 import Image from 'components/image/Image';
 import { BASE_URL } from 'constants/constants';
-import { toJS } from 'mobx';
 import Avatar from 'public/img/avatarDefault.png';
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -21,8 +20,6 @@ type Props = {
 
 const CardStudentForTeacher: FC<Props> = ({ user, setSelectedUserId }) => {
   const { getPlayResultForCurrentHomeWork } = gamesStore;
-
-  console.log('user', toJS(user));
 
   const navigate = useNavigate();
 

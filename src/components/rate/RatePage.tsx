@@ -30,6 +30,7 @@ const RatePage = observer(() => {
   const [loading, setLoading] = useState<boolean>(false); // State для загрузки
   const [currentPage, setCurrentPage] = useState<number>(1); // State для отображения текущей страницы
   const [count] = useState<number>(10); // State для отображения количества элементов на каждой странице
+
   useEffect(() => {
     setLoading(true);
     getTariffs();
@@ -75,7 +76,7 @@ const RatePage = observer(() => {
       </div>
       <div className={styles.paginationRateBlock}>
         <Pagination
-          count={Math.ceil(data.length / 10)}
+          count={Math.ceil(data.length / count)}
           onChange={paginate}
           page={currentPage}
           defaultValue={0}

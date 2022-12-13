@@ -6,8 +6,8 @@ import { CreatOrEditWorkRequestT, OneWorkResponseT } from 'app/types/WorkTypes';
 import { HomeworkViewModel } from 'app/viewModels/HomeworkViewModel';
 import { makeObservable, observable, runInAction } from 'mobx';
 import * as yup from 'yup';
-import { MIN_NAMES_LENGTH } from '../../constants/constants';
-import { removeEmptyFields } from '../../utils/removeEmptyFields';
+import { MIN_NAMES_LENGTH } from 'constants/constants';
+import { removeEmptyFields, throwErrorMessage } from 'utils';
 import { StatusTypes } from '../enums/StatusTypes';
 import homeWorksService from '../services/homeWorksService';
 import { PaginationType } from '../types/PaginationType';
@@ -69,7 +69,7 @@ class HomeworkStore extends StoreBase {
       });
       this.isDialogOpen = true;
     } catch (e) {
-      console.warn(e);
+      throwErrorMessage(e);
     }
   };
 
@@ -110,7 +110,7 @@ class HomeworkStore extends StoreBase {
         await this.getHomeWorks();
       });
     } catch (e) {
-      console.warn(e);
+      throwErrorMessage(e);
     }
   };
 
@@ -121,7 +121,7 @@ class HomeworkStore extends StoreBase {
         await this.getHomeWorks();
       });
     } catch (e) {
-      console.warn(e);
+      throwErrorMessage(e);
     }
   };
 

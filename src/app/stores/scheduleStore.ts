@@ -46,21 +46,19 @@ class GroupStore {
   getGroups = async () => {
     const res = await groupsService.getGroups({ perPage: 1000, type: 'class' });
     runInAction(() => {
-      if (!!res.items) {
+      if (!!res.items.length) {
         this.groups = res.items.map(el => ({ groupName: el.name, groupId: el.id }));
-        this.schedule = res.items.length
-          ? res.items
-              .map(group =>
-                scheduleMapper(
-                  group.schedule,
-                  group.name,
-                  group.id,
-                  group.teacherId,
-                  group.franchise,
-                ),
-              )
-              .reduce((acc, elem) => [...acc, ...elem], [] as ScheduleForUI[])
-          : [];
+        this.schedule = res.items
+          .map(group =>
+            scheduleMapper(
+              group.schedule.classworks,
+              group.name,
+              group.id,
+              group.teacherId,
+              group.franchise,
+            ),
+          )
+          .reduce((acc, elem) => [...acc, ...elem], [] as ScheduleForUI[]);
       }
     });
   };

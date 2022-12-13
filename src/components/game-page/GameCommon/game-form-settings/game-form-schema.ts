@@ -44,6 +44,40 @@ export const SHIFT_VERTICAL_SCHEMA = yup.object().shape({
     .required('Обязательное поле')
     .min(2, 'Минимум 2 формы')
     .max(10, 'Максимум 10 форм'),
+  perSuccessLevel: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 угадывание')
+    .max(10, 'Максимум 10 угадываний')
+    .test({
+      name: 'maxSuccessLevel',
+      message: 'Кол-во угадываний для смены режима должно быть меньше уровней',
+      test: (value, { parent: { elementsTotal } }) => (value ? elementsTotal > value : true),
+    })
+    .nullable(),
+  maxErrorLevel: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 ошибочное угадывание')
+    .max(10, 'Максимум 10 ошибочных угадываний')
+    .test({
+      name: 'maxErrorLevel',
+      message: 'Кол-во ошибочных угадываний должно быть меньше кол-ва угадываний',
+      test: (value, { parent: { perSuccessLevel } }) => (value ? perSuccessLevel > value : true),
+    })
+    .nullable(),
+  upgrade: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 процент')
+    .max(100, 'Максимум 100 процентов')
+    .nullable(),
+  downgrade: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 процент')
+    .max(100, 'Максимум 100 процентов')
+    .nullable(),
 });
 
 export const SHIFT_VERTICAL_FORM_SCHEMA = GAME_SCHEMA.concat(SHIFT_VERTICAL_SCHEMA);
@@ -204,18 +238,6 @@ export const SILHOUETTES_SCHEMA = yup.object().shape({
     .required('Обязательное поле')
     .min(1, 'Минимум 1 фигур')
     .max(10, 'Максимум 10 фигур'),
-  perSuccessLevel: yup.number().required('Обязательное поле').min(1, 'Минимум 1 уровень'),
-  maxErrorLevel: yup.number().required('Обязательное поле').min(1, 'Минимум 1 уровень'),
-  upgrade: yup
-    .number()
-    .required('Обязательное поле')
-    .min(1, 'Минимум 1 блик')
-    .max(10, 'Максимум 10 бликов'),
-  downgrade: yup
-    .number()
-    .required('Обязательное поле')
-    .min(1, 'Минимум 1 блик')
-    .max(10, 'Максимум 10 бликов'),
 });
 
 export const SILHOUETTES_FORM_SCHEMA = GAME_SCHEMA.concat(SILHOUETTES_SCHEMA);

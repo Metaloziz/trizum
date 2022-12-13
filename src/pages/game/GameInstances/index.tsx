@@ -1,12 +1,18 @@
 import { Roles } from 'app/enums/Roles';
-import { GamePresetT, GameT, PresetsGameSettings, ResultsNewT } from 'app/types/GameTypes';
+import {
+  GamePresetsResponseT,
+  GamePresetT,
+  GameT,
+  PresetsGameSettings,
+  ResultsNewT,
+} from 'app/types/GameTypes';
 import { OptionT } from 'app/types/OptionT';
 import Button from 'components/button/Button';
 import { GameDesc } from 'components/game-page/GameCommon/GameDesc';
 import { GameResultModal } from 'components/game-page/GameCommon/GameModal/GameResultModal/GameResultModal';
 import { NewGameModal } from 'components/game-page/GameCommon/GameModal/NewGameModal';
 import { PlayButton } from 'components/game-page/GameCommon/PlayButton';
-import { SelectBlock } from 'components/game-page/GameCommon/SelectBlock';
+import { TableSettingsPreset } from 'components/game-page/GameCommon/TableSettingsPreset';
 import styles from 'pages/game/Game.module.scss';
 import React, { FC, KeyboardEvent } from 'react';
 import { NavigateFunction } from 'react-router-dom';
@@ -34,6 +40,8 @@ type GameReturnPropsT = {
   children: React.ReactNode;
   game?: GameT;
   isLoading: boolean;
+  presets: GamePresetsResponseT;
+  changePage: (page: number) => void;
 };
 
 const KEY_GAME = ['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft'];
@@ -48,10 +56,7 @@ export const GameReturn: FC<GameReturnPropsT> = props => {
     resultModal,
     gameTitle,
     gameViewSize,
-    presetArr,
-    gamePreset,
     setPreset,
-    groupOptions,
     started,
     startGame,
     settings,
@@ -62,6 +67,8 @@ export const GameReturn: FC<GameReturnPropsT> = props => {
     stopGame,
     game,
     isLoading,
+    presets,
+    changePage,
   } = props;
 
   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
@@ -92,16 +99,26 @@ export const GameReturn: FC<GameReturnPropsT> = props => {
         <section>
           <div style={{ minWidth: `${gameViewSize + 200}px` }}>
             {(role === Roles.Methodist || role === Roles.Admin) && (
-              <SelectBlock
-                stopGame={stopGame}
-                width={gameViewSize + 100}
-                openModal={() => toggleModal(true)}
-                presetArrs={presetArr}
-                presetId={gamePreset.id}
+              <TableSettingsPreset
+                gamePresets={presets.items}
+                total={presets.total}
+                page={presets.page}
+                perPage={presets.perPage}
                 setPreset={setPreset}
-                groupOptions={groupOptions}
-                isLoading={isLoading}
+                stopGame={stopGame}
+                changePage={changePage}
+                openModal={() => toggleModal(true)}
               />
+              // <SelectBlock
+              //   stopGame={stopGame}
+              //   width={gameViewSize + 100}
+              //   openModal={() => toggleModal(true)}
+              //   presetArrs={presetArr}
+              //   presetId={gamePreset.id}
+              //   setPreset={setPreset}
+              //   groupOptions={groupOptions}
+              //   isLoading={isLoading}
+              // />
             )}
           </div>
 

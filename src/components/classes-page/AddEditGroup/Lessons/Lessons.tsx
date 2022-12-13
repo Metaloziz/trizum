@@ -2,15 +2,12 @@ import { Grid, Typography, TextField, Button } from '@mui/material';
 import { TimePicker } from '@mui/x-date-pickers';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import groupStore from 'app/stores/groupStore';
-import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react';
 import style from './Lessons.module.scss';
 
 const Lessons: FC = observer(() => {
-  const { schedule, changeLesson } = groupStore;
-
-  console.log('schedule', toJS(schedule));
+  const { schedule, changeLesson, isDisableEditForm } = groupStore;
 
   const addLesson = () => {
     groupStore.schedule.push({
@@ -47,6 +44,7 @@ const Lessons: FC = observer(() => {
                   label="Название урока"
                   value={el.name}
                   onChange={({ currentTarget: { value } }) => changeLesson(el.id, 'name', value)}
+                  disabled={isDisableEditForm}
                 />
               </Grid>
               <Grid
@@ -63,24 +61,27 @@ const Lessons: FC = observer(() => {
                   onChange={e => e && changeLesson(el.id, 'date', new Date(e))}
                   label="Дата урока"
                   defaultCalendarMonth="1"
+                  disabled={isDisableEditForm}
                   renderInput={e => <TextField {...e} />}
                 />
                 <TimePicker
                   label="Начало урока"
                   value={el.from}
                   onChange={e => e && changeLesson(el.id, 'from', new Date(e))}
+                  disabled={isDisableEditForm}
                   renderInput={e => <TextField {...e} />}
                 />
                 <TimePicker
                   label="Конец урока"
                   value={schedule[index].to}
                   onChange={e => e && changeLesson(el.id, 'to', new Date(e))}
+                  disabled={isDisableEditForm}
                   renderInput={e => <TextField {...e} />}
                 />
               </Grid>
             </Grid>
           ))}
-          <Button onClick={addLesson} variant="outlined">
+          <Button onClick={addLesson} variant="outlined" disabled={isDisableEditForm}>
             Добавить урок
           </Button>
         </div>
