@@ -229,21 +229,6 @@ export const Filter: FC<UserPageFilterProps> = observer(props => {
                 renderInput={params => <TextField {...params} fullWidth />}
               />
             </Grid>
-            <Grid item xs={12} sm={4}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Оплачен</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={isPaid || ''}
-                  label="Оплачен"
-                  onChange={handleChangeIsPaid}
-                >
-                  <MenuItem value={PAID}>{PAID}</MenuItem>
-                  <MenuItem value={NOT_PAID}>{NOT_PAID}</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
 
             <Grid item xs={12} sm={4}>
               <TextField
@@ -346,6 +331,7 @@ export const Filter: FC<UserPageFilterProps> = observer(props => {
                 </Select>
               </FormControl>
             </Grid>
+
             <Grid item xs={12} sm={4}>
               <TextField
                 autoComplete="on"
@@ -383,20 +369,37 @@ export const Filter: FC<UserPageFilterProps> = observer(props => {
               </Grid>
             )}
             {selectedRole === 'student' && (
-              <Grid item xs={12} sm={4}>
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">Тариф</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={tariffId}
-                    label="Тариф"
-                    onChange={handleChangeTariffId}
-                  >
-                    {getAllOptionsMUI(tariffsOptions)}
-                  </Select>
-                </FormControl>
-              </Grid>
+              <>
+                <Grid item xs={12} sm={4}>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Тариф</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={tariffId}
+                      label="Тариф"
+                      onChange={handleChangeTariffId}
+                    >
+                      {getAllOptionsMUI(tariffsOptions)}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Статус оплаты</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={isPaid || ''}
+                      label="Статус оплаты"
+                      onChange={handleChangeIsPaid}
+                    >
+                      <MenuItem value={PAID}>{PAID}</MenuItem>
+                      <MenuItem value={NOT_PAID}>{NOT_PAID}</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+              </>
             )}
           </Grid>
         </AccordionDetails>
