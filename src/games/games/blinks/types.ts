@@ -7,36 +7,49 @@ export interface Props extends GameProps {
   colorsMap: string[];
   sound?: number;
   onEnd?(result?: GameResult): void;
-  levelChangeEngine: number;
-  errorLevel: number;
-  upgradeBlink: number;
-  downgradeBlink: number;
-  onRef: any
+  perSuccessLevel: number;
+  maxErrorLevel: number;
+  upgrade: number;
+  downgrade: number;
+  onRef: any;
+  digitMax: number;
 }
 
 export interface LevelStatistic {
-  blinksCount: number,
+  blinksCount: number;
   result: boolean;
 }
 
-const PropsDefault : Props = {
-  width : 200,
-  timeComplete : 5,
-  levelMaxCompleted : 5,
-  blinksCount : 2,
-  sound : 1,
-  colorsMap : [
-    '#4b8bf5',
-    '#8a7ff3',
-    '#ef8884'
+const balloons = [
+  '#8a80f3',
+  '#ef8784',
+  '#ff9920',
+  '#babec7',
+  '#8f806b',
+  '#0d6384',
+  '#dfff00',
+  '#800080',
+  '#008080',
+  '#ccccff',
+];
+
+const PropsDefault: Props = {
+  width: 200,
+  timeComplete: 5,
+  levelMaxCompleted: 5,
+  blinksCount: 2,
+  sound: 1,
+  colorsMap: [
+    '#8a80f3',
+    '#ef8784',
+    '#ff9920',
   ],
-  levelChangeEngine: 1,
-  errorLevel: 2,
-  upgradeBlink: 1,
-  downgradeBlink: 1,
-  onRef: () => {}
+  perSuccessLevel: 1,
+  maxErrorLevel: 2,
+  upgrade: 1,
+  downgrade: 1,
+  onRef: () => {},
+  digitMax: 3,
 };
 
-export {
-  PropsDefault
-};
+export { PropsDefault, balloons };

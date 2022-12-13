@@ -49,7 +49,6 @@ export default class extends Component<Props, State> implements Game {
 
   constructor(props: any) {
     super(props);
-
     this.soundItems = [];
     this.blinks = [];
     this.blinksPress = [];
@@ -95,6 +94,15 @@ export default class extends Component<Props, State> implements Game {
     this.blinksRef = [];
     this.successPress = 0;
     this.failPress = 0;
+
+    this.result = {
+      result: 'win',
+      time: 0,
+      levelMaxCompleted: 0,
+      success: 0,
+      failed: 0,
+      finished: true,
+    };
 
     Promise.all([
       SoundPreload(SOUND_DO),
@@ -155,6 +163,31 @@ export default class extends Component<Props, State> implements Game {
     );
   };
 
+  private triggerEngine = () => {
+    const { perSuccessLevel: perLevel, maxErrorLevel, upgrade, downgrade } = this.props;
+    const { levelBlink: currentLevelBlink, levelStatistic } = this.state;
+
+    let levelBlink = currentLevelBlink;
+
+    const lastLevels = levelStatistic.slice(-perLevel);
+
+    const { length: errorsCount } = levelStatistic.filter(({ result }) => !result);
+
+    if (lastLevels.length === perLevel) {
+      if (errorsCount < maxErrorLevel) {
+        levelBlink += upgrade;
+      }
+
+      if (errorsCount > maxErrorLevel && levelBlink > 1) {
+        levelBlink -= downgrade;
+      }
+    }
+
+    this.setState({
+      levelBlink,
+    });
+  };
+
   onNext = () => {
     setTimeout(() => {
       this.startLogic();
@@ -162,42 +195,7 @@ export default class extends Component<Props, State> implements Game {
   };
 
   onNextLevel = () => {
-    const { levelChangeEngine, upgradeBlink, downgradeBlink, errorLevel } = this.props;
-    const { levelBlink: currentLevelBlink, levelStatistic } = this.state;
-
-    let levelBlink = currentLevelBlink;
-    const lastLevels = levelStatistic.slice(-levelChangeEngine);
-
-    let success = 0;
-    let errors = 0;
-
-    lastLevels.forEach(({ result }) => {
-      if (result) {
-        errors = 0;
-        success++;
-      } else {
-        success = 0;
-        errors++;
-      }
-    });
-
-    const counterCurrentBlinks = levelStatistic
-      .slice(-levelChangeEngine)
-      .filter(({ blinksCount }) => blinksCount === levelBlink);
-
-    if (success === levelChangeEngine) {
-      if (counterCurrentBlinks.length === levelChangeEngine) {
-        levelBlink += upgradeBlink;
-      }
-    }
-
-    if (errors === errorLevel && levelBlink > 1) {
-      levelBlink -= downgradeBlink;
-    }
-
-    this.setState({
-      levelBlink,
-    });
+    this.triggerEngine();
 
     setTimeout(() => {
       this.setState(
@@ -322,14 +320,14 @@ export default class extends Component<Props, State> implements Game {
     this.stop();
   };
 
-  onRefBlink = (index: any) => (ref: any) => {
+  onRefBlink = (index: number) => (ref: any) => {
     this.blinksRef[index] = ref;
   };
 
   renderInner = () => {
     const { width, colorsMap, sound = 1, levelMaxCompleted = 5, timeComplete = 3 } = this.props;
 
-    const { started, blink = false, stage = 'listen', level = 0 } = this.state;
+    const { started, blink = false, stage = 'listen', level = 0, levelBlink } = this.state;
 
     const sizeBlink = Math.round((width - (colorsMap.length - 1) * SPACE) / colorsMap.length);
 
@@ -353,8 +351,8 @@ export default class extends Component<Props, State> implements Game {
                   }}
                 />
               )}
-              renderTime={(t: any) => {
-                let progress = ((timeComplete - t) / timeComplete) * 100;
+              renderTime={(time: number) => {
+                let progress = ((timeComplete - time) / timeComplete) * 100;
 
                 if (progress > 100) {
                   progress = 100;
@@ -382,11 +380,11 @@ export default class extends Component<Props, State> implements Game {
             height: width,
           }}
         >
-          {colorsMap.map((a: any, index: number) => (
+          {colorsMap.map((color: string, index: number) => (
             <BlinkView
               key={`blink-${index}`}
               ref={this.onRefBlink(index)}
-              color={a}
+              color={color}
               size={sizeBlink}
               active={index === blink}
               onPress={stage == 'repeat' ? this.onPress(index) : undefined}
@@ -395,7 +393,7 @@ export default class extends Component<Props, State> implements Game {
           ))}
         </View>
         <View style={styles.wrapBottom}>
-          {started && stage == 'repeat' && (
+          {started && stage === 'repeat' && (
             <Timer
               ref={ref => (this.timerRef = ref)}
               renderTime={(time: any) => <Text style={styles.timer}>{time} сек</Text>}
