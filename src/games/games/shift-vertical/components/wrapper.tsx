@@ -57,8 +57,6 @@ export default class extends Component<Props & ComponentProps, State> {
     const timer: any = this.timerAll;
     const time = timer?.getValue();
 
-    console.log("on end --->", time, timer, this.result)
-
     onEnd({
       ...(result as any),
       time,
