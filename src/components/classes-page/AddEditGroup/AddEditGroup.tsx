@@ -50,6 +50,13 @@ const AddEditGroup: FC = observer(() => {
     );
   };
 
+  let isDisableTeacherSelector = !modalFields.franchiseId;
+
+  useEffect(() => {
+    getTeachers();
+    isDisableTeacherSelector = !modalFields.franchiseId;
+  }, [modalFields.franchiseId]);
+
   useEffect(() => {
     loadInitialModal();
   }, []);
@@ -86,7 +93,7 @@ const AddEditGroup: FC = observer(() => {
 
   const isFranchiseRole = role === Roles.Franchisee || role === Roles.FranchiseeAdmin;
 
-  const courseLabel = `Курс: ${GroupLevels[modalFields.level]}`;
+  const courseLabel = `Курс: ${GroupLevels[modalFields.level]} *`;
 
   const setSchedule = (count: number) => {
     groupStore.schedule = groupStore.setEmptyScheduleItems(1);
@@ -117,38 +124,6 @@ const AddEditGroup: FC = observer(() => {
             // error={!validateSchema.fields.name.isValidSync(modalFields.name)}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <FormControl fullWidth>
-            <InputLabel id="teacher">Учитель</InputLabel>
-            <Select
-              labelId="teacher"
-              label="Учитель"
-              fullWidth
-              onChange={event => (modalFields.teacherId = event.target.value)}
-              value={modalFields.teacherId}
-              disabled={isDisableEditForm}
-            >
-              {teacherOptions}
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <FormControl fullWidth>
-            <InputLabel id="level">Уровень</InputLabel>
-            <Select
-              labelId="level"
-              label="Уровень"
-              placeholder="Уровень"
-              fullWidth
-              disabled={isDisableEditForm}
-              // @ts-ignore
-              onChange={event => (modalFields.level = event.target.value)}
-              value={modalFields.level}
-            >
-              {getMUIOptionsFromEnum(GroupLevels)}
-            </Select>
-          </FormControl>
-        </Grid>
         {!isFranchiseRole && (
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
@@ -166,6 +141,39 @@ const AddEditGroup: FC = observer(() => {
             </FormControl>
           </Grid>
         )}
+        <Grid item xs={12} sm={6}>
+          <FormControl fullWidth>
+            <InputLabel id="level">Уровень</InputLabel>
+            <Select
+              labelId="level"
+              label="Уровень"
+              placeholder="Уровень"
+              fullWidth
+              disabled={isDisableEditForm}
+              // @ts-ignore
+              onChange={event => (modalFields.level = event.target.value)}
+              value={modalFields.level}
+            >
+              {getMUIOptionsFromEnum(GroupLevels)}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <FormControl fullWidth>
+            <InputLabel id="teacher">Учитель</InputLabel>
+            <Select
+              labelId="teacher"
+              label="Учитель"
+              fullWidth
+              onChange={event => (modalFields.teacherId = event.target.value)}
+              value={modalFields.teacherId}
+              disabled={isDisableEditForm || isDisableTeacherSelector}
+            >
+              {teacherOptions}
+            </Select>
+          </FormControl>
+        </Grid>
+
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth>
             <InputLabel id="course">{courseLabel}</InputLabel>
