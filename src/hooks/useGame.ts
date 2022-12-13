@@ -21,7 +21,7 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
   const { role } = appStore;
   const { groups } = groupStore;
   const {
-    deletePreset,
+    deletePreset: deletePresetStore,
     getPreset,
     getPresets,
     getGame,
@@ -79,6 +79,11 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
     stopGame();
     console.log('setPreset', toJS(data));
     await getPreset(data);
+  };
+
+  const deletePreset = async (id: string) => {
+    await deletePresetStore(id);
+    await getPreset(id);
   };
 
   // const toggleModal = (value: boolean) => setIsModalOpen(value);
