@@ -7,7 +7,7 @@ export const scheduleMapper = (
   teacherId: TeacherIdWTF,
   franchise: FranchiseWTF,
 ): ScheduleForUI[] =>
-  schedule.length
+  schedule?.length
     ? schedule.map((el, idx) => {
         const dateAr: number[] = el.date.split('.').map(elem => Number(elem));
         const timeStartAr: number[] = el.from.split(':').map(elem => Number(elem));

@@ -29,6 +29,7 @@ const AddEditGroup: FC = observer(() => {
     cleanModalValues,
     closeModal,
     editGroup,
+    isDisableEditForm,
   } = groupStore;
 
   const { role, user } = appStore;
@@ -111,7 +112,7 @@ const AddEditGroup: FC = observer(() => {
             label="Название"
             value={modalFields.name}
             fullWidth
-            disabled={!!selectedGroup.id && modalFields.status !== 'active'}
+            disabled={isDisableEditForm}
             onChange={({ currentTarget: { value } }) => (modalFields.name = value)}
             // error={!validateSchema.fields.name.isValidSync(modalFields.name)}
           />
@@ -125,6 +126,7 @@ const AddEditGroup: FC = observer(() => {
               fullWidth
               onChange={event => (modalFields.teacherId = event.target.value)}
               value={modalFields.teacherId}
+              disabled={isDisableEditForm}
             >
               {teacherOptions}
             </Select>
@@ -138,6 +140,7 @@ const AddEditGroup: FC = observer(() => {
               label="Уровень"
               placeholder="Уровень"
               fullWidth
+              disabled={isDisableEditForm}
               // @ts-ignore
               onChange={event => (modalFields.level = event.target.value)}
               value={modalFields.level}
@@ -154,6 +157,7 @@ const AddEditGroup: FC = observer(() => {
                 labelId="franchise"
                 label="Франшиза"
                 fullWidth
+                disabled={isDisableEditForm}
                 onChange={event => (modalFields.franchiseId = event.target.value)}
                 value={modalFields.franchiseId}
               >
@@ -168,7 +172,7 @@ const AddEditGroup: FC = observer(() => {
             <Select
               labelId="course"
               label={courseLabel}
-              disabled={!modalFields.level || !!selectedGroup.id}
+              disabled={!modalFields.level || isDisableEditForm}
               fullWidth
               onChange={({ target: { value } }) => {
                 const course = groupStore.courses.find(el => el.id === value);
@@ -197,12 +201,14 @@ const AddEditGroup: FC = observer(() => {
         </Grid>
         <Grid item xs={12} sm={6} sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <DatePicker
+            disabled={isDisableEditForm}
             onChange={e => e && (modalFields.dateSince = new Date(e))}
             value={modalFields.dateSince}
             renderInput={e => <TextField {...e} sx={{ width: '48%' }} />}
             label="Период работы группы с"
           />
           <DatePicker
+            disabled={isDisableEditForm}
             onChange={e => e && (modalFields.dateUntil = new Date(e))}
             value={modalFields.dateUntil}
             renderInput={e => <TextField {...e} sx={{ width: '48%' }} />}

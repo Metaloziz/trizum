@@ -2,6 +2,7 @@ import { makeAutoObservable, runInAction } from 'mobx';
 
 import franchiseService from 'app/services/franchiseService';
 import { FranchisingViewModel } from 'app/viewModels/FranchisingViewModel';
+import { throwErrorMessage } from 'utils';
 
 class FranchiseeStore {
   franchise: FranchisingViewModel[] = [
@@ -60,7 +61,7 @@ class FranchiseeStore {
       });
       return res;
     } catch (e) {
-      console.warn(e);
+      throwErrorMessage(e);
     }
     return [] as FranchisingViewModel[];
   };
@@ -73,7 +74,7 @@ class FranchiseeStore {
       });
       return res;
     } catch (e) {
-      console.warn(e);
+      throwErrorMessage(e);
     }
     return [] as FranchisingViewModel[];
   };

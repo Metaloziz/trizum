@@ -1,13 +1,15 @@
 import { Nullable } from 'app/types/Nullable';
 import axios from 'axios';
 import { makeObservable, observable } from 'mobx';
+import { ReactNode } from 'react';
+import { throwErrorMessage } from 'utils';
 
 export class StoreBase {
   isLoading: boolean = false;
 
   error: Nullable<Error> = null;
 
-  success: Nullable<React.ReactNode> = null;
+  success: Nullable<ReactNode> = null;
 
   constructor() {
     makeObservable(this, {
@@ -28,6 +30,8 @@ export class StoreBase {
         : typeof error === 'string'
         ? new Error(error)
         : error;
+
+      throwErrorMessage(error);
     } finally {
       this.isLoading = false;
     }

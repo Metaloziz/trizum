@@ -1,5 +1,5 @@
 import { Roles } from 'app/enums/Roles';
-import { EmptyUser } from 'app/stores/emptyUser';
+import { EmptyUser } from 'app/types/emptyUser';
 import React, { FC } from 'react';
 
 import CardStudentForTeacher from 'components/card-student/card-student-for-teacher/CardStudentForTeacher';

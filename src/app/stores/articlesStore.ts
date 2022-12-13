@@ -182,9 +182,5 @@ class ArticlesStore {
   setArticleId = (id: Nullable<string> = null) => {
     this.articleId = id;
   };
-
-  get getArticle() {
-    return this.article;
-  }
 }
 export default new ArticlesStore();

@@ -2,6 +2,7 @@ import reportService from 'app/services/reportService';
 import { ReportItemsT, ReportParamsForUI } from 'app/types/ReportT';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { AxiosError } from 'axios';
+import { throwErrorMessage } from 'utils';
 import { ResponseGroups } from '../types/GroupTypes';
 
 class ReportStore {
@@ -61,7 +62,7 @@ class ReportStore {
         this.total = res.total;
       });
     } catch (e) {
-      console.warn(e);
+      throwErrorMessage(e);
     }
   };
 

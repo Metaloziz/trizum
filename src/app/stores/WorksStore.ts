@@ -2,6 +2,7 @@ import worksService from 'app/services/worksService';
 import { StoreBase } from 'app/stores/StoreBase';
 import { RequestCreateWork, OneWorkResponseT } from 'app/types/WorkTypes';
 import { runInAction, makeObservable, observable } from 'mobx';
+import { throwErrorMessage } from 'utils';
 
 class WorksStore extends StoreBase {
   currentHomework?: OneWorkResponseT;
@@ -15,10 +16,10 @@ class WorksStore extends StoreBase {
 
   getCurrentWork = (workId: string) => {
     this.execute(async () => {
-      const responce = await worksService.getOneWork(workId);
+      const response = await worksService.getOneWork(workId);
 
       runInAction(() => {
-        this.currentHomework = responce;
+        this.currentHomework = response;
       });
     });
   };
@@ -31,7 +32,7 @@ class WorksStore extends StoreBase {
     try {
       await worksService.createWork(work);
     } catch (e) {
-      console.warn(e);
+      throwErrorMessage(e);
     }
   };
 
@@ -39,7 +40,7 @@ class WorksStore extends StoreBase {
     try {
       await worksService.editWork(work, id);
     } catch (e) {
-      console.warn(e);
+      throwErrorMessage(e);
     }
   };
 }
