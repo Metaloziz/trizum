@@ -6,7 +6,6 @@ import { GameProps, PlaySendResultT, PresetsGameSettings, ResultsNewT } from 'ap
 import { Option } from 'components/select-mui/CustomSelect';
 import { DEFAULT_GAME_SETTINGS } from 'constants/games';
 import { getPresetArrOptions } from 'constants/presetArr';
-import { toJS } from 'mobx';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { convertGroupOptions } from 'utils/convertGroupOptions';
@@ -21,7 +20,7 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
   const { role } = appStore;
   const { groups } = groupStore;
   const {
-    deletePreset,
+    deletePreset: deletePresetStore,
     getPreset,
     getPresets,
     getGame,
@@ -30,6 +29,7 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
     identificationParams,
     setIsLoading,
     isLoading,
+    changePage,
   } = gamesStore;
 
   const [refs, setRef] = useState<any>(null);
@@ -77,8 +77,12 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
 
   const setPreset = async (data: string) => {
     stopGame();
-    console.log('setPreset', toJS(data));
     await getPreset(data);
+  };
+
+  const deletePreset = async (id: string) => {
+    await deletePresetStore(id);
+    await getPreset(id);
   };
 
   // const toggleModal = (value: boolean) => setIsModalOpen(value);
@@ -132,7 +136,6 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
   const requestPresets = async () => {
     setIsLoading(true);
     if (role !== Roles.Student) {
-      // await getGroups();
       await getPresets({ game_code: gameName });
     }
     await getGame(gameName);
@@ -141,6 +144,11 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
       // getPreset()
     }
     setIsLoading(false);
+  };
+
+  const changePagePresets = async (page: number) => {
+    changePage(page);
+    await requestPresets();
   };
 
   useEffect(() => {
@@ -182,5 +190,6 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
     onRef,
     stopGame,
     isLoading,
+    changePagePresets,
   };
 };
