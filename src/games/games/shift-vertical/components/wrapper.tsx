@@ -11,15 +11,18 @@ import { Props } from '..';
 interface State {
   active: number;
   progress: string[];
-  cycleTime: number;
   levelStatistic: StatisticItem[];
 }
 
 interface ComponentProps {
   settingsCycleTime: number;
+  updateCycleTime: (time: number) => void;
 }
 
 export default class extends Component<Props & ComponentProps, State> {
+  timer: any;
+  timerAll: any;
+
   result: Result = {
     result: 'end',
     failed: 0,
@@ -34,14 +37,8 @@ export default class extends Component<Props & ComponentProps, State> {
     this.state = {
       active: 0,
       progress: [],
-      cycleTime: 0,
       levelStatistic: [],
     };
-  }
-
-  componentDidMount(): void {
-    const { settingsCycleTime } = this.props;
-    this.setState({ cycleTime: settingsCycleTime });
   }
 
   reset = () => {
@@ -95,48 +92,50 @@ export default class extends Component<Props & ComponentProps, State> {
   };
 
   private triggerEngine = (result: boolean) => {
-    const { perSuccessLevel, maxErrorLevel, upgrade, downgrade } = this.props;
+    const {
+      perSuccessLevel: perLevel,
+      maxErrorLevel,
+      upgrade,
+      downgrade,
+      settingsCycleTime: currentCycleTime,
+      updateCycleTime,
+    } = this.props;
 
-    const { levelStatistic: currentlevelStatistic, cycleTime: currentCycleTime } = this.state;
+    const { levelStatistic: currentlevelStatistic } = this.state;
 
     const levelStatistic = [...currentlevelStatistic, { result: result, time: currentCycleTime }];
 
     let cycleTime: number = currentCycleTime;
 
-    const lastLevels = levelStatistic.slice(-perSuccessLevel);
+    const lastLevels = levelStatistic.slice(-perLevel);
 
-    let success = 0;
-    let errors = 0;
+    if (lastLevels.length === perLevel) {
+      const { length: allErrors } = lastLevels.filter(({ result }) => !result);
 
-    lastLevels.forEach(({ result }) => {
-      if (result) {
-        errors = 0;
-        success++;
-      } else {
-        success = 0;
-        errors++;
+      if (allErrors > maxErrorLevel) {
+        cycleTime += (cycleTime * upgrade) / 100;
+        updateCycleTime(cycleTime);
       }
-    });
 
-    const counterCurrentTimer = lastLevels.filter(({ time }) => time === cycleTime);
-
-    if (success === perSuccessLevel) {
-      if (counterCurrentTimer.length === perSuccessLevel && currentCycleTime > 0) {
+      if (allErrors < maxErrorLevel) {
         cycleTime -= (cycleTime * downgrade) / 100;
+        updateCycleTime(cycleTime);
       }
     }
 
-    if (errors === maxErrorLevel) {
-      cycleTime += (cycleTime * upgrade) / 100;
-    }
-
-    this.setState({ levelStatistic, cycleTime });
+    this.setState({ levelStatistic });
   };
 
   render() {
-    const { timeComplete = 0, elementsTotal, groupsCount = 2, blinksCount = 2 } = this.props;
+    const {
+      timeComplete = 0,
+      elementsTotal,
+      groupsCount = 2,
+      blinksCount = 2,
+      settingsCycleTime: cycleTime,
+    } = this.props;
 
-    const { active = 0, progress = [], cycleTime } = this.state;
+    const { active = 0, progress = [] } = this.state;
 
     return (
       <View style={styles.wrap}>
@@ -155,7 +154,7 @@ export default class extends Component<Props & ComponentProps, State> {
         {timeComplete > 0 && (
           <View style={styles.progressTime}>
             <Timer
-              ref="timer"
+              ref={ref => (this.timer = ref)}
               time={timeComplete}
               onEnd={this.onEnd}
               renderComponent={() => (
@@ -166,8 +165,8 @@ export default class extends Component<Props & ComponentProps, State> {
                   }}
                 />
               )}
-              renderTime={(t: any) => {
-                let progress = ((timeComplete - t) / timeComplete) * 100;
+              renderTime={(time: number) => {
+                let progress = ((timeComplete - time) / timeComplete) * 100;
 
                 if (progress > 100) {
                   progress = 100;
@@ -186,8 +185,8 @@ export default class extends Component<Props & ComponentProps, State> {
           </View>
         )}
         <TimerAll
-          ref="timerAll"
-          renderTime={(time: any) => <Text style={styles.timer}>{time} сек</Text>}
+          ref={ref => (this.timerAll = ref)}
+          renderTime={(time: number) => <Text style={styles.timer}>{time} сек</Text>}
         />
       </View>
     );
@@ -203,6 +202,7 @@ const styles = StyleSheet.create({
   },
   wrap: {
     flex: 1,
+    paddingHorizontal: 6,
   },
   inner: {
     flex: 1,

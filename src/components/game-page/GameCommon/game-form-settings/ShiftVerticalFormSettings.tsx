@@ -23,11 +23,11 @@ const DEFAULT_VALUES: ShiftVerticalFormType = {
   ...BASE_DEFAULT_VALUES,
   blinksCount: 2,
   cycleTime: 5,
-  elementsTotal: 2,
+  elementsTotal: 3,
   groupsCount: 2,
   timeComplete: undefined,
   perSuccessLevel: 2,
-  maxErrorLevel: 2,
+  maxErrorLevel: 1,
   upgrade: 10,
   downgrade: 5,
 };
@@ -201,7 +201,7 @@ export const ShiftVerticalFormSettings = (props: FormSettingsType): ReactElement
               render={({ field: { value, onChange, ref } }) => (
                 <TextFieldCustom
                   type="text"
-                  label="Кол-во уровней для смены режима"
+                  label="Кол-во угадываний для смены режима"
                   size="small"
                   fullWidth
                   inputProps={{ type: 'number' }}
@@ -220,7 +220,7 @@ export const ShiftVerticalFormSettings = (props: FormSettingsType): ReactElement
               render={({ field: { value, onChange, ref } }) => (
                 <TextFieldCustom
                   type="text"
-                  label="Кол-во ошибок для уровня"
+                  label="Кол-во ошибочных угадываний"
                   size="small"
                   fullWidth
                   inputProps={{ type: 'number' }}
