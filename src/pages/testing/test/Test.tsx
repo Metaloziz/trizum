@@ -42,6 +42,7 @@ const Test: FC = observer(() => {
     case Roles.Methodist:
     case Roles.TeacherEducation:
     case Roles.Student:
+    case Roles.Tutor:
       return <TestPage />;
     case Roles.Unauthorized:
       return <Login />;
