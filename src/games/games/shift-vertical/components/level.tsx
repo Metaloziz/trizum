@@ -6,6 +6,8 @@ import { GameForms, GameForm } from '../common/forms';
 import { GameColors } from '../common/colors';
 import TimerButton from './timerButton';
 
+const SIZE_FIGURE = 140;
+
 export default class extends Component<any, any> {
   activeColors: any[];
   activeForms: any[];
@@ -129,7 +131,7 @@ export default class extends Component<any, any> {
                 <Text style={styles.itemTitleText}>Цвет</Text>
               </View>
               <View style={styles.itemBlock}>
-                {GameForm[this.getRandValue(this.activeForms, form)](80, color)}
+                {GameForm[this.getRandValue(this.activeForms, form)](SIZE_FIGURE, color)}
               </View>
             </View>
             <View style={styles.item}>
@@ -137,7 +139,7 @@ export default class extends Component<any, any> {
                 <Text style={styles.itemTitleText}>Форма</Text>
               </View>
               <View style={styles.itemBlock}>
-                {GameForm[form](80, this.getRandValue(this.activeColors, color))}
+                {GameForm[form](SIZE_FIGURE, this.getRandValue(this.activeColors, color))}
               </View>
             </View>
           </View>
@@ -151,14 +153,14 @@ export default class extends Component<any, any> {
 
     return (
       <View style={styles.wrap}>
-        <Text style={styles.title}> </Text>
+        <Text style={styles.title}></Text>
         <View style={styles.inner}>
           <View style={styles.item}>
             <View style={styles.itemTitle}>
               <Text style={styles.itemTitleText}>Цвет</Text>
             </View>
             <View style={styles.itemBlock}>
-              {GameForm[valiants.color.form](80, valiants.color.color)}
+              {GameForm[valiants.color.form](SIZE_FIGURE, valiants.color.color)}
             </View>
           </View>
           <View style={styles.item}>
@@ -166,7 +168,7 @@ export default class extends Component<any, any> {
               <Text style={styles.itemTitleText}>Форма</Text>
             </View>
             <View style={styles.itemBlock}>
-              {GameForm[valiants.form.form](80, valiants.form.color)}
+              {GameForm[valiants.form.form](SIZE_FIGURE, valiants.form.color)}
             </View>
           </View>
         </View>
@@ -224,23 +226,26 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginVertical: 6,
     alignItems: 'center',
+    position: "relative",
   },
   itemTitle: {
-    width: 70,
-    height: 28,
+    position: "absolute",
+    width: 125,
+    height: 45,
     backgroundColor: '#2e8dfd',
     justifyContent: 'center',
     alignItems: 'center',
     borderTopLeftRadius: 14,
     borderBottomLeftRadius: 14,
+    left: -125
   },
   itemTitleText: {
     color: '#fff',
     fontSize: 14,
   },
   itemBlock: {
-    width: 100,
-    height: 100,
+    width: 200,
+    height: 200,
     backgroundColor: '#e8eff6',
     borderRadius: 5,
     alignItems: 'center',
@@ -256,7 +261,7 @@ const styles = StyleSheet.create({
   },
   buttonTitle: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 18,
   },
   wrapButtons: {
     flexDirection: 'row',

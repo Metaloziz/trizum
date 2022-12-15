@@ -10,6 +10,8 @@ import TimerRevert from '../../components/timerRevert';
 
 import ErrorBlock from './components/errorBlock';
 
+const HEIGHT_AREA = 650;
+
 const SizesConfig = [
   {
     title : '3 на 3',
@@ -261,7 +263,7 @@ export default class extends Component<any, any> implements Game {
       timeComplete
     } = this.props;
 
-    const cellSize = (width / elementsTotal);
+    const cellSize = (HEIGHT_AREA / elementsTotal);
 
     return <View style={styles.wrap}>
       {started && timeComplete > 0 && <View style={styles.progressTime}>
@@ -294,17 +296,17 @@ export default class extends Component<any, any> implements Game {
       <View
         style={{
           ...styles.game,
-          width : width,
-          height : (width / elementsTotal) * elementsTotal
+          width : HEIGHT_AREA,
+          height : (HEIGHT_AREA / elementsTotal) * elementsTotal
         }}
       >
         <ErrorBlock
           onRef={(ref : any) => this.errorBlock = ref}
-          size={width/elementsTotal}
+          size={HEIGHT_AREA/elementsTotal}
         />
         <ErrorBlock
           onRef={(ref : any) => this.successBlock = ref}
-          size={width/elementsTotal}
+          size={HEIGHT_AREA/elementsTotal}
           color='rgba(0,255,0, 0.1)'
         />
         {layout.map((row : any, ri : number) => <View

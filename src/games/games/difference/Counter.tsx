@@ -22,6 +22,6 @@ export const Counter: FC<Props> = ({ findingPoints, gameLevel }) => {
 const styles = StyleSheet.create({
   root: {
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 5,
   },
 });

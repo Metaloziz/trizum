@@ -24,7 +24,7 @@ type ImageSize = {
 
 const defaultGameLevels = [
   {
-    differences: { areas: [], points: defaultPoints},
+    differences: { areas: [], points: defaultPoints },
     images: [{ path: imageOne }, { path: imageTwo }],
   },
 ];
@@ -97,7 +97,7 @@ export default class extends Component<any, DifferenceState> implements Game {
 
   public stop = () => {
     this.setStarted(false);
-    this.setState({ levels: 0, success: 0, actions: 0, findingPoints: {} });
+    this.setState({ levels: 0, success: 0, errors: 0, actions: 0, findingPoints: {} });
   };
 
   private reset = (cb: any) => {
@@ -134,7 +134,7 @@ export default class extends Component<any, DifferenceState> implements Game {
       success,
       failed: errors,
       time: time,
-      finished: status === 'win' ? true: false,
+      finished: status === 'win' ? true : false,
     };
 
     onEnd(result);
@@ -144,13 +144,19 @@ export default class extends Component<any, DifferenceState> implements Game {
 
   onResult = (result: boolean) => {
     const { errorAacceptable } = this.props;
-    const { levels: currentLevel, gameLevels, findingPoints: currentFindingPoints } = this.state;
+
+    const { levels: currentLevel, gameLevels, findingPoints: currentFindingPoints, success: currentSuccess, errors: currentErrors } = this.state;
+
     const countDifference = gameLevels[currentLevel].differences.points.length / 4;
+
     const isLastLevel = gameLevels.length - (currentLevel + 1) === 0;
 
-    const success = this.state.success + (result ? 1 : 0);
-    const errors = this.state.errors + (result ? 0 : 1);
+    const success = currentSuccess + (result ? 1 : 0);
+
+    const errors = currentErrors + (result ? 0 : 1);
+
     const levels = currentLevel + (result && success === countDifference && !isLastLevel ? 1 : 0);
+
     const levelSuccess = Object.keys(currentFindingPoints).length + (result ? 1 : 0);
 
     this.setState(
@@ -159,8 +165,6 @@ export default class extends Component<any, DifferenceState> implements Game {
         if (errors >= errorAacceptable) {
           return this.end('lose');
         }
-
-        console.log({ isLastLevel, countDifference, success, currentFindingPoints, levelSuccess });
 
         if (!isLastLevel && levelSuccess === countDifference) {
           this.setState({ findingPoints: {} });
@@ -301,21 +305,19 @@ export default class extends Component<any, DifferenceState> implements Game {
   };
 
   renderInner = () => {
-    const { width, timeComplete } = this.props;
+    const { timeComplete } = this.props;
     const { levels, gameLevels, findingPoints, gameView } = this.state;
-
-    console.log({timeComplete})
 
     return (
       <View
         style={{
-          minHeight: width,
+          minHeight: 675,
           ...styles.wrapLevels,
         }}
       >
         <Counter findingPoints={findingPoints} gameLevel={gameLevels[levels]} />
         <View style={{ ...styles.differenceImage, width: this.calcTouchArea(levels, 0, gameView) }}>
-          <UserPoints findingPoints={findingPoints} />
+          <UserPoints numberImage={1} findingPoints={findingPoints} />
           <TouchableOpacity
             style={[
               styles.touchArea,
@@ -343,7 +345,7 @@ export default class extends Component<any, DifferenceState> implements Game {
           </TouchableOpacity>
         </View>
         <View style={{ ...styles.differenceImage, width: this.calcTouchArea(levels, 0, gameView) }}>
-          <UserPoints findingPoints={findingPoints} />
+          <UserPoints numberImage={2} findingPoints={findingPoints} />
           <TouchableOpacity
             style={[
               styles.touchArea,
@@ -434,6 +436,8 @@ export default class extends Component<any, DifferenceState> implements Game {
 const styles = StyleSheet.create({
   wrapLevels: {
     justifyContent: 'center',
+    width: "85%",
+    marginHorizontal: "auto"
   },
   timer: {
     textAlign: 'center',
@@ -448,6 +452,9 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderRadius: 8,
     overflow: 'hidden',
+  },
+  wrapTouchArea: {
+    flexDirection: 'row',
   },
   differenceImage: {
     flex: 1,

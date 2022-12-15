@@ -1,17 +1,38 @@
 import React, { Component } from 'react';
 
 import { View, TouchableOpacity, StyleSheet, Text, Image } from 'react-native';
+import Modal from '@mui/material/Modal';
+import _ from 'lodash';
+
 import { Game, GameResult } from '../../common/types';
 
+import { Field, CounterCowsAndBulls, PrevValue, UsersAttempt } from './components';
 import Timer from '../../components/timerRevert';
 import StartTimer from '../../components/startTimer';
-import { Field, CounterCowsAndBulls, PrevValue, UsersAttempt } from './components';
-import _ from 'lodash';
+import { GameField, HistoryItem } from './types';
+import { Dialog } from '@mui/material';
+import { getLabelBulls, getLabelCows } from './utils';
 
 const buttonArrow = require('./assets/buttonArrow.png');
 
+const HEIGHT_AREA = 680;
 const START_TIMER = 3;
-export default class extends Component<any, any> implements Game {
+
+interface State {
+  started: boolean;
+  success: number;
+  errors: number;
+  level: number;
+  secretNumbers: string[];
+  guessNumber: Record<number, GameField>;
+  userErrorAacceptable: number;
+  prevGuessNumber: string[];
+  bulls: number;
+  cows: number;
+  history: HistoryItem[];
+  showHistory: boolean;
+}
+export default class extends Component<any, State> implements Game {
   timerRef: any;
 
   constructor(props: any) {
@@ -28,6 +49,8 @@ export default class extends Component<any, any> implements Game {
       userErrorAacceptable: 0,
       bulls: 0,
       cows: 0,
+      history: [],
+      showHistory: false,
     };
   }
 
@@ -70,6 +93,7 @@ export default class extends Component<any, any> implements Game {
     for (let i = 0; i < digitMax; i++) {
       this.setGuessNumber(i.toString(), '0');
     }
+    this.setState({ history: [] });
   };
 
   componentDidMount() {
@@ -97,6 +121,7 @@ export default class extends Component<any, any> implements Game {
       success: 0,
       errors: 0,
       prevGuessNumber: [],
+      history: [],
     });
   };
 
@@ -148,9 +173,9 @@ export default class extends Component<any, any> implements Game {
   };
 
   private end = (status = 'win') => {
-    const {timeComplete, onEnd = () => {} } = this.props;
+    const { timeComplete, onEnd = () => {} } = this.props;
     const timer = this.timerRef?.getValue();
-    const time = timeComplete - timer; 
+    const time = timeComplete - timer;
 
     const result: GameResult = {
       result: status == 'win' ? 'win' : 'lose',
@@ -244,16 +269,20 @@ export default class extends Component<any, any> implements Game {
 
     const userErrorAacceptable = this.state.userErrorAacceptable - 1;
 
+    this.addHistory({ userValue, bulls, cows });
     this.setBullsAndCows(bulls, cows);
 
     this.setLevelErrorAacceptable(userErrorAacceptable);
     this.setPrevGuessNumber(userValue.split(''));
 
-
     if (bulls === digitMax) return this.onResult(true);
 
     if (userErrorAacceptable === 0) return this.onResult(false);
   };
+
+  handleShowHistory = () => this.setState(prev => ({ ...prev, showHistory: !prev.showHistory }));
+
+  addHistory = (item: HistoryItem) => this.setState(prev => ({ history: [item, ...prev.history] }));
 
   renderFields = () => {
     const { digitMax } = this.props;
@@ -263,18 +292,28 @@ export default class extends Component<any, any> implements Game {
         key={field}
         id={field.toString()}
         onChange={this.updateGuessNumber}
-        value={this.state.guessNumber[field]}
+        value={this.state.guessNumber[field] as any}
       />
     ));
   };
 
   renderInner = () => {
-    const { width, levelMaxCompleted, timeComplete } = this.props;
+    const { levelMaxCompleted, timeComplete, errorAacceptable } = this.props;
+    const {
+      level,
+      showHistory,
+      prevGuessNumber,
+      history,
+      cows,
+      bulls,
+      userErrorAacceptable,
+      secretNumbers,
+    } = this.state;
 
     return (
       <View
         style={{
-          minHeight: width,
+          minHeight: HEIGHT_AREA,
           ...styles.inner,
         }}
       >
@@ -313,25 +352,52 @@ export default class extends Component<any, any> implements Game {
         )}
         <View style={styles.header}>
           <Text style={styles.label}>
-            Уровень {this.state.level}/{levelMaxCompleted}
+            Уровень {level}/{levelMaxCompleted}
           </Text>
-          <UsersAttempt count={this.state.userErrorAacceptable} />
+          <View style={styles.statistic}>
+            {prevGuessNumber.length > 0 && (
+              <TouchableOpacity
+                disabled={prevGuessNumber.length === 0}
+                style={styles.historyButton}
+                onPress={this.handleShowHistory}
+              >
+                <Text style={styles.historyButtonLabel}>История ходов</Text>
+              </TouchableOpacity>
+            )}
+
+            <UsersAttempt count={userErrorAacceptable} />
+          </View>
         </View>
         <View style={styles.gameArea}>
-          {this.state.userErrorAacceptable < this.props.errorAacceptable && (
+          {userErrorAacceptable < errorAacceptable && (
             <View style={styles.counterWrapper}>
-              <PrevValue values={this.state.prevGuessNumber} />
-              <CounterCowsAndBulls bulls={this.state.bulls} cows={this.state.cows} />
+              <PrevValue values={prevGuessNumber} />
+              <CounterCowsAndBulls bulls={bulls} cows={cows} />
             </View>
           )}
           <Text style={[styles.label, styles.labelGame]}>Введите пинкод</Text>
           <View style={styles.inputsWrapper}>{this.renderFields()}</View>
           <TouchableOpacity style={styles.button} onPress={this.checkAnswer}>
             <Text style={styles.buttonLabel}>
-              {this.state.prevGuessNumber.length > 0 ? 'Попробовать еще' : 'Играть'}
+              {prevGuessNumber.length > 0 ? 'Попробовать еще' : 'Играть'}
             </Text>
             <Image style={styles.buttonIcon} source={buttonArrow} />
           </TouchableOpacity>
+          <Dialog open={showHistory} onClose={this.handleShowHistory} maxWidth="md" fullWidth>
+            <View style={styles.historyModal}>
+              {history.map(({ userValue, bulls, cows }) => (
+                <View key={userValue} style={styles.historyItem}>
+                  <Text style={styles.historyLabel}>{userValue} - </Text>
+                  <Text style={styles.historyLabel}>
+                    {bulls} {getLabelBulls(bulls)}{' '}
+                  </Text>
+                  <Text style={styles.historyLabel}>
+                    {cows} {getLabelCows(cows)}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          </Dialog>
         </View>
       </View>
     );
@@ -411,6 +477,21 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
   },
+  statistic: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  historyButton: {
+    backgroundColor: '#CFD8DC',
+    borderRadius: 30,
+    marginRight: 12,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+  },
+  historyButtonLabel: {
+    fontWeight: '700',
+    fontSize: 18,
+  },
   labelGame: {
     textTransform: 'uppercase',
     fontSize: 36,
@@ -441,5 +522,21 @@ const styles = StyleSheet.create({
   buttonIcon: {
     width: 45,
     height: 45,
+  },
+  historyModal: {
+    padding: 20,
+    backgroundColor: '#2E8DFD',
+  },
+  historyItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomColor: '#fff',
+    borderBottomWidth: 1,
+    paddingVertical: 12,
+  },
+  historyLabel: {
+    fontSize: 24,
+    fontWeight: '500',
+    color: '#fff',
   },
 });

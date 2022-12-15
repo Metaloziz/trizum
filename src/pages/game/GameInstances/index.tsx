@@ -97,7 +97,7 @@ export const GameReturn: FC<GameReturnPropsT> = props => {
         </Button>
 
         <section>
-          <div style={{ minWidth: `${gameViewSize + 200}px` }}>
+          <div style={{ maxWidth: `${gameViewSize + 200}px` }}>
             {(role === Roles.Methodist || role === Roles.Admin) && (
               <TableSettingsPreset
                 gamePresets={presets.items}
