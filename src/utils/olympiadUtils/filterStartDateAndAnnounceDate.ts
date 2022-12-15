@@ -17,7 +17,7 @@ export const filterStartDateAndAnnounceDate = (groups: ResponseGroups[]) => {
       startDateValue = 0;
     }
 
-    if (currentDateValue > announceDateValue && currentDateValue < startDateValue) {
+    if (currentDateValue < startDateValue && currentDateValue > announceDateValue) {
       filterGroups.push(toJS(group));
     }
   });

@@ -19,7 +19,7 @@ export const OlympiadPreviewText: FC = observer(() => {
   const step = filterGroups.length;
 
   const [activeStep, setActiveStep] = useState(0);
-  const { name, description, schedule, endedAt, id } = groups[activeStep];
+  const { name, description, schedule, endedAt, id } = filterGroups[activeStep];
 
   const onNextClick = () => {
     setActiveStep(prevActiveStep => prevActiveStep + 1);
@@ -34,7 +34,7 @@ export const OlympiadPreviewText: FC = observer(() => {
   };
 
   const isStudentInGroups =
-    user.groups.filter(group => group.group.id === groups[activeStep].id).length !== 0;
+    user.groups.filter(group => group.group.id === filterGroups[activeStep].id).length !== 0;
 
   return (
     <>
