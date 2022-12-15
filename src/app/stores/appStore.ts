@@ -9,7 +9,7 @@ import { makeAutoObservable, runInAction } from 'mobx';
 import { LoginInfo } from 'pages/login/Login';
 import { dateNow } from 'utils/dateNow';
 import { execute } from 'utils/execute';
-import { getActiveClassGroup } from 'utils/getActiveClassGroup';
+import { getActiveClassAndOlympiadGroup, getActiveClassGroup } from 'utils/getActiveClassGroup';
 import { getGameForStudent } from 'utils/getGameForStudent';
 import { getNearestLessonObject } from 'utils/getNearestLessonObject/getNearestLessonObject';
 import { throwErrorMessage } from 'utils/throwErrorMessage';
@@ -173,10 +173,16 @@ class AppStore {
     }
   };
 
-  setGameIdsWithCodesByHomeWorkIndex = (index: number) => {
-    const classTypeObject = getActiveClassGroup(this.user);
+  // setGameIdsWithCodesByHomeWorkIndex = (index: number) => {
+  //   const classTypeObject = getActiveClassGroup(this.user);
+  //
+  //   this.currentWork = classTypeObject?.group.course.works[index];
+  // };
 
-    this.currentWork = classTypeObject?.group.course.works[index];
+  setGameIdsWithCodesByHomeWorkIndex = (index: number, groupId: string) => {
+    const classTypeObject = getActiveClassAndOlympiadGroup(this.user.groups);
+    const group = classTypeObject.filter(({ id }) => id === groupId);
+    this.currentWork = group[0]?.group.course.works[index];
   };
 
   /* actions student only */

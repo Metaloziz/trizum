@@ -12,7 +12,7 @@ import { filterStartDateAndAnnounceDate } from 'utils/olympiadUtils/filterStartD
 
 export const OlympiadPreviewText: FC = observer(() => {
   const theme = useTheme();
-  const { user } = appStore;
+  const { user, loadme } = appStore;
   const { groups, addUserGroup, isLoad } = groupStore;
 
   const filterGroups = filterStartDateAndAnnounceDate(groups);
@@ -31,6 +31,7 @@ export const OlympiadPreviewText: FC = observer(() => {
 
   const onParticipateClick = async () => {
     await addUserGroup({ groupId: id, userId: user.id });
+    await loadme();
   };
 
   const isStudentInGroups =
