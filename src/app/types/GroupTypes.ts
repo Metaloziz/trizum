@@ -2,7 +2,6 @@ import { DateTime } from 'app/enums/DateTime';
 import { GroupLevels } from 'app/enums/GroupLevels';
 import { GroupTypes } from 'app/enums/GroupTypes';
 import { StatusTypes } from 'app/enums/StatusTypes';
-import { EmptyUser } from 'app/stores/emptyUser';
 import { UserGroupStatus } from 'app/enums/UserGroupStatus';
 import { EmptyUser } from 'app/types/emptyUser';
 import { FranchiseT } from 'app/types/FranchiseTypes';

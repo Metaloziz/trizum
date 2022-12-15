@@ -249,6 +249,7 @@ class GroupStore {
           this.scheduleHomeWorks = response.schedule.homeworks;
           this.filteredHomeWork = response.schedule.homeworks;
         } else {
+          // @ts-ignore
           this.schedule = this.setEmptyScheduleItems(response.course.worksCount);
         }
       });

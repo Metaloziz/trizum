@@ -1,4 +1,4 @@
-import { EmptyUser } from 'app/stores/emptyUser';
+import { EmptyUser } from 'app/types/emptyUser';
 import { Group } from 'app/types/LoadMeTypes';
 import { toJS } from 'mobx';
 
