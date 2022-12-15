@@ -88,7 +88,7 @@
   }
 
   .buttonGroup {
-    margin: 15px 0 0 15px;
+    margin: 15px 0 0 250px;
     padding-bottom: 20px;
 
     @media (max-width: 680px) {
@@ -190,13 +190,13 @@
   }
 }
 
-
 .modalContent {
   display: flex;
   justify-content: space-between;
   flex-direction: column;
   align-items: center;
   width: 800px;
+  min-height: 400px;
   background-color: #fff;
   border-radius: 30px;
   padding: 0 58px 20px;
@@ -218,7 +218,6 @@
     }
   }
 
-
   p {
     margin: 48px 0 46px;
     font-size: 18px;
@@ -232,6 +231,8 @@
   }
 
   .panel {
+    position: absolute;
+    top: 0;
     text-transform: uppercase;
     background: linear-gradient(90deg, #0439AD 0%, #38028F 100%);
     margin: 0 auto;
@@ -254,6 +255,36 @@
   }
 }
 
+.modalFooter {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  flex-direction: column;
+
+}
+
+.btn {
+  margin-top: 10px;
+}
+
+.stepper {
+  width: 80%;
+  margin-top: 10px;
+}
+
+.date {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  & p {
+    margin: 0 5px 0 0;
+
+    font-weight: 600;
+  }
+}
 
 .olympiadPage {
   width: 400px;

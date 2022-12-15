@@ -7,19 +7,18 @@ import { GamePresetFromLoadme } from 'app/types/LoadMeTypes';
 
 import classNames from 'classnames';
 import KeepPlayingItem from 'components/keep-playing-item/KeepPlayingItem';
+import { toJS } from 'mobx';
+import { observer } from 'mobx-react-lite';
 import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getActiveClassGroup } from 'utils/getActiveClassGroup';
 
 import styles from './KeepPlaying.module.scss';
 
-const KeepPlaying: FC<KeepPlayingProps> = ({ className }) => {
+const KeepPlaying: FC<KeepPlayingProps> = observer(({ className, userGroupId }) => {
   const navigate = useNavigate();
 
   const { getPreset, setActiveWork } = gamesStore;
-  const { currentWork, user } = appStore;
-
-  console.log('currentWork', currentWork);
+  const { currentWork } = appStore;
 
   const gamePresets = currentWork?.work.gamePresets;
 
@@ -28,10 +27,8 @@ const KeepPlaying: FC<KeepPlayingProps> = ({ className }) => {
 
     await getPreset(gameCode);
 
-    const group = getActiveClassGroup(user);
-
     setActiveWork({
-      userGroupId: group?.id || '',
+      userGroupId,
       workGamePresetId: game.id,
       courseWorkId: currentWork?.id || '', // todo
     });
@@ -51,6 +48,6 @@ const KeepPlaying: FC<KeepPlayingProps> = ({ className }) => {
         ))}
     </div>
   );
-};
+});
 
 export default KeepPlaying;

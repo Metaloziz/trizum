@@ -263,3 +263,19 @@
     order: 4;
   }
 }
+
+.wrapNameClass {
+  width: 100%;
+  max-width: 965px;
+  border-radius: 30px;
+  padding: 10px 30px;
+  background-color: #fff;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.stepper {
+  width: 100%;
+}

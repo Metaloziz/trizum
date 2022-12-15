@@ -13,7 +13,7 @@ export class SearchCoursesParamsType {
 
   created_until: string = '';
 
-  type: string = 'class'; // только для курсов
+  type: string = ''; // только для курсов
 
   status: string = '';
 }

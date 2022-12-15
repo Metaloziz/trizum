@@ -1,28 +1,50 @@
+import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
+import { MobileStepper, useTheme } from '@mui/material';
+import ButtonMui from '@mui/material/Button';
+import { StatusTypes } from 'app/enums/StatusTypes';
 import appStore from 'app/stores/appStore';
+import groupStore from 'app/stores/groupStore';
 import CardStudent from 'components/card-student/CardStudent';
-import { games } from 'components/pupil-main/consts/consts';
-import { getWorksAndSchedule } from 'components/pupil-main/getWorksAndSchedule/getWorksAndSchedule';
+import { getWorksAndScheduleOnId } from 'components/pupil-main/getWorksAndSchedule/getWorksAndSchedule';
 import { HomeWorksList } from 'components/pupil-main/HomeWorksList/HomeWorksList';
 import WeeklyGrowth from 'components/weekly-growth/WeeklyGrowth';
 import KeepPlaying from 'containers/keep-playing/KeepPlaying';
-import { toJS } from 'mobx';
 
 import { observer } from 'mobx-react-lite';
 import styles from 'pages/home/Home.module.scss';
-import { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
+import { getActiveClassAndOlympiadGroup } from 'utils/getActiveClassGroup';
 import { personalRecordsArr } from 'utils/personalRecordsArr';
 
 export const StudentMain: FC = observer(() => {
-  const { user, setGameIdsWithCodesByHomeWorkIndex } = appStore;
+  const theme = useTheme();
 
-  const { works, schedule } = getWorksAndSchedule(user.groups);
+  const { user, setGameIdsWithCodesByHomeWorkIndex } = appStore;
+  const { getOlympiadGroups } = groupStore;
+
+  const [activeStep, setActiveStep] = useState(0);
+
+  const classTypeObject = getActiveClassAndOlympiadGroup(user.groups);
+
+  const { works, schedule } = getWorksAndScheduleOnId(
+    user.groups,
+    classTypeObject[activeStep]?.id || '',
+  );
 
   const recordsArr = personalRecordsArr(user.personalRecord);
 
-  // console.log('currentGameIds', toJS(currentGameIds));
-  console.log('works', toJS(works));
-  console.log('schedule', toJS(schedule));
-  console.log('user', toJS(user));
+  const onNextClick = () => {
+    setActiveStep(prevActiveStep => prevActiveStep + 1);
+  };
+
+  const onBackClick = () => {
+    setActiveStep(prevActiveStep => prevActiveStep - 1);
+  };
+  const step = classTypeObject.length;
+
+  useEffect(() => {
+    getOlympiadGroups({ perPage: 100, type: 'olympiad', status: StatusTypes.active });
+  }, []);
 
   return (
     <main className={styles.main}>
@@ -30,13 +52,44 @@ export const StudentMain: FC = observer(() => {
         <CardStudent user={user} />
         <WeeklyGrowth records={recordsArr} className={styles.weeklyGrowth} />
       </div>
+
+      {step > 1 && (
+        <div className={styles.wrapNameClass}>
+          <h2>
+            {classTypeObject[activeStep].group.type === 'class' ? 'Класс:' : 'Олимпиада:'}{' '}
+            {classTypeObject[activeStep].group.name}
+          </h2>
+          <MobileStepper
+            variant="dots"
+            steps={step}
+            position="static"
+            activeStep={activeStep}
+            className={styles.stepper}
+            nextButton={
+              <ButtonMui size="small" onClick={onNextClick} disabled={activeStep === step - 1}>
+                Следующая
+                {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+              </ButtonMui>
+            }
+            backButton={
+              <ButtonMui size="small" onClick={onBackClick} disabled={activeStep === 0}>
+                {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+                Предыдущая
+              </ButtonMui>
+            }
+          />
+        </div>
+      )}
+
       <div className={styles.rowHw}>
         <HomeWorksList
           works={works}
           schedule={schedule}
           setGameIdsWithCodes2={setGameIdsWithCodesByHomeWorkIndex}
+          groupId={classTypeObject[activeStep]?.id}
         />
-        <KeepPlaying className={styles.keepPlaying} games={games} />
+
+        <KeepPlaying className={styles.keepPlaying} userGroupId={classTypeObject[activeStep]?.id} />
       </div>
     </main>
   );

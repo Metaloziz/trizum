@@ -1,5 +1,6 @@
 import { DateTime } from 'app/enums/DateTime';
 import { Roles } from 'app/enums/Roles';
+import { StatusTypes } from 'app/enums/StatusTypes';
 import coursesService from 'app/services/coursesService';
 import franchiseService from 'app/services/franchiseService';
 import groupsService from 'app/services/groupsService';
@@ -19,6 +20,8 @@ import {
   ResponseOneGroup,
   Schedule,
 } from 'app/types/GroupTypes';
+import { Nullable } from 'app/types/Nullable';
+import { OlympiadFormType } from 'app/types/OlympiadPayloadType';
 import { ScheduleHomeWorksType } from 'app/types/scheduleHomeWorksType';
 import { ResponseUserT } from 'app/types/UserTypes';
 import { AxiosError } from 'axios';
@@ -28,6 +31,8 @@ import { findElement } from 'utils/findIndexElement';
 import { getIsBetweenDate } from 'utils/getIsBetweenDate';
 import { getLocalDateEuropeRegion } from 'utils/getLocalDateEuropeRegion';
 import { getNextMonth } from 'utils/getNextMonth';
+import { oldScheduleToNewScheduleType } from 'utils/oldScheduleToNewScheduleType';
+import { convertFormToCreateOlympiad } from 'utils/olympiadUtils/convertFormToCreateOlympiad';
 import { removeEmptyFields } from 'utils/removeEmptyFields';
 import {
   scheduleItemToServerMapper,
@@ -38,6 +43,8 @@ import { GroupStatusTypes } from '../types/GroupStatusTypes';
 
 class GroupStore {
   groups: ResponseGroups[] = [];
+
+  groupsForSelect: ResponseGroups[] = [];
 
   page = 0;
 
@@ -108,6 +115,21 @@ class GroupStore {
 
   isModalOpen = false;
 
+  defaultValuesOlympiad: Nullable<OlympiadFormType> = null;
+
+  private newOlympiad: OlympiadFormType = {
+    name: '',
+    description: '',
+    dateSince: null,
+    courseId: '',
+    type: 'olympiad',
+    level: null,
+    schedule: { homeworks: [] },
+    dateStart: null,
+    franchiseId: null,
+    status: StatusTypes.active,
+  };
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -163,11 +185,12 @@ class GroupStore {
           dateUntil,
         },
       );
+
       if (res.items.length && this.selectedGroup?.id) {
         await this.getOneGroup(this.selectedGroup.id);
       }
       runInAction(() => {
-        this.groups = res.items;
+        this.groups = oldScheduleToNewScheduleType(res.items);
         this.page = res.page;
         this.perPage = res.perPage;
         this.total = res.total;
@@ -194,7 +217,7 @@ class GroupStore {
         await this.getOneGroup(this.selectedGroup.id);
       }
       runInAction(() => {
-        this.groups = res.items;
+        this.groups = oldScheduleToNewScheduleType(res.items);
         this.page = res.page;
         this.perPage = res.perPage;
         this.total = res.total;
@@ -370,6 +393,75 @@ class GroupStore {
 
   resetFilteredHomeWorkByDates = () => {
     this.filteredHomeWork = this.scheduleHomeWorks;
+  };
+
+  setDefaultValuesOlympiad = (defaultValues: Nullable<OlympiadFormType> = this.newOlympiad) => {
+    this.defaultValuesOlympiad = defaultValues;
+  };
+
+  setCurrentOlympiad = async (groupId: string) => {
+    const {
+      course,
+      onlyGroup,
+      startedAt,
+      status,
+      level,
+      name,
+      franchise,
+      description,
+      schedule,
+      id,
+    } = await groupsService.getOneGroup(groupId);
+
+    // если старый тип расписания
+    if (Array.isArray(schedule)) {
+      schedule.homeworks = schedule;
+    }
+
+    const form: OlympiadFormType = {
+      id,
+      name,
+      level,
+      status: status!,
+      dateSince: new Date(startedAt.date),
+      dateStart: schedule.homeworks[0] ? new Date(schedule.homeworks[0].start) : null,
+      forGroupId: onlyGroup?.id,
+      franchiseId: franchise?.id,
+      description,
+      courseId: course.id,
+      schedule,
+    };
+
+    this.setDefaultValuesOlympiad(form);
+  };
+
+  addOlympiadGroup = async (values: OlympiadFormType) => {
+    await this.execute(async () => {
+      const { course } = await coursesService.getCurrentCourse(values.courseId);
+      await groupsService.addGroup(convertFormToCreateOlympiad(values, course.works!));
+
+      await this.getOlympiadGroups();
+    });
+  };
+
+  editOlympiadGroup = async (values: OlympiadFormType, id: string) => {
+    await this.execute(async () => {
+      const { course } = await coursesService.getCurrentCourse(values.courseId);
+
+      await groupsService.editGroup(convertFormToCreateOlympiad(values, course.works!), id);
+
+      await this.getOlympiadGroups();
+    });
+  };
+
+  getGroupsForSelect = async (paramsData?: GroupParamsForServer) => {
+    await this.execute(async () => {
+      const { items } = await groupsService.getGroups({ ...paramsData, perPage: 1000 });
+
+      runInAction(() => {
+        this.groupsForSelect = items;
+      });
+    });
   };
 
   get filteredCourses() {

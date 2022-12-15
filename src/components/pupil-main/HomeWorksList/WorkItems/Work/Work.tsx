@@ -1,8 +1,9 @@
 import { WorkWithIdFromLoadme } from 'app/types/LoadMeTypes';
 import { ScheduleHomeWorksType } from 'app/types/scheduleHomeWorksType';
+import { ScheduleHomeWorksType } from 'app/stores/groupStore';
+import { WorkWithIdFromLoadme } from 'app/types/LoadMeTypes';
 import style from 'components/pupil-main/HomeWorksList/HomeWorksList.module.scss';
 import { GamePresetData } from 'components/pupil-main/HomeWorksList/WorkItems/GamePresetData/GamePresetData';
-import { toJS } from 'mobx';
 import { FC } from 'react';
 import { getLocalDateEuropeRegion } from 'utils/getLocalDateEuropeRegion';
 
