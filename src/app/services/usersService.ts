@@ -1,5 +1,6 @@
 import { Paths } from 'app/enums/Paths';
 import instance from 'app/services/config';
+import { UpdateParentingPayloadType } from 'app/types/updateParentingPayloadType';
 import { UpdateUserPayloadT } from 'app/types/UpdateUserPayloadT';
 import {
   FullResponseUserT,
@@ -7,9 +8,7 @@ import {
   RequestUsersForFilter,
   ResponseOneUser,
   ResponseParenting,
-  ResponseUserT,
 } from 'app/types/UserTypes';
-import { UpdateParentingPayloadType } from 'app/types/updateParentingPayloadType';
 
 const usersService = {
   getAllUsers: async (params?: RequestUsersForFilter): Promise<FullResponseUserT> => {
@@ -55,8 +54,8 @@ const usersService = {
     const { data } = await instance.get(`${Paths.Users}/${id}`);
     return data;
   },
-  updateUser: async (newUser: UpdateUserPayloadT, userId: string): Promise<ResponseUserT> => {
-    const { data } = await instance.post(`${Paths.Users}/${userId}`, newUser);
+  updateUser: async (newUser: UpdateUserPayloadT, userId: string) => {
+    const { data } = await instance.post<ResponseOneUser>(`${Paths.Users}/${userId}`, newUser);
     return data;
   },
   createParenting: async (params: RequestParenting): Promise<ResponseParenting> => {

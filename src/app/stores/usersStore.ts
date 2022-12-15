@@ -123,12 +123,18 @@ class UsersStore {
   ): Promise<ResponseUserT | undefined | ErrorMessageType> => {
     try {
       const res = await usersService.updateUser(data, userId);
+
+      // only for edit active parent status
+      if (res.roleCode === 'parent' && data?.isActive && res?.children) {
+        const isActiveStudent = res?.children.find(user => user.main);
+        await usersService.updateUser(data, isActiveStudent?.childId ?? '');
+      }
+
       const isError = checkErrorMessage(res);
       if (isError) {
         return isError;
       }
       await this.getUsers();
-      // await this.getOneUser(userId);
       return res;
     } catch (e) {
       throwErrorMessage(e);
