@@ -12,9 +12,7 @@ const CheckingHomework = () => (
       {/* <CardStudent title="Днепровский Александр Алексеевич" type="student" /> */}
       <Homeworks className={styles.homeworksChecking} homeworks={homeworks} />
     </div>
-    <div>
-      <ChoiceInfoList className={styles.keepPlaying} games={games} />
-    </div>
+    <div>{/* <ChoiceInfoList className={styles.keepPlaying} games={games} /> */}</div>
   </div>
 );
 

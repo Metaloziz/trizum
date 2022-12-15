@@ -50,13 +50,7 @@ class GroupStore {
         this.groups = res.items.map(el => ({ groupName: el.name, groupId: el.id }));
         this.schedule = res.items
           .map(group =>
-            scheduleMapper(
-              group.schedule.classworks,
-              group.name,
-              group.id,
-              group.teacherId,
-              group.franchise,
-            ),
+            scheduleMapper(group.schedule, group.name, group.id, group.teacherId, group.franchise),
           )
           .reduce((acc, elem) => [...acc, ...elem], [] as ScheduleForUI[]);
       }

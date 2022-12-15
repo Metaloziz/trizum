@@ -17,20 +17,18 @@ type Props = {
   works: WorkWithIdFromLoadme[];
   schedule: ScheduleHomeWorksType[];
   setGameIdsWithCodes2: typeof appStore.setGameIdsWithCodesByHomeWorkIndex;
+  groupId: string;
 };
 
-export const HomeWorksList: FC<Props> = ({ works, schedule, setGameIdsWithCodes2 }) => {
+export const HomeWorksList: FC<Props> = ({ works, schedule, setGameIdsWithCodes2, groupId }) => {
   const [isListView, setIsListView] = useState(false);
   const [lessonIndex, setLessonIndex] = useState(0);
 
   useEffect(() => {
     const index = getNewNearestHomeWork(schedule);
     setLessonIndex(index);
-    setGameIdsWithCodes2(index);
+    setGameIdsWithCodes2(index, groupId);
   }, [schedule]);
-
-  console.log('schedule', toJS(schedule));
-  console.log('lessonIndex', toJS(lessonIndex));
 
   return (
     <div className={classNames(style.container)}>

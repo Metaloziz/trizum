@@ -1,12 +1,13 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { TableRow, TableCell, Typography, IconButton } from '@mui/material';
+import { StatusTypes } from 'app/enums/StatusTypes';
 import moment from 'moment';
 import React, { FC } from 'react';
-import { DateTime } from '../../../app/enums/DateTime';
-import { GroupLevels } from '../../../app/enums/GroupLevels';
-import { GroupStatus, GroupStatusValue } from '../../../app/enums/GroupStatus';
-import groupStore from '../../../app/stores/groupStore';
+import { DateTime } from 'app/enums/DateTime';
+import { GroupLevels } from 'app/enums/GroupLevels';
+import { GroupStatus } from 'app/enums/GroupStatus';
+import groupStore from 'app/stores/groupStore';
 
 export type ClassesRowsProps = {
   groups: typeof groupStore.groups;
@@ -62,7 +63,7 @@ export const ClassesRows: FC<ClassesRowsProps> = ({ groups, openModal, deleteGro
                 size="small"
                 onClick={() => deleteGroup(entity.id)}
                 color="error"
-                disabled={entity.status === GroupStatusValue.archive}
+                disabled={entity.status === StatusTypes.archive}
               >
                 <DeleteIcon fontSize="small" />
               </IconButton>

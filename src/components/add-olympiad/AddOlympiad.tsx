@@ -1,27 +1,28 @@
+import Button from '@mui/material/Button';
+import Pagination from '@mui/material/Pagination';
+import { AppRoutes } from 'app/enums/AppRoutes';
+import { GroupLevels } from 'app/enums/GroupLevels';
 import { Roles } from 'app/enums/Roles';
+import { StatusTypes } from 'app/enums/StatusTypes';
+import appStore from 'app/stores/appStore';
+import groupStore from 'app/stores/groupStore';
+import { FranchiseWTF } from 'app/types/GroupTypes';
+import { Nullable } from 'app/types/Nullable';
+import { OlympiadFormType } from 'app/types/OlympiadPayloadType';
+import Image from 'components/image/Image';
+import NameOlympiad from 'components/name-olimpiad/NameOlympiad';
+import { OlympiadForm } from 'components/olympiad-page/components/OlympiadForm/OlympiadForm';
+import Table from 'components/table/Table';
+import { observer } from 'mobx-react-lite';
 import React, { ChangeEvent, useEffect, useState } from 'react';
-
-import styles from './AddOlympiad.module.scss';
+import { useNavigate } from 'react-router-dom';
+import { changeDateView } from 'utils/changeDateView';
+import coursesStore from '../../app/stores/coursesStore';
+import franchiseeStore from '../../app/stores/franchiseeStore';
 
 import image from '../../assets/svgs/icon-setting-blue.svg';
 
-import NameOlympiad from 'components/name-olimpiad/NameOlympiad';
-import Table from 'components/table/Table';
-import groupStore from 'app/stores/groupStore';
-import { ResponseGroups } from 'app/types/GroupTypes';
-import { GroupLevels } from 'app/enums/GroupLevels';
-import Button from '@mui/material/Button';
-import Image from 'components/image/Image';
-import { OlympiadForm } from 'components/olympiad-page/components/OlympiadForm/OlympiadForm';
-import BasicModal from 'components/basic-modal/BasicModal';
-import { observer } from 'mobx-react-lite';
-import { changeDateView } from 'utils/changeDateView';
-import Pagination from '@mui/material/Pagination';
-import appStore from 'app/stores/appStore';
-import { useNavigate } from 'react-router-dom';
-import { AppRoutes } from 'app/enums/AppRoutes';
-import franchiseeStore from '../../app/stores/franchiseeStore';
-import coursesStore from '../../app/stores/coursesStore';
+import styles from './AddOlympiad.module.scss';
 
 const colNames = [
   'Название олимпиады',
@@ -50,23 +51,30 @@ const AddOlympiad = observer(() => {
   const {
     groups: currentItem,
     getOlympiadGroups,
-    getCurrentGroupFromLocalStorage,
     perPage,
     total,
     getOneGroup,
     queryFieldsOlympiads,
     cleanOlympiadQueryFieldsWithoutRequest,
+    setDefaultValuesOlympiad,
+    defaultValuesOlympiad,
+    setCurrentOlympiad,
+    getGroupsForSelect,
+    addOlympiadGroup,
+    groupsForSelect,
+    editOlympiadGroup,
   } = groupStore;
-  const { getFranchisee } = franchiseeStore;
-  const { getCoursesOlimp } = coursesStore;
+  const { getFranchisee, franchise: franchiseList } = franchiseeStore;
+  const { getCourses, setSearchCoursesParams, courses } = coursesStore;
+
   const IS_EDIT_ROLE = isEditRole(role as Roles);
 
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [currentGroup, setCurrentGroup] = useState<ResponseGroups>();
 
   useEffect(() => {
     getFranchisee();
-    getCoursesOlimp();
+    setSearchCoursesParams({ per_page: 1000, type: 'olympiad', status: StatusTypes.active });
+    getCourses();
     getOlympiadGroups();
     return () => {
       cleanOlympiadQueryFieldsWithoutRequest();
@@ -77,25 +85,47 @@ const AddOlympiad = observer(() => {
     queryFieldsOlympiads.page = newCurrentPage - 1;
   };
 
-  const setEditModal = (groupId: string) => {
-    setShowModal(true);
-    const result = getCurrentGroupFromLocalStorage(groupId);
-    setCurrentGroup(result);
+  const onGetGroups = async (franchiseId: string) => {
+    await getGroupsForSelect({ franchiseId, type: 'class' });
   };
 
-  const redirect = (groupId: string) => {
-    getOneGroup(groupId);
+  const setEditModal = async (groupId: string, franchise: Nullable<FranchiseWTF>) => {
+    await setCurrentOlympiad(groupId);
+    if (franchise) {
+      await onGetGroups(franchise.id);
+    }
+    setShowModal(true);
+  };
+
+  const redirect = async (groupId: string) => {
+    await getOneGroup(groupId);
     navigate(AppRoutes.OlympiadsListPage);
   };
+
+  const onAddOlympiadClick = () => {
+    setDefaultValuesOlympiad();
+    setShowModal(true);
+  };
+
+  const onSubmit = async (values: OlympiadFormType) => {
+    if (values.id) {
+      await editOlympiadGroup(values, values.id);
+    } else {
+      await addOlympiadGroup(values);
+    }
+    setShowModal(false);
+  };
+
+  const title = defaultValuesOlympiad?.id ? 'Изменение олимпиады' : 'Добавление олимпиады';
 
   const count = Math.ceil(total / perPage);
   return (
     <div className={styles.containerAdd}>
-      <NameOlympiad isEditRole={IS_EDIT_ROLE} />
+      <NameOlympiad addOlympiad={onAddOlympiadClick} isEditRole={IS_EDIT_ROLE} />
       <div className={styles.tableWrap}>
         <h2>Список Олимпиад</h2>
         <Table colNames={colNames} loading={false}>
-          {currentItem.map(({ id, name, startedAt, endedAt, level }) => (
+          {currentItem.map(({ id, name, startedAt, endedAt, level, franchise }) => (
             <tr key={id} onClick={() => redirect(id)}>
               <td>{name}</td>
               <td>{changeDateView(startedAt.date)}</td>
@@ -108,9 +138,9 @@ const AddOlympiad = observer(() => {
                 {IS_EDIT_ROLE && (
                   <Button
                     className={styles.settingOlympiad}
-                    onClick={event => {
+                    onClick={async event => {
                       event.stopPropagation();
-                      setEditModal(id);
+                      await setEditModal(id, franchise);
                     }}
                   >
                     <Image src={image} />
@@ -131,9 +161,18 @@ const AddOlympiad = observer(() => {
           onChange={paginate}
         />
       </div>
-      <BasicModal visibility={showModal} changeVisibility={setShowModal}>
-        <OlympiadForm setShowModal={setShowModal} mode="edite" group={currentGroup} />
-      </BasicModal>
+      {showModal && defaultValuesOlympiad && (
+        <OlympiadForm
+          defaultValues={defaultValuesOlympiad}
+          setShowModal={setShowModal}
+          onSubmitForm={onSubmit}
+          title={title}
+          franchise={franchiseList}
+          courses={courses}
+          groups={groupsForSelect}
+          getGroups={onGetGroups}
+        />
+      )}
     </div>
   );
 });
