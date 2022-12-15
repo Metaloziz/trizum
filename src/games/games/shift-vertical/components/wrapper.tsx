@@ -139,18 +139,6 @@ export default class extends Component<Props & ComponentProps, State> {
 
     return (
       <View style={styles.wrap}>
-        <LevelsView count={elementsTotal} progress={progress} />
-        <View style={styles.inner}>
-          <LevelView
-            key={`level-${active}`}
-            groupsCount={groupsCount}
-            blinksCount={blinksCount}
-            onProgress={this.onProgress}
-            onEnd={this.onLevelEnd}
-            onResult={this.onResult}
-            cycleTime={cycleTime}
-          />
-        </View>
         {timeComplete > 0 && (
           <View style={styles.progressTime}>
             <Timer
@@ -188,6 +176,18 @@ export default class extends Component<Props & ComponentProps, State> {
           ref={ref => (this.timerAll = ref)}
           renderTime={(time: number) => <Text style={styles.timer}>{time} сек</Text>}
         />
+        <LevelsView count={elementsTotal} progress={progress} />
+        <View style={styles.inner}>
+          <LevelView
+            key={`level-${active}`}
+            groupsCount={groupsCount}
+            blinksCount={blinksCount}
+            onProgress={this.onProgress}
+            onEnd={this.onLevelEnd}
+            onResult={this.onResult}
+            cycleTime={cycleTime}
+          />
+        </View>
       </View>
     );
   }
@@ -212,6 +212,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#e8eff6',
     borderRadius: 3,
     overflow: 'hidden',
+    width: "90%",
+    marginHorizontal: "auto"
   },
   progressTimeInner: {
     height: '100%',

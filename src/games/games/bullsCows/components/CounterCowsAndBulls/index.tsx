@@ -1,6 +1,8 @@
 import React, { FC, useEffect, useState } from 'react';
 import { StyleSheet, Text } from 'react-native';
 
+import { getLabelBulls, getLabelCows } from '../../utils';
+
 interface Props {
   bulls: number;
   cows: number;
@@ -10,29 +12,19 @@ export const CounterCowsAndBulls: FC<Props> = ({ bulls, cows }) => {
   const [bullsLabel, setBullsLabel] = useState('бык');
   const [cowsLabel, setCowsLabel] = useState('корова');
 
-  const getLabelBulls = (value: number) => {
-    if (value === 0 || value >= 5) {
-      return setBullsLabel('быков');
-    }
-    if (value > 1 && value <= 4) {
-      return setBullsLabel('быка');
-    }
-    return setBullsLabel('бык');
+  const renderLabelBulls = (value: number) => {
+    const bullsLabel = getLabelBulls(value);
+    setBullsLabel(bullsLabel);
   };
 
-  const getLabelCows = (value: number) => {
-    if (value === 0 || value >= 5) {
-      return setCowsLabel('коров');
-    }
-    if (value > 1 && value <= 4) {
-      return setCowsLabel('коровы');
-    }
-    return setCowsLabel('корова');
+  const renderLabelCows = (value: number) => {
+    const cowsLabel = getLabelCows(value);
+    setCowsLabel(cowsLabel);
   };
 
   useEffect(() => {
-    getLabelBulls(bulls);
-    getLabelCows(cows);
+    renderLabelBulls(bulls);
+    renderLabelCows(cows);
   }, [cows, bulls]);
 
   return (

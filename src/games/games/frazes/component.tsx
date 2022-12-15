@@ -12,6 +12,7 @@ import { FrazesDictionary, DictionaryType, Props } from './types';
 
 const imageBackground = require('./assets/background.png');
 
+const HEIGHT_AREA = 680;
 const START_TIMER = 3;
 
 type GameStatisticItem = {
@@ -237,7 +238,7 @@ export default class extends Component<Props, State> implements Game {
   };
 
   renderInner = () => {
-    const { width, timeComplete, words } = this.props;
+    const { timeComplete, words } = this.props;
 
     const {
       level = 0,
@@ -271,7 +272,7 @@ export default class extends Component<Props, State> implements Game {
     return (
       <View
         style={{
-          minHeight: width,
+          minHeight: HEIGHT_AREA,
           ...styles.inner,
         }}
       >
@@ -419,7 +420,10 @@ const styles = StyleSheet.create({
   },
   сontent: {
     flex: 1,
-    paddingHorizontal: 20,
+    maxWidth: 860,
+    position: 'relative',
+    left: '10%',
+    right: '10%',
     justifyContent: 'center',
   },
 });

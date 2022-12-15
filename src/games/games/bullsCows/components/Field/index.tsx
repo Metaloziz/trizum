@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import Select from 'react-select';
 
 interface Props {
-  value?: string;
+  value: string;
   id: string;
   onChangeValue?: (key: string, value: string) => void;
   onChange: (key: string, value: any) => void;

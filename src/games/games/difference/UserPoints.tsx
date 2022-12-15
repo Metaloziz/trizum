@@ -3,27 +3,27 @@ import { StyleSheet, View } from 'react-native';
 import { Point } from './types';
 
 interface Props {
-  findingPoints: any;
+  numberImage: number;
+  findingPoints: Record<number, Point[]>;
 }
 
-export const UserPoints: FC<Props> = ({ findingPoints }) => {
-  const drawArea = (points: Point[]) => {
-    const [A, B, C, D] = points;
-    return {
-      height: D.y - A.y,
-      width: B.x - A.x,
-      left: A.x,
-      top: A.y,
-    };
-  };
+export const UserPoints: FC<Props> = ({ numberImage, findingPoints }) => {
+  const drawArea = ([A, B, C, D]: Point[]) => ({
+    height: D.y - A.y,
+    width: B.x - A.x,
+    left: A.x,
+    top: A.y,
+  });
 
   return (
     <View style={styles.root}>
       <View style={styles.pointsWrap}>
-        {Object.values(findingPoints).map((value: any) => {
+        {Object.values(findingPoints).map((value: Point[], index) => {
           const [A, B, C, D] = value;
+
           return (
             <View
+              key={`${numberImage + index}`}
               style={{
                 ...styles.area,
                 ...drawArea([A, B, C, D]),
