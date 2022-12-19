@@ -45,7 +45,7 @@ export type ShulteGameSettingsType = {
   colorsMap: string[];
 };
 
-export type ShulteFormType = BaseGameSettingsType & ShulteGameSettingsType;
+export type ShulteFormType = BaseGameSettingsType & BaseGameWithEngineType & ShulteGameSettingsType;
 
 export type Game2048GameSettingsType = {
   timeComplete: number;

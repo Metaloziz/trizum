@@ -105,6 +105,19 @@ export const SHULTE_SCHEMA = yup.object().shape({
     .required('Обязательное поле')
     .min(1, 'Минимум 1 цвет')
     .max(10, 'Максимум 10 цветов'),
+  perSuccessLevel: yup.number().required('Обязательное поле').nullable(),
+  maxErrorLevel: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 нажатие')
+    .max(60, 'Максимум 100 нажатий')
+    .test({
+      name: 'maxErrorLevel',
+      message: 'Кол-во нажатий для замера должно быть меньше кол-ва всех клеток поля',
+      test: (value, { parent: { elementsTotal } }) =>
+        value ? elementsTotal * elementsTotal > value : true,
+    })
+    .nullable(),
 });
 
 export const SHULTE_FORM_SCHEMA = GAME_SCHEMA.concat(SHULTE_SCHEMA);
