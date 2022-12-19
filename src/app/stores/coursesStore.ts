@@ -118,7 +118,8 @@ class CoursesStore extends StoreBase {
       };
 
       if (id) {
-        await coursesService.editCourse(payloadWithWorks, id);
+        const data = removeEmptyFields(payloadWithWorks);
+        await coursesService.editCourse(data, id);
         await this.getCourses();
         this.setIsDialogOpen(false);
       }

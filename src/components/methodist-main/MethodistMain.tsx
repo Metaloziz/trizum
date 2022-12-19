@@ -16,9 +16,9 @@ import Pagination from '@mui/material/Pagination';
 import { LoadingIndicator } from 'components/franchising-page/ui/LoadingIndicator';
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, ChangeEvent, useState, useCallback } from 'react';
-import { StatusTypes } from '../../app/enums/StatusTypes';
+import { StatusTypes } from 'app/enums/StatusTypes';
 import coursesStore from '../../app/stores/coursesStore';
-import { SearchCoursesParamsType } from '../../app/types/SearchCoursesParamsType';
+import { SearchCoursesParamsType } from 'app/types/SearchCoursesParamsType';
 import styles from '../users-page/UsersPage.module.scss';
 
 import { AddOrEditDialog } from './AddOrEditDialog';

@@ -2,10 +2,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { TableRow, TableCell, Stack, IconButton } from '@mui/material';
 import { FC } from 'react';
-import { StatusTypes } from '../../../app/enums/StatusTypes';
-import { ShortCourseType } from '../../../app/types/CourseTypes';
-import { getNameFromEnum } from '../../../utils/getNameFromEnum';
-import { transformDate } from '../../../utils/transformData';
+import { StatusTypes } from 'app/enums/StatusTypes';
+import { ShortCourseType } from 'app/types/CourseTypes';
+import { getNameFromEnum } from 'utils/getNameFromEnum';
+import { transformDate } from 'utils/transformData';
 import { translateStatus } from '../helpers';
 
 type Props = {

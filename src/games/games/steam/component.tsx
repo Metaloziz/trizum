@@ -8,8 +8,8 @@ import StartTimer from '../../components/startTimer';
 import Timer from '../../components/timerRevert';
 
 import SteamItem from './components/item';
-import { toJS } from 'mobx';
 
+const HEIGHT_AREA = 680;
 const START_TIMER = 3;
 
 const imageBackground = require('./assets/background.png');
@@ -223,7 +223,7 @@ export default class extends Component<Props, State> implements Game {
       <View
         style={{
           ...styles.inner,
-          minHeight: width,
+          minHeight: HEIGHT_AREA,
         }}
       >
         <Image source={imageBackground} style={styles.background} />

@@ -9,19 +9,20 @@ import {
   TextField,
 } from '@mui/material';
 import { StatusTypes, EditStatusEnum, AddStatusEnum } from 'app/enums/StatusTypes';
+import { WorkTypes } from 'app/enums/WorkTypes';
 import Button from 'components/button/Button';
 import { TableWorks } from 'components/methodist-main/components/TableWorks';
+import { getTypeCourseOptions } from 'components/methodist-main/utils/getTypeCourseOptions';
 import { observer } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { getOptionMui } from 'utils/getOption';
-import { WorkTypes } from '../../app/enums/WorkTypes';
 import coursesStore from '../../app/stores/coursesStore';
 import homeworkStore from '../../app/stores/homeworkStore';
 
 import { Dialog, DialogTitle } from '../franchising-page/ui/Dialog';
 import { LoadingIndicator } from '../franchising-page/ui/LoadingIndicator';
 import { defaultSearchHomeWorksParams } from './utils/const';
-import { levelOptions, groupTypesOptions, statusTypesKeys } from './utils/utils';
+import { levelOptions, statusTypesKeys } from './utils/utils';
 
 export const AddOrEditDialog = observer(() => {
   const { getHomeWorks, setSearchParams, pagination, worksArray } = homeworkStore;
@@ -136,7 +137,7 @@ export const AddOrEditDialog = observer(() => {
                   }
                   // error={isError('type')}
                 >
-                  {groupTypesOptions}
+                  {getTypeCourseOptions()}
                 </Select>
               </FormControl>
             </Grid>

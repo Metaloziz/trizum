@@ -10,6 +10,7 @@ import { Game, GameResult } from '../../common/types';
 
 import LevelView from './components/level';
 
+const HEIGHT_AREA = 680;
 const START_TIMER = 3;
 
 const imageBackground = require('./assets/background.png');
@@ -195,55 +196,57 @@ export default class extends Component<Props, State> implements Game {
     return (
       <View
         style={{
-          minHeight: width,
+          minHeight: HEIGHT_AREA,
           ...styles.inner,
         }}
       >
         <Image source={imageBackground} style={styles.background} />
-        {timeComplete && timeComplete > 0 && (
-          <View style={styles.progressTime}>
-            <Timer
-              ref={ref => (this.timer = ref)}
-              time={timeComplete}
-              onEnd={this.onEnd}
-              renderComponent={() => (
-                <View
-                  style={{
-                    ...styles.progressTimeInner,
-                    width: `100%`,
-                  }}
-                />
-              )}
-              renderTime={(time: number) => {
-                let progress = ((timeComplete - time) / timeComplete) * 100;
-
-                if (progress > 100) {
-                  progress = 100;
-                }
-
-                return (
+        <View style={styles.gameBoard}>
+          {timeComplete && timeComplete > 0 && (
+            <View style={styles.progressTime}>
+              <Timer
+                ref={ref => (this.timer = ref)}
+                time={timeComplete}
+                onEnd={this.onEnd}
+                renderComponent={() => (
                   <View
                     style={{
                       ...styles.progressTimeInner,
-                      width: `${progress}%`,
+                      width: `100%`,
                     }}
                   />
-                );
-              }}
-            />
-          </View>
-        )}
-        <View style={styles.wrapLevels}>{levels}</View>
-        <LevelView
-          key={`level-${level}`}
-          onResult={this.onResult}
-          speed={gameSpeed}
-          width={width}
-        />
-        <TimerAll
-          ref={(ref: any) => (this.timerAll = ref)}
-          renderTime={(time: number) => <Text style={styles.timer}>{time} сек</Text>}
-        />
+                )}
+                renderTime={(time: number) => {
+                  let progress = ((timeComplete - time) / timeComplete) * 100;
+
+                  if (progress > 100) {
+                    progress = 100;
+                  }
+
+                  return (
+                    <View
+                      style={{
+                        ...styles.progressTimeInner,
+                        width: `${progress}%`,
+                      }}
+                    />
+                  );
+                }}
+              />
+            </View>
+          )}
+          <View style={styles.wrapLevels}>{levels}</View>
+          <LevelView
+            key={`level-${level}`}
+            onResult={this.onResult}
+            speed={gameSpeed}
+            width={width}
+          />
+          <TimerAll
+            ref={(ref: any) => (this.timerAll = ref)}
+            renderTime={(time: number) => <Text style={styles.timer}>{time} сек</Text>}
+          />
+        </View>
       </View>
     );
   };
@@ -291,6 +294,10 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
+  },
+  gameBoard: {
+    maxWidth: 770,
+    marginHorizontal: 'auto',
   },
   progressTime: {
     height: 6,

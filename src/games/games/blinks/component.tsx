@@ -12,6 +12,7 @@ import BlinkView from './components/blink';
 
 import { Game, GameResult } from '../../common/types';
 
+const HEIGHT_AREA = 680;
 const SPACE = 10;
 const START_TIMER = 3;
 const DELAY = 1200;
@@ -327,9 +328,11 @@ export default class extends Component<Props, State> implements Game {
   renderInner = () => {
     const { width, colorsMap, sound = 1, levelMaxCompleted = 5, timeComplete = 3 } = this.props;
 
-    const { started, blink = false, stage = 'listen', level = 0, levelBlink } = this.state;
+    const { started, blink = false, stage = 'listen', level = 0} = this.state;
 
-    const sizeBlink = Math.round((width - (colorsMap.length - 1) * SPACE) / colorsMap.length);
+    const sizeBlink = Math.round(((HEIGHT_AREA - 100) - (colorsMap.length - 1) * SPACE) / colorsMap.length);
+
+    console.log({sizeBlink})
 
     return (
       <>
@@ -377,7 +380,7 @@ export default class extends Component<Props, State> implements Game {
           style={{
             ...styles.game,
             width: width,
-            height: width,
+            height: HEIGHT_AREA - 100,
           }}
         >
           {colorsMap.map((color: string, index: number) => (

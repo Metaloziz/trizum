@@ -12,6 +12,7 @@ import TimerRevert from '../../components/timerRevert';
 import { generateLayout } from './utils/logic';
 
 const ErrorColor = 'rgba(0,255,0, 0.1)';
+const HEIGHT_AREA = 650;
 
 interface State {
   started: boolean;
@@ -205,18 +206,18 @@ export default class extends Component<Props, State> implements Game {
   };
 
   render() {
-    const { elementsTotal, width, timeComplete } = this.props;
+    const { elementsTotal, timeComplete } = this.props;
 
     const { started = false, need, layout } = this.state;
 
-    const cellSize = width / elementsTotal;
+    const cellSize = HEIGHT_AREA / elementsTotal;
 
     return (
       <View style={styles.wrap}>
         {started && timeComplete && timeComplete > 0 && (
           <View style={styles.progressTime}>
             <TimerRevert
-              time={timeComplete}
+              time={5000000}
               onEnd={() => this.end(false)}
               renderComponent={() => (
                 <View
@@ -256,14 +257,14 @@ export default class extends Component<Props, State> implements Game {
         <View
           style={{
             ...styles.game,
-            width: width,
-            height: (width / elementsTotal) * elementsTotal,
+            width: HEIGHT_AREA,
+            height: (HEIGHT_AREA / elementsTotal) * elementsTotal,
           }}
         >
-          <ErrorBlock onRef={(ref: any) => (this.errorBlock = ref)} size={width / elementsTotal} />
+          <ErrorBlock onRef={(ref: any) => (this.errorBlock = ref)} size={HEIGHT_AREA / elementsTotal} />
           <ErrorBlock
             onRef={(ref: any) => (this.successBlock = ref)}
-            size={width / elementsTotal}
+            size={HEIGHT_AREA / elementsTotal}
             color={ErrorColor}
           />
           {layout.map((row, ri: number) => (
@@ -295,7 +296,7 @@ export default class extends Component<Props, State> implements Game {
                   <Text
                     style={{
                       ...styles.cellTitle,
-                      fontSize: cellSize * 0.3,
+                      fontSize: row.length > 7 ? cellSize / row.length :  cellSize * 0.3,
                       color: cell.color,
                     }}
                   >

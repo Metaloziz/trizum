@@ -11,6 +11,7 @@ import { Game, GameResult } from '../../common/types';
 
 import Item from './components/item';
 
+const HEIGHT_AREA = 680;
 const START_TIMER = 3;
 const START_GAME = 5;
 
@@ -255,7 +256,7 @@ export default class extends Component<any, State> implements Game {
     const { width, elementsTotal, timeComplete, levelMaxCompleted } = this.props;
     const { flight = true, another = 0, ended = false, level = 0, speedGame } = this.state;
 
-    const height = width * (isWeb() ? 1 : 1.2);
+    const height = HEIGHT_AREA * (isWeb() ? 1 : 1.2);
     const items = [];
     const anotherItems = [];
 
@@ -310,7 +311,7 @@ export default class extends Component<any, State> implements Game {
         <View
           style={{
             ...styles.inner,
-            height: height,
+            height: HEIGHT_AREA,
           }}
         >
           <Image source={imageBackground} style={styles.background} />
