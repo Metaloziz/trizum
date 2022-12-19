@@ -193,6 +193,7 @@ export const Filter: FC<UserPageFilterProps> = observer(props => {
     setMiddleName('');
     setFranchiseId('');
     setGroupId('');
+    setGroupType('');
     setTariffId('');
     setIsPaid(null);
     setPhone(null);
