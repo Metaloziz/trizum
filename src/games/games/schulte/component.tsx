@@ -1,48 +1,35 @@
 import React, { Component } from 'react';
 import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
-import { Props } from './types';
-import { generateLayout } from './utils/logic';
 
 import { Game, GameResult } from '../../common/types';
+import { Props, NeedItem, GameStatistic } from './types';
+
+import ErrorBlock from './components/errorBlock';
 
 import Timer from '../../components/timer';
 import TimerRevert from '../../components/timerRevert';
 
-import ErrorBlock from './components/errorBlock';
+import { generateLayout } from './utils/logic';
 
-const SizesConfig = [
-  {
-    title : '3 на 3',
-    value : 0,
-    option : {
-      elementsTotal: 3
-    }
-  },
-  {
-    title : '4 на 4',
-    value : 1,
-    option : {
-      elementsTotal: 4
-    }
-  },
-  {
-    title : '6 на 6',
-    value : 2,
-    option : {
-      elementsTotal: 6
-    }
-  },
-];
+const ErrorColor = 'rgba(0,255,0, 0.1)';
 
-export default class extends Component<any, any> implements Game {
+interface State {
+  started: boolean;
+  need: NeedItem | undefined;
+  list: NeedItem[];
+  layout: NeedItem[][];
+  gameStatistic: GameStatistic[];
+}
 
-  counterFailed : any;
-  counterSuccess : any;
-  levelMaxCompleted : any;
-  errorBlock : any;
-  successBlock : any;
+export default class extends Component<Props, State> implements Game {
+  counterFailed: any;
+  counterSuccess: any;
+  levelMaxCompleted: any;
+  errorBlock: any;
+  successBlock: any;
+  timerRef: any;
 
-  constructor(props : any) {
+  constructor(props: any) {
     super(props);
 
     this.counterFailed = 0;
@@ -50,193 +37,162 @@ export default class extends Component<any, any> implements Game {
     this.levelMaxCompleted = 0;
 
     this.state = {
-      started : false,
-      need : {},
-      list : [],
-      layout : []
+      started: false,
+      need: {
+        text: '',
+        color: '',
+      },
+      list: [],
+      layout: [],
+      gameStatistic: [],
     };
   }
 
   componentDidMount() {
-    const {
-      onRef = () => {}
-    } = this.props;
+    const { onRef = () => {} } = this.props;
 
     onRef(this);
 
     this.reset(() => {});
   }
 
-  public getConfig = () => {
-    return [
-      {
-        name : 'digitMin',
-        type : 'select',
-        title : 'Минимальное число на поле',
-        option : [
-          {
-            title : '1',
-            value : 1,
-          },
-          {
-            title : '10',
-            value : 10,
-          },
-          {
-            title : '20',
-            value : 20,
-          },
-          {
-            title : '30',
-            value : 30,
-          },
-        ],
-        value : 1
-      },
-      {
-        name : 'timeComplete',
-        type : 'select',
-        title : 'Время на прохождение',
-        option : [
-          {
-            title : 'Бесконечно',
-            value : 0,
-          },
-          {
-            title : '10 секунд',
-            value : 10,
-          },
-          {
-            title : '20 секунд',
-            value : 20,
-          },
-          {
-            title : '30 секунд',
-            value : 30,
-          },
-        ],
-        value : 0
-      },
-      {
-        name : 'size',
-        type : 'select',
-        title : 'Размер поля',
-        option : SizesConfig,
-        value : 0
-      },
-    ];
-  }
-
-  public prepareConfig = (result : any) => {
-    const size = SizesConfig[parseInt(result.size)] || SizesConfig[0];
-
-    return {
-      ...size.option,
-      timeComplete : parseInt(result.timeComplete),
-      digitMin : parseInt(result.digitMin)
-    };
-  }
-
   public resume = () => {
     this.setState({
-      started : true
+      started: true,
     });
-  }
+  };
 
   public start = () => {
     this.reset(() => {
       this.onNext();
       this.resume();
     });
-  }
+  };
 
   public stop = () => {
     this.setState({
-      started : false
+      started: false,
+      gameStatistic: [],
     });
-  }
+  };
 
-  private reset = (cb : any) => {
-    const {
-      list,
-      layout
-    } = generateLayout(this.props);
+  private reset = (cb: any) => {
+    const { list, layout } = generateLayout(this.props);
 
     this.counterFailed = 0;
     this.counterSuccess = 0;
     this.levelMaxCompleted = 0;
 
-    this.setState({
-      started : false,
-      list,
-      layout
-    }, cb);
-  }
+    this.setState(
+      {
+        started: false,
+        list,
+        layout,
+      },
+      cb,
+    );
+  };
 
-  private onSelect = (item : any, x : any, y : any) => () => {
-    const {
-      onFeedbackError = () => {},
-      onFeedbackSuccess = () => {},
-    } = this.props;
+  private onSelect = (item: NeedItem, x: number, y: number) => () => {
+    const { need } = this.state;
 
-    const {
-      need = {}
-    } = this.state;
-
-    if(
-      need.text != item.text ||
-      need.color != item.color
-    ) {
+    if ((need && need.text != item.text) || (need && need.color != item.color)) {
       this.counterFailed++;
-      onFeedbackError(item, x, y);
       this.errorBlock?.show(x, y);
       return;
     }
 
-    if(parseInt(item.text) > this.levelMaxCompleted) {
+    if (parseInt(item.text) > this.levelMaxCompleted) {
       this.levelMaxCompleted = parseInt(item.text);
     }
 
     this.counterSuccess++;
     this.successBlock?.show(x, y);
-    onFeedbackSuccess(item, x, y);
+
     this.onNext();
-  }
+  };
+
+  private triggerEngine = () => {
+    const {
+      perSuccessLevel: maxAverageTime,
+      maxErrorLevel: countUserPress,
+      upgrade,
+      colorsMap,
+      digitMin,
+    } = this.props;
+
+    const { gameStatistic: currentGameStatistic, layout, list: currentList } = this.state;
+
+    const lastTime = currentGameStatistic.reduce((acc, { time }) => acc + time, 0);
+    const currentTime = this.timerRef?.getValue() || 0;
+
+    const lastClickTime = currentTime - lastTime;
+    const userClickTime = lastClickTime > 0 ? lastClickTime : 0.5;
+
+    const gameStatistic = [
+      ...currentGameStatistic,
+      { time: userClickTime, elementsTotal: layout.length },
+    ];
+
+    const lastStatistic = gameStatistic.slice(-countUserPress);
+
+    let list = currentList;
+    let elementsTotal = layout.length;
+
+    if (lastStatistic.length === countUserPress) {
+      const averageTime =
+        lastStatistic.reduce((acc, { time }) => acc + time, 0) / lastStatistic.length;
+
+      if (maxAverageTime > averageTime && elementsTotal < 10) {
+        elementsTotal += upgrade;
+        const newList = generateLayout({ elementsTotal, digitMin, colorsMap });
+        list = newList.list;
+        this.setState({ layout: newList.layout });
+      }
+
+      if (maxAverageTime < averageTime && elementsTotal > 2) {
+        elementsTotal -= upgrade;
+        const newList = generateLayout({ elementsTotal, digitMin, colorsMap });
+        list = newList.list;
+        this.setState({ layout: newList.layout });
+      }
+    }
+
+    return { gameStatistic, list };
+  };
 
   private onNext = () => {
-    const {
-      list = []
-    } = this.state;
+    const { list = [] } = this.state;
 
-    if(list.length == 0) {
+    if (list.length == 0) {
       this.end(true);
       return;
     }
 
-    const setList = list.slice(); // Delete link
+    const { gameStatistic, list: newList } = this.triggerEngine();
+
+    const setList = newList.slice(); // Delete link
     const need = setList.pop();
 
     this.setState({
-      list : setList,
-      need
+      list: setList,
+      need,
+      gameStatistic,
     });
-  }
+  };
 
   private end = (finished = false) => {
-    const timer : any = this.refs?.timer;
-    const time = timer?.getValue();
+    const time = this.timerRef.getValue();
 
-    const {
-      onEnd = () => {}
-    } = this.props;
+    const { onEnd = () => {} } = this.props;
 
-    const result : GameResult = {
-      finished : finished,
-      result : 'end',
-      time : time,
-      failed : this.counterFailed,
-      success : this.counterSuccess,
-      levelMaxCompleted : this.levelMaxCompleted
+    const result: GameResult = {
+      finished: finished,
+      result: 'end',
+      time: time,
+      failed: this.counterFailed,
+      success: this.counterSuccess,
+      levelMaxCompleted: this.levelMaxCompleted,
     };
 
     onEnd(result);
@@ -246,159 +202,174 @@ export default class extends Component<any, any> implements Game {
     this.levelMaxCompleted = 0;
 
     this.stop();
-  }
+  };
 
   render() {
-    const {
-      started = false,
-      need,
-      layout
-    } = this.state;
+    const { elementsTotal, width, timeComplete } = this.props;
 
-    const {
-      elementsTotal,
-      width,
-      timeComplete
-    } = this.props;
+    const { started = false, need, layout } = this.state;
 
-    const cellSize = (width / elementsTotal);
+    const cellSize = width / elementsTotal;
 
-    return <View style={styles.wrap}>
-      {started && timeComplete > 0 && <View style={styles.progressTime}>
-        <TimerRevert
-          time={timeComplete}
-          onEnd={() => this.end(false)}
-          renderComponent={() => <View
-            style={{
-              ...styles.progressTimeInner,
-              width : `100%`
-            }}
-          />}
-          renderTime={(t : any) => {
-            let progress = ((timeComplete - t) / timeComplete) * 100;
+    return (
+      <View style={styles.wrap}>
+        {started && timeComplete && timeComplete > 0 && (
+          <View style={styles.progressTime}>
+            <TimerRevert
+              time={timeComplete}
+              onEnd={() => this.end(false)}
+              renderComponent={() => (
+                <View
+                  style={{
+                    ...styles.progressTimeInner,
+                    width: `100%`,
+                  }}
+                />
+              )}
+              renderTime={(time: number) => {
+                let progress = ((timeComplete - time) / timeComplete) * 100;
 
-            if(progress > 100) {
-              progress = 100;
-            }
+                if (progress > 100) {
+                  progress = 100;
+                }
 
-            return <View
-              style={{
-                ...styles.progressTimeInner,
-                width : `${progress}%`
+                return (
+                  <View
+                    style={{
+                      ...styles.progressTimeInner,
+                      width: `${progress}%`,
+                    }}
+                  />
+                );
               }}
             />
-          }}
-        />
-      </View>}
-      {started && <Text style={styles.title}>Выберите: <Text style={{...styles.title, ...styles.titleActive, color : need?.color}}>{need?.text}</Text></Text>}
-      <View
-        style={{
-          ...styles.game,
-          width : width,
-          height : (width / elementsTotal) * elementsTotal
-        }}
-      >
-        <ErrorBlock
-          onRef={(ref : any) => this.errorBlock = ref}
-          size={width/elementsTotal}
-        />
-        <ErrorBlock
-          onRef={(ref : any) => this.successBlock = ref}
-          size={width/elementsTotal}
-          color='rgba(0,255,0, 0.1)'
-        />
-        {layout.map((row : any, ri : number) => <View
-          key={`row-${ri}`}
+          </View>
+        )}
+        {started && (
+          <Text style={styles.title}>
+            Выберите:{' '}
+            <Text style={{ ...styles.title, ...styles.titleActive, color: need?.color }}>
+              {need?.text}
+            </Text>
+          </Text>
+        )}
+        <View
           style={{
-            ...styles.row,
-            ...(layout.length - 1 == ri ? {
-              borderBottomWidth : 0
-            } : {})
+            ...styles.game,
+            width: width,
+            height: (width / elementsTotal) * elementsTotal,
           }}
         >
-          {row.map((cell : any, ci : number) => <TouchableOpacity
-            key={`cell-${ri}-${ci}`}
-            style={{
-              ...styles.cell,
-              ...(row.length - 1 == ci ? {
-                borderRightWidth : 0
-              } : {})
-            }}
-            activeOpacity={0.8}
-            onPress={this.onSelect(cell, ci, ri)}
-          >
-            <Text
+          <ErrorBlock onRef={(ref: any) => (this.errorBlock = ref)} size={width / elementsTotal} />
+          <ErrorBlock
+            onRef={(ref: any) => (this.successBlock = ref)}
+            size={width / elementsTotal}
+            color={ErrorColor}
+          />
+          {layout.map((row, ri: number) => (
+            <View
+              key={`row-${ri}`}
               style={{
-                ...styles.cellTitle,
-                fontSize : cellSize * 0.3,
-                color : cell.color
+                ...styles.row,
+                ...(layout.length - 1 == ri
+                  ? {
+                      borderBottomWidth: 0,
+                    }
+                  : {}),
               }}
-            >{cell.text}</Text>
-          </TouchableOpacity>)}
-        </View>)}
+            >
+              {row.map((cell, ci: number) => (
+                <TouchableOpacity
+                  key={`cell-${ri}-${ci}`}
+                  style={{
+                    ...styles.cell,
+                    ...(row.length - 1 == ci
+                      ? {
+                          borderRightWidth: 0,
+                        }
+                      : {}),
+                  }}
+                  activeOpacity={0.8}
+                  onPress={this.onSelect(cell, ci, ri)}
+                >
+                  <Text
+                    style={{
+                      ...styles.cellTitle,
+                      fontSize: cellSize * 0.3,
+                      color: cell.color,
+                    }}
+                  >
+                    {cell.text}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          ))}
+        </View>
+        {started && (
+          <Timer
+            ref={(ref: any) => (this.timerRef = ref)}
+            renderTime={(time: number) => <Text style={styles.timer}>{time} сек</Text>}
+          />
+        )}
       </View>
-      {started && <Timer
-        ref='timer'
-        renderTime={(time : any) => <Text style={styles.timer}>{time} сек</Text>}
-      />}
-    </View>;
+    );
   }
-
 }
 
 const styles = StyleSheet.create({
-  wrap : {
-    marginTop : 12,
-    marginBottom : 12
+  wrap: {
+    marginTop: 12,
+    marginBottom: 12,
   },
-  game : {
-    backgroundColor : '#fff',
-    borderWidth : 1,
-    borderColor : '#cdcdcd'
+  game: {
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#cdcdcd',
   },
-  row : {
-    flex : 1,
-    borderBottomWidth : 1,
-    borderColor : '#cdcdcd',
-    flexDirection : 'row'
+  row: {
+    flex: 1,
+    borderBottomWidth: 1,
+    borderColor: '#cdcdcd',
+    flexDirection: 'row',
   },
-  cell : {
-    flex : 1,
-    borderRightWidth : 1,
-    borderColor : '#cdcdcd',
-    alignItems : 'center',
-    justifyContent : 'center'
+  cell: {
+    flex: 1,
+    borderRightWidth: 1,
+    borderColor: '#cdcdcd',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  cellTitle : {
-    fontSize : 18,
-    fontWeight : 'bold'
+  cellTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
   },
-  titleActive : {
-    fontWeight : 'bold'
+  titleActive: {
+    fontWeight: 'bold',
   },
-  title : {
-    fontSize : 18,
-    textAlign : 'center',
-    marginBottom : 8
+  title: {
+    fontSize: 18,
+    textAlign: 'center',
+    marginBottom: 8,
   },
-  timer : {
-    textAlign : 'center',
-    marginTop : 12,
-    fontSize : 14,
-    lineHeight : 20,
+  timer: {
+    textAlign: 'center',
+    marginTop: 12,
+    fontSize: 14,
+    lineHeight: 20,
   },
-  progressTime : {
-    height : 6,
-    backgroundColor : '#E6EEF8',
-    borderRadius : 3,
-    overflow : 'hidden',
-    marginTop : 0,
-    marginHorizontal : 0,
-    marginBottom : 22
+  progressTime: {
+    height: 6,
+    backgroundColor: '#E6EEF8',
+    borderRadius: 3,
+    overflow: 'hidden',
+    marginTop: 0,
+    marginHorizontal: 0,
+    marginBottom: 22,
   },
-  progressTimeInner : {
-    height : 6,
-    backgroundColor : '#7427CC',
-    borderRadius : 2,
+  progressTimeInner: {
+    height: 6,
+    backgroundColor: '#7427CC',
+    borderRadius: 2,
   },
 });

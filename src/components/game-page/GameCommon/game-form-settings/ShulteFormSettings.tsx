@@ -40,12 +40,26 @@ const DEFAULT_VALUES: ShulteFormType = {
   elementsTotal: 3,
   digitMin: 1,
   colorsMap: ['null'],
+  perSuccessLevel: 4,
+  maxErrorLevel: 3,
+  upgrade: 1,
+  downgrade: 0,
 };
 
 export const ShulteFormSettings = (props: FormSettingsType): ReactElement => {
   const { usedInWorks, gamePreset, onFormSubmit, deletedPreset, createCopy } = props;
   const { settings, status, id, level, name } = gamePreset;
-  const { elementsTotal, colorsMap, timeComplete, description, digitMin } = settings[0];
+  const {
+    elementsTotal,
+    colorsMap,
+    timeComplete,
+    description,
+    digitMin,
+    perSuccessLevel,
+    maxErrorLevel,
+    upgrade,
+    downgrade,
+  } = settings[0];
 
   const defaultValues: ShulteFormType =
     id === '' && status !== 'copiyed'
@@ -59,6 +73,10 @@ export const ShulteFormSettings = (props: FormSettingsType): ReactElement => {
           elementsTotal: elementsTotal || 1,
           digitMin,
           colorsMap: colorsMap || ['null'],
+          perSuccessLevel,
+          maxErrorLevel,
+          upgrade,
+          downgrade,
         } as ShulteFormType);
 
   const methods = useForm<ShulteFormType>({
@@ -185,6 +203,44 @@ export const ShulteFormSettings = (props: FormSettingsType): ReactElement => {
                     <div className={styles.textColor}> не выбрано</div>
                   )}
                 </div>
+              )}
+              control={control}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} display="flex" alignItems="center">
+            <Controller
+              name="perSuccessLevel"
+              render={({ field: { value, onChange, ref } }) => (
+                <TextFieldCustom
+                  type="text"
+                  label="Среднее время нажатия для пересчета размера поля, c."
+                  size="small"
+                  fullWidth
+                  inputProps={{ type: 'number' }}
+                  error={errors.perSuccessLevel?.message}
+                  onChange={event => onChange(convertEmptyStringToNull(event))}
+                  value={convertNullToEmptyString(value!)}
+                  ref={ref}
+                />
+              )}
+              control={control}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} display="flex" alignItems="center">
+            <Controller
+              name="maxErrorLevel"
+              render={({ field: { value, onChange, ref } }) => (
+                <TextFieldCustom
+                  type="text"
+                  label="Кол-во нажатий для замера"
+                  size="small"
+                  fullWidth
+                  inputProps={{ type: 'number' }}
+                  error={errors.maxErrorLevel?.message}
+                  onChange={event => onChange(convertEmptyStringToNull(event))}
+                  value={convertNullToEmptyString(value!)}
+                  ref={ref}
+                />
               )}
               control={control}
             />
