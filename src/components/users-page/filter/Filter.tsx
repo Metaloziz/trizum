@@ -97,6 +97,10 @@ export const Filter: FC<UserPageFilterProps> = observer(props => {
     }
   }, [franchiseId, groupType]);
 
+  useEffect(() => {
+    cleanSearchUsersParams();
+  }, []);
+
   const onSearchClick = () => {
     let birthdateSince;
     if (bornDataSince) {
