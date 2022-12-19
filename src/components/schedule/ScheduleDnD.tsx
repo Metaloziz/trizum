@@ -110,7 +110,7 @@ const ScheduleDnD: FC = observer(() => {
         draggableAccessor={() => false} // todo disable drag and drop
         step={15}
         min={new Date(2022, 0, 1, 8, 0)}
-        max={new Date(2022, 0, 5, 20, 30)}
+        max={new Date(2023, 0, 5, 22, 0)}
         defaultView="week"
         views={['week']}
         messages={{ next: 'next', previous: 'last', today: 'Текущая' }}
