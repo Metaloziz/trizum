@@ -21,3 +21,8 @@ export const RolesNameArticle: { [key: string]: string } = {
   forTutor: 'tutor',
   forAdmin: 'admin',
 };
+
+export const RoleNamesForTutorFilter = {
+  franchiseeAdmin: 'Администратор франчайзи',
+  franchisee: 'Франчайзи',
+};

@@ -23,7 +23,7 @@ import Button from '../../button/Button';
 
 import usersStore from 'app/stores/usersStore';
 import appStore from 'app/stores/appStore';
-import { RoleNames } from 'app/enums/RoleNames';
+import { RoleNames, RoleNamesForTutorFilter } from 'app/enums/RoleNames';
 import { observer } from 'mobx-react-lite';
 import { RequestUsersForFilter } from 'app/types/UserTypes';
 import { Moment } from 'moment/moment';
@@ -63,8 +63,7 @@ export const Filter: FC<UserPageFilterProps> = observer(props => {
       : convertFranchiseeOptions(franchise);
   const groupsOptions = convertGroupOptions(groups);
   const groupsTypesOptions = convertEnumOptions(GroupTypes);
-  const roleOptions = convertEnumOptions(RoleNames);
-  roleOptions.push({ label: 'Все', value: 'all' });
+  const roleOptions = convertEnumOptions(role === 'tutor' ? RoleNamesForTutorFilter : RoleNames);
   const tariffsOptions = convertTariffOptions(tariffs);
 
   const [isOpenAccordion, setIsOpenAccordion] = useState(false);
@@ -147,13 +146,10 @@ export const Filter: FC<UserPageFilterProps> = observer(props => {
   };
 
   const handleChangeGroupId = ({ target: { value } }: SelectChangeEvent) => {
-    console.log('groupdId', value);
     setGroupId(value);
   };
 
   const handleChangeGroupType = ({ target: { value } }: SelectChangeEvent) => {
-    // setGroupId('');
-    console.log('group type', value);
     setGroupType(value);
   };
 
