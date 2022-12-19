@@ -83,11 +83,6 @@ class GroupStore {
   };
 
   editLesson = ({ lessonIndex, groupId, schedule }: EditLessonPayload) => {
-    // if (currentGroup) {
-    //   console.log('currentGroup', currentGroup);
-    //
-    //   currentGroup.schedule[lessonIndex] = schedule;
-
     this.execute(async () => {
       const currentGroup = await groupsService.getOneGroup(groupId);
 
@@ -99,7 +94,6 @@ class GroupStore {
       );
       await this.getGroups();
     });
-    // }
   };
 
   get actualSchedule() {
