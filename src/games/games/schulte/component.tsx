@@ -217,7 +217,7 @@ export default class extends Component<Props, State> implements Game {
         {started && timeComplete && timeComplete > 0 && (
           <View style={styles.progressTime}>
             <TimerRevert
-              time={5000000}
+              time={timeComplete}
               onEnd={() => this.end(false)}
               renderComponent={() => (
                 <View
