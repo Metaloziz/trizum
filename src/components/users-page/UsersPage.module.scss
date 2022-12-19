@@ -1,3 +1,5 @@
+@import "src/styles/mixins";
+
 .wrapper {
   max-width: 1324px;
   padding: 30px 20px 20px 20px;
@@ -80,6 +82,16 @@
 
 .cardWrapper {
   padding: 10px 0 32px 0;
+  width: 100%;
+
+  .emptyTitle {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    @include title-tag-h2();
+    margin-top: 20px;
+
+  }
 }
 
 .buttons {
