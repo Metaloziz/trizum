@@ -1,5 +1,3 @@
-import { Roles } from 'app/enums/Roles';
-import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   Accordion,
@@ -18,19 +16,19 @@ import {
   Typography,
 } from '@mui/material';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
-
-import Button from '../../button/Button';
-
-import usersStore from 'app/stores/usersStore';
-import appStore from 'app/stores/appStore';
+import { GroupTypes } from 'app/enums/GroupTypes';
 import { RoleNames, RoleNamesForTutorFilter } from 'app/enums/RoleNames';
-import { observer } from 'mobx-react-lite';
-import { RequestUsersForFilter } from 'app/types/UserTypes';
-import { Moment } from 'moment/moment';
+import { Roles } from 'app/enums/Roles';
+import appStore from 'app/stores/appStore';
 import franchiseeStore from 'app/stores/franchiseeStore';
 import groupStore from 'app/stores/groupStore';
-import { GroupTypes } from 'app/enums/GroupTypes';
 import tariffsStore from 'app/stores/tariffsStore';
+
+import usersStore from 'app/stores/usersStore';
+import { RequestUsersForFilter } from 'app/types/UserTypes';
+import { observer } from 'mobx-react-lite';
+import { Moment } from 'moment/moment';
+import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 import {
   convertEnumOptions,
   convertFranchiseeOptions,
@@ -39,6 +37,8 @@ import {
   getAllOptionsMUI,
   getRoleOptionsForFilter,
 } from 'utils';
+
+import Button from '../../button/Button';
 
 const PAID = 'Оплачен';
 const NOT_PAID = 'Не оплачен';
@@ -57,14 +57,16 @@ export const Filter: FC<UserPageFilterProps> = observer(props => {
   const { groups, getGroups } = groupStore;
   const { getFilteredUsers, perPage, setSearchUsersParams, cleanSearchUsersParams } = usersStore;
 
+  const groupsOptions = convertGroupOptions(groups);
+  const groupsTypesOptions = convertEnumOptions(GroupTypes);
+  const tariffsOptions = convertTariffOptions(tariffs);
+  const roleOptions = convertEnumOptions(
+    role === Roles.Tutor ? RoleNamesForTutorFilter : RoleNames,
+  );
   const franchiseOptions =
     role === Roles.Franchisee || role === Roles.FranchiseeAdmin
       ? convertFranchiseeOptions([oneFranchise])
       : convertFranchiseeOptions(franchise);
-  const groupsOptions = convertGroupOptions(groups);
-  const groupsTypesOptions = convertEnumOptions(GroupTypes);
-  const roleOptions = convertEnumOptions(role === 'tutor' ? RoleNamesForTutorFilter : RoleNames);
-  const tariffsOptions = convertTariffOptions(tariffs);
 
   const [isOpenAccordion, setIsOpenAccordion] = useState(false);
 
@@ -267,7 +269,7 @@ export const Filter: FC<UserPageFilterProps> = observer(props => {
               />
             </Grid>
 
-            {role !== 'franchisee' && role !== 'franchiseeAdmin' && (
+            {role !== Roles.Franchisee && role !== Roles.FranchiseeAdmin && (
               <Grid item xs={12} sm={4}>
                 <FormControl fullWidth>
                   <InputLabel id="demo-simple-select-label">Франшиза</InputLabel>
@@ -283,36 +285,40 @@ export const Filter: FC<UserPageFilterProps> = observer(props => {
                 </FormControl>
               </Grid>
             )}
-            <Grid item xs={12} sm={4}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Тип группы</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={groupType}
-                  disabled={franchiseId === ''}
-                  label="Тип группы"
-                  onChange={handleChangeGroupType}
-                >
-                  {getAllOptionsMUI(groupsTypesOptions)}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Группа</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={groupId}
-                  label="Группа"
-                  disabled={groupType === ''}
-                  onChange={handleChangeGroupId}
-                >
-                  {getAllOptionsMUI(groupsOptions)}
-                </Select>
-              </FormControl>
-            </Grid>
+            {role !== Roles.Tutor && (
+              <>
+                <Grid item xs={12} sm={4}>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Тип группы</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={groupType}
+                      disabled={franchiseId === ''}
+                      label="Тип группы"
+                      onChange={handleChangeGroupType}
+                    >
+                      {getAllOptionsMUI(groupsTypesOptions)}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Группа</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={groupId}
+                      label="Группа"
+                      disabled={groupType === ''}
+                      onChange={handleChangeGroupId}
+                    >
+                      {getAllOptionsMUI(groupsOptions)}
+                    </Select>
+                  </FormControl>
+                </Grid>
+              </>
+            )}
             <Grid item xs={12} sm={4}>
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">Роль</InputLabel>
@@ -364,7 +370,7 @@ export const Filter: FC<UserPageFilterProps> = observer(props => {
                 </FormControl>
               </Grid>
             )}
-            {selectedRole === 'student' && (
+            {selectedRole === Roles.Student && (
               <>
                 <Grid item xs={12} sm={4}>
                   <FormControl fullWidth>
