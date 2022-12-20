@@ -1,5 +1,6 @@
 // form
 export const MAX_NAMES_LENGTH = 150;
+export const MAX_TEST_NAME_LENGTH = 50;
 export const MAX_TEST_QUESTION_LENGTH = 150;
 export const MIN_NAMES_LENGTH = 1;
 export const PHONE_LENGTH = 11;

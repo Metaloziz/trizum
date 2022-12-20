@@ -11,19 +11,19 @@ import Button from 'components/button/Button';
 import CustomSelect from 'components/select-mui/CustomSelect';
 
 import TextFieldCustom from 'components/text-field-mui/TextFieldCustom';
-import { MAX_NAMES_LENGTH, MIN_NAMES_LENGTH } from 'constants/constants';
+import { MIN_NAMES_LENGTH, MAX_TEST_NAME_LENGTH } from 'constants/constants';
 import { STATUS_MENU } from 'constants/selectMenu';
 import {
   QuestionForm,
   QuestionFormData,
   SCHEMA_QUESTION_FORM,
 } from 'pages/testing/TestsList/TestEditForm/QuestionForm/QuestionForm';
-import style from './TestFormEditor.module.scss';
 import React, { ReactElement, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { convertEmptyStringToNull, convertNullToEmptyString } from 'utils/convertTextFieldUtils';
 import { filterSelectMenu } from 'utils/filterSelectMenu';
 import * as yup from 'yup';
+import style from './TestFormEditor.module.scss';
 
 type Props = {
   defaultValues: TestPayloadT;
@@ -40,7 +40,7 @@ export type TestInputType = Pick<OneTestBodyT, 'title' | 'maxResult' | 'status'>
 const INPUT_RULES = yup
   .string()
   .required('Обязательное поле')
-  .max(MAX_NAMES_LENGTH, `максимальная длинна ${MAX_NAMES_LENGTH} символов`)
+  .max(MAX_TEST_NAME_LENGTH, `максимальная длинна ${MAX_TEST_NAME_LENGTH} символов`)
   .min(MIN_NAMES_LENGTH, `минимальная длинна ${MIN_NAMES_LENGTH} символа`);
 
 const SCHEMA_TEST_FORM_EDITOR = yup.object().shape({
@@ -222,7 +222,7 @@ export const TestFormEditor = (props: Props): ReactElement => {
               ))}
             </Grid>
 
-            <Grid item xs={12} sm={12}>
+            <Grid item xs={12} sm={12} style={{ color: 'red', fontWeight: '600' }}>
               {errors.content?.message}
             </Grid>
 
