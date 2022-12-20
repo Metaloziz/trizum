@@ -3,6 +3,7 @@ import appStore from 'app/stores/appStore';
 import teacherMainStore from 'app/stores/scheduleStore';
 import AddEditGroup from 'components/classes-page/AddEditGroup';
 import { Toolbar } from 'components/schedule/ScheduleComponents/ScheduleComponents';
+import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import moment from 'moment';
 import React, { FC, SyntheticEvent, useEffect, useState } from 'react';
@@ -99,6 +100,8 @@ const ScheduleDnD: FC = observer(() => {
     }
   };
 
+  console.log('actualSchedule', toJS(actualSchedule));
+
   return (
     <div className={styles.wrapper}>
       <DnDCalendar
@@ -107,7 +110,7 @@ const ScheduleDnD: FC = observer(() => {
         draggableAccessor={() => false} // todo disable drag and drop
         step={15}
         min={new Date(2022, 0, 1, 8, 0)}
-        max={new Date(2022, 0, 5, 20, 30)}
+        max={new Date(2023, 0, 5, 22, 0)}
         defaultView="week"
         views={['week']}
         messages={{ next: 'next', previous: 'last', today: 'Текущая' }}

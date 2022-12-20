@@ -1,22 +1,22 @@
+import Pagination from '@mui/material/Pagination';
 import { Roles } from 'app/enums/Roles';
 import appStore from 'app/stores/appStore';
-import { AddSecondChildForm } from 'components/users-page/student-page-franchisee-modal-add-user/ParentChildren/AddSecondChildeForm/AddSecondChildForm';
-import React, { ChangeEvent, useEffect, useState } from 'react';
-import Pagination from '@mui/material/Pagination';
-import { observer } from 'mobx-react-lite';
-
-import modals from '../../app/stores/CardStudentExtended';
-
-import styles from './UsersPage.module.scss';
 import franchiseeStore from 'app/stores/franchiseeStore';
 import groupStore from 'app/stores/groupStore';
 import tariffsStore from 'app/stores/tariffsStore';
 import usersStore from 'app/stores/usersStore';
 import BasicModal from 'components/basic-modal/BasicModal';
-import CardStudentExtended from 'components/card-student/card-student-extended/CardStudentExtended';
+import { Filter } from 'components/users-page/filter/Filter';
+import { AddSecondChildForm } from 'components/users-page/student-page-franchisee-modal-add-user/ParentChildren/AddSecondChildeForm/AddSecondChildForm';
 import StudentPageFranchiseeModalAddUser from 'components/users-page/student-page-franchisee-modal-add-user/StudentPageFranchiseeModalAddUser';
 import StudentPageFranchiseeModalParents from 'components/users-page/student-page-franchisee-modal-parents/StudentPageFranchiseeModalParents';
-import { Filter } from 'components/users-page/filter/Filter';
+import { UsersList } from 'components/users-page/UsersList/UsersList';
+import { observer } from 'mobx-react-lite';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+
+import modals from '../../app/stores/CardStudentExtended';
+
+import styles from './UsersPage.module.scss';
 
 const UsersPage = observer(() => {
   const {
@@ -79,11 +79,7 @@ const UsersPage = observer(() => {
   return (
     <div className={styles.wrapper}>
       <Filter setIsModalOpen={setIsOpenAddUserModal} />
-      <div className={styles.cardWrapper}>
-        {users.map(u => (
-          <CardStudentExtended getOneUser={getOneUser} key={u.id} user={u} />
-        ))}
-      </div>
+      <UsersList users={users} getOneUser={getOneUser} />
       <div className={styles.pagination}>
         <Pagination
           count={Math.ceil(usersTotalCount / perPage)}
