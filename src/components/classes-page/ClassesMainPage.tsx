@@ -53,7 +53,7 @@ export const ClassesMainPage = observer(() => {
   return (
     <>
       <div className={styles.wrapper}>
-        {/* методист не может видеть эту кнопку и учитель */}
+        {/* методист и учитель не может видеть эту кнопку  */}
         {!whoCanUseIt([Roles.Methodist, Roles.Teacher]) && (
           <Button onClick={() => openModal()} variant="contained">
             Добавить группу
