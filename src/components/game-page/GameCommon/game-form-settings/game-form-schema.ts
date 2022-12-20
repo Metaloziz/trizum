@@ -238,6 +238,18 @@ export const SILHOUETTES_SCHEMA = yup.object().shape({
     .required('Обязательное поле')
     .min(1, 'Минимум 1 фигур')
     .max(10, 'Максимум 10 фигур'),
+  perSuccessLevel: yup
+    .number()
+    .required('Обязательное поле')
+    .min(5, 'Минимум 5 секунд')
+    .max(3600, 'Максимум 3600 секунд')
+    .nullable(),
+  maxErrorLevel: yup
+    .number()
+    .required('Обязательное поле')
+    .min(1, 'Минимум 1 нажатие')
+    .max(10, 'Максимум 10 нажатий')
+    .nullable(),
 });
 
 export const SILHOUETTES_FORM_SCHEMA = GAME_SCHEMA.concat(SILHOUETTES_SCHEMA);
