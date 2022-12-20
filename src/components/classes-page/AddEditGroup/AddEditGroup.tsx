@@ -107,6 +107,7 @@ const AddEditGroup: FC = observer(() => {
       visibility={isModalOpen}
       changeVisibility={onClose}
     >
+      <div>Все поля обязательны</div>
       <Grid
         container
         spacing={2}
