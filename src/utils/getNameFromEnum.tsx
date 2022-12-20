@@ -1,4 +1,4 @@
-import { StatusEnum } from '../app/enums/StatusTypes';
+import { StatusEnum } from 'app/enums/StatusTypes';
 
 export const getNameFromEnum = (key: string) => {
   const status = StatusEnum[key as keyof typeof StatusEnum];

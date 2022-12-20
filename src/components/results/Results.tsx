@@ -24,11 +24,11 @@ import {
 import UserCard from 'components/atoms/userCard';
 import { LineContainer } from 'components/results/LineContainer/LineContainer';
 import Tablet from 'components/tablet/Tablet';
-import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import moment from 'moment';
 import { Moment } from 'moment/moment';
 import React, { FC, useState, useEffect } from 'react';
+import { convertEngRoleToRu } from 'utils';
 
 // ResultTable
 import styles from './Results.module.scss';
@@ -73,9 +73,6 @@ const Results: FC = observer(() => {
   };
 
   const start = createdSince?.format('DD.MM.YYYY');
-  // const end = createdUntil?.format('DD.MM.YYYY');
-
-  console.log('user', toJS(user));
 
   const getData = () => {
     setPlayResultsSearchParams({
@@ -95,7 +92,11 @@ const Results: FC = observer(() => {
         <Tablet>
           <div className={styles.blockTop}>
             <div className={styles.user}>
-              <UserCard city={user.city ?? ''} status="Ученик" fullName={fullUserName} />
+              <UserCard
+                city={user.city ?? ''}
+                status={convertEngRoleToRu(user.role)}
+                fullName={fullUserName}
+              />
             </div>
             <div className={styles.filters}>
               <div className={styles.badges} />

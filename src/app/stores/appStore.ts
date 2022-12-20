@@ -217,7 +217,7 @@ class AppStore {
   get fullUserName() {
     const { firstName, middleName, lastName } = this.user;
 
-    return `${lastName} ${firstName} ${middleName}`;
+    return `${lastName ?? ''} ${firstName ?? ''} ${middleName ?? ''}`;
   }
 
   get getSchedule() {
