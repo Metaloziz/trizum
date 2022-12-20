@@ -19,7 +19,7 @@ export const scheduleMapper = (
         return {
           id: idx,
           groupName,
-          teacherId: teacherId.id,
+          teacherId: teacherId?.id,
           groupId,
           lesson: el.name,
           start,

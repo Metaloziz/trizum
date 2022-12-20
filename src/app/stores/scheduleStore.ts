@@ -15,7 +15,7 @@ class GroupStore {
     franchise: '',
   };
 
-  schedule: ScheduleForUI[] = [];
+  schedule: ScheduleForUI[] = [new ScheduleForUI()];
 
   groups: { groupName: string; groupId: string }[] = [];
 
@@ -52,7 +52,7 @@ class GroupStore {
           .map(group =>
             scheduleMapper(group.schedule, group.name, group.id, group.teacherId, group.franchise),
           )
-          .reduce((acc, elem) => [...acc, ...elem], [] as ScheduleForUI[]);
+          .reduce((acc, elem) => [...acc, ...elem], [new ScheduleForUI()]);
       }
     });
   };
@@ -99,8 +99,8 @@ class GroupStore {
   get actualSchedule() {
     const withFilter = this.schedule.filter(
       el =>
-        el.teacherId.includes(this.filters.teacherId) &&
-        el.franchise.includes(this.filters.franchise),
+        el?.teacherId?.includes(this.filters.teacherId) &&
+        el?.franchise?.includes(this.filters.franchise),
     );
     return withFilter.filter(el => el.groupId.includes(this.filters.groupId));
   }
