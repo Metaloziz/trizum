@@ -1,4 +1,5 @@
 import { Roles } from 'app/enums/Roles';
+import appStore from 'app/stores/appStore';
 import usersStore from 'app/stores/usersStore';
 import iconFlag from 'assets/svgs/icon-flag.svg';
 import iconMonkey from 'assets/svgs/monkey.svg';
@@ -24,8 +25,10 @@ const CardStudentForCheckHomeWork: FC = observer(() => {
     theNextLessonDate,
     resetCurrentUser,
   } = usersStore;
+  const { user } = appStore;
 
   const studentId = useParams()[SecondaryRoutes.StudentId];
+  const fullName = `${user.middleName} ${user.firstName} ${user.lastName}`;
 
   useEffect(() => {
     if (studentId) {
@@ -46,7 +49,9 @@ const CardStudentForCheckHomeWork: FC = observer(() => {
           />
         </CustomImageWrapper>
         <div>
-          <h3 className={styles.title}>{getFullUserName}</h3>
+          <h3 className={styles.title}>
+            {user.role === Roles.Student ? fullName : getFullUserName}
+          </h3>
           <div className={styles.mt15}>
             <ul className={styles.list}>
               <li>
@@ -55,7 +60,11 @@ const CardStudentForCheckHomeWork: FC = observer(() => {
                 </span>
                 Статус:
               </li>
-              <li>{currentUser?.roleCode === Roles.Student && 'Студент'}</li>
+              <li>
+                {studentId === user.id
+                  ? user.role === Roles.Student && 'Студент'
+                  : currentUser?.roleCode === Roles.Student && 'Студент'}
+              </li>
             </ul>
             <ul className={styles.list}>
               <li>
@@ -64,7 +73,7 @@ const CardStudentForCheckHomeWork: FC = observer(() => {
                 </span>
                 Город:
               </li>
-              <li>{currentUser?.city}</li>
+              <li>{studentId === user.id ? user.city : currentUser?.city}</li>
             </ul>
             <ul className={styles.list}>
               <li>

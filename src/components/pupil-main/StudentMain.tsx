@@ -1,6 +1,7 @@
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 import { MobileStepper, useTheme } from '@mui/material';
 import ButtonMui from '@mui/material/Button';
+import { AppRoutes } from 'app/enums/AppRoutes';
 import { StatusTypes } from 'app/enums/StatusTypes';
 import appStore from 'app/stores/appStore';
 import groupStore from 'app/stores/groupStore';
@@ -9,15 +10,16 @@ import { getWorksAndScheduleOnId } from 'components/pupil-main/getWorksAndSchedu
 import { HomeWorksList } from 'components/pupil-main/HomeWorksList/HomeWorksList';
 import WeeklyGrowth from 'components/weekly-growth/WeeklyGrowth';
 import KeepPlaying from 'containers/keep-playing/KeepPlaying';
-
 import { observer } from 'mobx-react-lite';
 import styles from 'pages/home/Home.module.scss';
 import React, { FC, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getActiveClassAndOlympiadGroup } from 'utils/getActiveClassGroup';
 import { personalRecordsArr } from 'utils/personalRecordsArr';
 
 export const StudentMain: FC = observer(() => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const { user, setGameIdsWithCodesByHomeWorkIndex } = appStore;
   const { getOlympiadGroups } = groupStore;
@@ -40,6 +42,11 @@ export const StudentMain: FC = observer(() => {
   const onBackClick = () => {
     setActiveStep(prevActiveStep => prevActiveStep - 1);
   };
+
+  const redirectListStudents = () => {
+    navigate(`${AppRoutes.Olympiads}/${classTypeObject[activeStep].group.id}`);
+  };
+
   const step = classTypeObject.length;
 
   useEffect(() => {
@@ -59,6 +66,13 @@ export const StudentMain: FC = observer(() => {
             {classTypeObject[activeStep].group.type === 'class' ? 'Класс:' : 'Олимпиада:'}{' '}
             {classTypeObject[activeStep].group.name}
           </h2>
+
+          {classTypeObject[activeStep].group.type === 'olympiad' && (
+            <p className={styles.statistic} onClick={redirectListStudents}>
+              Статистика
+            </p>
+          )}
+
           <MobileStepper
             variant="dots"
             steps={step}
