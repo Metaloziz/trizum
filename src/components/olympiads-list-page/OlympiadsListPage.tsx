@@ -1,25 +1,33 @@
-import React, { useEffect, useState } from 'react';
+import Button from '@mui/material/Button';
+import { AppRoutes } from 'app/enums/AppRoutes';
+import { Roles } from 'app/enums/Roles';
+import appStore from 'app/stores/appStore';
+import groupStore from 'app/stores/groupStore';
+import Table from 'components/table/Table';
+import { observer } from 'mobx-react-lite';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getFullYearsFromDate } from 'utils/getFullYearsFromDate';
 
 import styles from './OlympiadsListPage.module.scss';
 
-import Table from 'components/table/Table';
-import { Pagination } from '@mui/material';
-import groupStore from 'app/stores/groupStore';
-import Button from '@mui/material/Button';
-import { getFullYearsFromDate } from 'utils/getFullYearsFromDate';
-import { observer } from 'mobx-react-lite';
-
-export const colNames = ['№', 'ФИО', 'Возраст', 'Дата', 'Количество баллов', 'Результаты'];
+export const colNames = ['№', 'ФИО', 'Возраст', 'Количество баллов', 'Результаты'];
 
 const OlympiadsListPage = observer(() => {
   const { selectedGroup } = groupStore;
+  const { user, role } = appStore;
 
+  const navigate = useNavigate();
   const { users } = selectedGroup; // todo доделать локальную пагинацию
 
   const [currentPage, setCurrentPage] = useState(1);
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setCurrentPage(value);
+  };
+
+  const redirectToHomeWork = (userId: string) => {
+    navigate(`${AppRoutes.Olympiads}/${selectedGroup.id}/${userId}`);
   };
 
   const isShowResult = users[0] && users[0] !== undefined;
@@ -31,18 +39,29 @@ const OlympiadsListPage = observer(() => {
         {isShowResult ? (
           <Table loading={false} colNames={colNames}>
             {users.map(
-              ({ id, user: { firstName, middleName, lastName, birthdate }, stats }, index) => (
-                <tr key={id}>
-                  <td>{index + 1}</td>
-                  <td>{middleName + ' ' + firstName + ' ' + lastName}</td>
-                  <td>{getFullYearsFromDate(birthdate.date)}</td>
-                  <td>-</td>
-                  <td>-</td>
-                  <td>
-                    <Button>перейти</Button>
-                  </td>
-                </tr>
-              ),
+              (
+                { id, user: { firstName, middleName, lastName, birthdate, id: userId }, stats },
+                index,
+              ) => {
+                // @ts-ignore
+                const { total } = stats;
+
+                return (
+                  <tr key={id}>
+                    <td>{index + 1}</td>
+                    <td>{middleName + ' ' + firstName + ' ' + lastName}</td>
+                    <td>{getFullYearsFromDate(birthdate.date)}</td>
+                    <td>{total !== undefined ? total : '-'}</td>
+                    <td>
+                      {(role === Roles.Methodist ||
+                        role === Roles.Admin ||
+                        (role === Roles.Student && user.id === userId)) && (
+                        <Button onClick={() => redirectToHomeWork(userId)}>перейти</Button>
+                      )}
+                    </td>
+                  </tr>
+                );
+              },
             )}
           </Table>
         ) : (

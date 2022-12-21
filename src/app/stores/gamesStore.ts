@@ -299,10 +299,10 @@ class GamesStore {
     this.playResultsSearchParams = { ...this.playResultsSearchParams, ...params };
   };
 
-  getPlayResultForCurrentHomeWork = (userId: string) => {
+  getPlayResultForCurrentHomeWork = (userId: string, groupId?: string) => {
     const workId = coursesStore.currentHomework.work.id;
 
-    this.setPlayResultsSearchParams({ user_id: userId, work_id: workId });
+    this.setPlayResultsSearchParams({ user_id: userId, work_id: workId, group_id: groupId });
     this.getPlayResults();
     this.setPlayResultsSearchParams(new PlayResultsSearchParams());
   };
