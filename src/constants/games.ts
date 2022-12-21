@@ -27,11 +27,11 @@ export const DEFAULT_GAME_SETTINGS: { [key: string]: Partial<PresetsGameSettings
     errorAacceptable: 1,
     elementsTotal: 5,
   },
-  silhouettes: {
-    timeComplete: 10,
-    elementsTotal: 2,
-    digitMax: 4,
-  },
+  // silhouettes: {
+  //   timeComplete: 10,
+  //   elementsTotal: 2,
+  //   digitMax: 4,
+  // },
   memoryRhythm: {
     timeComplete: 60,
     blinksCount: 2,

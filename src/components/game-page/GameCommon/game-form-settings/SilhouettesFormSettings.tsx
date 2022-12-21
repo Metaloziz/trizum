@@ -21,12 +21,25 @@ const DEFAULT_VALUES: SilhouettesFormType = {
   timeComplete: 60,
   elementsTotal: 2,
   digitMax: 4,
+  perSuccessLevel: 3,
+  maxErrorLevel: 1,
+  upgrade: 1,
+  downgrade: 2,
 };
 
 export const SilhouettesFormSettings = (props: FormSettingsType): ReactElement => {
   const { usedInWorks, gamePreset, onFormSubmit, deletedPreset, createCopy } = props;
   const { settings, status, id, level, name } = gamePreset;
-  const { timeComplete, description, elementsTotal, digitMax } = settings[0];
+  const {
+    timeComplete,
+    description,
+    elementsTotal,
+    digitMax,
+    perSuccessLevel,
+    maxErrorLevel,
+    upgrade,
+    downgrade,
+  } = settings[0];
 
   const defaultValues: SilhouettesFormType =
     id === '' && status !== 'copiyed'
@@ -39,6 +52,10 @@ export const SilhouettesFormSettings = (props: FormSettingsType): ReactElement =
           timeComplete,
           elementsTotal,
           digitMax,
+          perSuccessLevel,
+          maxErrorLevel,
+          upgrade,
+          downgrade,
         } as SilhouettesFormType);
 
   const methods = useForm<SilhouettesFormType>({
@@ -123,6 +140,44 @@ export const SilhouettesFormSettings = (props: FormSettingsType): ReactElement =
                   title="Кол-во фигур для угадывания."
                   options={TEN_DIGIT_MENU}
                   error={errors.digitMax?.message}
+                  ref={ref}
+                />
+              )}
+              control={control}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Controller
+              name="perSuccessLevel"
+              render={({ field: { value, onChange, ref } }) => (
+                <TextFieldCustom
+                  type="text"
+                  label="Среднее время нажатий для пересчета кол-ва фигур для угадывания, c."
+                  size="small"
+                  fullWidth
+                  inputProps={{ type: 'number' }}
+                  error={errors.perSuccessLevel?.message}
+                  onChange={event => onChange(convertEmptyStringToNull(event))}
+                  value={convertNullToEmptyString(value!)}
+                  ref={ref}
+                />
+              )}
+              control={control}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Controller
+              name="maxErrorLevel"
+              render={({ field: { value, onChange, ref } }) => (
+                <TextFieldCustom
+                  type="text"
+                  label="Кол-во нажатий для замера"
+                  size="small"
+                  fullWidth
+                  inputProps={{ type: 'number' }}
+                  error={errors.maxErrorLevel?.message}
+                  onChange={event => onChange(convertEmptyStringToNull(event))}
+                  value={convertNullToEmptyString(value!)}
                   ref={ref}
                 />
               )}
