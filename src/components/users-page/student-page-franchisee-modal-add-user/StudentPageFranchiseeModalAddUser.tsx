@@ -1,9 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, FormControl, Grid, TextField } from '@mui/material';
-import { toJS } from 'mobx';
-import { observer } from 'mobx-react-lite';
-import React, { FC, useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { SexEnum } from 'app/enums/CommonEnums';
@@ -30,6 +26,10 @@ import { roleOptions } from 'components/users-page/student-page-franchisee-modal
 import { StudentParentsFormContainer } from 'components/users-page/student-parrents-form-container/StudentParentsFormContainer';
 import { MAX_NAMES_LENGTH, MIN_NAMES_LENGTH } from 'constants/constants';
 import { REG_NAME } from 'constants/regExp';
+import { toJS } from 'mobx';
+import { observer } from 'mobx-react-lite';
+import React, { FC, useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 
 import {
   convertFranchiseeOptions,
@@ -56,7 +56,7 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
     const { franchise } = franchiseeStore;
     const { groups, loadCurrentGroups } = groupStore;
     const { tariffs } = tariffsStore;
-    const { role } = appStore;
+    const { role, user } = appStore;
 
     const franchiseOptions = convertFranchiseeOptions(franchise);
     const sexOptions = convertSexOptions();
@@ -85,7 +85,9 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
       phone: currentUser?.phone || '',
       birthdate: currentUser?.birthdate?.date || '01.01.2010',
       email: currentUser?.email || '',
-      franchise: currentUser?.franchise?.id || '', // изменяется для Учителя на обучении
+      franchise: currentUser?.franchise?.id || user.franchise.id, // изменяется для
+      // Учителя на
+      // обучении
       tariff: currentUser?.tariff?.id || '',
       group: findActiveClassGroup(currentUser?.groups)?.groupId || '',
       password: currentUser?.password || '', // не обязателен при редактировании
@@ -256,6 +258,14 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
         });
       }
 
+      if (selectedRole === Roles.Student) {
+        loadCurrentGroups(selectedRole, {
+          franchiseId: user.franchise.id,
+          type: 'class',
+          perPage: 1000,
+        });
+      }
+
       resetField('franchise');
     }, [selectedRole]);
 
@@ -368,6 +378,7 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
                                 }}
                                 title="Франшиза"
                                 options={franchiseOptions}
+                                disabled={selectedRole === Roles.Student}
                                 error={errors.franchise?.message}
                               />
                             )}
