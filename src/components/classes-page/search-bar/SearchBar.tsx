@@ -32,7 +32,6 @@ const SearchBar = observer(() => {
   const { queryFields, getGroups, clearQueryFields } = groupStore;
 
   const [franchiseOptions, setFranchiseOptions] = useState<JSX.Element[]>([]);
-  // const [courseOptions, setCourseOptions] = useState<JSX.Element[]>([]);
   const [teacherOptions, setTeacherOptions] = useState<JSX.Element[]>([]);
 
   const { pathname } = useLocation();
@@ -48,10 +47,8 @@ const SearchBar = observer(() => {
 
   const getFranchises = async () => {
     const res = await franchiseService.getAll();
-    // const res1 = await coursesService.getAllCourses({ per_page: 10000 });
     const options = res.map(el => (el.id ? getOptionMui(el.id, el.shortName) : <></>));
     setFranchiseOptions(options);
-    // setCourseOptions(res1.items.map(el => (el.id ? getOptionMui(el.id, el.title) : <></>)));
   };
 
   useEffect(() => {
@@ -79,6 +76,11 @@ const SearchBar = observer(() => {
   useEffect(() => {
     getTeachers();
   }, [queryFields.franchiseId]);
+
+  const acceptFilter = () => {
+    queryFields.page = 0;
+    getGroups();
+  };
 
   /* temp */
   const [open, setOpen] = useState(false);
@@ -201,7 +203,7 @@ const SearchBar = observer(() => {
             }}
           >
             <Button onClick={clearQueryFields}>Сбросить</Button>
-            <Button onClick={() => getGroups()}>Применить</Button>
+            <Button onClick={acceptFilter}>Применить</Button>
           </Stack>
         </AccordionActions>
       </Accordion>
