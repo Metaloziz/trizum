@@ -42,6 +42,8 @@ export type PresetsGameSettings = {
   maxErrorLevel: number;
   upgrade: number;
   downgrade: number;
+  changeLevelDictionary: number;
+  errorLevel: number;
 };
 
 export type EditOrCreatePresetParamsT = {

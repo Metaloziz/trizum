@@ -68,6 +68,8 @@ class GamesStore {
     maxErrorLevel: 1,
     upgrade: 1,
     downgrade: 1,
+    changeLevelDictionary: 1,
+    errorLevel: 1,
   };
 
   gamePreset: OneGamePresent = {

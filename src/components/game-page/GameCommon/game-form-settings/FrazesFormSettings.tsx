@@ -29,7 +29,16 @@ const DEFAULT_VALUES: FrazesFormType = {
 export const FrazesFormSettings = (props: FormSettingsType): ReactElement => {
   const { usedInWorks, gamePreset, onFormSubmit, deletedPreset, createCopy } = props;
   const { settings, status, id, level, name } = gamePreset;
-  const { timeComplete, description, wordsFull, speed, errorAacceptable, words } = settings[0];
+  const {
+    timeComplete,
+    description,
+    wordsFull,
+    speed,
+    errorAacceptable,
+    words,
+    changeLevelDictionary,
+    errorLevel,
+  } = settings[0];
 
   const defaultValues: FrazesFormType =
     id === '' && status !== 'copiyed'
@@ -44,6 +53,8 @@ export const FrazesFormSettings = (props: FormSettingsType): ReactElement => {
           speed,
           errorAacceptable,
           words,
+          errorLevel,
+          changeLevelDictionary,
         } as FrazesFormType);
 
   const methods = useForm<FrazesFormType>({
