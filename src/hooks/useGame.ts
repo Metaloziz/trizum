@@ -93,41 +93,23 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
     startGame();
   };
 
-  const closeResultModal = () => {
+  const closeResultModal = async () => {
     if (role === Roles.Student) {
       const params: PlaySendResultT = {
-        /* нормальные настройки(но не факт) */
-        // userGroupId: user.groups[0].id,
         userGroupId: identificationParams.userGroupId,
-        // courseWorkId: user.groups[0].group.course.works[0].id,
         courseWorkId: identificationParams.courseWorkId,
-        /* конец нормальных настроек */
-        /* под вопросом - уточнить у аналитиков и Александра */
-        // workGamePresetId: user.groups[0].group.course.works[0].work.gamePresets[0].id,
         workGamePresetId: identificationParams.workGamePresetId,
-        finished: resultModal,
-        groupsCount: settings.groupsCount!,
-        elementsTotal: settings.elementsTotal!,
-        levelMaxCompleted: settings.levelMaxCompleted!,
-        cycleTime: settings.cycleTime!,
-        blinksCount: settings.blinksCount!,
-        wordsCount: settings.wordsCount!,
-        speed: settings.speed!,
-        // ?????????
-        actionsSuccessfulCount: gameResult.success,
-        actionSpeed: 1,
-        actions: 1,
+
         time: gameResult.time,
-        errorsPercentage: 1,
-        phraseSpeedAv: 1,
-        timeMax: gameResult.timeMax!,
-        cycleTimeAv: 1,
-        actionSpeedAv: 1,
         workCompleted: false,
         courseCompleted: false,
-        /* конец под вопросом */
+        failed: gameResult.failed!,
+        finished: gameResult.finished || true,
+        levelMaxCompleted: gameResult.levelMaxCompleted!,
+        levelMinCompleted: gameResult.levelMinCompleted!,
+        success: gameResult.success || gameResult.score!,
       };
-      sendResults(params);
+      await sendResults(params);
     }
     setResultModal(false);
     setGameResult(newDefaultResult);
@@ -140,9 +122,6 @@ export const useGame = ({ actualPresets, gamePreset, gameName }: useGameProps) =
     }
     await getGame(gameName);
 
-    if (role === Roles.Student) {
-      // getPreset()
-    }
     setIsLoading(false);
   };
 
