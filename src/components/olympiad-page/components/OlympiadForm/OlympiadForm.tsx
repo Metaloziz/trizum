@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { DesktopDatePicker } from '@mui/x-date-pickers';
 import { GroupLevels } from 'app/enums/GroupLevels';
 import { ShortCourseType } from 'app/types/CourseTypes';
 import { ResponseGroups } from 'app/types/GroupTypes';
@@ -132,7 +132,7 @@ export const OlympiadForm: FC<Props> = ({
               <Controller
                 name="dateSince"
                 render={({ field: { value, onChange, ref } }) => (
-                  <DateTimePicker
+                  <DesktopDatePicker
                     value={value}
                     onChange={onChange}
                     ref={ref}
@@ -157,7 +157,7 @@ export const OlympiadForm: FC<Props> = ({
               <Controller
                 name="dateStart"
                 render={({ field: { value, onChange, ref } }) => (
-                  <DateTimePicker
+                  <DesktopDatePicker
                     value={value || ''}
                     onChange={onChange}
                     ref={ref}
