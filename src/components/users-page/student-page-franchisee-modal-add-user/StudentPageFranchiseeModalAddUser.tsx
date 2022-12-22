@@ -26,7 +26,6 @@ import { roleOptions } from 'components/users-page/student-page-franchisee-modal
 import { StudentParentsFormContainer } from 'components/users-page/student-parrents-form-container/StudentParentsFormContainer';
 import { MAX_NAMES_LENGTH, MIN_NAMES_LENGTH } from 'constants/constants';
 import { REG_NAME } from 'constants/regExp';
-import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -202,11 +201,7 @@ export const StudentPageFranchiseeModalAddUser: FC<Props> = observer(
       defaultValues,
     });
 
-    console.log('errors', toJS(errors));
-    console.log('selectedRole', toJS(selectedRole));
-
     const onSubmit = handleSubmit(async values => {
-      console.log(values.franchise);
       const newUserData: RequestRegister = {
         sex: (values.sex as SexEnum) === SexEnum.Male,
         franchiseId: values.franchise,

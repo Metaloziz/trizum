@@ -10,13 +10,13 @@ class ReportStore {
 
   groups: ResponseGroups[] = [];
 
-  page = 0;
+  page: number = 0;
 
-  perPage = 0;
+  perPage: number = 10;
 
-  total = 0;
+  total: number = 1;
 
-  isLoad = false;
+  isLoad: boolean = false;
 
   private queryDefaultValues: ReportParamsForUI = {
     perPage: 10,
