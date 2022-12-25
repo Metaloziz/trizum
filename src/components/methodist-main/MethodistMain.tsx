@@ -37,6 +37,7 @@ const MethodistMain = observer(() => {
     getCurrentCourse,
     setCurrentCourse,
     filterData,
+    isDialogOpen,
   } = coursesStore;
 
   const [currentPage, setCurrentPage] = useState(pagination.page + 1);
@@ -93,7 +94,7 @@ const MethodistMain = observer(() => {
         overflow: 'auto',
       }}
     >
-      <AddOrEditDialog />
+      {isDialogOpen && <AddOrEditDialog />}
 
       <Box p={2}>
         <Box mb={1}>
