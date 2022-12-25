@@ -41,7 +41,7 @@ export const HomeworkPage = observer(() => {
     clearSearchParams();
     getHomeWorks();
     getGames();
-    getPresets({ status: StatusTypes.active });
+    getPresets({ status: StatusTypes.active, per_page: 1000 });
   }, []);
 
   const [currentPage, setCurrentPage] = useState(pagination.page + 1);
