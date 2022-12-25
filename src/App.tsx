@@ -82,7 +82,7 @@ const App = observer(() => (
 
           <Route path={AppRoutes.Testing}>
             <Route path="" element={<Testing />} />
-            <Route path=":testId/:articleId" element={<Test />} />
+            <Route path=":articleId" element={<Test />} />
             <Route path={SecondaryRoutes.Result} element={<Result />} />
             <Route path={AppRoutes.TestEditor}>
               <Route path=":id" element={<EditTest />} />

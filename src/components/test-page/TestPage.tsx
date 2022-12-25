@@ -24,7 +24,6 @@ const TestPage: FC = observer(() => {
     incrementResult,
     postResult,
     getTitleTest,
-    result,
     questions,
     currentQuestion,
     setCurrentQuestion,
@@ -43,14 +42,14 @@ const TestPage: FC = observer(() => {
     navigate(`${AppRoutes.Testing}/result`);
   };
 
-  const checkAnswer = () => {
+  const checkAnswer = async () => {
     if (currentRadioValue === currentQuestion.correctAnswer) {
       incrementResult();
     }
   };
 
-  const nextStep = () => {
-    checkAnswer();
+  const nextStep = async () => {
+    await checkAnswer();
 
     setCurrentRadioValue(defaultRadioButtonValue);
 
@@ -62,7 +61,7 @@ const TestPage: FC = observer(() => {
       setCurrentQuestion(newQuestion);
     } else {
       if (articleId && article?.status === StatusTypes.active && role !== Roles.Admin) {
-        postResult({ articleId, result });
+        postResult(articleId);
       }
       onEndTest();
     }

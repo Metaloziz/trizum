@@ -33,10 +33,7 @@ export const ArticleFromEditor: FC = observer(() => {
       </Paper>
       <div className={style.buttons}>
         {test && (
-          <RedirectCurrentPageButton
-            title="Пройти тест"
-            rout={`${AppRoutes.Testing}/${article?.test?.id}/${id}`}
-          />
+          <RedirectCurrentPageButton title="Пройти тест" rout={`${AppRoutes.Testing}/${id}`} />
         )}
         <RedirectCurrentPageButton title="К списку статей" rout={AppRoutes.Blog} />
       </div>

@@ -1,6 +1,6 @@
 import { StatusTypes } from 'app/enums/StatusTypes';
+import { articlesService } from 'app/services/articlesService';
 import { testsService } from 'app/services/testsService';
-import { ArticleTestResultPayloadT } from 'app/types/ArticleTestResultPayloadT';
 import { Nullable } from 'app/types/Nullable';
 import { StatusT } from 'app/types/StatusT';
 import { ContentIDT, OneTestT, PreviewTestT, TestPayloadT } from 'app/types/TestsT';
@@ -94,6 +94,28 @@ class TestsStore {
     }, this);
   };
 
+  setTestFromArticle = (articleId: string) => {
+    executeError(async () => {
+      const { test } = await articlesService.getArticle(articleId);
+
+      runInAction(() => {
+        if (test) {
+          this.currentTest = { test, usedInWorks: [] };
+          const mixedAnswers = test.content.map(({ question, answers, correctAnswer }) => ({
+            question,
+            correctAnswer,
+            answers: mixElements([...answers], correctAnswer),
+          }));
+
+          const newQuestion = addIdElements(mixedAnswers);
+
+          this.questions = newQuestion;
+          this.currentQuestion = newQuestion[FIRST_ARRAY_ITEM];
+        }
+      });
+    }, this);
+  };
+
   setTests = () => {
     executeError(async () => {
       const res = await testsService.getTests(this.searchParams);
@@ -146,9 +168,9 @@ class TestsStore {
     }, this);
   };
 
-  postResult = (result: ArticleTestResultPayloadT) => {
+  postResult = (articleId: string) => {
     executeError(async () => {
-      const res = await testsService.postArticleTestResult(result);
+      await testsService.postArticleTestResult({ articleId, result: this.result });
     }, this);
   };
 
