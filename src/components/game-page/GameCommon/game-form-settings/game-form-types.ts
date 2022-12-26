@@ -177,4 +177,5 @@ export type GamesFormSettingsType = BaseGameSettingsType &
     | GameDifferenceFormType
     | FrazesFormType
     | BullsAndCowsFormType
+    | GameFindWordFormType
   );
