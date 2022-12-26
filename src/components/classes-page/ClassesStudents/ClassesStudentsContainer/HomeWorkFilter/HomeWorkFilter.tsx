@@ -1,8 +1,9 @@
-import { TextField, Button } from '@mui/material';
+import { TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Dayjs } from 'dayjs';
 import React, { FC } from 'react';
 import style from './HomeWorkFilter.module.scss';
+import Button from 'components/button/Button';
 
 type Props = {
   startDate: Dayjs | null;
@@ -58,11 +59,13 @@ export const HomeWorkFilter: FC<Props> = ({
           renderInput={params => <TextField {...params} />}
         />
       </div>
-      <div>
-        <Button onClick={setFilter} disabled={isDisableFilter}>
+      <div className={style.buttons}>
+        <Button onClick={setFilter} type="button" size="small" disabled={isDisableFilter}>
           применить
         </Button>
-        <Button onClick={resetDate}>сбросить</Button>
+        <Button onClick={resetDate} variant="reset" size="small" disabled={isDisableFilter}>
+          сбросить
+        </Button>
       </div>
     </div>
   );
