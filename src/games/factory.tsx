@@ -29,6 +29,10 @@ import {
   PropsDefault as BullsCowsPropsDefault,
   Component as BullsCowsComponent,
 } from './games/bullsCows';
+import {
+  PropsDefault as FindWordsPropsDefault,
+  Component as FindWordsComponent,
+} from './games/findWords';
 
 export const GameIdentifiers = {
   shulte: 'shulte',
@@ -44,6 +48,7 @@ export const GameIdentifiers = {
   frazes: 'frazes',
   difference: 'difference',
   bullsAndCows: 'bullsAndCows',
+  search: 'search',
 };
 
 export const GameList = {
@@ -111,6 +116,11 @@ export const GameList = {
     name: 'Быки и коровы',
     component: BullsCowsComponent,
     props: BullsCowsPropsDefault,
+  },
+  [GameIdentifiers.search]: {
+    name: 'Найди слова',
+    component: FindWordsComponent,
+    props: FindWordsPropsDefault,
   },
 };
 

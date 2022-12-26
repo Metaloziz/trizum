@@ -36,7 +36,8 @@ export type PresetsGameSettings = {
   area: boolean;
   gage: GageType[];
   wordsFull: boolean;
-  words: FrazesDictionary[];
+  dictionary: FrazesDictionary[];
+  words: string[];
   differenceGameLevels: DifferenceGameLevel[];
   perSuccessLevel: number;
   maxErrorLevel: number;

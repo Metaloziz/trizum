@@ -20,6 +20,7 @@ import Fireflies from '../../assets/images/game/firelines.png';
 import Difference from '../../assets/images/game/difference.png';
 import Frazes from '../../assets/images/game/frazes.png';
 import BullsCows from '../../assets/images/game/bullsCows.png';
+import FindWords from '../../assets/images/game/findWords.png';
 
 import { Factory } from '../../games';
 
@@ -90,6 +91,11 @@ const Games = [
     title: 'Быки и коровы',
     name: 'bullsAndCows',
     prevImg: BullsCows,
+  },
+  {
+    title: 'Найди слова',
+    name: 'search',
+    prevImg: FindWords,
   },
 ];
 

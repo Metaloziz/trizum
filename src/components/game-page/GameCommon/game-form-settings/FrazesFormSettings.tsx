@@ -13,7 +13,7 @@ import { BaseFormGameSettings } from './BaseFormGameSettings';
 import { FRAZES_FORM_SCHEMA } from './game-form-schema';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { defaultWords } from 'games/games/frazes/assets/words';
+import { defaultDictionary } from 'games/games/frazes/assets/words';
 
 const DEFAULT_VALUES: FrazesFormType = {
   ...BASE_DEFAULT_VALUES,
@@ -23,13 +23,13 @@ const DEFAULT_VALUES: FrazesFormType = {
   wordsFull: false,
   errorLevel: 2,
   changeLevelDictionary: 3,
-  words: defaultWords,
+  dictionary: defaultDictionary,
 };
 
 export const FrazesFormSettings = (props: FormSettingsType): ReactElement => {
   const { usedInWorks, gamePreset, onFormSubmit, deletedPreset, createCopy } = props;
   const { settings, status, id, level, name } = gamePreset;
-  const { timeComplete, description, wordsFull, speed, errorAacceptable, words } = settings[0];
+  const { timeComplete, description, wordsFull, speed, errorAacceptable, dictionary } = settings[0];
 
   const defaultValues: FrazesFormType =
     id === '' && status !== 'copiyed'
@@ -43,7 +43,7 @@ export const FrazesFormSettings = (props: FormSettingsType): ReactElement => {
           wordsFull,
           speed,
           errorAacceptable,
-          words,
+          dictionary,
         } as FrazesFormType);
 
   const methods = useForm<FrazesFormType>({
@@ -60,7 +60,7 @@ export const FrazesFormSettings = (props: FormSettingsType): ReactElement => {
   } = methods;
 
   const { fields, append, remove } = useFieldArray({
-    name: 'words' as never,
+    name: 'dictionary' as never,
     control,
   });
 
@@ -215,7 +215,7 @@ export const FrazesFormSettings = (props: FormSettingsType): ReactElement => {
                   <Grid item xs={12} lg={4}>
                     <Controller
                       control={control}
-                      name={`words.${index}.easy` as const}
+                      name={`dictionary.${index}.easy` as const}
                       render={({ field: { value, onChange, ref } }) => (
                         <TextFieldCustom
                           type="text"
@@ -223,7 +223,7 @@ export const FrazesFormSettings = (props: FormSettingsType): ReactElement => {
                           size="small"
                           fullWidth
                           inputProps={{ type: 'text' }}
-                          error={errors.words?.[index]?.easy?.message}
+                          error={errors.dictionary?.[index]?.easy?.message}
                           onChange={event => onChange(convertEmptyStringToNull(event))}
                           value={value}
                           ref={ref}
@@ -234,7 +234,7 @@ export const FrazesFormSettings = (props: FormSettingsType): ReactElement => {
                   <Grid item xs={12} lg={4}>
                     <Controller
                       control={control}
-                      name={`words.${index}.normal` as const}
+                      name={`dictionary.${index}.normal` as const}
                       render={({ field: { value, onChange, ref } }) => (
                         <TextFieldCustom
                           type="text"
@@ -242,7 +242,7 @@ export const FrazesFormSettings = (props: FormSettingsType): ReactElement => {
                           size="small"
                           fullWidth
                           inputProps={{ type: 'text' }}
-                          error={errors.words?.[index]?.normal?.message}
+                          error={errors.dictionary?.[index]?.normal?.message}
                           onChange={event => onChange(convertEmptyStringToNull(event))}
                           value={value}
                           ref={ref}
@@ -253,7 +253,7 @@ export const FrazesFormSettings = (props: FormSettingsType): ReactElement => {
                   <Grid item xs={12} lg={4}>
                     <Controller
                       control={control}
-                      name={`words.${index}.hard` as const}
+                      name={`dictionary.${index}.hard` as const}
                       render={({ field: { value, onChange, ref } }) => (
                         <TextFieldCustom
                           type="text"
@@ -261,7 +261,7 @@ export const FrazesFormSettings = (props: FormSettingsType): ReactElement => {
                           size="small"
                           fullWidth
                           inputProps={{ type: 'text' }}
-                          error={errors.words?.[index]?.hard?.message}
+                          error={errors.dictionary?.[index]?.hard?.message}
                           onChange={event => onChange(convertEmptyStringToNull(event))}
                           value={value}
                           ref={ref}

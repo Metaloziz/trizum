@@ -1,4 +1,4 @@
-export const defaultWords = [
+export const defaultDictionary = [
   { easy: 'Ухо', normal: 'Зал', hard: 'Система' },
   { easy: 'Сухо', normal: 'Сын', hard: 'Конец' },
   { easy: 'Сом', normal: 'Ум', hard: 'Отношение' },

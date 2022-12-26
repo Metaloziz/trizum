@@ -102,8 +102,8 @@ export default class extends Component<Props, State> implements Game {
   };
 
   startLogic = () => {
-    const { wordsFull, words } = this.props;
-    this.setState({ wordsFull, words });
+    const { wordsFull, disctionary } = this.props;
+    this.setState({ wordsFull, words: disctionary });
     this.setVisible(false, true);
   };
 
@@ -238,7 +238,7 @@ export default class extends Component<Props, State> implements Game {
   };
 
   renderInner = () => {
-    const { timeComplete, words } = this.props;
+    const { timeComplete, disctionary } = this.props;
 
     const {
       level = 0,
@@ -252,7 +252,7 @@ export default class extends Component<Props, State> implements Game {
 
     const levels = [];
 
-    for (let i = 0; i < words.length; i++) {
+    for (let i = 0; i < disctionary.length; i++) {
       const result = gameStatistic[i];
       levels.push(
         <View key={`level-${i}`} style={styles.level}>

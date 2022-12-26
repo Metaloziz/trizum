@@ -470,3 +470,26 @@ export const BULLS_AND_COWS_SCHEMA = yup.object().shape({
 });
 
 export const BULLS_AND_COWS_FORM_SCHEMA = GAME_SCHEMA.concat(BULLS_AND_COWS_SCHEMA);
+
+export const GAME_FIND_WORD = yup.object().shape({
+  timeComplete: yup
+    .number()
+    .notRequired()
+    .min(5, 'Минимум 5 секунд')
+    .max(3600, 'Максимум 3600 секунд')
+    .nullable(),
+  words: yup
+    .array()
+    .of(
+      yup
+        .string()
+        .min(3, 'Слово должно быть больше 3 символов')
+        .nullable()
+        .required('Обязательное поле'),
+    )
+    .min(1, 'Минимум 1 слово')
+    .max(9, 'Максимум 9 слов')
+    .required('Заполнить'),
+});
+
+export const GAME_FIND_WORD_SCHEMA = GAME_SCHEMA.concat(GAME_FIND_WORD);

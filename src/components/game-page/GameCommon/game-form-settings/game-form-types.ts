@@ -142,7 +142,7 @@ export type FrazesGameSettingsType = {
   wordsFull: boolean;
   errorLevel: number;
   changeLevelDictionary: number;
-  words: FrazesDictionary[];
+  dictionary: FrazesDictionary[];
 };
 
 export type FrazesFormType = BaseGameSettingsType & FrazesGameSettingsType;
@@ -155,6 +155,13 @@ export type BullsAndCowsSettingsType = {
 };
 
 export type BullsAndCowsFormType = BaseGameSettingsType & BullsAndCowsSettingsType;
+
+export type GameFindWordSettingsType = {
+  timeComplete: number;
+  words: string[];
+};
+
+export type GameFindWordFormType = BaseGameSettingsType & GameFindWordSettingsType;
 
 export type GamesFormSettingsType = BaseGameSettingsType &
   (

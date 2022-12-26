@@ -4,14 +4,7 @@ import { Dialog } from 'components/rate/ui/Dialog';
 import React, { FC } from 'react';
 import styles from './gameResultModal.module.scss';
 
-const GAMES_WITH_LEVEL = [
-  'fireflies',
-  'bigFish',
-  'frazes',
-  'difference',
-  'memoryRhythm',
-  'FindWordsNumbersShapes',
-];
+const GAMES_WITH_LEVEL = ['fireflies', 'bigFish', 'frazes', 'difference', 'memoryRhythm'];
 
 type GameResultModalPropsT = {
   gameResult: ResultsNewT;
