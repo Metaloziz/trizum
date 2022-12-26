@@ -387,8 +387,6 @@ export const GameDifferenceFormSettings = (props: FormSettingsType): ReactElemen
     }
   }, [status]);
 
-  console.log({levelAreas})
-
   return (
     <FormProvider {...methods}>
       <form onSubmit={onSubmit}>

@@ -104,7 +104,9 @@ export type SilhouettesGameSettingsType = {
   digitMax: number;
 };
 
-export type SilhouettesFormType = BaseGameSettingsType & SilhouettesGameSettingsType;
+export type SilhouettesFormType = BaseGameSettingsType &
+  BaseGameWithEngineType &
+  SilhouettesGameSettingsType;
 
 export type SteamEngineGameSettingsType = {
   timeComplete: number;

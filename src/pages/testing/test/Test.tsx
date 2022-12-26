@@ -13,16 +13,14 @@ import { useParams } from 'react-router-dom';
 
 const Test: FC = observer(() => {
   const { role } = appStore;
-  const { setOneTest, currentTest, setCurrentTestToNull } = testsStore;
+  const { currentTest, setCurrentTestToNull, setTestFromArticle } = testsStore;
   const { getCurrentArticle, article, isLoading } = articlesStore;
-  const { testId, articleId } = useParams<'testId' | 'articleId'>();
+  const { articleId } = useParams<'articleId'>();
 
   useEffect(() => {
     setCurrentTestToNull();
-    if (testId) {
-      setOneTest(testId);
-    }
     if (articleId) {
+      setTestFromArticle(articleId);
       getCurrentArticle(articleId);
     }
   }, []);

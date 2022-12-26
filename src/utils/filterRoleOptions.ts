@@ -34,6 +34,19 @@ export const filterRoleOptions = (roleOptions: OptionT[], role: string) => {
           el.value !== Roles.Teacher &&
           el.value !== Roles.TeacherEducation,
       );
+    case Roles.Admin:
+      return roleOptions.filter(
+        el =>
+          // el.value !== Roles.Methodist &&
+          // el.value !== Roles.Tutor &&
+          el.value !== Roles.Student,
+        // el.value !== Roles.Admin &&
+        // el.value !== Roles.Parent &&
+        // el.value !== Roles.Teacher &&
+        // el.value !== Roles.TeacherEducation &&
+        // el.value !== Roles.FranchiseeAdmin,
+      );
+
     default:
       return roleOptions;
   }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, TouchableOpacity, StyleSheet, Text, Image } from 'react-native';
-import { Props } from './types';
+import { View, TouchableOpacity, StyleSheet, Text, Image, ImageSourcePropType } from 'react-native';
+import { Props, GameItem, GameStatistic } from './types';
 
 import { Game, GameResult } from '../../common/types';
 
@@ -12,6 +12,8 @@ import { arrayShuffle, isWeb } from '../../common/utils';
 const HEIGHT_AREA = 680;
 
 const START_TIMER = 3;
+
+const DRAW_SPACE = 12;
 
 const imageBackground = require('./assets/background.png');
 
@@ -68,7 +70,16 @@ const MapElements = [
   },
 ];
 
-export default class extends Component<any, any> implements Game {
+interface State {
+  started: boolean;
+  elements: GameItem[];
+  variants: GameItem[];
+  score: number;
+  gameStatistic: GameStatistic[];
+}
+
+export default class extends Component<Props, State> implements Game {
+  timerRef: any;
   timerAll: any;
 
   constructor(props: any) {
@@ -79,6 +90,7 @@ export default class extends Component<any, any> implements Game {
       elements: [],
       variants: [],
       score: 0,
+      gameStatistic: [],
     };
   }
 
@@ -110,6 +122,7 @@ export default class extends Component<any, any> implements Game {
       elements: [],
       variants: [],
       score: 0,
+      gameStatistic: [],
     });
   };
 
@@ -130,10 +143,11 @@ export default class extends Component<any, any> implements Game {
   };
 
   startLogic = () => {
-    const { elementsTotal = 1 } = this.props;
+    const { elementsTotal, digitMax } = this.props;
 
-    const randShuffle = arrayShuffle(MapElements.slice())?.slice(0, elementsTotal);
-    const randVariants = arrayShuffle(MapElements.slice());
+    const randVariants = arrayShuffle(MapElements.slice()).slice(0, digitMax);
+
+    const randShuffle = arrayShuffle(randVariants.slice())?.slice(0, elementsTotal);
 
     this.setState({
       elements: randShuffle,
@@ -141,56 +155,26 @@ export default class extends Component<any, any> implements Game {
     });
   };
 
-  public getConfig = () => {
-    return [
-      {
-        name: 'timeComplete',
-        type: 'select',
-        title: 'Время на прохождение уровня',
-        option: [0, 10, 15, 30, 60, 120, 180].map(a => ({
-          title: a === 0 ? 'Бесконечно' : `${a} сек`,
-          value: a,
-        })),
-        value: 0,
-      },
-      {
-        name: 'elementsTotal',
-        type: 'select',
-        title: 'Количество фигур',
-        option: [2, 3, 4].map(a => ({
-          title: `${a}`,
-          value: a,
-        })),
-        value: 2,
-      },
-    ];
-  };
-
-  public prepareConfig = (result: any) => {
-    return {
-      timeComplete: parseInt(result.timeComplete),
-      elementsTotal: parseInt(result.elementsTotal),
-    };
-  };
-
-  onClip = (id: any) => () => {
+  onClip = (id: number) => () => {
     const { onFeedbackError = () => {}, onFeedbackSuccess = () => {} } = this.props;
-
     const elements = this.state.elements.slice();
     const variants = this.state.variants.slice();
 
-    const exist = elements.find((a: any) => a.id == id) || false;
+    const exist = elements.find(element => element.id == id) || false;
 
     if (exist) {
+      const score = this.state.score + 1;
       onFeedbackSuccess();
-
-      const setElements = elements.filter((a: any) => a.id != id);
-      const setVariants = variants.filter((a: any) => a.id != id);
+      const { gameStatistic, elements, variants } = this.triggerEngine(id);
+      const setElements = elements.filter(element => element.id != id);
+      const setVariants = variants.filter(variant => variant.id != id);
 
       this.setState(
         {
           elements: setElements,
           variants: setVariants,
+          gameStatistic,
+          score,
         },
         () => {
           if (setElements.length == 0) {
@@ -205,15 +189,95 @@ export default class extends Component<any, any> implements Game {
     this.onEnd();
   };
 
+  private triggerEngine = (id: number) => {
+    const {
+      perSuccessLevel: maxAverageTime,
+      maxErrorLevel: countUserPress,
+      upgrade: countElements,
+      downgrade: countVariants,
+    } = this.props;
+
+    const {
+      gameStatistic: currentGameStatistic,
+      elements: currentElements,
+      variants: currentVariants,
+    } = this.state;
+
+    const lastTime = currentGameStatistic.reduce((acc, { time }) => acc + time, 0);
+    const currentTime = this.timerAll?.getValue() || 0;
+
+    const lastClickTime = currentTime - lastTime;
+    const userClickTime = lastClickTime > 0 ? lastClickTime : 0.5;
+
+    const gameStatistic = [
+      ...currentGameStatistic,
+      { time: userClickTime, elements: currentElements.length, variants: currentVariants.length },
+    ];
+
+    const lastStatistic = gameStatistic.slice(-countUserPress);
+
+    let elements = currentElements;
+    let variants = currentVariants;
+
+    if (lastStatistic.length === countUserPress) {
+      const averageTime =
+        lastStatistic.reduce((acc, { time }) => acc + time, 0) / lastStatistic.length;
+
+      let availableElements: GameItem[] = [];
+      let availableVariants: GameItem[] = [];
+
+      MapElements.forEach(mapElement => {
+        const existElement = currentElements.find(element => element.id === mapElement.id);
+        const existVariant = currentVariants.find(variant => variant.id === mapElement.id);
+        if (!existElement) {
+          availableElements.push(mapElement);
+        }
+        if (!existVariant) {
+          availableVariants.push(mapElement);
+        }
+      });
+
+      if (maxAverageTime > averageTime) {
+        elements = [...elements, ...availableElements.slice(0, countElements)];
+        variants = [...variants, ...availableVariants.slice(0, countVariants)];
+      }
+
+      if (maxAverageTime <= averageTime && elements.length > 2) {
+        const selectedElement = elements.find(element => element.id === id);
+
+        const countCurrentElements = elements.length;
+
+        if (selectedElement) {
+          elements = elements.slice(0, countCurrentElements - 1);
+          let deletedItems: GameItem[] = [];
+
+          variants.forEach(variant => {
+            const existItem = elements.find(elements => elements.id === variant.id);
+            if (!existItem) {
+              deletedItems.push(variant);
+            }
+          });
+
+          variants = variants.filter(
+            variant => variant.id !== selectedElement.id && variant.id !== deletedItems[0].id,
+          );
+        }
+      }
+    }
+
+    return { gameStatistic, elements, variants };
+  };
+
   onWin = () => {
-    const { elementsTotal, onEnd = () => {} } = this.props;
+    const { onEnd = () => {} } = this.props;
+    const { score } = this.state;
 
     const timer: any = this.timerAll;
     const time = timer?.getValue();
 
     const result: GameResult = {
       result: 'win',
-      success: elementsTotal - this.state.elements.length,
+      success: score,
       failed: 0,
       finished: true,
       time: time,
@@ -225,15 +289,20 @@ export default class extends Component<any, any> implements Game {
   };
 
   onEnd = () => {
-    const { elementsTotal, onEnd = () => {} } = this.props;
+    const { onEnd = () => {} } = this.props;
+    const { score } = this.state;
 
     const timer: any = this.timerAll;
     const time = timer?.getValue();
 
+    if (score > 0 || score >= MapElements.length) {
+      this.onWin();
+    }
+
     const result: GameResult = {
       result: 'lose',
       finished: false,
-      success: elementsTotal - this.state.elements.length,
+      success: score,
       failed: 1,
       time: time,
     };
@@ -244,13 +313,12 @@ export default class extends Component<any, any> implements Game {
   };
 
   renderInner = () => {
+    const { timeComplete } = this.props;
+
     const { elements = [], variants = [] } = this.state;
 
-    const { width, timeComplete } = this.props;
-
-    const drawSpace = 12;
-    const drawSize = (isWeb() ? HEIGHT_AREA * 0.6 : HEIGHT_AREA) - drawSpace * 2;
-    const imageSize = drawSize - drawSpace * 2;
+    const drawSize = (isWeb() ? HEIGHT_AREA * 0.6 : HEIGHT_AREA) - DRAW_SPACE * 2;
+    const imageSize = drawSize - DRAW_SPACE * 2;
 
     return (
       <View
@@ -260,10 +328,10 @@ export default class extends Component<any, any> implements Game {
         }}
       >
         <Image source={imageBackground} style={styles.background} />
-        {timeComplete > 0 && (
+        {timeComplete && timeComplete > 0 && (
           <View style={styles.progressTime}>
             <Timer
-              ref="timer"
+              ref={(ref: any) => (this.timerRef = ref)}
               time={timeComplete}
               onEnd={this.onEnd}
               renderComponent={() => (
@@ -299,19 +367,19 @@ export default class extends Component<any, any> implements Game {
               ...styles.wrapDraw,
               width: drawSize,
               height: drawSize,
-              margin: drawSpace,
+              margin: DRAW_SPACE,
             }}
           >
-            {elements.map((a: any) => (
+            {elements.map(({ id, mask }) => (
               <Image
-                key={`mask-${a.id}`}
-                source={a.mask}
+                key={`mask-${id}`}
+                source={mask as ImageSourcePropType}
                 style={{
                   ...styles.imageMask,
                   width: imageSize,
                   height: imageSize,
-                  top: drawSpace,
-                  left: drawSpace,
+                  top: DRAW_SPACE,
+                  left: DRAW_SPACE,
                 }}
               />
             ))}
@@ -320,29 +388,29 @@ export default class extends Component<any, any> implements Game {
             style={{
               ...styles.wrapVariants,
               width: drawSize,
-              margin: drawSpace,
+              margin: DRAW_SPACE,
               marginTop: 0,
             }}
           >
-            {variants.map((a: any) => (
+            {variants.map(({ id, image }) => (
               <TouchableOpacity
-                key={`variant-${a.id}`}
+                key={`variant-${id}`}
                 activeOpacity={0.8}
                 style={{
                   ...styles.wrapVariant,
                   width: drawSize / 4,
                   height: drawSize / 4,
                 }}
-                onPress={this.onClip(a.id)}
+                onPress={this.onClip(id)}
               >
-                <Image source={a.image} style={styles.variantImage} />
+                <Image source={image as ImageSourcePropType} style={styles.variantImage} />
               </TouchableOpacity>
             ))}
           </View>
         </View>
         <TimerAll
           ref={(ref: any) => (this.timerAll = ref)}
-          renderTime={(time: any) => <Text style={styles.timer}>{time} сек</Text>}
+          renderTime={(time: number) => <Text style={styles.timer}>{time} сек</Text>}
         />
       </View>
     );

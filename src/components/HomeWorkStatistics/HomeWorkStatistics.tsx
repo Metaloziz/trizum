@@ -9,6 +9,7 @@ import { CurrentHomeWork } from './CurrentHomeWork/CurrentHomeWork';
 export const HomeWorkStatistics = observer(() => {
   switch (appStore.role) {
     case Roles.Methodist:
+    case Roles.Student:
       return <CurrentHomeWork />;
     default:
       return <Navigate to={AppRoutes.Index} />;

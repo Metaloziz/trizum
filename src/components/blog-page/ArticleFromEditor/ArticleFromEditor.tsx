@@ -1,26 +1,19 @@
 import Paper from '@mui/material/Paper';
 import { AppRoutes } from 'app/enums/AppRoutes';
-import { SecondaryRoutes } from 'app/enums/SecondaryRoutes';
 import articlesStore from 'app/stores/articlesStore';
-import testsStore from 'app/stores/testsStore';
 import { Loader } from 'components/loader/Loader';
 import { PlateEditor } from 'components/PlateEditor/PlateEditor';
 import { RedirectCurrentPageButton } from 'components/test-page/RedirectArticlesPageButton/RedirectCurrentPageButton';
 import { observer } from 'mobx-react-lite';
 import Custom404 from 'pages/404.page';
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
+import { useParams } from 'react-router-dom';
 import style from './ArticleFromEditor.module.scss';
 
 export const ArticleFromEditor: FC = observer(() => {
   const { isLoading, article } = articlesStore;
 
-  const { setOneTest } = testsStore;
-
-  useEffect(() => {
-    if (article?.test?.id) {
-      setOneTest(article?.test.id);
-    }
-  }, [article?.test?.id]);
+  const { id } = useParams<'id'>();
 
   if (isLoading) {
     return <Loader />;
@@ -29,6 +22,7 @@ export const ArticleFromEditor: FC = observer(() => {
   if (!article) {
     return <Custom404 />;
   }
+
   const { title, content, test } = article;
 
   return (
@@ -39,10 +33,7 @@ export const ArticleFromEditor: FC = observer(() => {
       </Paper>
       <div className={style.buttons}>
         {test && (
-          <RedirectCurrentPageButton
-            title="Пройти тест"
-            rout={`${AppRoutes.Testing}/${SecondaryRoutes.CurrentElement}`}
-          />
+          <RedirectCurrentPageButton title="Пройти тест" rout={`${AppRoutes.Testing}/${id}`} />
         )}
         <RedirectCurrentPageButton title="К списку статей" rout={AppRoutes.Blog} />
       </div>

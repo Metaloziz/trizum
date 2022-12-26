@@ -177,16 +177,23 @@ export type CreateGroupFroUI = {
 
 export type Schedule = { name: string; date: string; from: string; to: string };
 
-export type ScheduleForUI = {
-  franchise: string;
-  teacherId: string;
-  groupName: string;
-  groupId: string;
-  lesson: string;
-  start: Date;
-  end: Date;
-  id: number;
-};
+export class ScheduleForUI {
+  franchise: string = '';
+
+  teacherId: string = '';
+
+  groupName: string = '';
+
+  groupId: string = '';
+
+  lesson: string = '';
+
+  start: Date = new Date();
+
+  end: Date = new Date();
+
+  id: number = 0;
+}
 
 export type GroupParams = Partial<{
   perPage: number;

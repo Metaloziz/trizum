@@ -10,15 +10,16 @@ export const AddScheduleToOlympiad = (
   const schedule: ScheduleObjectType = { homeworks: [], classworks: [] };
   const newDataSince = new Date(dateSince.getDate());
   const dataStart = dateSince.setDate(newDataSince.getDate() + 7);
-
   works?.map((_, index) => {
     const start = new Date(dateStart || dataStart);
     const end = new Date(dateStart || dataStart);
 
-    start.setDate(start.getDate() + index);
-    end.setDate(end.getDate() + index + 1);
-    start.setSeconds(0);
-    end.setSeconds(0);
+    start.setUTCDate(start.getDate() + index);
+    start.setUTCHours(0);
+    end.setUTCDate(end.getDate() + index + 1);
+    end.setUTCHours(0);
+
+    end.setMinutes(end.getMinutes() - 1);
 
     return schedule.homeworks?.push({
       index,

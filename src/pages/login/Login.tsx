@@ -22,10 +22,9 @@ export const Login: FC = () => {
     handleSubmit,
     register,
     formState: { errors },
-    control,
   } = useForm<LoginInfo>({
     resolver: yupResolver(schema),
-    defaultValues: { phone: '+76660003334', password: 'Base76660003334' },
+    defaultValues: { phone: '', password: '' },
   });
 
   const { loginError } = appStore;

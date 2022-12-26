@@ -30,7 +30,7 @@ const BlogItem: FC<Props> = observer(({ title, imgSrc = '', description, id, tes
   const navigate = useNavigate();
 
   const onTestClick = () => {
-    navigate(`${AppRoutes.Testing}/${testId}/${id}`);
+    navigate(`${AppRoutes.Testing}/${id}`);
   };
 
   const onReadTheoryClick = (): void => {

@@ -31,10 +31,12 @@ interface Props {
 }
 
 const Table: FC<Props> = props => {
-  const { list, colNames, loading, children } = props;
+  const { colNames, loading, children } = props;
+
   if (loading) {
     return <Loader />;
   }
+
   return (
     <div className={styles.tableContent}>
       <table>

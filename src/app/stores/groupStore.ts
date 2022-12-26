@@ -27,7 +27,6 @@ import { ResponseUserT } from 'app/types/UserTypes';
 import { AxiosError } from 'axios';
 import { makeAutoObservable, runInAction } from 'mobx';
 import moment from 'moment';
-import { findElement } from 'utils/findIndexElement';
 import { getIsBetweenDate } from 'utils/getIsBetweenDate';
 import { getLocalDateEuropeRegion } from 'utils/getLocalDateEuropeRegion';
 import { getNextMonth } from 'utils/getNextMonth';
@@ -209,6 +208,7 @@ class GroupStore {
       const res = await groupsService.getGroups(
         paramsData || {
           ...this.queryFields,
+          // page: 0,
           dateSince,
           dateUntil,
         },
@@ -311,8 +311,6 @@ class GroupStore {
   editUserGroup = async (editGroupData: EditUserGroupPayloadType, userGroupId: string) => {
     await this.execute(() => groupsService.editUserGroupStatus(editGroupData, userGroupId));
   };
-
-  getCurrentGroupFromLocalStorage = (groupId: string) => findElement(this.groups, groupId);
 
   nullableSelectedGroup = () => {
     this.selectedGroup = new ResponseOneGroup();

@@ -2,6 +2,8 @@ import OlympiadsListPage from 'components/olympiads-list-page/OlympiadsListPage'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { Article } from 'pages/article/Article';
 import BlogEditor from 'pages/blog/blog-editor/BlogEditor';
+import { ListOlympiadStudents } from 'pages/olympiads/ListOlympiadStudents/ListOlympiadStudents';
+import { OlympiadUserStatistics } from 'pages/olympiads/OlympiadUserStatistics/OlympiadUserStatistics';
 import { Testing } from 'pages/testing/Testing';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import DefaultLayout from 'components/layout/default/DefaultLayout';
@@ -64,7 +66,11 @@ const App = observer(() => (
 
           <Route path={AppRoutes.Olympiads}>
             <Route path="" element={<Olympiads />} />
-            {/* <Route path=":id" element={<Olympiad />} /> */}
+            <Route path=":groupId" element={<ListOlympiadStudents />} />
+            <Route
+              path={`:groupId/:${SecondaryRoutes.StudentId}`}
+              element={<OlympiadUserStatistics />}
+            />
             <Route path={AppRoutes.OlympiadsListPage} element={<OlympiadsListPage />} />
           </Route>
 
@@ -76,7 +82,7 @@ const App = observer(() => (
 
           <Route path={AppRoutes.Testing}>
             <Route path="" element={<Testing />} />
-            <Route path=":testId/:articleId" element={<Test />} />
+            <Route path=":articleId" element={<Test />} />
             <Route path={SecondaryRoutes.Result} element={<Result />} />
             <Route path={AppRoutes.TestEditor}>
               <Route path=":id" element={<EditTest />} />

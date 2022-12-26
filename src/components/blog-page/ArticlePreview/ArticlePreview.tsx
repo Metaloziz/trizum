@@ -8,20 +8,24 @@ type Props = {
 };
 export const ArticlePreview: FC<Props> = ({ articles }) => (
   <div>
-    {articles.map(({ title, content, test, id, status, description }) => {
-      const picture = findPictureUrl(content);
+    {articles.length === 0 ? (
+      <div style={{ textAlign: 'center', fontWeight: 500, fontSize: '18px' }}>Статей нет</div>
+    ) : (
+      articles.map(({ title, content, test, id, status, description }) => {
+        const picture = findPictureUrl(content);
 
-      return (
-        <BlogItem
-          id={id}
-          key={id}
-          title={title}
-          description={description}
-          imgSrc={picture}
-          testId={test}
-          status={status}
-        />
-      );
-    })}
+        return (
+          <BlogItem
+            id={id}
+            key={id}
+            title={title}
+            description={description}
+            imgSrc={picture}
+            testId={test}
+            status={status}
+          />
+        );
+      })
+    )}
   </div>
 );

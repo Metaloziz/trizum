@@ -1,5 +1,6 @@
+import instance from 'app/services/config';
 import tokenService from 'app/services/tokenService';
-import Axios, { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
+import { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
 import dateTransformer from 'axios-date-reviver';
 import { StatusCodes } from 'http-status-codes';
 import { BASE_URL } from 'constants/constants';
@@ -158,7 +159,7 @@ export class HttpClient {
 
   execute = async <TResponse>(): Promise<TResponse> => {
     await this.applyPrerequestHooks();
-    const response = (await Axios.request(this.config)) as AxiosResponse<TResponse>;
+    const response = (await instance.request(this.config)) as AxiosResponse<TResponse>;
     return response.data;
   };
 }

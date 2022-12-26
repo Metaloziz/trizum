@@ -43,6 +43,8 @@ export type PresetsGameSettings = {
   maxErrorLevel: number;
   upgrade: number;
   downgrade: number;
+  changeLevelDictionary: number;
+  errorLevel: number;
 };
 
 export type EditOrCreatePresetParamsT = {
@@ -145,25 +147,16 @@ export type PlaySendResultT = {
   userGroupId: string;
   courseWorkId: string;
   workGamePresetId: string;
-  finished: boolean;
+
   workCompleted: boolean;
   courseCompleted: boolean;
-  timeMax: number;
+
   time: number;
-  groupsCount: number;
-  actionSpeedAv: number;
-  elementsTotal: number;
+  finished: boolean;
+  levelMinCompleted: number;
   levelMaxCompleted: number;
-  errorsPercentage: number;
-  actionsSuccessfulCount: number;
-  actions: number;
-  actionSpeed: number;
-  cycleTime: number;
-  cycleTimeAv: number;
-  wordsCount: number;
-  phraseSpeedAv: number;
-  speed: number;
-  blinksCount: number;
+  success: number;
+  failed: number;
 };
 
 export type ResultT = 'end' | 'lose' | 'win';
@@ -178,6 +171,7 @@ export type ResultsNewT = {
   timeMax?: number;
   time: number;
   finished: boolean;
+  score?: number;
 };
 
 export type GameIdWithCode = {
