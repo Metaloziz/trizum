@@ -61,14 +61,16 @@ const BlogPage: FunctionComponent = observer(() => {
       )}
       <ArticlePreview articles={articles} />
       <div className={styles.pagination}>
-        <Pagination
-          count={Math.ceil(total / perPage)}
-          color="primary"
-          size="large"
-          page={currentPage}
-          boundaryCount={1}
-          onChange={onPageChange}
-        />
+        {articles.length !== 0 && (
+          <Pagination
+            count={Math.ceil(total / perPage)}
+            color="primary"
+            size="large"
+            page={currentPage}
+            boundaryCount={1}
+            onChange={onPageChange}
+          />
+        )}
       </div>
     </div>
   );

@@ -125,41 +125,51 @@ const AddOlympiad = observer(() => {
       <div className={styles.tableWrap}>
         <h2>Список Олимпиад</h2>
         <Table colNames={colNames} loading={false}>
-          {currentItem.map(({ id, name, startedAt, endedAt, level, franchise }) => (
-            <tr key={id} onClick={() => redirect(id)}>
-              <td>{name}</td>
-              <td>{changeDateView(startedAt.date)}</td>
-              <td>{changeDateView(endedAt.date)}</td>
-              <td>{GroupLevels[level]}</td>
-              <td>-</td>
-              <td>-</td>
-              <td>-</td>
-              <td>
-                {IS_EDIT_ROLE && (
-                  <Button
-                    className={styles.settingOlympiad}
-                    onClick={async event => {
-                      event.stopPropagation();
-                      await setEditModal(id, franchise);
-                    }}
-                  >
-                    <Image src={image} />
-                  </Button>
-                )}
+          {currentItem.length === 0 ? (
+            <tr>
+              <td style={{ textAlign: 'center', fontWeight: 500, fontSize: '18px' }}>
+                Олимпиад нет
               </td>
             </tr>
-          ))}
+          ) : (
+            currentItem.map(({ id, name, startedAt, endedAt, level, franchise }) => (
+              <tr key={id} onClick={() => redirect(id)}>
+                <td>{name}</td>
+                <td>{changeDateView(startedAt.date)}</td>
+                <td>{changeDateView(endedAt.date)}</td>
+                <td>{GroupLevels[level]}</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>
+                  {IS_EDIT_ROLE && (
+                    <Button
+                      className={styles.settingOlympiad}
+                      onClick={async event => {
+                        event.stopPropagation();
+                        await setEditModal(id, franchise);
+                      }}
+                    >
+                      <Image src={image} />
+                    </Button>
+                  )}
+                </td>
+              </tr>
+            ))
+          )}
         </Table>
       </div>
       <div className={styles.paginationOlympiad}>
-        <Pagination
-          count={count}
-          color="primary"
-          size="large"
-          page={queryFieldsOlympiads.page ? queryFieldsOlympiads.page + 1 : 1}
-          boundaryCount={1}
-          onChange={paginate}
-        />
+        {currentItem.length !== 0 && (
+          <Pagination
+            count={count}
+            color="primary"
+            size="large"
+            page={queryFieldsOlympiads.page ? queryFieldsOlympiads.page + 1 : 1}
+            boundaryCount={1}
+            onChange={paginate}
+          />
+        )}
       </div>
       {showModal && defaultValuesOlympiad && (
         <OlympiadForm
