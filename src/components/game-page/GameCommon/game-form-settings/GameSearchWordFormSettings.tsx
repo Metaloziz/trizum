@@ -6,7 +6,6 @@ import { Controller, FormProvider, useFieldArray, useForm } from 'react-hook-for
 
 import { BASE_DEFAULT_VALUES } from 'components/game-page/GameCommon/game-form-settings/constants';
 import {
-  GameDifferenceFormType,
   FormSettingsType,
   GameFindWordFormType,
 } from 'components/game-page/GameCommon/game-form-settings/game-form-types';
@@ -37,7 +36,7 @@ export const GameSearchWordFormSettings = (props: FormSettingsType): ReactElemen
       ? DEFAULT_VALUES
       : ({ name, level, status, timeComplete, description, words } as GameFindWordFormType);
 
-  const methods = useForm<GameDifferenceFormType>({
+  const methods = useForm<GameFindWordFormType>({
     resolver: yupResolver(GAME_FIND_WORD_SCHEMA),
     defaultValues,
     mode: 'onBlur',
@@ -47,7 +46,6 @@ export const GameSearchWordFormSettings = (props: FormSettingsType): ReactElemen
     handleSubmit,
     control,
     formState: { errors },
-    getValues,
     reset,
   } = methods;
 
@@ -56,7 +54,9 @@ export const GameSearchWordFormSettings = (props: FormSettingsType): ReactElemen
     control,
   });
 
-  const onSubmit = handleSubmit(values => onFormSubmit(values));
+  const onSubmit = handleSubmit(values => {
+    onFormSubmit(values);
+  });
 
   useEffect(() => {
     if (status === 'copiyed') {
