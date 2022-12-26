@@ -33,6 +33,7 @@ const GAMES: { [key: string]: FunctionComponent<GameContainerProps & any> } = {
   [GameIdentifiers.difference]: Factory(GameIdentifiers.difference),
   [GameIdentifiers.frazes]: Factory(GameIdentifiers.frazes),
   [GameIdentifiers.bullsAndCows]: Factory(GameIdentifiers.bullsAndCows),
+  [GameIdentifiers.search]: Factory(GameIdentifiers.search),
 };
 
 const GameItems = observer(() => {

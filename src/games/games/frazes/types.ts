@@ -1,5 +1,5 @@
 import { GameProps, GameResult } from '../../common/types';
-import { defaultWords } from './assets/words';
+import { defaultDictionary } from './assets/words';
 
 export interface Props extends GameProps {
   elementsTotal?: number; // Кол-во угадываний
@@ -7,7 +7,7 @@ export interface Props extends GameProps {
   timeComplete: number; // Время на прохождение
   speed: number; // Время на которое появляются слова в милисекундах
   wordsFull: boolean; // Писать слова полностью или две буквы
-  words: FrazesDictionary[]; // Cлова
+  disctionary: FrazesDictionary[]; // Cлова
   changeLevelDictionary: number; // Кол-во уровней когда менять словарь
   errorLevel: number; // Кол-во ошибок на уровне
   onEnd?(result?: GameResult): void;
@@ -28,7 +28,7 @@ const PropsDefault: Props = {
   errorAacceptable: 5,
   speed: 2000,
   wordsFull: false,
-  words: defaultWords,
+  disctionary: defaultDictionary,
   changeLevelDictionary: 3,
   errorLevel: 2,
 };

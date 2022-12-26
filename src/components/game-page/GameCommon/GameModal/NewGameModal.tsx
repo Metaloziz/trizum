@@ -21,6 +21,7 @@ import {
   ShulteFormSettings,
   SilhouettesFormSettings,
   SteamEngineFormSettings,
+  GameSearchWordFormSettings,
 } from 'components/game-page/GameCommon/game-form-settings/';
 import { FormSettingsType } from 'components/game-page/GameCommon/game-form-settings/game-form-types';
 import { Dialog } from 'components/rate/ui/Dialog';
@@ -40,6 +41,7 @@ const GAMES_MODAL_SETTINGS: { [key: string]: FunctionComponent<FormSettingsType>
   [GameIdentifiers.difference]: GameDifferenceFormSettings,
   [GameIdentifiers.frazes]: FrazesFormSettings,
   [GameIdentifiers.bullsAndCows]: BullsAndCowsSettings,
+  [GameIdentifiers.search]: GameSearchWordFormSettings,
 };
 
 type PropsT = {

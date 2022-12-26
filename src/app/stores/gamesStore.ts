@@ -62,6 +62,7 @@ class GamesStore {
     area: false,
     gage: [{ id: 1, area: true, speed: 1 }],
     wordsFull: false,
+    dictionary: [],
     words: [],
     differenceGameLevels: [],
     perSuccessLevel: 2,
