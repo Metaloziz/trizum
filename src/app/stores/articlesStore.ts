@@ -162,6 +162,7 @@ class ArticlesStore {
   deleteArticle = (articleId: string) => {
     executeError(async () => {
       await articlesService.editArticle(articleId, { status: 'removal' });
+      await this.getArticles();
     }, this);
   };
 
