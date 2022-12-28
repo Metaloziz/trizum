@@ -110,7 +110,7 @@ export const ShulteFormSettings = (props: FormSettingsType): ReactElement => {
           gameName="ТАБЛИЦА ШУЛЬТЕ"
           deletedPreset={deletedPreset}
           usedInWorks={usedInWorks}
-          status={status === StatusTypes.copiyed ? StatusTypes.draft : status}
+          status={status}
           createCopy={createCopy}
         >
           <Grid item xs={12} sm={6}>

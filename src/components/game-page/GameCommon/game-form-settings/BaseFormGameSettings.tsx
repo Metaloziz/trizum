@@ -36,7 +36,10 @@ export const BaseFormGameSettings: FC<BaseFormGameSettingsType> = ({
     formState: { errors },
   } = useFormContext<BaseGameSettingsType>();
 
-  const menu = filterSelectMenu(status, STATUS_MENU);
+  const menu = filterSelectMenu(
+    status === StatusTypes.copiyed ? StatusTypes.draft : status,
+    STATUS_MENU,
+  );
 
   return (
     <>
