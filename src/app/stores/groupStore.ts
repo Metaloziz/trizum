@@ -25,7 +25,7 @@ import { OlympiadFormType } from 'app/types/OlympiadPayloadType';
 import { ScheduleHomeWorksType } from 'app/types/scheduleHomeWorksType';
 import { ResponseUserT } from 'app/types/UserTypes';
 import { AxiosError } from 'axios';
-import { makeAutoObservable, runInAction } from 'mobx';
+import { makeAutoObservable, runInAction, toJS } from 'mobx';
 import moment from 'moment';
 import { getIsBetweenDate } from 'utils/getIsBetweenDate';
 import { getLocalDateEuropeRegion } from 'utils/getLocalDateEuropeRegion';
@@ -76,7 +76,7 @@ class GroupStore {
     dateUntil: '',
     type: 'class',
     level: '',
-    status: '',
+    status: 'active',
   };
 
   private queryDefaultValuesOlympiads: GroupParamsForUI = {
@@ -111,6 +111,8 @@ class GroupStore {
   courses: ShortCourseType[] = [];
 
   isLoad = false;
+
+  errorMessage: string | null = null;
 
   isModalOpen = false;
 
@@ -257,22 +259,31 @@ class GroupStore {
     });
 
   addGroup = async (franchiseId?: string) => {
+    this.isLoad = true;
+
     const schedule: Schedule[] = !this.schedule.length
       ? []
       : this.schedule.map(elem => scheduleItemToServerMapper(elem));
 
     const params = removeEmptyFields(this.modalFields);
 
-    await groupsService.addGroup({
+    const result = await groupsService.addGroup({
       ...params,
       franchiseId: franchiseId || this.modalFields.franchiseId,
       dateSince: moment(this.modalFields.dateSince).format(DateTime.DdMmYyyy),
       dateUntil: moment(this.modalFields.dateUntil).format(DateTime.DdMmYyyy),
       schedule: { classworks: schedule, homeworks: this.scheduleHomeWorks },
     });
-    this.cleanModalValues();
-    this.closeModal();
-    await this.getGroups();
+
+    if ('error' in result) {
+      this.setErrorMessage(result?.message?.detail);
+    } else {
+      this.cleanModalValues();
+      this.closeModal();
+      await this.getGroups();
+    }
+
+    this.isLoad = false;
   };
 
   editGroup = async () => {
@@ -461,6 +472,10 @@ class GroupStore {
         this.groupsForSelect = items;
       });
     });
+  };
+
+  setErrorMessage = (message: string | null) => {
+    this.errorMessage = message;
   };
 
   get filteredCourses() {
