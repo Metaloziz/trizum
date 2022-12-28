@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Grid } from '@mui/material';
+import { StatusTypes } from 'app/enums/StatusTypes';
 import { OptionT } from 'app/types/OptionT';
 import {
   BASE_DEFAULT_VALUES,
@@ -97,8 +98,8 @@ export const ShulteFormSettings = (props: FormSettingsType): ReactElement => {
   });
 
   useEffect(() => {
-    if (status === 'copiyed') {
-      reset({ ...defaultValues, status: 'draft' });
+    if (status === StatusTypes.copiyed) {
+      reset({ ...defaultValues, status: StatusTypes.draft });
     }
   }, [status]);
 
@@ -109,7 +110,7 @@ export const ShulteFormSettings = (props: FormSettingsType): ReactElement => {
           gameName="ТАБЛИЦА ШУЛЬТЕ"
           deletedPreset={deletedPreset}
           usedInWorks={usedInWorks}
-          status={status}
+          status={status === StatusTypes.copiyed ? StatusTypes.draft : status}
           createCopy={createCopy}
         >
           <Grid item xs={12} sm={6}>
