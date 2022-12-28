@@ -38,6 +38,7 @@ export const FrazesFormSettings = (props: FormSettingsType): ReactElement => {
     dictionary,
     changeLevelDictionary,
     errorLevel,
+    words,
   } = settings[0];
 
   const defaultValues: FrazesFormType =
@@ -52,11 +53,10 @@ export const FrazesFormSettings = (props: FormSettingsType): ReactElement => {
           wordsFull,
           speed,
           errorAacceptable,
-          dictionary,
+          dictionary: words || dictionary, // если старый тип игры
           errorLevel,
           changeLevelDictionary,
         } as FrazesFormType);
-
   const methods = useForm<FrazesFormType>({
     resolver: yupResolver(FRAZES_FORM_SCHEMA),
     defaultValues,

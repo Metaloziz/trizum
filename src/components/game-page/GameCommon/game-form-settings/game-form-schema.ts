@@ -428,7 +428,7 @@ export const FRAZES_SCHEMA = yup.object().shape({
     .max(99000, 'Максимум 99 000 милисекунд')
     .nullable(),
   wordsFull: yup.boolean().notRequired(),
-  words: yup
+  dictionary: yup
     .array()
     .of(
       yup.object({
