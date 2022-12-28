@@ -254,7 +254,7 @@ export const SILHOUETTES_SCHEMA = yup.object().shape({
   perSuccessLevel: yup
     .number()
     .required('Обязательное поле')
-    .min(5, 'Минимум 5 секунд')
+    .min(1, 'Минимум 1 секунд')
     .max(3600, 'Максимум 3600 секунд')
     .nullable(),
   maxErrorLevel: yup
