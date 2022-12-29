@@ -1,21 +1,40 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { TableRow, TableCell, Typography, IconButton } from '@mui/material';
-import { StatusTypes } from 'app/enums/StatusTypes';
-import moment from 'moment';
-import React, { FC } from 'react';
 import { DateTime } from 'app/enums/DateTime';
 import { GroupLevels } from 'app/enums/GroupLevels';
 import { GroupStatus } from 'app/enums/GroupStatus';
+import { StatusTypes } from 'app/enums/StatusTypes';
 import groupStore from 'app/stores/groupStore';
+import { toJS } from 'mobx';
+import moment from 'moment';
+import React, { FC } from 'react';
 
 export type ClassesRowsProps = {
   groups: typeof groupStore.groups;
   openModal: typeof groupStore.openModal;
   deleteGroup: (id: string) => void;
+  openShowModeForm: (id: string) => void;
 };
 
-export const ClassesRows: FC<ClassesRowsProps> = ({ groups, openModal, deleteGroup }) => {
+export const ClassesRows: FC<ClassesRowsProps> = ({
+  groups,
+  openModal,
+  deleteGroup,
+  openShowModeForm,
+}) => {
+  const editGroup = (event: React.MouseEvent<HTMLButtonElement>, groupId: string) => {
+    event.stopPropagation();
+    console.log('event', toJS(event));
+
+    openModal(groupId);
+  };
+
+  const deleteGroupCallBack = (event: React.MouseEvent<HTMLButtonElement>, groupId: string) => {
+    event.stopPropagation();
+    deleteGroup(groupId);
+  };
+
   if (groups.length) {
     return (
       <>
@@ -28,6 +47,7 @@ export const ClassesRows: FC<ClassesRowsProps> = ({ groups, openModal, deleteGro
                 verticalAlign: 'top',
               },
             }}
+            onClick={() => openShowModeForm(entity.id)}
           >
             <TableCell>
               <Typography variant="caption">{entity.name || ''}</Typography>
@@ -56,12 +76,17 @@ export const ClassesRows: FC<ClassesRowsProps> = ({ groups, openModal, deleteGro
                 : entity.status}
             </TableCell>
             <TableCell align="right">
-              <IconButton size="small" onClick={() => openModal(entity.id)} color="primary">
+              <IconButton
+                size="small"
+                onClick={e => editGroup(e, entity.id)}
+                color="primary"
+                disabled={entity.status === StatusTypes.active}
+              >
                 <EditIcon fontSize="small" />
               </IconButton>
               <IconButton
                 size="small"
-                onClick={() => deleteGroup(entity.id)}
+                onClick={e => deleteGroupCallBack(e, entity.id)}
                 color="error"
                 disabled={entity.status === StatusTypes.archive}
               >

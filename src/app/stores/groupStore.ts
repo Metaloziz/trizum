@@ -118,6 +118,8 @@ class GroupStore {
 
   defaultValuesOlympiad: Nullable<OlympiadFormType> = null;
 
+  isShowModeForm: boolean = false;
+
   private newOlympiad: OlympiadFormType = {
     name: '',
     description: '',
@@ -386,6 +388,7 @@ class GroupStore {
     this.selectedGroup = new ResponseOneGroup();
     this.isModalOpen = false;
     this.scheduleHomeWorks = [];
+    this.isShowModeForm = false;
   };
 
   changeScheduleHomeWork = (newHomeWorkData: Partial<ScheduleHomeWorksType>) => {
@@ -478,12 +481,17 @@ class GroupStore {
     this.errorMessage = message;
   };
 
+  setIsShowMode = (status: boolean) => {
+    this.isShowModeForm = status;
+  };
+
   get filteredCourses() {
     return this.courses && this.courses.length
       ? this.courses.filter(el => el.level.includes(this.modalFields.level))
       : [];
   }
 
+  // она не нужна так как НЕ активные гурппы скрыты
   get isDisableEditForm() {
     return !!this.selectedGroup.id && this.modalFields.status !== 'active';
   }

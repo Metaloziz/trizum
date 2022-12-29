@@ -13,6 +13,7 @@ import {
 import { Roles } from 'app/enums/Roles';
 import groupStore from 'app/stores/groupStore';
 import AddEditGroup from 'components/classes-page/AddEditGroup';
+import { ShowModGroup } from 'components/classes-page/AddEditGroup/ShowModGroup/ShowModGroup';
 import SearchBar from 'components/classes-page/search-bar/SearchBar';
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
@@ -31,6 +32,8 @@ export const ClassesMainPage = observer(() => {
     queryFields,
     nullableSelectedGroup,
     deleteGroup,
+    setIsShowMode,
+    getOneGroup,
   } = groupStore;
 
   const [currentPage, setCurrentPage] = useState((queryFields.page || 0) + 1);
@@ -48,6 +51,11 @@ export const ClassesMainPage = observer(() => {
 
   const deleteCurrentCourse = (groupId: string) => {
     deleteGroup(groupId);
+  };
+
+  const openShowModeForm = (groupId: string) => {
+    openModal(groupId);
+    setIsShowMode(true);
   };
 
   return (
@@ -88,6 +96,7 @@ export const ClassesMainPage = observer(() => {
                   groups={groups}
                   openModal={openModal}
                   deleteGroup={deleteCurrentCourse}
+                  openShowModeForm={openShowModeForm}
                 />
               </TableBody>
             </Table>

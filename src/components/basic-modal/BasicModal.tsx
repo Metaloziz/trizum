@@ -19,6 +19,7 @@ const BasicModal: FC<Props> = props => {
       PaperProps={{
         style: {
           borderRadius: '30px',
+          position: 'relative',
         },
       }}
       maxWidth="md"

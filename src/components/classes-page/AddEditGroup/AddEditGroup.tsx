@@ -32,6 +32,7 @@ const AddEditGroup: FC = observer(() => {
     isDisableEditForm,
     setErrorMessage,
     errorMessage,
+    isShowModeForm,
   } = groupStore;
 
   const { role, user } = appStore;
@@ -129,11 +130,17 @@ const AddEditGroup: FC = observer(() => {
 
       <BasicModal
         fullWidth
-        title={selectedGroup.id ? 'Редактировать группу' : 'Добавить группу'}
+        title={
+          selectedGroup.id
+            ? isShowModeForm
+              ? 'просмотр'
+              : 'Редактировать группу'
+            : 'Добавить группу'
+        }
         visibility={isModalOpen}
         changeVisibility={onClose}
       >
-        <div>Все поля обязательны</div>
+        {!isShowModeForm && <div>Все поля обязательны</div>}
         <Grid
           container
           spacing={2}
@@ -267,17 +274,19 @@ const AddEditGroup: FC = observer(() => {
               flexDirection: 'row-reverse',
             }}
           >
-            <Button
-              onClick={() =>
-                selectedGroup.id
-                  ? editGroup()
-                  : isFranchiseRole
-                  ? addGroup(user.franchise.id)
-                  : addGroup()
-              }
-            >
-              {selectedGroup.id ? 'Изменить' : 'Добавить'}
-            </Button>
+            {!isShowModeForm && (
+              <Button
+                onClick={() =>
+                  selectedGroup.id
+                    ? editGroup()
+                    : isFranchiseRole
+                    ? addGroup(user.franchise.id)
+                    : addGroup()
+                }
+              >
+                {selectedGroup.id ? 'Изменить' : 'Добавить'}
+              </Button>
+            )}
           </Grid>
         </Grid>
       </BasicModal>

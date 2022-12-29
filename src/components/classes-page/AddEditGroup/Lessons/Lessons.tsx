@@ -7,7 +7,7 @@ import React, { FC } from 'react';
 import style from './Lessons.module.scss';
 
 const Lessons: FC = observer(() => {
-  const { schedule, changeLesson, isDisableEditForm } = groupStore;
+  const { schedule, changeLesson, isDisableEditForm, isShowModeForm } = groupStore;
 
   const addLesson = () => {
     groupStore.schedule.push({
@@ -81,9 +81,10 @@ const Lessons: FC = observer(() => {
               </Grid>
             </Grid>
           ))}
-          <Button onClick={addLesson} variant="outlined" disabled={isDisableEditForm}>
+          { !isShowModeForm && <Button onClick={addLesson} variant="outlined"
+                   disabled={isDisableEditForm}>
             Добавить урок
-          </Button>
+          </Button>}
         </div>
       )}
     </>
