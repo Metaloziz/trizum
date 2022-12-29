@@ -17,8 +17,8 @@ const columnNames = [
   'Статус',
   'Франшиза',
   'Дата рождения',
-  'Оплачен',
-  'Дата окончания действия',
+  'Статус оплаты',
+  'Дата создания',
   'Тариф',
 ];
 const columnNamesFranchisee = [
@@ -26,8 +26,8 @@ const columnNamesFranchisee = [
   'Город',
   'Статус',
   'Дата рождения',
-  'Оплачен',
-  'Дата окончания действия',
+  'Статус оплаты',
+  'Дата создания',
   'Тариф',
 ];
 
@@ -78,7 +78,7 @@ const ReportPage = observer(() => {
                     )}
                     <td>{transformDate(item?.birthdate?.date) || 'Нет данных'}</td>
                     <td>{item?.isPayed ? 'Оплачен' : 'Не оплачен'}</td>
-                    <td>{transformDate(item?.payedUntil?.date) || 'Нет данных'}</td>
+                    <td>{transformDate(item?.createdAt?.date) || 'Нет данных'}</td>
                     <td>{item?.tariff ? item.tariff?.name : 'Нет данных'}</td>
                   </tr>
                 ))
