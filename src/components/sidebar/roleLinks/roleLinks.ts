@@ -35,7 +35,7 @@ export const franchiseeAdminLinks = [
 export const franchiseeLinks = [
   Links.Index,
   Links.Classes,
-  Links.Statistic,
+  // Links.Statistic,
   // Links.Homework,
   Links.Users,
   Links.Games,
@@ -48,7 +48,7 @@ export const methodistLinks = [
   Links.Index,
   Links.Schedule,
   Links.Classes,
-  Links.Statistic,
+  // Links.Statistic,
   Links.Homework,
   Links.Games,
   Links.Blog,
@@ -59,7 +59,7 @@ export const methodistLinks = [
 export const adminLinks = [
   Links.Index,
   Links.Users,
-  Links.Statistic,
+  // Links.Statistic,
   Links.Classes,
   Links.Games,
   Links.Blog,
